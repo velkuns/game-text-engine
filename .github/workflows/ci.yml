@@ -51,7 +51,7 @@ jobs:
         run: make php/deps
 
       - name: Check Code Style
-        run: make php/check
+        run: make php/cs-check
 
       - name: Units Tests
         run: make php/tests
