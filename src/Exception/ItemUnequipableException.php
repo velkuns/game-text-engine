@@ -9,11 +9,6 @@
 
 declare(strict_types=1);
 
-namespace Eureka\Component\Template;
+namespace Velkuns\GameTextEngine\Exception;
 
-/**
- * DataMapper Data abstract class.
- *
- * @author Romain Cottard
- */
-class DummySrc {}
+class ItemUnequipableException extends \RuntimeException {}
