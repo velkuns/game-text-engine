@@ -1,0 +1,44 @@
+{
+  "name": "eureka/component-template",
+  "description": "Template for new component & domain",
+  "type": "library",
+  "minimum-stability": "stable",
+  "license": "MIT",
+
+  "authors": [
+    {
+      "name": "Romain Cottard",
+      "role": "Developer"
+    }
+  ],
+
+  "autoload": {
+    "psr-4": {
+      "Eureka\\Component\\Template\\": "./src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Eureka\\Component\\Template\\Tests\\": "./tests"
+    }
+  },
+
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+
+  "require": {
+    "php": "7.4.*||8.0.*||8.1.*||8.2.*"
+  },
+
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "phpstan/phpstan": "^1.10",
+    "phpunit/phpcov": "^8.2",
+    "phpunit/phpunit": "^9.6",
+    "squizlabs/php_codesniffer": "^3.7"
+  }
+}
