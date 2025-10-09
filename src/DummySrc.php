@@ -16,6 +16,4 @@ namespace Eureka\Component\Template;
  *
  * @author Romain Cottard
  */
-class DummySrc
-{
-}
+class DummySrc {}

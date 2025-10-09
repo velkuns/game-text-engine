@@ -1,4 +1,4 @@
-name: CI
+name: SonarCloud
 
 on:
   push:
@@ -7,23 +7,18 @@ on:
     branches: [ main ]
 
 jobs:
-  ci:
-
+  sonarcloud:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-versions: [ '8.3', '8.4', '8.5' ]
-
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # To avoid "Shallow clone detected" error in SonarCloud report
 
       #~ PHP Setup
-      - name: Setup PHP ${{ matrix.php-versions }}
+      - name: Setup PHP 8.3 # Minimum version
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: '8.3'
 
       #~ Composer Cache
       - name: Get Composer Cache Directory
@@ -38,28 +33,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      #~ Composer install
-      - name: Validate composer.json
-        run: composer validate
-
       - name: Install dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: make install
 
-      #~ CI part
-      - name: Dependencies
-        run: make php/deps
-
-      - name: Check Code Style
-        run: make php/check
-
       - name: Units Tests
-        run: make php/tests
+        run: make php/tests # To generate the coverage report
 
-      - name: Fix unit tests report path
-        run: |
-          sed -i 's+'$GITHUB_WORKSPACE'+/github/workspace+g' build/reports/phpunit/clover.xml
-          sed -i 's+'$GITHUB_WORKSPACE'+/github/workspace+g' build/reports/phpunit/unit.xml
-
-      - name: PHP Static Analyze
-        run: make php/analyze
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

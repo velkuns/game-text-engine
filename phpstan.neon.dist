@@ -1,5 +1,13 @@
+includes:
+  - ./vendor/phpstan/phpstan-phpunit/extension.neon
+  - ./vendor/phpstan/phpstan-phpunit/rules.neon
+  - ./vendor/phpstan/phpstan-strict-rules/rules.neon
+  - ./vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
 parameters:
-  phpVersion: 80100 # PHP 8.1 - Current minimal version supported
+  phpVersion:
+    min: 80300
+    max: 80599
   level: max
   paths:
     - ./src
