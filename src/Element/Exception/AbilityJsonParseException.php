@@ -9,13 +9,6 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Item;
+namespace Velkuns\GameTextEngine\Element\Exception;
 
-interface ItemEquipableInterface
-{
-    public function isEquipped(): bool;
-
-    public function equip(): static;
-
-    public function unequip(): static;
-}
+class AbilityJsonParseException extends \RuntimeException {}

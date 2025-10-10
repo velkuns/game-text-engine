@@ -11,18 +11,18 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element;
 
-use Velkuns\GameTextEngine\Character\Ability\BaseAbility;
-use Velkuns\GameTextEngine\Character\Ability\CompoundAbility;
-use Velkuns\GameTextEngine\Character\Character;
-use Velkuns\GameTextEngine\Character\Inventory;
-use Velkuns\GameTextEngine\Exception\ElementJsonParseException;
-use Velkuns\GameTextEngine\Item\Item;
-use Velkuns\GameTextEngine\Modifier\Modifier;
+use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
+use Velkuns\GameTextEngine\Element\Ability\CompoundAbility;
+use Velkuns\GameTextEngine\Element\Entity\Entity;
+use Velkuns\GameTextEngine\Element\Entity\EntityInventory;
+use Velkuns\GameTextEngine\Element\Exception\ElementJsonParseException;
+use Velkuns\GameTextEngine\Element\Item\Item;
+use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 
 /**
  * @phpstan-import-type BaseAbilityData from BaseAbility
  * @phpstan-import-type CompoundAbilityData from CompoundAbility
- * @phpstan-import-type CharacterData from Character
+ * @phpstan-import-type CharacterData from Entity
  * @phpstan-import-type ModifierData from Modifier
  */
 readonly class ElementFactory
@@ -34,7 +34,7 @@ readonly class ElementFactory
     /**
      * @throws ElementJsonParseException
      */
-    public function fromJson(string $type, string $jsonString): Character|Item
+    public function fromJson(string $type, string $jsonString): Entity|Item
     {
         try {
             /** @var array<string, BaseAbilityData|CompoundAbilityData|CharacterData> $json */
@@ -55,13 +55,13 @@ readonly class ElementFactory
     /**
      * @param array<string, CharacterData> $data
      */
-    public function newCharacter(int $id, array $data): Character
+    public function newCharacter(int $id, array $data): Entity
     {
-        return new Character(
+        return new Entity(
             $id,
             $data['name'] ?? 'Unamed',
             $this->abilityFactory->fromArray($data['abilities'] ?? []),
-            new Inventory(),
+            new EntityInventory(),
         );
     }
 

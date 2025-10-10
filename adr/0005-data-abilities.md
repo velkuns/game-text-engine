@@ -29,14 +29,15 @@ So, the format will be:
 Base ability format:
 ```json
 {
-    "type": "string",
-    "initial": "int",
+    "type": "base",
+    "name": "string",
     "current": "int",
     "max": "int",
     "constraints": {
         "min": "int",
         "max": "int"
     },
+    "initial": "int",
     "rule?": "string"
 }
 ```
@@ -45,6 +46,7 @@ Example (for a vitality ability):
 ```json
 {
     "type": "base",
+    "name": "vitality",
     "rule": "strength + endurance",
     "initial": 12,
     "current": 3,
@@ -60,7 +62,8 @@ Example (for a vitality ability):
 Compound ability format:
 ```json
 {
-    "type": "string",
+    "type": "compound",
+    "name": "string",
     "rule": "string"
 }
 ```
@@ -70,5 +73,13 @@ Example:
 {
     "type": "compound",
     "rule": "(strength + agility) / 2"
+}
+```
+
+### Global Abilities format
+```json
+{
+    "base": "list<BaseAbility>",
+    "compound": "list<CompoundAbility>"
 }
 ```

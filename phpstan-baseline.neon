@@ -1,8 +1,56 @@
 parameters:
 	ignoreErrors:
 		-
+			rawMessage: 'Missing parameter $current (int) in call to Velkuns\GameTextEngine\Element\Ability\BaseAbility constructor.'
+			identifier: argument.missing
+			count: 1
+			path: src/Element/AbilityFactory.php
+
+		-
+			rawMessage: 'Missing parameter $max (int) in call to Velkuns\GameTextEngine\Element\Ability\BaseAbility constructor.'
+			identifier: argument.missing
+			count: 1
+			path: src/Element/AbilityFactory.php
+
+		-
+			rawMessage: 'Offset ''range'' does not exist on array{type: ''base'', name: string, initial: int, current: int, max: int, constraints: array{min: int, max: int}, rule: string|null}.'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: src/Element/AbilityFactory.php
+
+		-
+			rawMessage: 'Offset ''value'' does not exist on array{type: ''base'', name: string, initial: int, current: int, max: int, constraints: array{min: int, max: int}, rule: string|null}.'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: src/Element/AbilityFactory.php
+
+		-
+			rawMessage: Unknown parameter $range in call to Velkuns\GameTextEngine\Element\Ability\BaseAbility constructor.
+			identifier: argument.unknown
+			count: 1
+			path: src/Element/AbilityFactory.php
+
+		-
+			rawMessage: Unknown parameter $value in call to Velkuns\GameTextEngine\Element\Ability\BaseAbility constructor.
+			identifier: argument.unknown
+			count: 1
+			path: src/Element/AbilityFactory.php
+
+		-
 			rawMessage: 'Call to an undefined method Velkuns\GameTextEngine\Element\AbilityFactory::fromArray().'
 			identifier: method.notFound
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: 'Cannot import type alias CharacterData: type alias does not exist in Velkuns\GameTextEngine\Element\Entity\Entity.'
+			identifier: typeAlias.notFound
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: 'Class Velkuns\GameTextEngine\Element\Entity\Entity constructor invoked with 4 parameters, 7 required.'
+			identifier: arguments.count
 			count: 1
 			path: src/Element/ElementFactory.php
 
@@ -13,7 +61,37 @@ parameters:
 			path: src/Element/ElementFactory.php
 
 		-
-			rawMessage: 'Parameter #1 $data of method Velkuns\GameTextEngine\Element\ElementFactory::newModifiers() expects array<array{name: string, description: string, targetAbility: string, value: int}>, mixed given.'
+			rawMessage: 'Missing parameter $ability (string) in call to Velkuns\GameTextEngine\Element\Modifier\Modifier constructor.'
+			identifier: argument.missing
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: 'Offset ''description'' does not exist on array{ability: string, value: int}.'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: 'Offset ''name'' does not exist on array{ability: string, value: int}.'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: 'Offset ''targetAbility'' does not exist on array{ability: string, value: int}.'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: PHPDoc tag @var for variable $json contains unknown class Velkuns\GameTextEngine\Element\CharacterData.
+			identifier: class.notFound
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: 'Parameter #1 $data of method Velkuns\GameTextEngine\Element\ElementFactory::newModifiers() expects array<array{ability: string, value: int}>, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Element/ElementFactory.php
@@ -31,50 +109,74 @@ parameters:
 			path: src/Element/ElementFactory.php
 
 		-
-			rawMessage: 'Parameter #2 $data of method Velkuns\GameTextEngine\Element\ElementFactory::newCharacter() expects array<string, array{id: int, name: string, abilities: array<string, array{type: ''base'', value: int, initial: int, range: array{min: int, max: int}}|Velkuns\GameTextEngine\Character\Ability\CompoundAbility>, inventory: array{weapon?: array{id: int, name: string, description: string, modifiers: array<array{name: string, description: string, targetAbility: string, value: int}>, flag: int, isEquipped: bool}|null, gears: list<array{id: int, name: string, description: string, modifiers: array<array{name: string, description: string, targetAbility: string, value: int}>, flag: int, isEquipped: bool}>, bag: list<array{id: int, name: string, description: string, modifiers: array<array{name: string, description: string, targetAbility: string, value: int}>, flag: int, isEquipped: bool}>}}>, array<string, array{id: int, name: string, abilities: array<string, array{type: ''base'', value: int, initial: int, range: array{min: int, max: int}}|Velkuns\GameTextEngine\Character\Ability\CompoundAbility>, inventory: array{weapon?: array{id: int, name: string, description: string, modifiers: array<array{name: string, description: string, targetAbility: string, value: int}>, flag: int, isEquipped: bool}|null, gears: list<array{id: int, name: string, description: string, modifiers: array<array{name: string, description: string, targetAbility: string, value: int}>, flag: int, isEquipped: bool}>, bag: list<array{id: int, name: string, description: string, modifiers: array<array{name: string, description: string, targetAbility: string, value: int}>, flag: int, isEquipped: bool}>}}|array{type: ''base'', value: int, initial: int, range: array{min: int, max: int}}|array{type: ''compound'', rule: string}> given.'
+			rawMessage: 'Parameter #1 $name of class Velkuns\GameTextEngine\Element\Entity\Entity constructor expects string, int given.'
 			identifier: argument.type
 			count: 1
 			path: src/Element/ElementFactory.php
 
 		-
-			rawMessage: 'Parameter #2 $name of class Velkuns\GameTextEngine\Character\Character constructor expects string, array<string, array<string, array<int|string, array<array<array<string, int|string>|int|string>|bool|int|string>|bool|int|string>|Velkuns\GameTextEngine\Character\Ability\CompoundAbility|null>|int|string>|string given.'
+			rawMessage: 'Parameter #1 $name of class Velkuns\GameTextEngine\Element\Item\Item constructor expects string, int given.'
 			identifier: argument.type
 			count: 1
 			path: src/Element/ElementFactory.php
 
 		-
-			rawMessage: 'Parameter #2 $name of class Velkuns\GameTextEngine\Item\Item constructor expects string, mixed given.'
+			rawMessage: 'Parameter #2 $data of method Velkuns\GameTextEngine\Element\ElementFactory::newCharacter() expects array<string, Velkuns\GameTextEngine\Element\CharacterData>, array<string, array<string, array<string, int>|int|string|null>|Velkuns\GameTextEngine\Element\CharacterData> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Element/ElementFactory.php
 
 		-
-			rawMessage: 'Parameter #3 $abilities of class Velkuns\GameTextEngine\Character\Character constructor expects array<string, Velkuns\GameTextEngine\Character\Ability\AbilityInterface>, mixed given.'
+			rawMessage: 'Parameter #2 $subType of class Velkuns\GameTextEngine\Element\Item\Item constructor expects string|null, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Element/ElementFactory.php
 
 		-
-			rawMessage: 'Parameter #3 $description of class Velkuns\GameTextEngine\Item\Item constructor expects string, mixed given.'
+			rawMessage: 'Parameter #2 $type of class Velkuns\GameTextEngine\Element\Entity\Entity constructor expects Velkuns\GameTextEngine\Element\Entity\EntityType, string|Velkuns\GameTextEngine\Element\CharacterData given.'
 			identifier: argument.type
 			count: 1
 			path: src/Element/ElementFactory.php
 
 		-
-			rawMessage: 'Parameter #4 $modifiers of class Velkuns\GameTextEngine\Item\Item constructor expects list<Velkuns\GameTextEngine\Modifier\Modifier>, array<Velkuns\GameTextEngine\Modifier\Modifier> given.'
+			rawMessage: 'Parameter #3 $coins of class Velkuns\GameTextEngine\Element\Entity\Entity constructor expects int, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Element/ElementFactory.php
 
 		-
-			rawMessage: 'Parameter #5 $flag of class Velkuns\GameTextEngine\Item\Item constructor expects int, mixed given.'
+			rawMessage: 'Parameter #3 $description of class Velkuns\GameTextEngine\Element\Item\Item constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Element/ElementFactory.php
 
 		-
-			rawMessage: 'Parameter #6 $isEquipped of class Velkuns\GameTextEngine\Item\Item constructor expects bool, mixed given.'
+			rawMessage: 'Parameter #4 $info of class Velkuns\GameTextEngine\Element\Entity\Entity constructor expects Velkuns\GameTextEngine\Element\Entity\EntityInfo, Velkuns\GameTextEngine\Element\Entity\EntityInventory given.'
 			identifier: argument.type
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: 'Parameter #4 $modifiers of class Velkuns\GameTextEngine\Element\Item\Item constructor expects list<Velkuns\GameTextEngine\Element\Modifier\Modifier>, array<Velkuns\GameTextEngine\Element\Modifier\Modifier> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: 'Parameter #5 $flags of class Velkuns\GameTextEngine\Element\Item\Item constructor expects int, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: 'Parameter #6 $isEquipped of class Velkuns\GameTextEngine\Element\Item\Item constructor expects bool, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: 'Parameter $data of method Velkuns\GameTextEngine\Element\ElementFactory::newCharacter() has invalid type Velkuns\GameTextEngine\Element\CharacterData.'
+			identifier: class.notFound
 			count: 1
 			path: src/Element/ElementFactory.php
 
@@ -82,4 +184,22 @@ parameters:
 			rawMessage: 'Undefined variable: $id'
 			identifier: variable.undefined
 			count: 2
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: Unknown parameter $description in call to Velkuns\GameTextEngine\Element\Modifier\Modifier constructor.
+			identifier: argument.unknown
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: Unknown parameter $name in call to Velkuns\GameTextEngine\Element\Modifier\Modifier constructor.
+			identifier: argument.unknown
+			count: 1
+			path: src/Element/ElementFactory.php
+
+		-
+			rawMessage: Unknown parameter $targetAbility in call to Velkuns\GameTextEngine\Element\Modifier\Modifier constructor.
+			identifier: argument.unknown
+			count: 1
 			path: src/Element/ElementFactory.php

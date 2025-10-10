@@ -9,6 +9,6 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Exception;
+namespace Velkuns\GameTextEngine\Element\Exception;
 
-class ItemUnequipableException extends \RuntimeException {}
+class ElementJsonParseException extends \RuntimeException {}

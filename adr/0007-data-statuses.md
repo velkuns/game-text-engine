@@ -1,4 +1,4 @@
-# Data - Status
+# Data - Statuses
 
 ## Status
 
@@ -15,6 +15,13 @@ For example:
 - a curse that decrease the strength
 - ...
 
+List of possible status types:
+- skill
+- state
+- blessing
+- curse
+- title (purely descriptive, no effect)
+
 ## Decision
 
 Status format:
@@ -23,8 +30,10 @@ Status format:
     "type": "skill|state|blessing|curse|title",
     "name": "string",
     "description": "string",
+    "modifiers": [],
     "conditions?": {},
-    "modifiers": []
+    "durationTurns": "int",
+    "remainingTurns": "int"
 }
 ```
 
@@ -39,7 +48,9 @@ Blessing status example:
             "ability": "strength",
             "value": 3
         }
-    ]
+    ],
+    "duration": "int",
+    "remaining": "int"
 }
 ```
 
@@ -54,7 +65,9 @@ Curse status example:
             "ability": "endurance",
             "value": -2
         }
-    ]
+    ],
+    "durationTurns": "int",
+    "remainingTurns": "int"
 }
 ```
 
@@ -73,7 +86,9 @@ State status examples:
             "ability": "agility",
             "value": -10
         }
-    ]
+    ],
+    "durationTurns": "int",
+    "remainingTurns": "int"
 }
 ```
 
@@ -93,14 +108,6 @@ Skill status example:
     "type": "skill",
     "name": "Sword Mastery",
     "description": "You have mastered the art of sword fighting. Your strength is increased by 2 and your agility by 1 when you have a weapon.",
-    "condition": {
-        "has": "item",
-        "item": {
-            "type": "weapon",
-            "subtype": "sword",
-            "equipped": true
-        }
-    },
     "modifier": [
         {
             "ability": "strength",
@@ -110,6 +117,14 @@ Skill status example:
             "ability": "agility",
             "value": 1
         }
-    ]
+    ],
+    "condition": {
+        "has": "item",
+        "item": {
+            "type": "weapon",
+            "subtype": "sword",
+            "equipped": true
+        }
+    }
 }
 ```

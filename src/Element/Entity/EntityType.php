@@ -9,6 +9,11 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Exception;
+namespace Velkuns\GameTextEngine\Element\Entity;
 
-class AbilityJsonParseException extends \RuntimeException {}
+enum EntityType: string
+{
+    case Player = 'player';
+    case Npc       = 'npc';
+    case Creature  = 'creature';
+}

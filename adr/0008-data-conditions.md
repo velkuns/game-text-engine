@@ -13,6 +13,17 @@ So we need to define number of conditions required from a list to be considered 
 - number: number of conditions required to be met
 - list: list of conditions
 
+Condition types:
+- ability: check an ability value
+- skill: check if a skill is present or not
+- state: check if a state is present or not
+- blessing: check if a blessing is present or not
+- curse: check if a curse is present or not
+- title: check if a title is present or not
+- item: check if an item is present or not (in inventory or equipped)
+- entity_size: check size of the entity (player or enemy)
+- entity_race: check race of the entity (player or enemy)
+
 ## Decision
 
 Condition format:
@@ -23,9 +34,9 @@ Condition format:
     "list": [
         {
             "type": "string",
-            "name": "string (can be empty)",
-            "operator": ">|<|>=|<=|==|!=",
+            "operator": ">|<|>=|<=|=|!=",
             "value": "int",
+            "name?": "string",
             "subtype?": "string",
             "equipped?": "boolean",
             "flags?": "int"
@@ -39,7 +50,7 @@ Condition format:
 {
     "type": "ability",
     "name": "string",
-    "operator": ">|<|>=|<=|==|!=",
+    "operator": ">|<|>=|<=|=|!=",
     "value": "int"
 }
 ```
@@ -70,6 +81,32 @@ Condition format:
 > Value is 1 if the item must be present, 0 if it must not be present.
 > Equipped and flags are optional and can be used to match more precisely the condition.
 
+### Entities conditions type
+#### Size of the entity (player or enemy)
+```json
+{
+    "type": "entity_size",
+    "name": "tiny|small|medium|large|huge",
+    "operator": "=",
+    "value": "0|1"
+}
+```
+
+#### Race of the entity (player or enemy)
+```json
+{
+    "type": "entity_race",
+    "name": "rat|goblin|human|elf|dwarf|orc|troll|...",
+    "operator": "=",
+    "value": "0|1"
+}
+```
+
+
+
+
+
+
 ### Examples
 Ability condition example:
  - At least 1 of the following conditions must be met:
@@ -79,7 +116,7 @@ Ability condition example:
 ```json
 {
     "conditions": {
-        "number": "1",
+        "numberRequired": "1",
         "list": [
             {
                 "type": "ability",
@@ -103,11 +140,11 @@ State condition example:
 ```json
 {
     "conditions": {
-        "number": "3",
+        "numberRequired": "3",
         "list": [
             {
                 "type": "skill",
-                "name": "lock-picking",
+                "name": "lockpicking",
                 "operator": "=",
                 "value": 1
             },
@@ -134,7 +171,7 @@ Weapon condition example:
 ```json
 {
     "conditions": {
-        "number": "1",
+        "numberRequired": "1",
         "list": [
             {
                 "type": "item",
@@ -154,7 +191,7 @@ Weapon condition example:
 ```json
 {
     "conditions": {
-        "number": "1",
+        "numberRequired": "1",
         "list": [
             {
                 "type": "item",

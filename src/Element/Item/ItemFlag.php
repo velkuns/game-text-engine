@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Item;
+namespace Velkuns\GameTextEngine\Element\Item;
 
 class ItemFlag
 {

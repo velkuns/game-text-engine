@@ -9,23 +9,19 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Modifier;
+namespace Velkuns\GameTextEngine\Element\Modifier;
 
 /**
  * @phpstan-type ModifierData array{
- *     name: string,
- *     description: string,
- *     targetAbility: string,
+ *     ability: string,
  *     value: int,
  * }
  */
 readonly class Modifier implements \JsonSerializable
 {
     public function __construct(
-        public string $name,
-        public string $targetAbility,
+        public string $ability,
         public int $value,
-        public string $description = '',
     ) {}
 
     /**
@@ -34,10 +30,8 @@ readonly class Modifier implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'name'          => $this->name,
-            'targetAbility' => $this->targetAbility,
-            'value'         => $this->value,
-            'description'   => $this->description,
+            'ability' => $this->ability,
+            'value'   => $this->value,
         ];
     }
 }

@@ -9,11 +9,10 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Item;
+namespace Velkuns\GameTextEngine\Element\Ability;
 
-use Velkuns\GameTextEngine\Character\Character;
-
-interface ItemConsumableInterface
+enum AbilityType: string
 {
-    public function useOn(Character $character): static;
+    case Base = 'base';
+    case Compound = 'compound';
 }

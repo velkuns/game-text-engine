@@ -9,23 +9,37 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Item;
+namespace Velkuns\GameTextEngine\Element\Item;
 
-use Velkuns\GameTextEngine\Modifier\Modifier;
+use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 
-interface ItemInterface
+interface ItemInterface extends \JsonSerializable
 {
-    public function getId(): int;
+    public function getType(): string;
+
     public function getName(): string;
+
     public function getDescription(): string;
+
+    public function getSubType(): ?string;
 
     /**
      * @return list<Modifier>
      */
     public function getModifiers(): array;
 
+    public function getFlags(): int;
+
+    public function getPrice(): int;
+
+    public function isEquipped(): bool;
+
+
     public function isConsumable(): bool;
+
     public function isEquipable(): bool;
+
     public function isWeapon(): bool;
+
     public function isGear(): bool;
 }

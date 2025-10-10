@@ -20,7 +20,7 @@ So we need to define how an item is stored, with its properties.
     "modifiers": "list<Modifier>",
     "flags": "int",
     "equipped": "bool",
-    "price?": "int"
+    "price": "int"
 }
 ```
 

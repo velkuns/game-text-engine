@@ -1,4 +1,4 @@
-# Data - Players
+# Data - Player
 
 ## Status
 
@@ -25,15 +25,17 @@ Format:
 {
     "name": "string",
     "info": {
-        "size": "int",
+        "level": "int",
         "age": "int",
+        "size": "string",
         "race": "string",
         "description": "string",
-        "background": "string"
+        "background": "string",
+        "notes": "string"
     },
-    "notes": "string",
-    "inventory": [],
-    "abilities": {}
+    "abilities": "Abilities",
+    "statuses": "Statuses",
+    "inventory": "Inventory"
 }
 ```
 
@@ -42,28 +44,25 @@ Example:
 {
     "name": "player #1",
     "info": {
+        "level": "1",
         "size": "175",
         "age": "20",
         "race": "human",
         "description": "...",
-        "background": "..."
+        "background": "...",
+        "notes": "..."
     },
-    "notes": "...",
-    "inventory": [],
     "abilities": {
-        "strength": {},
-        "endurance": {},
-        "agility": {},
-        "intuition": {},
-        "vitality": {},
-        "attack": {
-            "type": "compound",
-            "rule": "(strength + agility) / 2"
-        },
-        "defense": {
-            "type": "compound",
-            "rule": "(((endurance + intuition) * 2) / 2 ) + 4"
-        }
-    }
+        "base": "list<BaseAbility>",
+        "compound": "list<CompoundAbility>"
+    },
+    "statuses": {
+        "skills": "list<Status>",
+        "states": "list<Status>",
+        "blessings": "list<Status>",
+        "curses": "list<Status>",
+        "titles": "list<Status>"
+    },
+    "inventory": "list<Item>"
 }
 ```
