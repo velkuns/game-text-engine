@@ -19,7 +19,11 @@ interface AbilityInterface extends \JsonSerializable
 
     public function getCurrent(): int;
 
+    public function getMax(): int;
+
     public function getInitial(): int;
 
     public function getConstraints(): ConstraintsAbility;
+
+    public function getRule(): ?string;
 }

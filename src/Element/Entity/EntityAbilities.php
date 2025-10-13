@@ -19,38 +19,24 @@ use Velkuns\GameTextEngine\Element\Ability\CompoundAbility;
  * @phpstan-import-type BaseAbilityData from BaseAbility
  * @phpstan-import-type CompoundAbilityData from CompoundAbility
  * @phpstan-type AbilitiesData array{
- *     base: array<string, BaseAbilityData>,
- *     compound: array<string, CompoundAbilityData>,
+ *     bases: array<string, BaseAbilityData>,
+ *     compounds: array<string, CompoundAbilityData>,
  * }
  */
-class EntityAbilities implements \JsonSerializable
+readonly class EntityAbilities implements \JsonSerializable
 {
-    /** @var array<string, BaseAbility> $base */
-    public array $base = [];
-
-    /** @var array<string, CompoundAbility> $compound */
-    public array $compound = [];
-
     /**
-     * @param list<BaseAbility> $baseAbilities
-     * @param list<CompoundAbility> $compoundAbilities
+     * @param array<string, BaseAbility> $bases
+     * @param array<string, CompoundAbility> $compounds
      */
     public function __construct(
-        array $baseAbilities = [],
-        array $compoundAbilities = [],
-    ) {
-        foreach ($baseAbilities as $ability) {
-            $this->base[$ability->name] = $ability;
-        }
-
-        foreach ($compoundAbilities as $ability) {
-            $this->compound[$ability->name] = $ability;
-        }
-    }
+        private array $bases,
+        private array $compounds = [],
+    ) {}
 
     public function get(string $name): ?AbilityInterface
     {
-        return $this->base[$name] ?? $this->compound[$name] ?? null;
+        return $this->bases[$name] ?? $this->compounds[$name] ?? null;
     }
 
     /**
@@ -59,8 +45,8 @@ class EntityAbilities implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'base'     => \array_map(fn(AbilityInterface $ability) => $ability->jsonSerialize(), $this->base),
-            'compound' => \array_map(fn(AbilityInterface $ability) => $ability->jsonSerialize(), $this->compound),
+            'bases'     => \array_map(fn(AbilityInterface $ability) => $ability->jsonSerialize(), $this->bases),
+            'compounds' => \array_map(fn(AbilityInterface $ability) => $ability->jsonSerialize(), $this->compounds),
         ];
     }
 }

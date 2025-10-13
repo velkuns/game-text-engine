@@ -14,17 +14,7 @@ namespace Velkuns\GameTextEngine\Element\Item;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 
 /**
- * @phpstan-import-type ModifierData from Modifier
- * @phpstan-type ItemData array{
- *     name: string,
- *     type: string,
- *     subtype: string|null,
- *     description: string,
- *     modifiers: list<ModifierData>,
- *     flags: int,
- *     equipped: bool,
- *     price: int,
- * }
+ * @phpstan-import-type ItemData from ItemInterface
  */
 readonly class Item implements ItemInterface
 {
@@ -111,16 +101,7 @@ readonly class Item implements ItemInterface
     }
 
     /**
-     * @return array{
-     *      name: string,
-     *      type: string,
-     *      subtype: string|null,
-     *      description: string,
-     *      modifiers: list<ModifierData>,
-     *      flags: int,
-     *      equipped: bool,
-     *      price: int,
-     * }
+     * @return ItemData
      */
     public function jsonSerialize(): array
     {

@@ -49,6 +49,11 @@ readonly class BaseAbility implements AbilityInterface
         return $this->current;
     }
 
+    public function getMax(): int
+    {
+        return $this->max;
+    }
+
     public function getInitial(): int
     {
         return $this->initial;
@@ -57,6 +62,11 @@ readonly class BaseAbility implements AbilityInterface
     public function getConstraints(): ConstraintsAbility
     {
         return $this->constraints;
+    }
+
+    public function getRule(): ?string
+    {
+        return $this->rule;
     }
 
     /**

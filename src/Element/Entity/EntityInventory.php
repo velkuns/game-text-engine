@@ -13,6 +13,9 @@ namespace Velkuns\GameTextEngine\Element\Entity;
 
 use Velkuns\GameTextEngine\Element\Item\Item;
 
+/**
+ * @phpstan-import-type ItemData from Item
+ */
 class EntityInventory implements \JsonSerializable
 {
     /** @var \WeakMap<Item, Item> */
@@ -24,6 +27,7 @@ class EntityInventory implements \JsonSerializable
     public function __construct(
         array $items = [],
     ) {
+        $this->items = new \WeakMap();
         foreach ($items as $item) {
             $this->add($item);
         }
@@ -51,13 +55,13 @@ class EntityInventory implements \JsonSerializable
     }
 
     /**
-     * @return list<Item>
+     * @return list<ItemData>
      */
     public function jsonSerialize(): array
     {
         $items = [];
         foreach ($this->items as $item) {
-            $items[] = $item;
+            $items[] = $item->jsonSerialize();
         }
 
         return $items;

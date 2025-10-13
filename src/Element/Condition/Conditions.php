@@ -16,14 +16,14 @@ use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 /**
  * @phpstan-import-type ConditionData from ConditionInterface
  * @phpstan-type ConditionsData array{
- *     number_required: int,
- *     conditions: array<string, ConditionData>,
+ *     numberRequired: int,
+ *     conditions: list<ConditionData>,
  * }
  */
 readonly class Conditions implements \JsonSerializable
 {
     /**
-     * @param array<string, Condition> $conditions
+     * @param list<Condition> $conditions
      */
     public function __construct(
         private int $numberRequired,
@@ -36,7 +36,7 @@ readonly class Conditions implements \JsonSerializable
     }
 
     /**
-     * @return array<string, Condition>
+     * @return list<Condition>
      */
     public function getConditions(): array
     {
@@ -48,7 +48,7 @@ readonly class Conditions implements \JsonSerializable
         $validConditions = 0;
 
         foreach ($this->conditions as $condition) {
-            $validConditions += $condition->isValid($entity) ? 1 : 0;
+            $validConditions += $condition->evaluate($entity) ? 1 : 0;
 
             // Early exit if we already reached the required number of valid conditions
             if ($validConditions >= $this->numberRequired) {
@@ -65,8 +65,8 @@ readonly class Conditions implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'number_required' => $this->numberRequired,
-            'conditions'      => \array_map(fn(Condition $condition) => $condition->jsonSerialize(), $this->conditions),
+            'numberRequired' => $this->numberRequired,
+            'conditions'     => \array_map(fn(Condition $condition) => $condition->jsonSerialize(), $this->conditions),
         ];
     }
 }

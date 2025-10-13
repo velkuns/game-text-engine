@@ -47,6 +47,11 @@ readonly class CompoundAbility implements AbilityInterface
         return \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getCurrent(), $this->abilities));
     }
 
+    public function getMax(): int
+    {
+        return \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getMax(), $this->abilities));
+    }
+
     public function getInitial(): int
     {
         return \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getInitial(), $this->abilities));
@@ -58,6 +63,11 @@ readonly class CompoundAbility implements AbilityInterface
         $max = \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getConstraints()->max, $this->abilities));
 
         return new ConstraintsAbility($min, $max);
+    }
+
+    public function getRule(): string
+    {
+        return $this->rule;
     }
 
     /**

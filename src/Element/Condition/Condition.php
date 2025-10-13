@@ -18,7 +18,7 @@ use Velkuns\GameTextEngine\Element\Status\StatusType;
 /**
  * @phpstan-import-type ConditionData from ConditionInterface
  */
-readonly class Condition implements \JsonSerializable
+readonly class Condition implements ConditionInterface
 {
     public function __construct(
         private ConditionType $type,
@@ -29,11 +29,6 @@ readonly class Condition implements \JsonSerializable
         private ?bool $isEquipped = null,
         private ?int $flags = null,
     ) {}
-
-    public function validate(): ?int
-    {
-        return $this->flags;
-    }
 
     public function getType(): ConditionType
     {
@@ -70,7 +65,7 @@ readonly class Condition implements \JsonSerializable
         return $this->flags;
     }
 
-    public function isValid(EntityInterface $entity): bool
+    public function evaluate(EntityInterface $entity): bool
     {
         $entityValue = match ($this->getType()) {
             ConditionType::Ability    => $entity->getAbilities()->get($this->getName())?->getCurrent() ?? 0,
@@ -138,13 +133,13 @@ readonly class Condition implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'type'       => $this->type->value,
-            'operator'   => $this->operator->value,
-            'value'      => $this->value,
-            'name'       => $this->name,
-            'subType'    => $this->subType,
-            'isEquipped' => $this->isEquipped,
-            'flags'      => $this->flags,
+            'type'     => $this->type->value,
+            'name'     => $this->name,
+            'operator' => $this->operator->value,
+            'value'    => $this->value,
+            'subType'  => $this->subType,
+            'equipped' => $this->isEquipped,
+            'flags'    => $this->flags,
         ];
     }
 }
