@@ -1,4 +1,4 @@
-# Architecture - Character statistics
+# Architecture - Entity statistics
 
 ## Status
 `draft`
@@ -11,7 +11,7 @@ Cela permet également de pouvoir créer différents types de personnages, avec 
 combats moins linéaires. Les statistiques peuvent aussi être utilisés pour d'autres mécaniques de jeu.
 
 ## Decision
-### Character stats game
+### Entity stats game
 Pour faire des combats un joueur doit avoir des statistiques de combat, comme la force, l'agilité, l'endurance, etc.
 Après quelques réflexions, je suis arrivé à cet ensemble de statistiques de base pour un joueur dans un jeu de type "playbook".
 - strength (force) : reflète la puissance physique du personnage
@@ -33,7 +33,7 @@ probabilités de succès et les dégâts infligés.
 - _Attack_ -> **(strength + agility)** : Force + agilité pour représenter sa capacité à porter une offensive efficace
 - _Defense_ -> **(endurance + intuition) * 2** : Endurance et intuition pour représenter sa capacité à résister aux attaques et à anticiper les mouvements de l'adversaire
 
-Hit chance: Character Attack / Enemy Defense
+Hit chance: Entity Attack / Enemy Defense
 
 #### Examples
 
@@ -41,10 +41,10 @@ Example 1:
 
 |            | strength | agility | endurance | intuition |
 |------------|----------|---------|-----------|-----------|
-| Character  | 6        | 6       | 6         | 6         |
+| Entity  | 6        | 6       | 6         | 6         |
 | Enemy      | 6        | 6       | 6         | 6         |
 
-- Character Attack = 6 + 6 = 100
+- Entity Attack = 6 + 6 = 100
 - Enemy Defense = (6 + 6) * 2 = 200
 - Hit chance = 12 / 24 = 0.5 (50%)
 
@@ -57,10 +57,10 @@ Ce rat est plus petit (donc moins de force et d'endurance), mais plus agile et i
 
 |           | strength | agility | endurance | intuition |
 |-----------|----------|---------|-----------|-----------|
-| Character | 6        | 6       | 6         | 6         |
+| Entity | 6        | 6       | 6         | 6         |
 | Raged Rat | 2        | 10      | 2         | 10        |
 
-- Character Attack = 6 + 6 = 12
+- Entity Attack = 6 + 6 = 12
 - Enemy Defense = (2 + 10) * 2 = 24
 - Hit chance = 12 / 24 = 0.5 (50%)
 
