@@ -11,21 +11,22 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Entity;
 
+use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 use Velkuns\GameTextEngine\Element\Status\StatusType;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface
  */
-readonly class Entity implements EntityInterface
+class Entity implements EntityInterface
 {
     public function __construct(
-        public string $name,
-        public EntityType $type,
-        public int $coins,
-        public EntityInfo $info,
-        public EntityAbilities $abilities,
-        public EntityStatuses $statuses,
-        public EntityInventory $inventory,
+        private readonly string $name,
+        private readonly EntityType $type,
+        private int $coins,
+        private readonly EntityInfo $info,
+        private readonly EntityAbilities $abilities,
+        private readonly EntityStatuses $statuses,
+        private readonly EntityInventory $inventory,
     ) {}
 
     public function getName(): string
@@ -72,6 +73,29 @@ readonly class Entity implements EntityInterface
             StatusType::Curse => isset($this->statuses->curses[$statusName]),
             StatusType::Title => isset($this->statuses->titles[$statusName]),
         };
+    }
+
+    /**
+     * @return list<Modifier>
+     */
+    public function getModifiers(Entity $enemy): array
+    {
+        $modifiers = [];
+
+        foreach ($this->statuses->skills as $status) {
+            if ($status->getModifiers() === []) {
+                continue;
+            }
+
+            $conditions = $status->getConditions();
+            if ($conditions === null || !$conditions->evaluate($this, $enemy)) {
+                continue;
+            }
+
+            $modifiers = \array_merge($modifiers, $status->getModifiers());
+        }
+
+        return $modifiers;
     }
 
     /**

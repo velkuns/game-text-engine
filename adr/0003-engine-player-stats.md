@@ -39,10 +39,10 @@ Hit chance: Entity Attack / Enemy Defense
 
 Example 1:
 
-|            | strength | agility | endurance | intuition |
-|------------|----------|---------|-----------|-----------|
-| Entity  | 6        | 6       | 6         | 6         |
-| Enemy      | 6        | 6       | 6         | 6         |
+|          | strength | agility | endurance | intuition |
+|----------|----------|---------|-----------|-----------|
+| Entity   | 6        | 6       | 6         | 6         |
+| Enemy    | 6        | 6       | 6         | 6         |
 
 - Entity Attack = 6 + 6 = 100
 - Enemy Defense = (6 + 6) * 2 = 200
@@ -57,7 +57,7 @@ Ce rat est plus petit (donc moins de force et d'endurance), mais plus agile et i
 
 |           | strength | agility | endurance | intuition |
 |-----------|----------|---------|-----------|-----------|
-| Entity | 6        | 6       | 6         | 6         |
+| Entity    | 6        | 6       | 6         | 6         |
 | Raged Rat | 2        | 10      | 2         | 10        |
 
 - Entity Attack = 6 + 6 = 12
@@ -71,7 +71,7 @@ De même, en cas de réussite du rat, il fera moins de dégâts au joueur, car m
 
 
 ### Life and damage
-Pour la vie du joueur, on peut utiliser la formule suivante (statistique composée) :
+Pour la vie du joueur, on peut utiliser la formule suivante (statistique de base mais composée à l'initialisation) :
 - vitality = endurance + strength
 
 Pour les dégâts, on peut utiliser la formule suivante :

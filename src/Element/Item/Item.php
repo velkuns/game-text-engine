@@ -28,6 +28,7 @@ readonly class Item implements ItemInterface
         private array $modifiers = [],
         private int $flags = 0,
         private bool $isEquipped = false,
+        private int $damages = 0,
         private int $price = 0,
         private string $type = 'item',
     ) {}
@@ -58,6 +59,11 @@ readonly class Item implements ItemInterface
     public function getSubType(): ?string
     {
         return $this->subType;
+    }
+
+    public function getDamages(): int
+    {
+        return $this->damages;
     }
 
     public function getFlags(): int
@@ -113,6 +119,7 @@ readonly class Item implements ItemInterface
             'modifiers'   => \array_map(fn(Modifier $modifier) => $modifier->jsonSerialize(), $this->modifiers),
             'flags'       => $this->flags,
             'equipped'    => $this->isEquipped,
+            'damages'     => $this->damages,
             'price'       => $this->price,
         ];
     }

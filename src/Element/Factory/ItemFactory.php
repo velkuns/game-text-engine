@@ -33,8 +33,9 @@ readonly class ItemFactory
         $modifiers   = \array_map(fn($modifier) => $this->modifierFactory->from($modifier), $data['modifiers']);
         $flags       = $data['flags'];
         $equipped    = $data['equipped'];
+        $damages     = $data['damages'];
         $price       = $data['price'];
 
-        return new Item($name, $subType, $description, $modifiers, $flags, $equipped, $price);
+        return new Item($name, $subType, $description, $modifiers, $flags, $equipped, $damages, $price);
     }
 }

@@ -322,6 +322,7 @@ class ElementFactoryTest extends TestCase
             ],
             "flags": 1,
             "equipped": false,
+            "damages": 2,
             "price": 100
         }';
 
@@ -332,6 +333,7 @@ class ElementFactoryTest extends TestCase
         self::assertSame("A sharp blade.", $item->getDescription());
         self::assertSame(1, $item->getFlags());
         self::assertFalse($item->isEquipped());
+        self::assertSame(2, $item->getDamages());
         self::assertSame(100, $item->getPrice());
         self::assertSame('item', $item->getType());
         self::assertCount(1, $item->getModifiers());
@@ -352,6 +354,7 @@ class ElementFactoryTest extends TestCase
             ],
             "flags": 1,
             "equipped": false,
+            "damages": 2,
             "price": 100
         ';
 
@@ -487,6 +490,7 @@ class ElementFactoryTest extends TestCase
                     "modifiers": [],
                     "flags": 7,
                     "equipped": true,
+                    "damages": 2,
                     "price": 0
                 }
             ]
@@ -535,6 +539,7 @@ class ElementFactoryTest extends TestCase
         self::assertSame('sword', $item->getSubType());
         self::assertSame('A sharp blade', $item->getDescription());
         self::assertTrue($item->isEquipped());
+        self::assertSame(2, $item->getDamages());
         self::assertSame(7, $item->getFlags());
         self::assertSame(0, $item->getPrice());
         self::assertEmpty($item->getModifiers());

@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
 
-use Velkuns\GameTextEngine\Element\Entity\Entity;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Entity\EntityType;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
@@ -19,8 +18,8 @@ use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
-use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Status\StatusType;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface
@@ -84,6 +83,7 @@ class EntityFactoryTest extends TestCase
         self::assertSame('sword', $item->getSubType());
         self::assertSame('A sharp blade', $item->getDescription());
         self::assertTrue($item->isEquipped());
+        self::assertSame(2, $item->getDamages());
         self::assertSame(7, $item->getFlags());
         self::assertSame(0, $item->getPrice());
         self::assertEmpty($item->getModifiers());
@@ -106,6 +106,7 @@ class EntityFactoryTest extends TestCase
             'modifiers'   => [],
             'flags'       => 7,
             'equipped'    => false,
+            'damages'     => 2,
             'price'       => 10,
         ]);
         $hero->getInventory()->add($axe);
@@ -246,6 +247,7 @@ class EntityFactoryTest extends TestCase
                     'modifiers'   => [],
                     'flags'       => 7,
                     'equipped'    => true,
+                    'damages'     => 2,
                     'price'       => 0,
                 ],
             ],

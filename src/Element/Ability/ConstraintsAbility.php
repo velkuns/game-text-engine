@@ -21,6 +21,19 @@ readonly class ConstraintsAbility implements \JsonSerializable
 {
     public function __construct(public int $min, public int $max) {}
 
+    public function clamp(int $value): int
+    {
+        if ($value < $this->min) {
+            return $this->min;
+        }
+
+        if ($value > $this->max) {
+            return $this->max;
+        }
+
+        return $value;
+    }
+
     /**
      * @return ConstraintsAbilityData
      */

@@ -23,6 +23,7 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  *      modifiers: list<ModifierData>,
  *      flags: int,
  *      equipped: bool,
+ *      damages: int,
  *      price: int,
  *  }
  */
@@ -40,6 +41,8 @@ interface ItemInterface extends \JsonSerializable
      * @return list<Modifier>
      */
     public function getModifiers(): array;
+
+    public function getDamages(): int;
 
     public function getFlags(): int;
 

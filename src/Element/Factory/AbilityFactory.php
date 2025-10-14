@@ -27,12 +27,21 @@ readonly class AbilityFactory
      */
     public function fromBases(array $data): array
     {
-        return \array_map(fn(array $abilityData) => $this->fromBaseAbility($abilityData), $data);
+        $withoutInit = \array_filter($data, fn(array $abilityData) => $abilityData['rule'] === null);
+        $withInit    = \array_filter($data, fn(array $abilityData) => $abilityData['rule'] !== null);
+
+        //~ First create all base abilities without initialization (no rule)
+        $bases = \array_map(fn(array $abilityData) => $this->fromBaseAbility($abilityData), $withoutInit);
+
+        //~ Then create all base abilities with init (with rule for initialization)
+        $bases += \array_map(fn(array $abilityData) => $this->fromBaseAbility($abilityData, $bases), $withInit);
+
+        return $bases;
     }
 
     /**
-     * @param array<string, CompoundAbilityData> $data
-     * @param array<string, BaseAbility> $bases
+     * @phpstan-param array<string, CompoundAbilityData> $data
+     * @phpstan-param array<string, BaseAbility> $bases
      * @return array<string, CompoundAbility>
      */
     public function fromCompounds(array $data, array $bases): array
@@ -41,10 +50,17 @@ readonly class AbilityFactory
     }
 
     /**
-     * @param BaseAbilityData $data
+     * @phpstan-param BaseAbilityData $data
+     * @phpstan-param array<string, BaseAbility> $baseAbilities
      */
-    public function fromBaseAbility(array $data): BaseAbility
+    public function fromBaseAbility(array $data, array $baseAbilities = []): BaseAbility
     {
+        //~ Filter only related abilities
+        $abilities = \array_filter(
+            $baseAbilities,
+            fn(BaseAbility $ability) => \str_contains($data['rule'] ?? '', $ability->name),
+        );
+
         return new BaseAbility(
             name: $data['name'],
             current: $data['current'],
@@ -55,12 +71,13 @@ readonly class AbilityFactory
             ),
             initial: $data['initial'],
             rule: $data['rule'] ?? null,
+            abilities: $abilities,
         );
     }
 
     /**
-     * @param CompoundAbilityData $data
-     * @param array<string, BaseAbility> $baseAbilities
+     * @phpstan-param CompoundAbilityData $data
+     * @phpstan-param array<string, BaseAbility> $baseAbilities
      */
     public function fromCompoundAbility(array $data, array $baseAbilities): CompoundAbility
     {
