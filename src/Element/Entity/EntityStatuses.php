@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Entity;
 
+use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 use Velkuns\GameTextEngine\Element\Status\Status;
 use Velkuns\GameTextEngine\Element\Status\StatusInterface;
 
@@ -60,6 +61,46 @@ class EntityStatuses implements \JsonSerializable
         $this->blessings = $blessings;
         $this->curses    = $curses;
         $this->titles    = $titles;
+    }
+
+    /**
+     * @return list<Modifier>
+     */
+    public function getAllModifiers(EntityInterface $player, EntityInterface $enemy): array
+    {
+        return \array_values(
+            \array_merge(
+                $this->getModifiers($this->skills, $player, $enemy),
+                $this->getModifiers($this->states, $player, $enemy),
+                $this->getModifiers($this->blessings, $player, $enemy),
+                $this->getModifiers($this->curses, $player, $enemy),
+                $this->getModifiers($this->titles, $player, $enemy),
+            ),
+        );
+    }
+
+    /**
+     * @param array<string, StatusInterface> $statuses
+     * @return Modifier[]
+     */
+    private function getModifiers(array $statuses, EntityInterface $player, EntityInterface $enemy): array
+    {
+        $modifiers = [];
+
+        foreach ($statuses as $status) {
+            if ($status->getModifiers() === []) {
+                continue;
+            }
+
+            $conditions = $status->getConditions();
+            if ($conditions === null || !$conditions->evaluate($player, $enemy)) {
+                continue;
+            }
+
+            $modifiers = \array_merge($modifiers, $status->getModifiers());
+        }
+
+        return $modifiers;
     }
 
     /**

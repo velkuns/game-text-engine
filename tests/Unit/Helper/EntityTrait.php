@@ -178,12 +178,48 @@ trait EntityTrait
                         'remainingTurns' => 0,
                     ],
                 ],
-                'states'    => [],
+                'states'    => [
+                    'Rested' => [
+                        'type'        => 'state',
+                        'name'        => 'Rested',
+                        'description' => 'You are well rested',
+                        'modifiers'   => [
+                            [
+                                'ability' => 'vitality',
+                                'value'   => 0,
+                            ],
+                        ],
+                        'conditions'  => null,
+                        'durationTurns'  => 0,
+                        'remainingTurns' => 0,
+                    ],
+                ],
                 'blessings' => [],
                 'curses'    => [],
-                'titles'    => [],
+                'titles'    => [
+                    'Dragon Slayer' => [
+                        'type'        => 'title',
+                        'name'        => 'Dragon Slayer',
+                        'description' => 'You have slain a dragon',
+                        'modifiers'   => [],
+                        'conditions'  => null,
+                        'durationTurns'  => 0,
+                        'remainingTurns' => 0,
+                    ],
+                ],
             ],
             'inventory' => [
+                [
+                    'type'        => 'item',
+                    'name'        => 'The Axe',
+                    'subType'     => 'axe',
+                    'description' => 'A sharp axe',
+                    'modifiers'   => [],
+                    'flags'       => 7,
+                    'equipped'    => false,
+                    'damages'     => 2,
+                    'price'       => 0,
+                ],
                 [
                     'type'        => 'item',
                     'name'        => 'The Sword',

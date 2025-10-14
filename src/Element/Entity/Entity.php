@@ -80,22 +80,7 @@ class Entity implements EntityInterface
      */
     public function getModifiers(Entity $enemy): array
     {
-        $modifiers = [];
-
-        foreach ($this->statuses->skills as $status) {
-            if ($status->getModifiers() === []) {
-                continue;
-            }
-
-            $conditions = $status->getConditions();
-            if ($conditions === null || !$conditions->evaluate($this, $enemy)) {
-                continue;
-            }
-
-            $modifiers = \array_merge($modifiers, $status->getModifiers());
-        }
-
-        return $modifiers;
+        return $this->statuses->getAllModifiers($this, $enemy);
     }
 
     /**
