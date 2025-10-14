@@ -1,7 +1,7 @@
 # Game Text Engine
 [![Current version](https://img.shields.io/packagist/v/velkuns/game-text-engine.svg?logo=composer)](https://packagist.org/packages/velkuns/game-text-engine)
 [![Supported PHP version](https://img.shields.io/static/v1?logo=php&label=PHP&message=8.3%20-%208.5&color=777bb4)](https://packagist.org/packages/velkuns/game-text-engine)
-![CI](https://github.com/eureka-framework/component-template/workflows/CI/badge.svg)
+![CI](https://github.com/velkuns/game-text-engine/workflows/CI/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=velkuns_game-text-engine&metric=alert_status)](https://sonarcloud.io/dashboard?id=velkuns_game-text-engine)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=velkuns_game-text-engine&metric=coverage)](https://sonarcloud.io/dashboard?id=velkuns_game-text-engine)
 
@@ -37,11 +37,6 @@ See the [CONTRIBUTING](CONTRIBUTING.md) file.
 
 
 ### Install / update project
-
-You can run the global command to install app, install assets, compiles it then docker compose build & up:
-```bash
-make app/run
-```
 
 You can install project with the following command:
 ```bash
@@ -94,19 +89,6 @@ make php/deps
 To perform a static analyze of your code (with phpstan, lvl 9 at default), you can use the following command:
 ```bash
 make php/analyse
-```
-
-To ensure you code still compatible with current supported version at Deezer and futures versions of php, you need to
-run the following commands (both are required for full support):
-
-Minimal supported version:
-```bash
-make php/min-compatibility
-```
-
-Maximal supported version:
-```bash
-make php/max-compatibility
 ```
 
 #### CI Simulation
