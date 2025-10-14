@@ -34,7 +34,7 @@ readonly class Combat
         $endurance = $defender->getAbilities()->get('endurance')?->getCurrentWithModifiers($defenderModifiers);
 
         if ($attack === null || $defense === null || $strength === null || $endurance === null) {
-            throw new \RuntimeException('Both attacker and defender must have attack and defense abilities'); // @codeCoverageIgnore
+            throw new \UnexpectedValueException('Both attacker and defender must have attack and defense abilities'); // @codeCoverageIgnore
         }
 
         //~ hit chance = attack / (defense * 2)
@@ -76,7 +76,7 @@ readonly class Combat
         $vitality = $defender->getAbilities()->get('vitality');
 
         if ($vitality === null) {
-            throw new \RuntimeException('Entity has no vitality ability'); // @codeCoverageIgnore
+            throw new \UnexpectedValueException('Entity has no vitality ability'); // @codeCoverageIgnore
         }
 
         $vitality->decrease($damages);
