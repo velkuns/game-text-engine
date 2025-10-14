@@ -28,7 +28,7 @@ readonly class ItemFactory
     public function from(array $data): Item
     {
         $name        = $data['name'];
-        $subType     = $data['subtype'] ?? null;
+        $subType     = $data['subType'] ?? null;
         $description = $data['description'];
         $modifiers   = \array_map(fn($modifier) => $this->modifierFactory->from($modifier), $data['modifiers']);
         $flags       = $data['flags'];

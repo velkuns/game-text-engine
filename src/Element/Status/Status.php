@@ -79,8 +79,8 @@ readonly class Status implements StatusInterface
             'type'           => $this->getType()->value,
             'name'           => $this->getName(),
             'description'    => $this->getDescription(),
-            'conditions'     => $this->getConditions()?->jsonSerialize(),
             'modifiers'      => array_map(fn(Modifier $modifier) => $modifier->jsonSerialize(), $this->getModifiers()),
+            'conditions'     => $this->getConditions()?->jsonSerialize(),
             'durationTurns'  => $this->getDurationTurns(),
             'remainingTurns' => $this->getRemainingTurns(),
         ];

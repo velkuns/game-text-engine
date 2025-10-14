@@ -41,8 +41,8 @@ readonly class EntityInfo implements \JsonSerializable
     {
         return [
             'level'       => $this->level,
-            'size'        => $this->size,
             'age'         => $this->age,
+            'size'        => $this->size,
             'race'        => $this->race,
             'description' => $this->description,
             'background'  => $this->background,

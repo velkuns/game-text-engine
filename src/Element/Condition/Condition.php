@@ -94,7 +94,7 @@ readonly class Condition implements ConditionInterface
 
             if ($this->isEquipped() !== null) {
                 $matchFull++;
-                $match += $item->isEquipped() ? 1 : 0;
+                $match += $item->isEquipped() === $this->isEquipped() ? 1 : 0;
             }
 
             if ($this->getSubType() !== null) {
@@ -107,12 +107,12 @@ readonly class Condition implements ConditionInterface
                 $match += ($item->getFlags() & $this->getFlags()) === $this->getFlags() ? 1 : 0;
             }
 
-            if ($match === $matchFull) {
-                return true;
+            if ($match < $matchFull) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     private function match(int $value): bool

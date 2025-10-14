@@ -106,9 +106,9 @@ readonly class Item implements ItemInterface
     public function jsonSerialize(): array
     {
         return [
-            'name'        => $this->name,
             'type'        => $this->type,
-            'subtype'     => $this->subType,
+            'name'        => $this->name,
+            'subType'     => $this->subType,
             'description' => $this->description,
             'modifiers'   => \array_map(fn(Modifier $modifier) => $modifier->jsonSerialize(), $this->modifiers),
             'flags'       => $this->flags,

@@ -18,7 +18,7 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  * @phpstan-type ItemData array{
  *      name: string,
  *      type: string,
- *      subtype: string|null,
+ *      subType: string|null,
  *      description: string,
  *      modifiers: list<ModifierData>,
  *      flags: int,

@@ -8,11 +8,11 @@
  */
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Tests\Unit\Element\Condition;
+namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use Velkuns\GameTextEngine\Element\Condition\Conditions;
 use Velkuns\GameTextEngine\Element\Entity\Entity;
+use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
+use Velkuns\GameTextEngine\Element\Entity\EntityType;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
 use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
@@ -20,150 +20,107 @@ use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
 use PHPUnit\Framework\TestCase;
+use Velkuns\GameTextEngine\Element\Status\StatusType;
 
-class ConditionsTest extends TestCase
+/**
+ * @phpstan-import-type EntityData from EntityInterface
+ */
+class EntityFactoryTest extends TestCase
 {
-    private static ConditionsFactory $conditionFactory;
-    private static EntityFactory $entityFactory;
+    private EntityFactory $entityFactory;
 
-    public static function setUpBeforeClass(): void
+    public function setUp(): void
     {
-        self::$conditionFactory = new ConditionsFactory();
-        self::$entityFactory    = new EntityFactory(
+        $this->entityFactory    = new EntityFactory(
             new AbilityFactory(),
             new StatusFactory(new ModifierFactory(), new ConditionsFactory()),
             new ItemFactory(new ModifierFactory()),
         );
     }
 
-    #[DataProvider('evaluateDataProvider')]
-    public function testEvaluate(Conditions $conditions, Entity $entity, bool $evaluation): void
+    public function testFrom(): void
     {
-        self::assertSame($evaluation, $conditions->evaluate($entity));
+        $data = self::getHeroData();
+        $hero = $this->entityFactory->from($data);
+
+        self::assertSame('Brave Test Hero #1', $hero->getName());
+        self::assertSame(EntityType::Player, $hero->getType());
+        self::assertSame(100, $hero->getCoins());
+
+        $info = $hero->getInfo();
+        self::assertSame(5, $info->level);
+        self::assertSame(30, $info->age);
+        self::assertSame('1m75', $info->size);
+        self::assertSame('elf', $info->race);
+        self::assertSame('A brave hero', $info->description);
+        self::assertSame('Born in a small village', $info->background);
+        self::assertSame('No special notes', $info->notes);
+
+        $ability = $hero->getAbilities()->get('strength');
+        self::assertNotNull($ability);
+        self::assertSame(10, $ability->getCurrent());
+        self::assertSame(20, $ability->getMax());
+        self::assertSame(10, $ability->getInitial());
+        self::assertNull($ability->getRule());
+        self::assertSame('strength', $ability->getName());
+
+        $statuses = $hero->getStatuses();
+        self::assertCount(1, $statuses->skills);
+        self::assertCount(0, $statuses->states);
+        self::assertCount(0, $statuses->blessings);
+        self::assertCount(0, $statuses->curses);
+        self::assertCount(0, $statuses->titles);
+
+        self::assertFalse($hero->hasStatus(StatusType::Skill, 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus(StatusType::State, 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus(StatusType::Blessing, 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus(StatusType::Curse, 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus(StatusType::Title, 'non-existing-skill'));
+
+
+        $item = $hero->getInventory()->get('The Sword');
+        self::assertNotNull($item);
+        self::assertSame('The Sword', $item->getName());
+        self::assertSame('sword', $item->getSubType());
+        self::assertSame('A sharp blade', $item->getDescription());
+        self::assertTrue($item->isEquipped());
+        self::assertSame(7, $item->getFlags());
+        self::assertSame(0, $item->getPrice());
+        self::assertEmpty($item->getModifiers());
+        self::assertSame('item', $item->getType());
+        self::assertTrue($item->isConsumable());
+        self::assertTrue($item->isEquipped());
+        self::assertFalse($item->isGear());
+        self::assertTrue($item->isEquipable());
+        self::assertTrue($item->isWeapon());
+
+        self::assertSame($data, $hero->jsonSerialize());
+
+        self::assertNull($hero->getInventory()->get('The Axe'));
+
+        $axe = (new ItemFactory(new ModifierFactory()))->from([
+            'type'        => 'item',
+            'name'        => 'The Axe',
+            'subType'     => 'axe',
+            'description' => 'A sharp axe',
+            'modifiers'   => [],
+            'flags'       => 7,
+            'equipped'    => false,
+            'price'       => 10,
+        ]);
+        $hero->getInventory()->add($axe);
+        self::assertNotNull($hero->getInventory()->get('The Axe'));
+
+        $hero->getInventory()->drop($axe);
+        self::assertNull($hero->getInventory()->get('The Axe'));
     }
 
     /**
-     * @return array<string, array{0: Conditions|null, 1: Entity, 2: bool}>
+     * @return EntityData
      */
-    public static function evaluateDataProvider(): array
+    public static function getHeroData(): array
     {
-        self::setUpBeforeClass();
-
         return [
-            'evaluate required 1 condition with list of 1 conditions' => [
-                self::$conditionFactory->from([
-                    'numberRequired' => 1,
-                    'conditions' => [
-                        [
-                            'type'     => 'ability',
-                            'name'     => 'strength',
-                            'operator' => '>=',
-                            'value'    => 10,
-                        ],
-                    ],
-                ]),
-                self::getHero(),
-                true,
-            ],
-            'evaluate required 1 condition with list of 1 conditions but evaluation failed' => [
-                self::$conditionFactory->from([
-                    'numberRequired' => 1,
-                    'conditions' => [
-                        [
-                            'type'     => 'skill',
-                            'name'     => 'swordsmanship',
-                            'operator' => '=',
-                            'value'    => 0,
-                        ],
-                    ],
-                ]),
-                self::getHero(),
-                false,
-            ],
-            'evaluate required 1 condition with list of 2 conditions' => [
-                self::$conditionFactory->from([
-                    'numberRequired' => 1,
-                    'conditions' => [
-                        [
-                            'type'     => 'ability',
-                            'name'     => 'strength',
-                            'operator' => '>',
-                            'value'    => 10,
-                        ],
-                        [
-                            'type'     => 'ability',
-                            'name'     => 'agility',
-                            'operator' => '=',
-                            'value'    => 15,
-                        ],
-                    ],
-                ]),
-                self::getHero(),
-                true,
-            ],
-            'evaluate required 2 condition with list of 2 conditions' => [
-                self::$conditionFactory->from([
-                    'numberRequired' => 2,
-                    'conditions' => [
-                        [
-                            'type'     => 'ability',
-                            'name'     => 'strength',
-                            'operator' => '<=',
-                            'value'    => 10,
-                        ],
-                        [
-                            'type'     => 'ability',
-                            'name'     => 'agility',
-                            'operator' => '>',
-                            'value'    => 0,
-                        ],
-                    ],
-                ]),
-                self::getHero(),
-                true,
-            ],
-            'evaluate required 1 condition with list of 1 conditions on specific item' => [
-                self::$conditionFactory->from([
-                    'numberRequired' => 1,
-                    'conditions' => [
-                        [
-                            'type'     => 'item',
-                            'name'     => 'The Sword',
-                            'subType'  => 'sword',
-                            'operator' => '=',
-                            'value'    => 1,
-                            'equipped' => true,
-                            'flags'    => 3,
-                        ],
-                    ],
-                ]),
-                self::getHero(),
-                true,
-            ],
-            'evaluate required 1 condition with list of 1 conditions on specific item but evaluation failed' => [
-                self::$conditionFactory->from([
-                    'numberRequired' => 1,
-                    'conditions' => [
-                        [
-                            'type'     => 'item',
-                            'name'     => 'The Sword',
-                            'subType'  => 'sword',
-                            'operator' => '=',
-                            'value'    => 1,
-                            'equipped' => false,
-                            'flags'    => 3,
-                        ],
-                    ],
-                ]),
-                self::getHero(),
-                false,
-            ],
-        ];
-    }
-
-    public static function getHero(): Entity
-    {
-        $data = [
             'name'  => 'Brave Test Hero #1',
             'type'  => 'player',
             'coins' => 100,
@@ -178,6 +135,7 @@ class ConditionsTest extends TestCase
             ],
             'abilities' => [
                 'bases' => [
+
                     'strength' => [
                         'type'    => 'base',
                         'name'    => 'strength',
@@ -292,7 +250,5 @@ class ConditionsTest extends TestCase
                 ],
             ],
         ];
-
-        return self::$entityFactory->from($data);
     }
 }
