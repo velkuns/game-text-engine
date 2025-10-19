@@ -13,8 +13,6 @@ namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
 use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
 use Velkuns\GameTextEngine\Element\Ability\ConstraintsAbility;
 use Velkuns\GameTextEngine\Element\Condition\ConditionOperatorType;
-use Velkuns\GameTextEngine\Element\Condition\ConditionType;
-use Velkuns\GameTextEngine\Element\Entity\EntityType;
 use Velkuns\GameTextEngine\Element\Exception\ElementJsonParseException;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
@@ -24,7 +22,6 @@ use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
-use Velkuns\GameTextEngine\Element\Status\StatusType;
 
 class ElementFactoryTest extends TestCase
 {
@@ -69,7 +66,7 @@ class ElementFactoryTest extends TestCase
                 "numberRequired": 1,
                 "conditions": [
                     {
-                        "type": "item",
+                        "type": "self.inventory.item",
                         "name": "",
                         "operator": "=",
                         "value": 1,
@@ -85,7 +82,7 @@ class ElementFactoryTest extends TestCase
 
         $status = $this->elementFactory->statusFromJson($json);
 
-        self::assertSame(StatusType::Skill, $status->getType());
+        self::assertSame('skill', $status->getType());
         self::assertSame('swordsmanship', $status->getName());
         self::assertSame('Skill in using swords.', $status->getDescription());
         self::assertCount(2, $status->getModifiers());
@@ -117,7 +114,7 @@ class ElementFactoryTest extends TestCase
                 "numberRequired": 1,
                 "conditions": [
                     {
-                        "type": "item",
+                        "type": "self.inventory.item",
                         "name": "",
                         "operator": "=",
                         "value": 1,
@@ -167,7 +164,7 @@ class ElementFactoryTest extends TestCase
             "numberRequired": 1,
             "conditions": [
                 {
-                    "type": "item",
+                    "type": "self.inventory.item",
                     "name": "",
                     "operator": "=",
                     "value": 1,
@@ -183,7 +180,7 @@ class ElementFactoryTest extends TestCase
         self::assertCount(1, $conditions->getConditions());
 
         $condition = $conditions->getConditions()[0];
-        self::assertSame(ConditionType::Item, $condition->getType());
+        self::assertSame('self.inventory.item', $condition->getType());
         self::assertSame('', $condition->getName());
         self::assertSame(ConditionOperatorType::Equal, $condition->getOperator());
         self::assertSame(1, $condition->getValue());
@@ -198,7 +195,7 @@ class ElementFactoryTest extends TestCase
             "numberRequired": 1,
             "conditions": [
                 {
-                    "type": "item",
+                    "type": "self.inventory.item",
                     "name": "",
                     "operator": "=",
                     "value": 1,
@@ -462,7 +459,7 @@ class ElementFactoryTest extends TestCase
                             "numberRequired": 1,
                             "conditions": [
                                 {
-                                    "type": "item",
+                                    "type": "self.inventory.item",
                                     "name": "",
                                     "operator": "=",
                                     "value": 1,
@@ -499,7 +496,7 @@ class ElementFactoryTest extends TestCase
         $hero = $this->elementFactory->entityFromJson($json);
 
         self::assertSame('Brave Test Hero #1', $hero->getName());
-        self::assertSame(EntityType::Player, $hero->getType());
+        self::assertSame('player', $hero->getType());
         self::assertSame(100, $hero->getCoins());
 
         $info = $hero->getInfo();
@@ -526,11 +523,11 @@ class ElementFactoryTest extends TestCase
         self::assertCount(0, $statuses->curses);
         self::assertCount(0, $statuses->titles);
 
-        self::assertFalse($hero->hasStatus(StatusType::Skill, 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus(StatusType::State, 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus(StatusType::Blessing, 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus(StatusType::Curse, 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus(StatusType::Title, 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus('skill', 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus('state', 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus('blessing', 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus('curse', 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus('title', 'non-existing-skill'));
 
 
         $item = $hero->getInventory()->get('The Sword');

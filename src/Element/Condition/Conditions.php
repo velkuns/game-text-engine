@@ -49,7 +49,7 @@ readonly class Conditions implements \JsonSerializable
 
         foreach ($this->conditions as $condition) {
             //~ Some conditions are evaluated on the player, others on the enemy, depending on their type
-            $entity = $condition->getType()->isPlayerCondition() ? $player : $enemy;
+            $entity = \str_starts_with($condition->getType(), 'self') ? $player : $enemy;
 
             //~ Evaluate condition and increment valid conditions count if true
             $validConditions += $condition->evaluate($entity) ? 1 : 0;

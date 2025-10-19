@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Entity;
 
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
-use Velkuns\GameTextEngine\Element\Status\StatusType;
 
 /**
  * @phpstan-import-type EntityInfoData from EntityInfo
@@ -33,7 +32,7 @@ interface EntityInterface extends \JsonSerializable
 {
     public function getName(): string;
 
-    public function getType(): EntityType;
+    public function getType(): string;
 
     public function getCoins(): int;
 
@@ -45,5 +44,5 @@ interface EntityInterface extends \JsonSerializable
 
     public function getInventory(): EntityInventory;
 
-    public function hasStatus(StatusType $statusType, string $statusName): bool;
+    public function hasStatus(string $statusType, string $statusName): bool;
 }

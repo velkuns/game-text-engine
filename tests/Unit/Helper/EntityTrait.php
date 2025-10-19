@@ -164,7 +164,7 @@ trait EntityTrait
                             'numberRequired' => 1,
                             'conditions'     => [
                                 [
-                                    'type'     => 'item',
+                                    'type'     => 'self.inventory.item',
                                     'name'     => '',
                                     'operator' => '=',
                                     'value'    => 1,

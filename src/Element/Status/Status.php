@@ -23,7 +23,7 @@ readonly class Status implements StatusInterface
      * @param list<Modifier> $modifiers
      */
     public function __construct(
-        private StatusType $type,
+        private string $type,
         private string $name,
         private string $description,
         private array $modifiers,
@@ -32,7 +32,7 @@ readonly class Status implements StatusInterface
         private int $remainingTurns = 0,
     ) {}
 
-    public function getType(): StatusType
+    public function getType(): string
     {
         return $this->type;
     }
@@ -76,7 +76,7 @@ readonly class Status implements StatusInterface
     public function jsonSerialize(): array
     {
         return [
-            'type'           => $this->getType()->value,
+            'type'           => $this->getType(),
             'name'           => $this->getName(),
             'description'    => $this->getDescription(),
             'modifiers'      => array_map(fn(Modifier $modifier) => $modifier->jsonSerialize(), $this->getModifiers()),

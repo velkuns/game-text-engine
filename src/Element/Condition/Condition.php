@@ -13,7 +13,6 @@ namespace Velkuns\GameTextEngine\Element\Condition;
 
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Entity\EntityInventory;
-use Velkuns\GameTextEngine\Element\Status\StatusType;
 
 /**
  * @phpstan-import-type ConditionData from ConditionInterface
@@ -21,7 +20,7 @@ use Velkuns\GameTextEngine\Element\Status\StatusType;
 readonly class Condition implements ConditionInterface
 {
     public function __construct(
-        private ConditionType $type,
+        private string $type,
         private string $name,
         private ConditionOperatorType $operator,
         private int $value,
@@ -30,7 +29,7 @@ readonly class Condition implements ConditionInterface
         private ?int $flags = null,
     ) {}
 
-    public function getType(): ConditionType
+    public function getType(): string
     {
         return $this->type;
     }
@@ -68,15 +67,16 @@ readonly class Condition implements ConditionInterface
     public function evaluate(EntityInterface $entity): bool
     {
         $entityValue = match ($this->getType()) {
-            ConditionType::Ability    => $entity->getAbilities()->get($this->getName())?->getCurrent() ?? 0,
-            ConditionType::Skill      => $entity->hasStatus(StatusType::Skill, $this->getName()) ? 1 : 0,
-            ConditionType::State      => $entity->hasStatus(StatusType::State, $this->getName()) ? 1 : 0,
-            ConditionType::Blessing   => $entity->hasStatus(StatusType::Blessing, $this->getName()) ? 1 : 0,
-            ConditionType::Curse      => $entity->hasStatus(StatusType::Curse, $this->getName()) ? 1 : 0,
-            ConditionType::Title      => $entity->hasStatus(StatusType::Title, $this->getName()) ? 1 : 0,
-            ConditionType::EntityRace => $entity->getInfo()->race === $this->getName() ? 1 : 0,
-            ConditionType::EntitySize => $entity->getInfo()->size === $this->getName() ? 1 : 0,
-            ConditionType::Item       => $this->isValidItem($entity->getInventory()) ? 1 : 0,
+            'self.ability'             => $entity->getAbilities()->get($this->getName())?->getCurrent() ?? 0,
+            'self.statuses.skill'      => $entity->hasStatus('skill', $this->getName()) ? 1 : 0,
+            'self.statuses.state'      => $entity->hasStatus('state', $this->getName()) ? 1 : 0,
+            'self.statuses.blessing'   => $entity->hasStatus('blessing', $this->getName()) ? 1 : 0,
+            'self.statuses.curse'      => $entity->hasStatus('curse', $this->getName()) ? 1 : 0,
+            'self.statuses.title'      => $entity->hasStatus('title', $this->getName()) ? 1 : 0,
+            'enemy.info.race'           => $entity->getInfo()->race === $this->getName() ? 1 : 0,
+            'enemy.info.size'           => $entity->getInfo()->size === $this->getName() ? 1 : 0,
+            'self.inventory.item'      => $this->isValidItem($entity->getInventory()) ? 1 : 0,
+            default                      => 0, // Unknown type, return 0
         };
 
         return $this->match($entityValue);
@@ -134,7 +134,7 @@ readonly class Condition implements ConditionInterface
     public function jsonSerialize(): array
     {
         return [
-            'type'     => $this->type->value,
+            'type'     => $this->type,
             'name'     => $this->name,
             'operator' => $this->operator->value,
             'value'    => $this->value,

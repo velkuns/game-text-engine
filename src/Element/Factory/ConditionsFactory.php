@@ -15,7 +15,6 @@ use Velkuns\GameTextEngine\Element\Condition\Condition;
 use Velkuns\GameTextEngine\Element\Condition\ConditionInterface;
 use Velkuns\GameTextEngine\Element\Condition\ConditionOperatorType;
 use Velkuns\GameTextEngine\Element\Condition\Conditions;
-use Velkuns\GameTextEngine\Element\Condition\ConditionType;
 
 /**
  * @phpstan-import-type ConditionsData from Conditions
@@ -43,7 +42,7 @@ readonly class ConditionsFactory
      */
     private function fromCondition(array $data): Condition
     {
-        $type     = ConditionType::from($data['type']);
+        $type     = $data['type'];
         $name     = $data['name'];
         $operator = ConditionOperatorType::from($data['operator']);
         $value    = $data['value'];

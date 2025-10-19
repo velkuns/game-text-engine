@@ -26,12 +26,18 @@ use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
  */
 interface ConditionInterface
 {
-    public function getType(): ConditionType;
+    public function getType(): string;
+
     public function getName(): string;
+
     public function getOperator(): ConditionOperatorType;
+
     public function getValue(): int;
+
     public function getSubType(): ?string;
+
     public function isEquipped(): ?bool;
+
     public function getFlags(): ?int;
 
     public function evaluate(EntityInterface $entity): bool;
