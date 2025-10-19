@@ -19,7 +19,6 @@ use Velkuns\GameTextEngine\Element\Entity\EntityInfo;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Entity\EntityInventory;
 use Velkuns\GameTextEngine\Element\Entity\EntityStatuses;
-use Velkuns\GameTextEngine\Element\Entity\EntityType;
 use Velkuns\GameTextEngine\Element\Item\Item;
 use Velkuns\GameTextEngine\Element\Status\StatusInterface;
 
@@ -47,7 +46,7 @@ readonly class EntityFactory
     public function from(array $data): Entity
     {
         $name      = $data['name'];
-        $type      = EntityType::from($data['type']);
+        $type      = $data['type'];
         $coins     = $data['coins'];
         $info      = $this->fromEntityInfo($data['info']);
         $abilities = $this->fromEntityAbilities($data['abilities']);

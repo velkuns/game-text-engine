@@ -13,7 +13,6 @@ namespace Velkuns\GameTextEngine\Element\Factory;
 
 use Velkuns\GameTextEngine\Element\Status\Status;
 use Velkuns\GameTextEngine\Element\Status\StatusInterface;
-use Velkuns\GameTextEngine\Element\Status\StatusType;
 
 /**
  * @phpstan-import-type StatusData from StatusInterface
@@ -30,7 +29,7 @@ readonly class StatusFactory
      */
     public function from(array $data): Status
     {
-        $type           = StatusType::from($data['type']);
+        $type           = $data['type'];
         $name           = $data['name'];
         $description    = $data['description'];
         $modifiers      = \array_map(fn($modifier) => $this->modifierFactory->from($modifier), $data['modifiers']);

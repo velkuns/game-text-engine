@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Entity;
 
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
-use Velkuns\GameTextEngine\Element\Status\StatusType;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface
@@ -21,7 +20,7 @@ class Entity implements EntityInterface
 {
     public function __construct(
         private readonly string $name,
-        private readonly EntityType $type,
+        private readonly string $type,
         private int $coins,
         private readonly EntityInfo $info,
         private readonly EntityAbilities $abilities,
@@ -34,7 +33,7 @@ class Entity implements EntityInterface
         return $this->name;
     }
 
-    public function getType(): EntityType
+    public function getType(): string
     {
         return $this->type;
     }
@@ -64,14 +63,15 @@ class Entity implements EntityInterface
         return $this->inventory;
     }
 
-    public function hasStatus(StatusType $statusType, string $statusName): bool
+    public function hasStatus(string $statusType, string $statusName): bool
     {
         return match ($statusType) {
-            StatusType::Skill => isset($this->statuses->skills[$statusName]),
-            StatusType::State => isset($this->statuses->states[$statusName]),
-            StatusType::Blessing => isset($this->statuses->blessings[$statusName]),
-            StatusType::Curse => isset($this->statuses->curses[$statusName]),
-            StatusType::Title => isset($this->statuses->titles[$statusName]),
+            'skill'    => isset($this->statuses->skills[$statusName]),
+            'state'    => isset($this->statuses->states[$statusName]),
+            'blessing' => isset($this->statuses->blessings[$statusName]),
+            'curse'    => isset($this->statuses->curses[$statusName]),
+            'title'    => isset($this->statuses->titles[$statusName]),
+            default    => false, // Unknown status type
         };
     }
 
@@ -90,7 +90,7 @@ class Entity implements EntityInterface
     {
         return [
             'name'      => $this->name,
-            'type'      => $this->type->value,
+            'type'      => $this->type,
             'coins'     => $this->coins,
             'info'      => $this->info->jsonSerialize(),
             'abilities' => $this->abilities->jsonSerialize(),

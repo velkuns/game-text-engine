@@ -55,7 +55,7 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'ability',
+                            'type'     => 'self.ability',
                             'name'     => 'strength',
                             'operator' => '>=',
                             'value'    => 10,
@@ -71,7 +71,7 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'skill',
+                            'type'     => 'self.statuses.skill',
                             'name'     => 'swordsmanship',
                             'operator' => '=',
                             'value'    => 0,
@@ -87,13 +87,13 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'ability',
+                            'type'     => 'self.ability',
                             'name'     => 'strength',
                             'operator' => '>',
                             'value'    => 10,
                         ],
                         [
-                            'type'     => 'ability',
+                            'type'     => 'self.ability',
                             'name'     => 'agility',
                             'operator' => '=',
                             'value'    => 15,
@@ -109,13 +109,13 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 2,
                     'conditions' => [
                         [
-                            'type'     => 'ability',
+                            'type'     => 'self.ability',
                             'name'     => 'strength',
                             'operator' => '<=',
                             'value'    => 10,
                         ],
                         [
-                            'type'     => 'ability',
+                            'type'     => 'self.ability',
                             'name'     => 'agility',
                             'operator' => '>',
                             'value'    => 0,
@@ -131,7 +131,7 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'item',
+                            'type'     => 'self.inventory.item',
                             'name'     => 'The Sword',
                             'subType'  => 'sword',
                             'operator' => '=',
@@ -150,7 +150,7 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'item',
+                            'type'     => 'self.inventory.item',
                             'name'     => 'The Sword',
                             'subType'  => 'sword',
                             'operator' => '=',
@@ -266,7 +266,7 @@ class ConditionsTest extends TestCase
                             'numberRequired' => 1,
                             'conditions'     => [
                                 [
-                                    'type'     => 'item',
+                                    'type'     => 'self.inventory.item',
                                     'name'     => '',
                                     'operator' => '=',
                                     'value'    => 1,
@@ -287,7 +287,7 @@ class ConditionsTest extends TestCase
             ],
             'inventory' => [
                 [
-                    'type'        => 'item',
+                    'type'        => 'self.inventory.item',
                     'name'        => 'The Sword',
                     'subType'     => 'sword',
                     'description' => 'A sharp blade',
@@ -391,7 +391,7 @@ class ConditionsTest extends TestCase
             ],
             'inventory' => [
                 [
-                    'type'        => 'item',
+                    'type'        => 'self.inventory.item',
                     'name'        => 'The Dagger',
                     'subType'     => 'dagger',
                     'description' => 'A sharp dagger',

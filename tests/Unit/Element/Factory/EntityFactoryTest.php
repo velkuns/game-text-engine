@@ -11,14 +11,12 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
 
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Entity\EntityType;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
 use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
-use Velkuns\GameTextEngine\Element\Status\StatusType;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -43,7 +41,7 @@ class EntityFactoryTest extends TestCase
         $hero = $this->entityFactory->from($data);
 
         self::assertSame('Brave Test Hero #1', $hero->getName());
-        self::assertSame(EntityType::Player, $hero->getType());
+        self::assertSame('player', $hero->getType());
         self::assertSame(100, $hero->getCoins());
 
         $info = $hero->getInfo();
@@ -70,11 +68,11 @@ class EntityFactoryTest extends TestCase
         self::assertCount(0, $statuses->curses);
         self::assertCount(0, $statuses->titles);
 
-        self::assertFalse($hero->hasStatus(StatusType::Skill, 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus(StatusType::State, 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus(StatusType::Blessing, 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus(StatusType::Curse, 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus(StatusType::Title, 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus('skill', 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus('state', 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus('blessing', 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus('curse', 'non-existing-skill'));
+        self::assertFalse($hero->hasStatus('title', 'non-existing-skill'));
 
 
         $item = $hero->getInventory()->get('The Sword');
@@ -219,7 +217,7 @@ class EntityFactoryTest extends TestCase
                             'numberRequired' => 1,
                             'conditions'     => [
                                 [
-                                    'type'     => 'item',
+                                    'type'     => 'self.inventory.item',
                                     'name'     => '',
                                     'operator' => '=',
                                     'value'    => 1,

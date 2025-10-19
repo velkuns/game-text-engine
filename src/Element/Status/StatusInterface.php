@@ -29,7 +29,7 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  */
 interface StatusInterface extends \JsonSerializable
 {
-    public function getType(): StatusType;
+    public function getType(): string;
 
     public function getName(): string;
 
