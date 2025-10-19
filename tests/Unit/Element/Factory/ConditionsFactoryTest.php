@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
 
-use Velkuns\GameTextEngine\Element\Condition\ConditionOperatorType;
+use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
+use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
+use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +22,11 @@ class ConditionsFactoryTest extends TestCase
 
     public function setUp(): void
     {
-        $this->factory = new ConditionsFactory();
+        $this->factory = new ConditionsFactory(
+            new ConditionParser(),
+            new ConditionElementResolver(),
+            new ConditionValidator(),
+        );
     }
 
     public function testFrom(): void
@@ -29,31 +35,19 @@ class ConditionsFactoryTest extends TestCase
             'numberRequired' => 1,
             'conditions' => [
                 [
-                    'type'     => 'self.ability',
-                    'name'     => 'strength',
-                    'operator' => '>=',
-                    'value'    => 10,
-                    'subType'  => null,
-                    'equipped' => null,
-                    'flags'    => null,
+                    'type'      => 'self.abilities.bases.strength',
+                    'condition' => 'value>=10',
+                    'is'        => true,
                 ],
                 [
-                    'type'     => 'self.statuses.skill',
-                    'name'     => 'sword mastery',
-                    'operator' => '=',
-                    'value'    => 0,
-                    'subType'  => null,
-                    'equipped' => null,
-                    'flags'    => null,
+                    'type'      => 'self.statuses.skills',
+                    'condition' => 'name=Sword (Mastery)',
+                    'is'        => false,
                 ],
                 [
-                    'type'     => 'self.inventory.item',
-                    'name'     => '',
-                    'operator' => '=',
-                    'value'    => 1,
-                    'subType'  => 'sword',
-                    'equipped' => true,
-                    'flags'    => 3,
+                    'type'      => 'self.inventory.items',
+                    'condition' => 'subType=sword;equipped=true;flags&3',
+                    'is'        => true,
                 ],
             ],
         ];
@@ -64,31 +58,19 @@ class ConditionsFactoryTest extends TestCase
         self::assertSame(1, $conditions->getNumberRequired());
 
         $condition0 = $conditions->getConditions()[0];
-        self::assertSame('strength', $condition0->getName());
-        self::assertSame('self.ability', $condition0->getType());
-        self::assertSame(10, $condition0->getValue());
-        self::assertSame(ConditionOperatorType::GreaterOrEqualThan, $condition0->getOperator());
-        self::assertNull($condition0->isEquipped());
-        self::assertNull($condition0->getFlags());
-        self::assertNull($condition0->getSubType());
+        self::assertSame('self.abilities.bases.strength', $condition0->getType());
+        self::assertSame('value>=10', $condition0->getCondition());
+        self::assertTrue($condition0->is());
 
         $condition1 = $conditions->getConditions()[1];
-        self::assertSame('sword mastery', $condition1->getName());
-        self::assertSame('self.statuses.skill', $condition1->getType());
-        self::assertSame(0, $condition1->getValue());
-        self::assertSame(ConditionOperatorType::Equal, $condition1->getOperator());
-        self::assertNull($condition1->isEquipped());
-        self::assertNull($condition1->getFlags());
-        self::assertNull($condition1->getSubType());
+        self::assertSame('self.statuses.skills', $condition1->getType());
+        self::assertSame('name=Sword (Mastery)', $condition1->getCondition());
+        self::assertFalse($condition1->is());
 
         $condition2 = $conditions->getConditions()[2];
-        self::assertSame('', $condition2->getName());
-        self::assertSame('self.inventory.item', $condition2->getType());
-        self::assertSame(1, $condition2->getValue());
-        self::assertSame(ConditionOperatorType::Equal, $condition2->getOperator());
-        self::assertTrue($condition2->isEquipped());
-        self::assertSame(3, $condition2->getFlags());
-        self::assertSame('sword', $condition2->getSubType());
+        self::assertSame('self.inventory.items', $condition2->getType());
+        self::assertSame('subType=sword;equipped=true;flags&3', $condition2->getCondition());
+        self::assertTrue($condition2->is());
 
         self::assertSame($data, $conditions->jsonSerialize());
     }

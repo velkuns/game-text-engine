@@ -15,7 +15,7 @@ So we need to define how an item is stored, with its properties.
 {
     "name": "string",
     "type": "item",
-    "subtype?": "string",
+    "subType?": "string",
     "description": "string",
     "modifiers": "list<Modifier>",
     "flags": "int",

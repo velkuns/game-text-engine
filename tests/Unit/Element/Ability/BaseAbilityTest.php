@@ -22,7 +22,7 @@ class BaseAbilityTest extends TestCase
     {
         $ability = new BaseAbility(
             name: 'vitality',
-            current: 5,
+            value: 5,
             max: 10,
             constraints: new ConstraintsAbility(min: 0, max: 20),
             initial: 10,
@@ -30,7 +30,7 @@ class BaseAbilityTest extends TestCase
 
         self::assertSame(AbilityType::Base, $ability->getType());
         self::assertSame('vitality', $ability->getName());
-        self::assertSame(5, $ability->getCurrent());
+        self::assertSame(5, $ability->getValue());
         self::assertSame(10, $ability->getMax());
         self::assertSame(10, $ability->getInitial());
         self::assertNull($ability->getRule());
@@ -43,7 +43,7 @@ class BaseAbilityTest extends TestCase
         self::expectException(\UnexpectedValueException::class);
         new BaseAbility(
             name: 'vitality',
-            current: 0,
+            value: 0,
             max: 0,
             constraints: new ConstraintsAbility(min: 0, max: 20),
             initial: 0,
@@ -56,19 +56,19 @@ class BaseAbilityTest extends TestCase
     {
         $ability = new BaseAbility(
             name: 'vitality',
-            current: 5,
+            value: 5,
             max: 10,
             constraints: new ConstraintsAbility(min: 0, max: 20),
             initial: 10,
         );
 
-        self::assertSame(5, $ability->getCurrent());
+        self::assertSame(5, $ability->getValue());
         self::assertSame(10, $ability->getMax());
 
         $ability->increase(5);
         $ability->increaseMax(5);
 
-        self::assertSame(10, $ability->getCurrent());
+        self::assertSame(10, $ability->getValue());
         self::assertSame(15, $ability->getMax());
     }
 
@@ -76,20 +76,20 @@ class BaseAbilityTest extends TestCase
     {
         $ability = new BaseAbility(
             name: 'vitality',
-            current: 5,
+            value: 5,
             max: 10,
             constraints: new ConstraintsAbility(min: 0, max: 20),
             initial: 10,
         );
 
-        self::assertSame(5, $ability->getCurrent());
+        self::assertSame(5, $ability->getValue());
         self::assertSame(10, $ability->getMax());
 
         //~ Try increase over max constraint, so value should be clamped
         $ability->increase(20);
         $ability->increaseMax(20);
 
-        self::assertSame(20, $ability->getCurrent());
+        self::assertSame(20, $ability->getValue());
         self::assertSame(20, $ability->getMax());
     }
 
@@ -97,19 +97,19 @@ class BaseAbilityTest extends TestCase
     {
         $ability = new BaseAbility(
             name: 'vitality',
-            current: 5,
+            value: 5,
             max: 10,
             constraints: new ConstraintsAbility(min: 0, max: 20),
             initial: 10,
         );
 
-        self::assertSame(5, $ability->getCurrent());
+        self::assertSame(5, $ability->getValue());
         self::assertSame(10, $ability->getMax());
 
         $ability->decrease(2);
         $ability->decreaseMax(2);
 
-        self::assertSame(3, $ability->getCurrent());
+        self::assertSame(3, $ability->getValue());
         self::assertSame(8, $ability->getMax());
     }
 
@@ -117,20 +117,20 @@ class BaseAbilityTest extends TestCase
     {
         $ability = new BaseAbility(
             name: 'vitality',
-            current: 5,
+            value: 5,
             max: 10,
             constraints: new ConstraintsAbility(min: 0, max: 20),
             initial: 10,
         );
 
-        self::assertSame(5, $ability->getCurrent());
+        self::assertSame(5, $ability->getValue());
         self::assertSame(10, $ability->getMax());
 
         //~ Try increase over max constraint, so value should be clamped
         $ability->decrease(20);
         $ability->decreaseMax(20);
 
-        self::assertSame(0, $ability->getCurrent());
+        self::assertSame(0, $ability->getValue());
         self::assertSame(0, $ability->getMax());
     }
 
@@ -138,13 +138,13 @@ class BaseAbilityTest extends TestCase
     {
         $ability = new BaseAbility(
             name: 'vitality',
-            current: 5,
+            value: 5,
             max: 10,
             constraints: new ConstraintsAbility(min: 0, max: 20),
             initial: 10,
         );
 
-        self::assertSame(5, $ability->getCurrent());
+        self::assertSame(5, $ability->getValue());
         self::assertSame(10, $ability->getMax());
 
         $modifiers = [
@@ -153,6 +153,6 @@ class BaseAbilityTest extends TestCase
             new Modifier('strength', 5), // Should be ignored
         ];
 
-        self::assertSame(6, $ability->getCurrentWithModifiers($modifiers)); // 5 + 2 - 1 = 6
+        self::assertSame(6, $ability->getValueWithModifiers($modifiers)); // 5 + 2 - 1 = 6
     }
 }

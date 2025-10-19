@@ -48,8 +48,7 @@ interface ItemInterface extends \JsonSerializable
 
     public function getPrice(): int;
 
-    public function isEquipped(): bool;
-
+    public function equipped(): bool;
 
     public function isConsumable(): bool;
 

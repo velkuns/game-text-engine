@@ -47,7 +47,7 @@ class EntityInventory implements \JsonSerializable
     public function getEquippedWeapon(): ?Item
     {
         foreach ($this->items as $item) {
-            if ($item->isWeapon() && $item->isEquipped()) {
+            if ($item->isWeapon() && $item->equipped()) {
                 return $item;
             }
         }

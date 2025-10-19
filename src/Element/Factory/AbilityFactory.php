@@ -63,7 +63,7 @@ readonly class AbilityFactory
 
         return new BaseAbility(
             name: $data['name'],
-            current: $data['current'],
+            value: $data['value'],
             max: $data['max'],
             constraints: new ConstraintsAbility(
                 min: $data['constraints']['min'],

@@ -19,7 +19,7 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  *     type: 'base',
  *     name: string,
  *     initial: int,
- *     current: int,
+ *     value: int,
  *     max: int,
  *     constraints: ConstraintsAbilityData,
  *     rule: string|null,
@@ -32,7 +32,7 @@ class BaseAbility implements AbilityInterface
      */
     public function __construct(
         public readonly string $name,
-        public int $current = 0,
+        public int $value = 0,
         public int $max = 0,
         public readonly ConstraintsAbility $constraints = new ConstraintsAbility(0, 12),
         public int $initial = 0,
@@ -46,7 +46,7 @@ class BaseAbility implements AbilityInterface
             }
             $result = \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getInitial(), $this->abilities));
             $this->initial = $result;
-            $this->current = $result;
+            $this->value = $result;
             $this->max     = $result;
         }
     }
@@ -61,9 +61,9 @@ class BaseAbility implements AbilityInterface
         return $this->name;
     }
 
-    public function getCurrent(): int
+    public function getValue(): int
     {
-        return $this->current;
+        return $this->value;
     }
 
     public function getMax(): int
@@ -88,14 +88,14 @@ class BaseAbility implements AbilityInterface
 
     public function decrease(int $value): self
     {
-        $this->current = $this->constraints->clamp($this->current - $value);
+        $this->value = $this->constraints->clamp($this->value - $value);
 
         return $this;
     }
 
     public function increase(int $value): self
     {
-        $this->current = $this->constraints->clamp($this->current + $value);
+        $this->value = $this->constraints->clamp($this->value + $value);
 
         return $this;
     }
@@ -115,22 +115,22 @@ class BaseAbility implements AbilityInterface
     }
 
     /**
-     * Apply modifiers to current ability value and return a new instance with modified value.
+     * Apply modifiers to value ability value and return a new instance with modified value.
      *
      * @param list<Modifier> $modifiers
      */
-    public function getCurrentWithModifiers(array $modifiers): int
+    public function getValueWithModifiers(array $modifiers): int
     {
-        $current = $this->getCurrent();
+        $value = $this->getValue();
         foreach ($modifiers as $modifier) {
             if ($modifier->ability !== $this->name) {
                 continue;
             }
 
-            $current += $modifier->value;
+            $value += $modifier->value;
         }
 
-        return $this->getConstraints()->clamp($current);
+        return $this->getConstraints()->clamp($value);
     }
 
     /**
@@ -141,10 +141,10 @@ class BaseAbility implements AbilityInterface
         return [
             'type'        => AbilityType::Base->value,
             'name'        => $this->name,
-            'current'     => $this->current,
-            'max'         => $this->max,
-            'constraints' => $this->constraints->jsonSerialize(),
             'initial'     => $this->initial,
+            'max'         => $this->max,
+            'value'       => $this->value,
+            'constraints' => $this->constraints->jsonSerialize(),
             'rule'        => $this->rule,
         ];
     }

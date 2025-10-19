@@ -12,9 +12,11 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Factory;
 
 use Velkuns\GameTextEngine\Element\Condition\Condition;
+use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
 use Velkuns\GameTextEngine\Element\Condition\ConditionInterface;
-use Velkuns\GameTextEngine\Element\Condition\ConditionOperatorType;
+use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Element\Condition\Conditions;
+use Velkuns\GameTextEngine\Element\Condition\ConditionValidatorInterface;
 
 /**
  * @phpstan-import-type ConditionsData from Conditions
@@ -22,6 +24,12 @@ use Velkuns\GameTextEngine\Element\Condition\Conditions;
  */
 readonly class ConditionsFactory
 {
+    public function __construct(
+        private ConditionParser $parser,
+        private ConditionElementResolver $resolver,
+        private ConditionValidatorInterface $validator,
+    ) {}
+
     /**
      * @param ConditionsData $data
      */
@@ -42,13 +50,10 @@ readonly class ConditionsFactory
      */
     private function fromCondition(array $data): Condition
     {
-        $type     = $data['type'];
-        $name     = $data['name'];
-        $operator = ConditionOperatorType::from($data['operator']);
-        $value    = $data['value'];
-        $subType  = $data['subType'] ?? null;
-        $equipped = $data['equipped'] ?? null;
-        $flags    = $data['flags'] ?? null;
-        return new Condition($type, $name, $operator, $value, $subType, $equipped, $flags);
+        $type      = $data['type'];
+        $condition = $data['condition'];
+        $is        = $data['is'];
+
+        return new Condition($this->parser, $this->resolver, $this->validator, $type, $condition, $is);
     }
 }

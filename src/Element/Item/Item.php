@@ -27,7 +27,7 @@ readonly class Item implements ItemInterface
         private string $description = '',
         private array $modifiers = [],
         private int $flags = 0,
-        private bool $isEquipped = false,
+        private bool $equipped = false,
         private int $damages = 0,
         private int $price = 0,
         private string $type = 'item',
@@ -76,9 +76,9 @@ readonly class Item implements ItemInterface
         return $this->price;
     }
 
-    public function isEquipped(): bool
+    public function equipped(): bool
     {
-        return $this->isEquipped;
+        return $this->equipped;
     }
 
     public function isConsumable(): bool
@@ -118,7 +118,7 @@ readonly class Item implements ItemInterface
             'description' => $this->description,
             'modifiers'   => \array_map(fn(Modifier $modifier) => $modifier->jsonSerialize(), $this->modifiers),
             'flags'       => $this->flags,
-            'equipped'    => $this->isEquipped,
+            'equipped'    => $this->equipped,
             'damages'     => $this->damages,
             'price'       => $this->price,
         ];

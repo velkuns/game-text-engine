@@ -30,8 +30,8 @@ readonly class EntityAbilities implements \JsonSerializable
      * @param array<string, CompoundAbility> $compounds
      */
     public function __construct(
-        private array $bases,
-        private array $compounds = [],
+        public array $bases,
+        public array $compounds = [],
     ) {}
 
     public function get(string $name): ?AbilityInterface

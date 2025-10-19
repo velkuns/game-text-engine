@@ -19,7 +19,7 @@ interface AbilityInterface extends \JsonSerializable
 
     public function getName(): string;
 
-    public function getCurrent(): int;
+    public function getValue(): int;
 
     public function getMax(): int;
 
@@ -38,9 +38,9 @@ interface AbilityInterface extends \JsonSerializable
     public function increaseMax(int $value): self;
 
     /**
-     * Apply modifiers to current ability value and return a new instance with modified value.
+     * Apply modifiers to value ability value and return a new instance with modified value.
      *
      * @param list<Modifier> $modifiers
      */
-    public function getCurrentWithModifiers(array $modifiers): int;
+    public function getValueWithModifiers(array $modifiers): int;
 }

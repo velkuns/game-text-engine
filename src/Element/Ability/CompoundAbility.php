@@ -44,9 +44,9 @@ readonly class CompoundAbility implements AbilityInterface
     /**
      * @todo Implement other rules like multiply, subtract, mixed operations, ...)
      */
-    public function getCurrent(): int
+    public function getValue(): int
     {
-        return \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getCurrent(), $this->abilities));
+        return \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getValue(), $this->abilities));
     }
 
     public function getMax(): int
@@ -105,22 +105,22 @@ readonly class CompoundAbility implements AbilityInterface
     }
 
     /**
-     * Apply modifiers to current ability value and return a new instance with modified value.
+     * Apply modifiers to value ability value and return a new instance with modified value.
      *
      * @param list<Modifier> $modifiers
      */
-    public function getCurrentWithModifiers(array $modifiers): int
+    public function getValueWithModifiers(array $modifiers): int
     {
-        $current = $this->getCurrent();
+        $value = $this->getValue();
         foreach ($modifiers as $modifier) {
             if ($modifier->ability !== $this->name) {
                 continue;
             }
 
-            $current += $modifier->value;
+            $value += $modifier->value;
         }
 
-        return $this->getConstraints()->clamp($current);
+        return $this->getConstraints()->clamp($value);
     }
 
     /**

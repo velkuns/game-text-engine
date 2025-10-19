@@ -12,7 +12,10 @@ namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
 
 use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
 use Velkuns\GameTextEngine\Element\Ability\ConstraintsAbility;
+use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
 use Velkuns\GameTextEngine\Element\Condition\ConditionOperatorType;
+use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
+use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
 use Velkuns\GameTextEngine\Element\Exception\ElementJsonParseException;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
@@ -31,7 +34,11 @@ class ElementFactoryTest extends TestCase
     {
         $abilityFactory    = new AbilityFactory();
         $modifierFactory   = new ModifierFactory();
-        $conditionsFactory = new ConditionsFactory();
+        $conditionsFactory = new ConditionsFactory(
+            new ConditionParser(),
+            new ConditionElementResolver(),
+            new ConditionValidator(),
+        );
         $itemFactory       = new ItemFactory($modifierFactory);
         $statusFactory     = new StatusFactory($modifierFactory, $conditionsFactory);
         $entityFactory     = new EntityFactory($abilityFactory, $statusFactory, $itemFactory);
@@ -66,13 +73,9 @@ class ElementFactoryTest extends TestCase
                 "numberRequired": 1,
                 "conditions": [
                     {
-                        "type": "self.inventory.item",
-                        "name": "",
-                        "operator": "=",
-                        "value": 1,
-                        "subType": "sword",
-                        "equipped": null,
-                        "flags": null
+                        "type": "self.inventory.items",
+                        "condition": "subType=sword",
+                        "is": true
                     }
                 ]
             },
@@ -114,13 +117,9 @@ class ElementFactoryTest extends TestCase
                 "numberRequired": 1,
                 "conditions": [
                     {
-                        "type": "self.inventory.item",
-                        "name": "",
-                        "operator": "=",
-                        "value": 1,
-                        "subType": "sword",
-                        "equipped": null,
-                        "flags": null
+                        "type": "self.inventory.items",
+                        "condition": "subType=sword",
+                        "is": true
                     }
                 ]
             },
@@ -164,13 +163,9 @@ class ElementFactoryTest extends TestCase
             "numberRequired": 1,
             "conditions": [
                 {
-                    "type": "self.inventory.item",
-                    "name": "",
-                    "operator": "=",
-                    "value": 1,
-                    "subType": "sword",
-                    "equipped": null,
-                    "flags": null
+                        "type": "self.inventory.items",
+                        "condition": "subType=sword",
+                        "is": true
                 }
             ]
         }';
@@ -180,13 +175,9 @@ class ElementFactoryTest extends TestCase
         self::assertCount(1, $conditions->getConditions());
 
         $condition = $conditions->getConditions()[0];
-        self::assertSame('self.inventory.item', $condition->getType());
-        self::assertSame('', $condition->getName());
-        self::assertSame(ConditionOperatorType::Equal, $condition->getOperator());
-        self::assertSame(1, $condition->getValue());
-        self::assertSame('sword', $condition->getSubType());
-        self::assertNull($condition->isEquipped());
-        self::assertNull($condition->getFlags());
+        self::assertSame('self.inventory.items', $condition->getType());
+        self::assertSame('subType=sword', $condition->getCondition());
+        self::assertTrue($condition->is());
     }
 
     public function testConditionsFromJsonWithInvalidJson(): void
@@ -195,13 +186,9 @@ class ElementFactoryTest extends TestCase
             "numberRequired": 1,
             "conditions": [
                 {
-                    "type": "self.inventory.item",
-                    "name": "",
-                    "operator": "=",
-                    "value": 1,
-                    "subType": "sword",
-                    "equipped": null,
-                    "flags": null
+                        "type": "self.inventory.items",
+                        "condition": "subType=sword",
+                        "is": true
                 }
             ]
         ';
@@ -225,7 +212,7 @@ class ElementFactoryTest extends TestCase
         $json    = '{
             "type": "base",
             "name": "strength",
-            "current": 10,
+            "value": 10,
             "max": 20,
             "constraints": {
                 "min": 0,
@@ -237,7 +224,7 @@ class ElementFactoryTest extends TestCase
         $ability = $this->elementFactory->abilityBaseFromJson($json);
 
         self::assertSame('strength', $ability->getName());
-        self::assertSame(10, $ability->getCurrent());
+        self::assertSame(10, $ability->getValue());
         self::assertSame(20, $ability->getMax());
         self::assertSame(10, $ability->getInitial());
         self::assertNull($ability->getRule());
@@ -251,7 +238,7 @@ class ElementFactoryTest extends TestCase
         $json = '{
             "type": "base",
             "name": "strength",
-            "current": 10,
+            "value": 10,
             "max": 20,
             "constraints": {
                 "min": 0,
@@ -281,7 +268,7 @@ class ElementFactoryTest extends TestCase
         $ability = $this->elementFactory->abilityCompoundFromJson($json, $bases);
 
         self::assertSame('attack', $ability->getName());
-        self::assertSame(25, $ability->getCurrent());
+        self::assertSame(25, $ability->getValue());
         self::assertSame(50, $ability->getMax());
         self::assertSame(25, $ability->getInitial());
         self::assertSame('strength + agility', $ability->getRule());
@@ -329,7 +316,7 @@ class ElementFactoryTest extends TestCase
         self::assertSame('sword', $item->getSubType());
         self::assertSame("A sharp blade.", $item->getDescription());
         self::assertSame(1, $item->getFlags());
-        self::assertFalse($item->isEquipped());
+        self::assertFalse($item->equipped());
         self::assertSame(2, $item->getDamages());
         self::assertSame(100, $item->getPrice());
         self::assertSame('item', $item->getType());
@@ -380,7 +367,7 @@ class ElementFactoryTest extends TestCase
                     "strength": {
                         "type": "base",
                         "name": "strength",
-                        "current": 10,
+                        "value": 10,
                         "max": 20,
                         "constraints": {
                             "min": 0,
@@ -392,7 +379,7 @@ class ElementFactoryTest extends TestCase
                     "agility": {
                         "type": "base",
                         "name": "agility",
-                        "current": 15,
+                        "value": 15,
                         "max": 30,
                         "constraints": {
                             "min": 0,
@@ -404,7 +391,7 @@ class ElementFactoryTest extends TestCase
                     "endurance": {
                         "type": "base",
                         "name": "endurance",
-                        "current": 12,
+                        "value": 12,
                         "max": 25,
                         "constraints": {
                             "min": 0,
@@ -416,7 +403,7 @@ class ElementFactoryTest extends TestCase
                     "intuition": {
                         "type": "base",
                         "name": "intuition",
-                        "current": 8,
+                        "value": 8,
                         "max": 20,
                         "constraints": {
                             "min": 0,
@@ -459,13 +446,9 @@ class ElementFactoryTest extends TestCase
                             "numberRequired": 1,
                             "conditions": [
                                 {
-                                    "type": "self.inventory.item",
-                                    "name": "",
-                                    "operator": "=",
-                                    "value": 1,
-                                    "subType": "sword",
-                                    "equipped": true,
-                                    "flags": 3
+                                    "type": "self.inventory.items",
+                                    "condition": "subType=sword;equipped=true;flags&3",
+                                    "is": true
                                 }
                             ]
                         },
@@ -510,7 +493,7 @@ class ElementFactoryTest extends TestCase
 
         $ability = $hero->getAbilities()->get('strength');
         self::assertNotNull($ability);
-        self::assertSame(10, $ability->getCurrent());
+        self::assertSame(10, $ability->getValue());
         self::assertSame(20, $ability->getMax());
         self::assertSame(10, $ability->getInitial());
         self::assertNull($ability->getRule());
@@ -535,14 +518,14 @@ class ElementFactoryTest extends TestCase
         self::assertSame('The Sword', $item->getName());
         self::assertSame('sword', $item->getSubType());
         self::assertSame('A sharp blade', $item->getDescription());
-        self::assertTrue($item->isEquipped());
+        self::assertTrue($item->equipped());
         self::assertSame(2, $item->getDamages());
         self::assertSame(7, $item->getFlags());
         self::assertSame(0, $item->getPrice());
         self::assertEmpty($item->getModifiers());
         self::assertSame('item', $item->getType());
         self::assertTrue($item->isConsumable());
-        self::assertTrue($item->isEquipped());
+        self::assertTrue($item->equipped());
         self::assertFalse($item->isGear());
         self::assertTrue($item->isEquipable());
         self::assertTrue($item->isWeapon());

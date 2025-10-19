@@ -93,7 +93,7 @@ class EntityStatuses implements \JsonSerializable
             }
 
             $conditions = $status->getConditions();
-            if ($conditions === null || !$conditions->evaluate($player, $enemy)) {
+            if ($conditions !== null && !$conditions->evaluate($player, $enemy)) {
                 continue;
             }
 

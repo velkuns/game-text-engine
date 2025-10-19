@@ -45,7 +45,7 @@ class AbilityFactoryTest extends TestCase
         $strength = $bases['strength'];
         self::assertSame('strength', $strength->getName());
         self::assertSame(AbilityType::Base, $strength->getType());
-        self::assertSame(10, $strength->getCurrent());
+        self::assertSame(10, $strength->getValue());
         self::assertSame(20, $strength->getMax());
         self::assertSame(10, $strength->getInitial());
         self::assertSame(0, $strength->getConstraints()->min);
@@ -56,7 +56,7 @@ class AbilityFactoryTest extends TestCase
         $agility = $bases['agility'];
         self::assertSame('agility', $agility->getName());
         self::assertSame(AbilityType::Base, $agility->getType());
-        self::assertSame(15, $agility->getCurrent());
+        self::assertSame(15, $agility->getValue());
         self::assertSame(30, $agility->getMax());
         self::assertSame(15, $agility->getInitial());
         self::assertSame(0, $agility->getConstraints()->min);
@@ -67,7 +67,7 @@ class AbilityFactoryTest extends TestCase
         $vitality = $bases['vitality'];
         self::assertSame('vitality', $vitality->getName());
         self::assertSame(AbilityType::Base, $vitality->getType());
-        self::assertSame(22, $vitality->getCurrent());
+        self::assertSame(22, $vitality->getValue());
         self::assertSame(22, $vitality->getMax());
         self::assertSame(22, $vitality->getInitial());
         self::assertSame(0, $vitality->getConstraints()->min);
@@ -77,7 +77,7 @@ class AbilityFactoryTest extends TestCase
         $expectedVitalityData = [
             'type'        => 'base',
             'name'        => 'vitality',
-            'current'     => 22,
+            'value'     => 22,
             'max'         => 22,
             'constraints' => [
                 'min' => 0,
@@ -97,7 +97,7 @@ class AbilityFactoryTest extends TestCase
 
         self::assertSame('strength', $strength->getName());
         self::assertSame(AbilityType::Base, $strength->getType());
-        self::assertSame(10, $strength->getCurrent());
+        self::assertSame(10, $strength->getValue());
         self::assertSame(20, $strength->getMax());
         self::assertSame(10, $strength->getInitial());
         self::assertSame(0, $strength->getConstraints()->min);
@@ -135,7 +135,7 @@ class AbilityFactoryTest extends TestCase
         self::assertSame('attack', $attack->getName());
         self::assertSame(AbilityType::Compound, $attack->getType());
         self::assertSame('strength + agility', $attack->getRule());
-        self::assertSame(25, $attack->getCurrent());
+        self::assertSame(25, $attack->getValue());
         self::assertSame(50, $attack->getMax());
         self::assertSame(25, $attack->getInitial());
         self::assertSame(0, $attack->getConstraints()->min);
@@ -146,7 +146,7 @@ class AbilityFactoryTest extends TestCase
         self::assertSame('defense', $defense->getName());
         self::assertSame(AbilityType::Compound, $defense->getType());
         self::assertSame('endurance + intuition', $defense->getRule());
-        self::assertSame(20, $defense->getCurrent());
+        self::assertSame(20, $defense->getValue());
         self::assertSame(45, $defense->getMax());
         self::assertSame(20, $defense->getInitial());
         self::assertSame(0, $defense->getConstraints()->min);
@@ -171,7 +171,7 @@ class AbilityFactoryTest extends TestCase
         self::assertSame('attack', $attack->getName());
         self::assertSame(AbilityType::Compound, $attack->getType());
         self::assertSame('strength + agility', $attack->getRule());
-        self::assertSame(25, $attack->getCurrent());
+        self::assertSame(25, $attack->getValue());
         self::assertSame(50, $attack->getMax());
         self::assertSame(25, $attack->getInitial());
         self::assertSame(0, $attack->getConstraints()->min);
@@ -188,61 +188,61 @@ class AbilityFactoryTest extends TestCase
             'vitality' => [
                 'type'    => 'base',
                 'name'    => 'vitality',
-                'current' => 0,
+                'initial' => 0,
                 'max'     => 0,
+                'value'   => 0,
                 'constraints' => [
                     'min' => 0,
                     'max' => 100,
                 ],
-                'initial' => 0,
                 'rule'    => 'endurance + strength',
             ],
             'strength' => [
                 'type'    => 'base',
                 'name'    => 'strength',
-                'current' => 10,
+                'initial' => 10,
                 'max'     => 20,
+                'value'   => 10,
                 'constraints' => [
                     'min' => 0,
                     'max' => 100,
                 ],
-                'initial' => 10,
                 'rule'    => null,
             ],
             'agility' => [
                 'type'    => 'base',
                 'name'    => 'agility',
-                'current' => 15,
+                'initial' => 15,
                 'max'     => 30,
+                'value'   => 15,
                 'constraints' => [
                     'min' => 0,
                     'max' => 100,
                 ],
-                'initial' => 15,
                 'rule'    => null,
             ],
             'endurance' => [
                 'type'    => 'base',
                 'name'    => 'endurance',
-                'current' => 12,
+                'initial' => 12,
                 'max'     => 25,
+                'value'   => 12,
                 'constraints' => [
                     'min' => 0,
                     'max' => 100,
                 ],
-                'initial' => 12,
                 'rule'    => null,
             ],
             'intuition' => [
                 'type'    => 'base',
                 'name'    => 'intuition',
-                'current' => 8,
+                'initial' => 8,
                 'max'     => 20,
+                'value'   => 8,
                 'constraints' => [
                     'min' => 0,
                     'max' => 100,
                 ],
-                'initial' => 8,
                 'rule'    => null,
             ],
         ];

@@ -2,6 +2,7 @@ includes:
   - ./vendor/phpstan/phpstan-phpunit/extension.neon
   - ./vendor/phpstan/phpstan-phpunit/rules.neon
   - ./vendor/phpstan/phpstan-strict-rules/rules.neon
+  - ./vendor/phpstan/phpstan-deprecation-rules/rules.neon
   - ./vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
 parameters:
@@ -15,3 +16,25 @@ parameters:
 
   bootstrapFiles:
     - ./vendor/autoload.php
+
+  ignoreErrors:
+    -
+      identifier: 'property.dynamicName'
+      path:       'src/Element/Condition/ConditionValidator.php'
+      count:      1
+    -
+      identifier: 'method.dynamicName'
+      path:       'src/Element/Condition/ConditionValidator.php'
+      count:      2
+    -
+      identifier: 'property.dynamicName'
+      path:       'src/Element/Condition/ConditionElementResolver.php'
+      count:      1
+    -
+      identifier: 'method.dynamicName'
+      path:       'src/Element/Condition/ConditionElementResolver.php'
+      count:      1
+    -
+      message:    '`Call to an undefined method object::get().`'
+      path:       'src/Element/Condition/ConditionElementResolver.php'
+      count:      1

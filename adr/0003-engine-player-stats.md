@@ -99,7 +99,7 @@ Statistique principale:
         "type": "base",
         "initial": 6,
         "max": 6,
-        "current": 6,
+        "value": 6,
         "constraints": {
             "min": 0,
             "max": 12
@@ -110,7 +110,7 @@ Statistique principale:
         "type": "base",
         "initial": 6,
         "max": 6,
-        "current": 6,
+        "value": 6,
         "constraints": {
             "min": 1,
             "max": 12
@@ -121,7 +121,7 @@ Statistique principale:
         "type": "base",
         "initial": 6,
         "max": 6,
-        "current": 6,
+        "value": 6,
         "constraints": {
             "min": 1,
             "max": 12
@@ -132,7 +132,7 @@ Statistique principale:
         "type": "base",
         "initial": 6,
         "max": 6,
-        "current": 6,
+        "value": 6,
         "constraints": {
             "min": 1,
             "max": 12
@@ -143,7 +143,7 @@ Statistique principale:
         "type": "base",
         "initial": 0, // 12 after initialization
         "max": 0,     // 12 after initialization
-        "current": 0, // 12 after initialization
+        "value": 0, // 12 after initialization
         "constraints": {
             "min": 0,
             "max": 24

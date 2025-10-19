@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Helper;
 
+use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
+use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
+use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
 use Velkuns\GameTextEngine\Element\Entity\Entity;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
@@ -25,35 +28,40 @@ use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
  */
 trait EntityTrait
 {
-    private EntityFactory $entityFactory;
+    private static ?EntityFactory $entityFactory = null;
 
-    private function getEntityFactory(): EntityFactory
+    private static function getEntityFactory(): EntityFactory
     {
-        if (!isset($this->entityFactory)) {
-            $this->entityFactory = new EntityFactory(
+        if (self::$entityFactory === null) {
+            $conditionFactory = new ConditionsFactory(
+                new ConditionParser(),
+                new ConditionElementResolver(),
+                new ConditionValidator(),
+            );
+            self::$entityFactory = new EntityFactory(
                 new AbilityFactory(),
-                new StatusFactory(new ModifierFactory(), new ConditionsFactory()),
+                new StatusFactory(new ModifierFactory(), $conditionFactory),
                 new ItemFactory(new ModifierFactory()),
             );
         }
 
-        return $this->entityFactory;
+        return self::$entityFactory;
     }
 
-    private function getPlayer(): Entity
+    private static function getPlayer(): Entity
     {
-        return $this->getEntityFactory()->from($this->getPlayerData());
+        return self::getEntityFactory()->from(self::getPlayerData());
     }
 
-    private function getGoblin(): Entity
+    private static function getGoblin(): Entity
     {
-        return $this->getEntityFactory()->from($this->getGoblinData());
+        return self::getEntityFactory()->from(self::getGoblinData());
     }
 
     /**
      * @phpstan-return EntityData
      */
-    private function getPlayerData(): array
+    private static function getPlayerData(): array
     {
         return [
             'name'  => 'Brave Test Hero #1',
@@ -73,60 +81,60 @@ trait EntityTrait
                     'strength' => [
                         'type'    => 'base',
                         'name'    => 'strength',
-                        'initial' => 6,
-                        'max'     => 6,
-                        'current' => 6,
+                        'initial' => 10,
+                        'max'     => 10,
+                        'value'   => 10,
                         'constraints' => [
                             'min' => 0,
-                            'max' => 12,
+                            'max' => 20,
                         ],
                         'rule'    => null,
                     ],
                     'endurance' => [
                         'type'    => 'base',
                         'name'    => 'endurance',
-                        'initial' => 8,
-                        'max'     => 8,
-                        'current' => 8,
+                        'initial' => 14,
+                        'max'     => 14,
+                        'value'   => 14,
                         'constraints' => [
                             'min' => 0,
-                            'max' => 12,
+                            'max' => 20,
                         ],
                         'rule'    => null,
                     ],
                     'agility' => [
                         'type'    => 'base',
                         'name'    => 'agility',
-                        'initial' => 8,
-                        'max'     => 8,
-                        'current' => 8,
+                        'initial' => 15,
+                        'max'     => 15,
+                        'value'   => 15,
                         'constraints' => [
                             'min' => 0,
-                            'max' => 12,
+                            'max' => 20,
                         ],
                         'rule'    => null,
                     ],
                     'intuition' => [
                         'type'    => 'base',
                         'name'    => 'intuition',
-                        'initial' => 7,
-                        'max'     => 7,
-                        'current' => 7,
+                        'initial' => 12,
+                        'max'     => 12,
+                        'value'   => 12,
                         'constraints' => [
                             'min' => 0,
-                            'max' => 7,
+                            'max' => 20,
                         ],
                         'rule'    => null,
                     ],
                     'vitality' => [
                         'type'    => 'base',
                         'name'    => 'vitality',
-                        'initial' => 0,
-                        'max'     => 0,
-                        'current' => 0,
+                        'initial' => 24,
+                        'max'     => 24,
+                        'value'   => 24,
                         'constraints' => [
                             'min' => 0,
-                            'max' => 24,
+                            'max' => 40,
                         ],
                         'rule'    => 'strength + endurance',
                     ],
@@ -148,7 +156,7 @@ trait EntityTrait
                 'skills' => [
                     'swordsmanship' => [
                         'type'        => 'skill',
-                        'name'        => 'swordsmanship',
+                        'name'        => 'Sword (Mastery)',
                         'description' => 'Super skill',
                         'modifiers'   => [
                             [
@@ -162,15 +170,11 @@ trait EntityTrait
                         ],
                         'conditions' => [
                             'numberRequired' => 1,
-                            'conditions'     => [
+                            'conditions' => [
                                 [
-                                    'type'     => 'self.inventory.item',
-                                    'name'     => '',
-                                    'operator' => '=',
-                                    'value'    => 1,
-                                    'subType'  => 'sword',
-                                    'equipped' => true,
-                                    'flags'    => 3,
+                                    'type'      => 'self.inventory.items',
+                                    'condition' => 'subType=sword;equipped=true;flag&3',
+                                    'is'        => true,
                                 ],
                             ],
                         ],
@@ -238,7 +242,7 @@ trait EntityTrait
     /**
      * @phpstan-return EntityData
      */
-    private function getGoblinData(): array
+    private static function getGoblinData(): array
     {
         return [
             'name'  => 'Gobelin #1',
@@ -258,48 +262,48 @@ trait EntityTrait
                     'strength' => [
                         'type'    => 'base',
                         'name'    => 'strength',
-                        'initial' => 4,
-                        'max'     => 4,
-                        'current' => 4,
+                        'initial' => 8,
+                        'max'     => 8,
+                        'value'   => 8,
                         'constraints' => [
                             'min' => 0,
-                            'max' => 12,
+                            'max' => 20,
                         ],
                         'rule'    => null,
                     ],
                     'endurance' => [
                         'type'    => 'base',
                         'name'    => 'endurance',
-                        'initial' => 4,
-                        'max'     => 4,
-                        'current' => 4,
+                        'initial' => 8,
+                        'max'     => 8,
+                        'value'   => 8,
                         'constraints' => [
                             'min' => 0,
-                            'max' => 12,
+                            'max' => 20,
                         ],
                         'rule'    => null,
                     ],
                     'agility' => [
                         'type'    => 'base',
                         'name'    => 'agility',
-                        'initial' => 7,
-                        'max'     => 7,
-                        'current' => 7,
+                        'initial' => 14,
+                        'max'     => 14,
+                        'value'   => 14,
                         'constraints' => [
                             'min' => 0,
-                            'max' => 12,
+                            'max' => 20,
                         ],
                         'rule'    => null,
                     ],
                     'intuition' => [
                         'type'    => 'base',
                         'name'    => 'intuition',
-                        'initial' => 5,
-                        'max'     => 5,
-                        'current' => 5,
+                        'initial' => 10,
+                        'max'     => 10,
+                        'value'   => 10,
                         'constraints' => [
                             'min' => 0,
-                            'max' => 12,
+                            'max' => 20,
                         ],
                         'rule'    => null,
                     ],
@@ -308,10 +312,10 @@ trait EntityTrait
                         'name'    => 'vitality',
                         'initial' => 0,
                         'max'     => 0,
-                        'current' => 0,
+                        'value'   => 0,
                         'constraints' => [
                             'min' => 0,
-                            'max' => 24,
+                            'max' => 40,
                         ],
                         'rule'    => 'strength + endurance',
                     ],

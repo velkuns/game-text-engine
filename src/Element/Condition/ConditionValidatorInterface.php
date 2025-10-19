@@ -11,14 +11,13 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Condition;
 
-enum ConditionOperatorType: string
+/**
+ * @phpstan-import-type ConditionPartData from ConditionParser
+ */
+interface ConditionValidatorInterface
 {
-    case GreaterThan = '>';
-    case GreaterOrEqualThan = '>=';
-    case Equal = '=';
-    case LessOrEqualThan = '<=';
-    case LessThan = '<';
-    case Different = '!=';
-
-    case HasFlags = '&';
+    /**
+     * @param list<ConditionPartData> $conditions
+     */
+    public function validate(object $element, array $conditions): bool;
 }
