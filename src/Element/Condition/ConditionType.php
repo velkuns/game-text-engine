@@ -22,4 +22,21 @@ enum ConditionType: string
     case Item = 'item';
     case EntitySize = 'entity_size';
     case EntityRace = 'entity_race';
+
+    public function isPlayerCondition(): bool
+    {
+        return \in_array(
+            $this,
+            [
+                self::Ability,
+                self::Skill,
+                self::State,
+                self::Blessing,
+                self::Curse,
+                self::Title,
+                self::Item,
+            ],
+            true,
+        );
+    }
 }

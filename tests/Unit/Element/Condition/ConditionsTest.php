@@ -37,13 +37,13 @@ class ConditionsTest extends TestCase
     }
 
     #[DataProvider('evaluateDataProvider')]
-    public function testEvaluate(Conditions $conditions, Entity $entity, bool $evaluation): void
+    public function testEvaluate(Conditions $conditions, Entity $player, Entity $enemy, bool $evaluation): void
     {
-        self::assertSame($evaluation, $conditions->evaluate($entity));
+        self::assertSame($evaluation, $conditions->evaluate($player, $enemy));
     }
 
     /**
-     * @return array<string, array{0: Conditions|null, 1: Entity, 2: bool}>
+     * @return array<string, array{0: Conditions|null, 1: Entity, 2: Entity, 3: bool}>
      */
     public static function evaluateDataProvider(): array
     {
@@ -63,6 +63,7 @@ class ConditionsTest extends TestCase
                     ],
                 ]),
                 self::getHero(),
+                self::getEnemy(),
                 true,
             ],
             'evaluate required 1 condition with list of 1 conditions but evaluation failed' => [
@@ -78,6 +79,7 @@ class ConditionsTest extends TestCase
                     ],
                 ]),
                 self::getHero(),
+                self::getEnemy(),
                 false,
             ],
             'evaluate required 1 condition with list of 2 conditions' => [
@@ -99,6 +101,7 @@ class ConditionsTest extends TestCase
                     ],
                 ]),
                 self::getHero(),
+                self::getEnemy(),
                 true,
             ],
             'evaluate required 2 condition with list of 2 conditions' => [
@@ -120,6 +123,7 @@ class ConditionsTest extends TestCase
                     ],
                 ]),
                 self::getHero(),
+                self::getEnemy(),
                 true,
             ],
             'evaluate required 1 condition with list of 1 conditions on specific item' => [
@@ -138,6 +142,7 @@ class ConditionsTest extends TestCase
                     ],
                 ]),
                 self::getHero(),
+                self::getEnemy(),
                 true,
             ],
             'evaluate required 1 condition with list of 1 conditions on specific item but evaluation failed' => [
@@ -156,6 +161,7 @@ class ConditionsTest extends TestCase
                     ],
                 ]),
                 self::getHero(),
+                self::getEnemy(),
                 false,
             ],
         ];
@@ -288,6 +294,111 @@ class ConditionsTest extends TestCase
                     'modifiers'   => [],
                     'flags'       => 7,
                     'equipped'    => true,
+                    'damages'     => 2,
+                    'price'       => 0,
+                ],
+            ],
+        ];
+
+        return self::$entityFactory->from($data);
+    }
+
+    public static function getEnemy(): Entity
+    {
+        $data = [
+            'name'  => 'Gobelin #1',
+            'type'  => 'creature',
+            'coins' => 2,
+            'info'  => [
+                'level'       => 2,
+                'age'         => 20,
+                'size'        => 'small',
+                'race'        => 'gobelin',
+                'description' => 'An evil gobelin',
+                'background'  => 'Born in a small village',
+                'notes'       => 'No special notes',
+            ],
+            'abilities' => [
+                'bases' => [
+                    'strength' => [
+                        'type'    => 'base',
+                        'name'    => 'strength',
+                        'current' => 10,
+                        'max'     => 20,
+                        'constraints' => [
+                            'min' => 0,
+                            'max' => 100,
+                        ],
+                        'initial' => 10,
+                        'rule'    => null,
+                    ],
+                    'agility' => [
+                        'type'    => 'base',
+                        'name'    => 'agility',
+                        'current' => 15,
+                        'max'     => 30,
+                        'constraints' => [
+                            'min' => 0,
+                            'max' => 100,
+                        ],
+                        'initial' => 15,
+                        'rule'    => null,
+                    ],
+                    'endurance' => [
+                        'type'    => 'base',
+                        'name'    => 'endurance',
+                        'current' => 12,
+                        'max'     => 25,
+                        'constraints' => [
+                            'min' => 0,
+                            'max' => 100,
+                        ],
+                        'initial' => 12,
+                        'rule'    => null,
+                    ],
+                    'intuition' => [
+                        'type'    => 'base',
+                        'name'    => 'intuition',
+                        'current' => 8,
+                        'max'     => 20,
+                        'constraints' => [
+                            'min' => 0,
+                            'max' => 100,
+                        ],
+                        'initial' => 8,
+                        'rule'    => null,
+                    ],
+                ],
+                'compounds' => [
+                    'attack' => [
+                        'type' => 'compound',
+                        'name' => 'attack',
+                        'rule' => 'strength + agility',
+                    ],
+                    'defense' => [
+                        'type' => 'compound',
+                        'name' => 'defense',
+                        'rule' => 'endurance + intuition',
+                    ],
+                ],
+            ],
+            'statuses' => [
+                'skills'    => [],
+                'states'    => [],
+                'blessings' => [],
+                'curses'    => [],
+                'titles'    => [],
+            ],
+            'inventory' => [
+                [
+                    'type'        => 'item',
+                    'name'        => 'The Dagger',
+                    'subType'     => 'dagger',
+                    'description' => 'A sharp dagger',
+                    'modifiers'   => [],
+                    'flags'       => 7,
+                    'equipped'    => true,
+                    'damages'     => 1,
                     'price'       => 0,
                 ],
             ],

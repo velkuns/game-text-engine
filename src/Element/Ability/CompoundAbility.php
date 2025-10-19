@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Ability;
 
+use Velkuns\GameTextEngine\Element\Modifier\Modifier;
+
 /**
  * @phpstan-type CompoundAbilityData array{
  *     type: "compound",
@@ -68,6 +70,57 @@ readonly class CompoundAbility implements AbilityInterface
     public function getRule(): string
     {
         return $this->rule;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function decrease(int $value): self
+    {
+        return $this;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function increase(int $value): self
+    {
+        return $this;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function decreaseMax(int $value): self
+    {
+        return $this;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function increaseMax(int $value): self
+    {
+        return $this;
+    }
+
+    /**
+     * Apply modifiers to current ability value and return a new instance with modified value.
+     *
+     * @param list<Modifier> $modifiers
+     */
+    public function getCurrentWithModifiers(array $modifiers): int
+    {
+        $current = $this->getCurrent();
+        foreach ($modifiers as $modifier) {
+            if ($modifier->ability !== $this->name) {
+                continue;
+            }
+
+            $current += $modifier->value;
+        }
+
+        return $this->getConstraints()->clamp($current);
     }
 
     /**

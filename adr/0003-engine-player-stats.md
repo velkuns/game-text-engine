@@ -39,10 +39,10 @@ Hit chance: Entity Attack / Enemy Defense
 
 Example 1:
 
-|            | strength | agility | endurance | intuition |
-|------------|----------|---------|-----------|-----------|
-| Entity  | 6        | 6       | 6         | 6         |
-| Enemy      | 6        | 6       | 6         | 6         |
+|          | strength | agility | endurance | intuition |
+|----------|----------|---------|-----------|-----------|
+| Entity   | 6        | 6       | 6         | 6         |
+| Enemy    | 6        | 6       | 6         | 6         |
 
 - Entity Attack = 6 + 6 = 100
 - Enemy Defense = (6 + 6) * 2 = 200
@@ -57,7 +57,7 @@ Ce rat est plus petit (donc moins de force et d'endurance), mais plus agile et i
 
 |           | strength | agility | endurance | intuition |
 |-----------|----------|---------|-----------|-----------|
-| Entity | 6        | 6       | 6         | 6         |
+| Entity    | 6        | 6       | 6         | 6         |
 | Raged Rat | 2        | 10      | 2         | 10        |
 
 - Entity Attack = 6 + 6 = 12
@@ -71,17 +71,17 @@ De même, en cas de réussite du rat, il fera moins de dégâts au joueur, car m
 
 
 ### Life and damage
-Pour la vie du joueur, on peut utiliser la formule suivante (statistique composée) :
+Pour la vie du joueur, on peut utiliser la formule suivante (statistique de base mais composée à l'initialisation) :
 - vitality = endurance + strength
 
 Pour les dégâts, on peut utiliser la formule suivante :
-- damages = (character strength * 1.5) - enemy endurance
+- damages = (character strength * 2) / enemy endurance + item damages
 
 On appliquera des modificateurs en fonction de l'arme du joueur et de l'armure de l'adversaire.
 
 Avec les exemples précédents, on peut calculer les dégâts infligés :
-- Exemple 1 (sans modificateur) : 6 * 1.5 - 6 = 3 (Perte d'un quart de vie pour l'ennemi)
-- Exemple 2 (sans modificateur) : 6 * 1.5 - 2 = 7 (Le rat meurt instantanément car il n'a que 4 de vitalité - ou hp)
+- Exemple 1 (sans modificateur) : (6 * 2) / 6 = 2 (Perte d'un quart de vie pour l'ennemi)
+- Exemple 2 (sans modificateur) : (6 * 2) - 2 = 6 (Le rat meurt instantanément car il n'a que 4 de vitalité - ou hp)
 
 ### Future possibilities
 On pourrait imaginer vouloir privilégier l'attaque sur une partie du corps adverse par exemple, pour cibler une faiblesse.
@@ -97,49 +97,58 @@ Statistique principale:
 {
     "strength": {
         "type": "base",
-        "value": 6,
-        "origin": 6,
-        "range": {
-            "min": 1,
+        "initial": 6,
+        "max": 6,
+        "current": 6,
+        "constraints": {
+            "min": 0,
             "max": 12
-        }
+        },
+        "rule": null
     },
     "endurance": {
         "type": "base",
-        "value": 6,
-        "origin": 6,
-        "range": {
+        "initial": 6,
+        "max": 6,
+        "current": 6,
+        "constraints": {
             "min": 1,
             "max": 12
-        }
+        },
+        "rule": null
     },
     "agility": {
         "type": "base",
-        "value": 6,
-        "origin": 6,
-        "range": {
+        "initial": 6,
+        "max": 6,
+        "current": 6,
+        "constraints": {
             "min": 1,
             "max": 12
-        }
+        },
+        "rule": null
     },
     "intuition": {
         "type": "base",
-        "value": 6,
-        "origin": 6,
-        "range": {
+        "initial": 6,
+        "max": 6,
+        "current": 6,
+        "constraints": {
             "min": 1,
             "max": 12
-        }
+        },
+        "rule": null
     },
     "vitality": {
         "type": "base",
-        "init": "strength + endurance",
-        "value": 12,
-        "origin": 12,
-        "range": {
-            "min": 1,
-            "max": 12
-        }
+        "initial": 0, // 12 after initialization
+        "max": 0,     // 12 after initialization
+        "current": 0, // 12 after initialization
+        "constraints": {
+            "min": 0,
+            "max": 24
+        },
+        "rule": "strength + endurance"
     },
     "attack": {
         "type": "compound",

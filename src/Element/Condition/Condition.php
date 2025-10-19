@@ -84,9 +84,10 @@ readonly class Condition implements ConditionInterface
 
     private function isValidItem(EntityInventory $inventory): bool
     {
-        $matchFull = 0;
-        $match     = 0;
         foreach ($inventory->items as $item) {
+            $matchFull = 0;
+            $match     = 0;
+
             if ($this->getName() !== '') {
                 $matchFull++;
                 $match += $item->getName() === $this->getName() ? 1 : 0;
@@ -107,12 +108,12 @@ readonly class Condition implements ConditionInterface
                 $match += ($item->getFlags() & $this->getFlags()) === $this->getFlags() ? 1 : 0;
             }
 
-            if ($match < $matchFull) {
-                return false;
+            if ($match === $matchFull) {
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     private function match(int $value): bool

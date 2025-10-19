@@ -30,13 +30,17 @@ class AbilityFactoryTest extends TestCase
     public function testFromBases(): void
     {
         $data = [
-            'strength' => self::getAbilityBaseData('strength'),
-            'agility'  => self::getAbilityBaseData('agility'),
+            // With initialization
+            'vitality'  => self::getAbilityBaseData('vitality'),
+            // Without initialization
+            'strength'  => self::getAbilityBaseData('strength'),
+            'endurance' => self::getAbilityBaseData('endurance'),
+            'agility'   => self::getAbilityBaseData('agility'),
         ];
 
         $bases = $this->factory->fromBases($data);
 
-        self::assertCount(2, $bases);
+        self::assertCount(4, $bases);
 
         $strength = $bases['strength'];
         self::assertSame('strength', $strength->getName());
@@ -59,6 +63,30 @@ class AbilityFactoryTest extends TestCase
         self::assertSame(100, $agility->getConstraints()->max);
         self::assertSame($data['agility'], $agility->jsonSerialize());
         self::assertNull($agility->getRule());
+
+        $vitality = $bases['vitality'];
+        self::assertSame('vitality', $vitality->getName());
+        self::assertSame(AbilityType::Base, $vitality->getType());
+        self::assertSame(22, $vitality->getCurrent());
+        self::assertSame(22, $vitality->getMax());
+        self::assertSame(22, $vitality->getInitial());
+        self::assertSame(0, $vitality->getConstraints()->min);
+        self::assertSame(100, $vitality->getConstraints()->max);
+        self::assertSame('endurance + strength', $vitality->getRule());
+
+        $expectedVitalityData = [
+            'type'        => 'base',
+            'name'        => 'vitality',
+            'current'     => 22,
+            'max'         => 22,
+            'constraints' => [
+                'min' => 0,
+                'max' => 100,
+            ],
+            'initial'     => 22,
+            'rule'        => 'endurance + strength',
+        ];
+        self::assertEquals($expectedVitalityData, $vitality->jsonSerialize());
     }
 
     public function testFromBaseAbility(): void
@@ -157,6 +185,18 @@ class AbilityFactoryTest extends TestCase
     private static function getAbilityBaseData(string $name): array
     {
         $bases = [
+            'vitality' => [
+                'type'    => 'base',
+                'name'    => 'vitality',
+                'current' => 0,
+                'max'     => 0,
+                'constraints' => [
+                    'min' => 0,
+                    'max' => 100,
+                ],
+                'initial' => 0,
+                'rule'    => 'endurance + strength',
+            ],
             'strength' => [
                 'type'    => 'base',
                 'name'    => 'strength',

@@ -44,6 +44,17 @@ class EntityInventory implements \JsonSerializable
         return null;
     }
 
+    public function getEquippedWeapon(): ?Item
+    {
+        foreach ($this->items as $item) {
+            if ($item->isWeapon() && $item->isEquipped()) {
+                return $item;
+            }
+        }
+
+        return null;
+    }
+
     public function add(Item $item): void
     {
         $this->items[$item] = $item;
