@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Entity;
 
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 
 /**
  * @phpstan-import-type EntityInfoData from EntityInfo
@@ -45,4 +46,9 @@ interface EntityInterface extends \JsonSerializable
     public function getInventory(): EntityInventory;
 
     public function hasStatus(string $statusType, string $statusName): bool;
+
+    /**
+     * @return list<Modifier>
+     */
+    public function getModifiers(EntityInterface $enemy): array;
 }

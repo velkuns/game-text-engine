@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
 
+use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
-use Velkuns\GameTextEngine\Tests\Unit\Helper\EntityTrait;
-use PHPUnit\Framework\TestCase;
+use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface
@@ -70,11 +70,11 @@ class EntityFactoryTest extends TestCase
         self::assertSame('A sharp blade', $item->getDescription());
         self::assertTrue($item->equipped());
         self::assertSame(2, $item->getDamages());
-        self::assertSame(7, $item->getFlags());
+        self::assertSame(6, $item->getFlags());
         self::assertSame(0, $item->getPrice());
         self::assertEmpty($item->getModifiers());
         self::assertSame('item', $item->getType());
-        self::assertTrue($item->isConsumable());
+        self::assertFalse($item->isConsumable());
         self::assertTrue($item->equipped());
         self::assertFalse($item->isGear());
         self::assertTrue($item->isEquipable());
@@ -90,7 +90,7 @@ class EntityFactoryTest extends TestCase
             'subType'     => 'bow',
             'description' => 'A short bow',
             'modifiers'   => [],
-            'flags'       => 7,
+            'flags'       => 6,
             'equipped'    => false,
             'damages'     => 2,
             'price'       => 10,

@@ -48,22 +48,26 @@ php/analyze: vendor/bin/phpstan build/reports/phpstan #manual & ci
 	$(call header,Running Static Analyze - Pretty tty format)
 	@XDEBUG_MODE=off ./vendor/bin/phpstan analyse --error-format=table
 
-php/tests: vendor/bin/phpunit build/reports/phpunit #ci
-	$(call header,Running Unit Tests)
-	@XDEBUG_MODE=coverage php ./vendor/bin/phpunit --testsuite=unit --coverage-clover=./build/reports/phpunit/clover.xml --log-junit=./build/reports/phpunit/unit.xml --coverage-php=./build/reports/phpunit/unit.cov --coverage-html=./build/reports/coverage/ --fail-on-warning
+php/tests: vendor/bin/phpunit build/reports/phpunit
+	$(call header,Running Unit & Integration Tests)
+	@XDEBUG_MODE=coverage php ./vendor/bin/phpunit --testsuite=unit,integration --coverage-clover=./build/reports/phpunit/clover.xml --log-junit=./build/reports/phpunit/unit.xml --coverage-php=./build/reports/phpunit/unit.cov --coverage-html=./build/reports/coverage/ --fail-on-warning
 
 php/test: php/tests
 
-php/integration: vendor/bin/phpunit build/reports/phpunit #manual
+php/testdox: vendor/bin/phpunit #manual
+	$(call header,Running Unit & Integration Tests (Pretty format))
+	@XDEBUG_MODE=coverage php ./vendor/bin/phpunit --testdox --testsuite=unit,integration --coverage-clover=./build/reports/phpunit/clover.xml --log-junit=./build/reports/phpunit/unit.xml --coverage-php=./build/reports/phpunit/unit.cov --coverage-html=./build/reports/coverage/ --fail-on-warning
+
+php/tests-unit: vendor/bin/phpunit build/reports/phpunit #ci
+	$(call header,Running Unit Tests)
+	@XDEBUG_MODE=coverage php ./vendor/bin/phpunit --testsuite=unit --fail-on-warning
+
+php/tests-integration: vendor/bin/phpunit build/reports/phpunit #manual
 	$(call header,Running Integration Tests)
 	@XDEBUG_MODE=coverage php ./vendor/bin/phpunit --testsuite=integration --fail-on-warning
-
-php/testdox: vendor/bin/phpunit #manual
-	$(call header,Running Unit Tests (Pretty format))
-	@XDEBUG_MODE=coverage php ./vendor/bin/phpunit --testsuite=unit --fail-on-warning --testdox
 
 clean:
 	$(call header,Cleaning previous build) #manual
 	@if [ "$(shell ls -A ./build)" ]; then rm -rf ./build/*; fi; echo " done"
 
-ci: clean validate install php/deps php/cs-check php/tests php/integration php/analyze
+ci: clean validate install php/deps php/cs-check php/tests php/analyze

@@ -16,7 +16,7 @@ Modifier format:
 
 ```json
 {
-    "ability": "string",
+    "type": "string",
     "value": "int"
 }
 ```
@@ -25,7 +25,7 @@ Example:
 
 ```json
 {
-    "ability": "strength",
+    "type": "ability.strength",
     "value": 2
 }
 ```

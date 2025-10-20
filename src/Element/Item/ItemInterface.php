@@ -57,4 +57,9 @@ interface ItemInterface extends \JsonSerializable
     public function isWeapon(): bool;
 
     public function isGear(): bool;
+
+    /**
+     * @return ItemData
+     */
+    public function jsonSerialize(): array;
 }

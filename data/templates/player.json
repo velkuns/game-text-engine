@@ -1,0 +1,110 @@
+{
+    "name": "Player Name",
+    "type": "player",
+    "coins": 10,
+    "info": {
+        "level": 1,
+        "age": 20,
+        "size": "medium",
+        "race": "human",
+        "description": "A brave hero",
+        "background": "",
+        "notes": ""
+    },
+    "abilities": {
+        "bases": {
+            "strength": {
+                "type": "base",
+                "name": "strength",
+                "initial": 10,
+                "max": 10,
+                "value": 10,
+                "constraints": {
+                    "min": 0,
+                    "max": 20
+                },
+                "rule": null
+            },
+            "endurance": {
+                "type": "base",
+                "name": "endurance",
+                "initial": 10,
+                "max": 10,
+                "value": 10,
+                "constraints": {
+                    "min": 0,
+                    "max": 20
+                },
+                "rule": null
+            },
+            "agility": {
+                "type": "base",
+                "name": "agility",
+                "initial": 10,
+                "max": 10,
+                "value": 10,
+                "constraints": {
+                    "min": 0,
+                    "max": 20
+                },
+                "rule": null
+            },
+            "intuition": {
+                "type": "base",
+                "name": "intuition",
+                "initial": 10,
+                "max": 10,
+                "value": 10,
+                "constraints": {
+                    "min": 0,
+                    "max": 20
+                },
+                "rule": null
+            },
+            "vitality": {
+                "type": "base",
+                "name": "vitality",
+                "initial": 0,
+                "max": 0,
+                "value": 0,
+                "constraints": {
+                    "min": 0,
+                    "max": 40
+                },
+                "rule": "strength + endurance"
+            }
+        },
+        "compounds": {
+            "attack": {
+                "type": "compound",
+                "name": "attack",
+                "rule": "strength + agility"
+            },
+            "defense": {
+                "type": "compound",
+                "name": "defense",
+                "rule": "endurance + intuition"
+            }
+        }
+    },
+    "statuses": {
+        "skills": [],
+        "states": [],
+        "blessings": [],
+        "curses": [],
+        "titles": []
+    },
+    "inventory": [
+        {
+            "type": "item",
+            "name": "Rusted Sword",
+            "subType": "sword",
+            "description": "A rusted sword",
+            "modifiers": [],
+            "flags": 6,
+            "equipped": true,
+            "damages": 3,
+            "price": 0
+        }
+    ]
+}

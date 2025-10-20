@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Entity;
 
 use Velkuns\GameTextEngine\Element\Entity\EntityInventory;
-use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Item\Item;
 use Velkuns\GameTextEngine\Element\Item\ItemFlag;
+use PHPUnit\Framework\TestCase;
 
 class EntityInventoryTest extends TestCase
 {

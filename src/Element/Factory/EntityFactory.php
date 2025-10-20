@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Factory;
 
+use Velkuns\GameTextEngine\Api\Bestiary;
 use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
 use Velkuns\GameTextEngine\Element\Ability\CompoundAbility;
 use Velkuns\GameTextEngine\Element\Entity\Entity;
@@ -43,7 +44,7 @@ readonly class EntityFactory
     /**
      * @param EntityData $data
      */
-    public function from(array $data): Entity
+    public function from(array $data): EntityInterface
     {
         $name      = $data['name'];
         $type      = $data['type'];

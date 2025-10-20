@@ -61,11 +61,11 @@ class ElementFactoryTest extends TestCase
             "description": "Skill in using swords.",
             "modifiers": [
                 {
-                    "ability": "agility",
+                    "type": "ability.agility",
                     "value": 5
                 },
                 {
-                    "ability": "attack",
+                    "type": "ability.attack",
                     "value": 10
                 }
             ],
@@ -105,11 +105,11 @@ class ElementFactoryTest extends TestCase
             "description": "Skill in using swords.",
             "modifiers": [
                 {
-                    "ability": "agility",
+                    "type": "ability.agility",
                     "value": 5
                 },
                 {
-                    "ability": "attack",
+                    "type": "ability.attack",
                     "value": 10
                 }
             ],
@@ -135,20 +135,20 @@ class ElementFactoryTest extends TestCase
     public function testModifierFromJson(): void
     {
         $json = '{
-            "ability": "strength",
+            "type": "ability.strength",
             "value": 5
         }';
 
         $modifier = $this->elementFactory->modifierFromJson($json);
 
-        self::assertSame('strength', $modifier->ability);
+        self::assertSame('ability.strength', $modifier->type);
         self::assertSame(5, $modifier->value);
     }
 
     public function testModifierFromJsonWithInvalidJson(): void
     {
         $json = '{
-            "ability": "strength",
+            "type": "ability.strength",
             "value": 5
         ';
 
@@ -300,7 +300,7 @@ class ElementFactoryTest extends TestCase
             "description": "A sharp blade.",
             "modifiers": [
                 {
-                    "ability": "attack",
+                    "type": "ability.attack",
                     "value": 10
                 }
             ],
@@ -332,7 +332,7 @@ class ElementFactoryTest extends TestCase
             "description": "A sharp blade.",
             "modifiers": [
                 {
-                    "ability": "attack",
+                    "type": "ability.attack",
                     "value": 10
                 }
             ],
@@ -434,11 +434,11 @@ class ElementFactoryTest extends TestCase
                         "description": "Super skill",
                         "modifiers": [
                             {
-                                "ability": "agility",
+                                "type": "ability.agility",
                                 "value": 5
                             },
                             {
-                                "ability": "attack",
+                                "type": "attack.value",
                                 "value": 10
                             }
                         ],

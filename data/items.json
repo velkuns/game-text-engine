@@ -1,0 +1,218 @@
+[
+    {
+        "type": "item",
+        "name": "Rusty Sword",
+        "subType": "sword",
+        "description": "A rusty sword",
+        "modifiers": [],
+        "flags": 6,
+        "equipped": false,
+        "damages": 3,
+        "price": 0
+    },
+    {
+        "type": "item",
+        "name": "Iron Sword",
+        "subType": "sword",
+        "description": "A simple iron sword",
+        "modifiers": [],
+        "flags": 6,
+        "equipped": false,
+        "damages": 4,
+        "price": 10
+    },
+    {
+        "type": "item",
+        "name": "Sharp Iron Sword",
+        "subType": "sword",
+        "description": "A sharp iron sword",
+        "modifiers": [],
+        "flags": 6,
+        "equipped": false,
+        "damages": 5,
+        "price": 0
+    },
+    {
+        "type": "item",
+        "name": "Rusty dagger",
+        "subType": "dagger",
+        "description": "A rusty dagger",
+        "modifiers": [
+            {
+                "type": "self.abilities.bases.agility.value",
+                "value": 2
+            }
+        ],
+        "flags": 6,
+        "equipped": false,
+        "damages": 2,
+        "price": 0
+    },
+    {
+        "type": "item",
+        "name": "Iron dagger",
+        "subType": "dagger",
+        "description": "An iron dagger",
+        "modifiers": [
+            {
+                "type": "self.abilities.bases.agility",
+                "value": 2
+            }
+        ],
+        "flags": 6,
+        "equipped": false,
+        "damages": 3,
+        "price": 0
+    },
+    {
+        "type": "item",
+        "name": "Sharp Iron dagger",
+        "subType": "dagger",
+        "description": "A sharp iron dagger",
+        "modifiers": [
+            {
+                "type": "self.abilities.bases.agility",
+                "value": 2
+            }
+        ],
+        "flags": 6,
+        "equipped": false,
+        "damages": 4,
+        "price": 0
+    },
+    {
+        "type": "item",
+        "name": "Simple Bow",
+        "subType": "bow",
+        "description": "A simple bow",
+        "modifiers": [],
+        "flags": 6,
+        "equipped": false,
+        "damages": 3,
+        "price": 0
+    },
+    {
+        "type": "item",
+        "name": "Refined Bow",
+        "subType": "bow",
+        "description": "A refined Bow",
+        "modifiers": [],
+        "flags": 6,
+        "equipped": false,
+        "damages": 4,
+        "price": 0
+    },
+    {
+        "type": "item",
+        "name": "Wood Mass",
+        "subType": "mass",
+        "description": "A wood mass",
+        "modifiers": [],
+        "flags": 6,
+        "equipped": false,
+        "damages": 2,
+        "price": 0
+    },
+    {
+        "type": "item",
+        "name": "Simple Lockpick",
+        "subType": "lockpick",
+        "description": "A consumable lockpick. Can be used once.",
+        "modifiers": [],
+        "flags": 1,
+        "equipped": false,
+        "damages": 4,
+        "price": 0
+    },
+    {
+        "type": "item",
+        "name": "Iron Lockpick",
+        "subType": "lockpick",
+        "description": "Strong lockpick. Can be used many times.",
+        "modifiers": [],
+        "flags": 0,
+        "equipped": false,
+        "damages": 4,
+        "price": 0
+    },
+    {
+        "type": "item",
+        "name": "Basic food",
+        "subType": "food",
+        "description": "Simple food. Can restore some health.",
+        "modifiers": [
+            {
+                "type": "ability.vitality",
+                "value": 5
+            }
+        ],
+        "flags": 1,
+        "equipped": false,
+        "damages": 0,
+        "price": 5
+    },
+    {
+        "type": "item",
+        "name": "Rich food",
+        "subType": "food",
+        "description": "Rich food. Can restore more health.",
+        "modifiers": [
+            {
+                "type": "ability.vitality",
+                "value": 10
+            }
+        ],
+        "flags": 1,
+        "equipped": false,
+        "damages": 0,
+        "price": 10
+    },
+    {
+        "type": "item",
+        "name": "Small Potion of Life",
+        "subType": "potion",
+        "description": "Small Potion of Life. Can restore some health.",
+        "modifiers": [
+            {
+                "type": "ability.vitality",
+                "value": 5
+            }
+        ],
+        "flags": 1,
+        "equipped": false,
+        "damages": 0,
+        "price": 10
+    },
+    {
+        "type": "item",
+        "name": "Medium Life Potion",
+        "subType": "potion",
+        "description": "Medium Potion of Life. Can restore some health.",
+        "modifiers": [
+            {
+                "type": "ability.vitality",
+                "value": 10
+            }
+        ],
+        "flags": 1,
+        "equipped": false,
+        "damages": 0,
+        "price": 20
+    },
+    {
+        "type": "item",
+        "name": "Great Life Potion",
+        "subType": "potion",
+        "description": "Great Potion of Life. Can restore some health.",
+        "modifiers": [
+            {
+                "type": "ability.vitality",
+                "value": 10
+            }
+        ],
+        "flags": 1,
+        "equipped": false,
+        "damages": 0,
+        "price": 20
+    }
+]
