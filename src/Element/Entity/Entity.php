@@ -75,6 +75,11 @@ class Entity implements EntityInterface
         };
     }
 
+    public function isAlive(): bool
+    {
+        return ($this->abilities->get('vitality')?->getValue() ?? 0) > 0;
+    }
+
     /**
      * @return list<Modifier>
      */

@@ -82,10 +82,15 @@ declare(strict_types=1);
 
 namespace Application;
 
-use Velkuns\GameTextEngine\Api\Bestiary;use Velkuns\GameTextEngine\Api\Items;
+use Velkuns\GameTextEngine\Api\Bestiary;
+use Velkuns\GameTextEngine\Api\Items;
 use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
-use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;use Velkuns\GameTextEngine\Element\Condition\ConditionParser;use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
-use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
+use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
+use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
+use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
+use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
+use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
+use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
@@ -115,6 +120,95 @@ $bestiary->load($loader->fromFile('/path/to/bestiary.json'));
 $entity = $bestiary->get('Goblin');
 ```
 
+### Story API
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Application;
+
+use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
+use Velkuns\GameTextEngine\Api\Story;
+
+//~ Factories
+// ... define here your graph factory creation method ...
+
+//~ Loader
+$dataDir = __DIR__ . '/../../../data';
+$loader = new JsonLoader();
+
+$story = new Story($conditionFactory);
+$story->load($loader->fromFile'/path/to/story.json'));
+
+//~ Start the story - retrieve the first node of the story
+$text = $story->start();
+
+// define $player before
+  
+//~ Get possible choices
+$choices = $story->getPossibleChoices($node->id, $player);
+
+//~ Then display choices to the player, get his choice and advance the story
+$playerChoice = $choices[0];
+$nextText = $story->goto($playerChoice->source, $playerChoice->target, $player/*[, $enemy]*/); // A validation is made to be sure the choice is valid
+```
+
+### Combat API
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Application;
+
+use Random\Engine\Mt19937;
+use Random\Randomizer;
+use Velkuns\GameTextEngine\Api\Combat;
+
+//~ Factories
+// ... define here your graph factory creation method ...
+
+$story = new Story($conditionFactory);
+
+//~ Check if the current text node triggers a combat
+$text = $story->goto('text_4', $player, $enemy);
+if (!isset($text->trigger->combat)) {
+    return;
+}
+
+//~ load enemies entities from bestiary
+$enemies = [];
+foreach ($text->trigger->combat->enemies as $enemyName) {;
+    $enemies[] = $bestiary->get($enemyName);
+}
+
+//~ Randomizer
+$randomizer = new Randomizer(new Mt19937());
+$combat = new Combat($randomizer);
+
+$turns = [];
+foreach ($enemies as $enemy) {
+    do {
+        $turns[] = $combat->turn($player, $enemy);
+        if (!$enemy->isAlive()) {
+            break; // stop combat with this enemy if it is dead
+        }
+        
+        $turns[] = $combat->turn($enemy, $player);
+    } while ($player->isAlive() && $enemy->isAlive())
+    
+    if (!$player->isAlive()) {
+        break; // stop combat if player is dead
+    }
+}
+
+//~ Display combat results
+// ... your code to display combat turns ...
+
+```
 
 ## Contributing
 

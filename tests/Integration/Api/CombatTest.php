@@ -38,11 +38,11 @@ class CombatTest extends TestCase
         self::assertSame(16, $goblin->getAbilities()->get('vitality')?->getValue());
 
         //~ Turn #1 - Player attacks Goblin
-        echo "Turn #1 - Player attacks Goblin\n";
+        //echo "Turn #1 - Player attacks Goblin\n";
         $result = $this->combat->turn($player, $goblin);
         $chance = round($result['chance'] * 100) . '%';
         $roll   = round($result['roll'] * 100);
-        echo " > Player 'miss' Goblin (hit chance: $chance, roll: $roll)\n\n";
+        //echo " > Player 'miss' Goblin (hit chance: $chance, roll: $roll)\n\n";
 
         self::assertFalse($result['hit'], var_export($result, true));
         self::assertSame(5, $result['damages'], $result['debug']['damages']);
@@ -50,11 +50,11 @@ class CombatTest extends TestCase
         self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
 
         //~ Turn #2 - Goblin attacks Player
-        echo "Turn #2 - Goblin attacks Player\n";
+        //echo "Turn #2 - Goblin attacks Player\n";
         $result = $this->combat->turn($goblin, $player);
         $chance = round($result['chance'] * 100) . '%';
         $roll   = round($result['roll'] * 100);
-        echo " > Goblin 'hit' and inflicts " . $result['damages'] . " damages to Player (hit chance: $chance, roll: $roll)\n\n";
+        //echo " > Goblin 'hit' and inflicts " . $result['damages'] . " damages to Player (hit chance: $chance, roll: $roll)\n\n";
 
         self::assertTrue($result['hit'], $result['debug']['hit chance']);
         self::assertSame(2, $result['damages'], $result['debug']['damages']);
@@ -62,11 +62,11 @@ class CombatTest extends TestCase
         self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
 
         //~ Turn #3 - Player attacks Goblin
-        echo "Turn #3 - Player attacks Goblin\n";
+        //echo "Turn #3 - Player attacks Goblin\n";
         $result = $this->combat->turn($player, $goblin);
         $chance = round($result['chance'] * 100) . '%';
         $roll   = round($result['roll'] * 100);
-        echo " > Player 'miss' Goblin (hit chance: $chance, roll: $roll)\n\n";
+        //echo " > Player 'miss' Goblin (hit chance: $chance, roll: $roll)\n\n";
 
         self::assertFalse($result['hit'], $result['debug']['hit chance']);
         self::assertSame(5, $result['damages'], $result['debug']['damages']);
@@ -74,15 +74,18 @@ class CombatTest extends TestCase
         self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
 
         //~ Turn #4 - Goblin attacks Player
-        echo "Turn #4 - Goblin attacks Player\n";
+        //echo "Turn #4 - Goblin attacks Player\n";
         $result = $this->combat->turn($goblin, $player);
         $chance = round($result['chance'] * 100) . '%';
         $roll   = round($result['roll'] * 100);
-        echo " > Goblin 'miss' Player (hit chance: $chance, roll: $roll)\n\n";
+        //echo " > Goblin 'miss' Player (hit chance: $chance, roll: $roll)\n\n";
 
         self::assertFalse($result['hit'], $result['debug']['hit chance']);
         self::assertSame(2, $result['damages'], $result['debug']['damages']);
         self::assertSame(22, $player->getAbilities()->get('vitality')->getValue());
         self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
+
+        self::assertTrue($player->isAlive());
+        self::assertTrue($goblin->isAlive());
     }
 }

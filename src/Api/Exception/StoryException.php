@@ -9,12 +9,6 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Graph\Node;
+namespace Velkuns\GameTextEngine\Api\Exception;
 
-readonly class ActionNode
-{
-    public function __construct(
-        public int $id,
-        public string $content,
-    ) {}
-}
+class StoryException extends \RuntimeException {}

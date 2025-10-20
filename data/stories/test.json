@@ -1,0 +1,130 @@
+{
+    "metadata": {
+        "title": "A Day in the Life of a Developer"
+    },
+    "nodes": {
+        "text_1": {
+            "metadata": {
+                "text": "Marie vous salue de la main.\n \n Vous vous engagez sur la route, en direction des champs qui bordent le village.\n Vous voici maintenant aventurier. Enfin, un aventurier qui débute.\n \n Votre coeur tambourine dans votre poitrine. Est-ce de l'excitation ? De la peur ?\n Probablement un peu des deux. Après tout, c'est la première fois que vous quittez votre village.\n\n Vous vous arrêtez quelques seconde, respirez un bon coup, puis vous reprennez votre route."
+            }
+        },
+        "text_2": {
+            "metadata": {
+                "text": "2 chemin s'offre à vous..."
+            }
+        },
+        "text_3": {
+            "metadata": {
+                "text": "Vous vous enfoncez dans la forêt, et vous tombez sur un loup au détour du chemin..."
+            }
+        },
+        "text_4": {
+            "metadata": {
+                "text": "Vous décidez de combattre le loup! Préparez-vous...",
+                "trigger": {
+                    "combat": {
+                        "entities": ["Gray Wolf"]
+                    }
+                }
+            }
+        },
+        "text_5": {
+            "metadata": {
+                "text": "Vous avancez sur le chemin et devant vous se dresse une sombre masure. Vous vous approchez de la porte..."
+            }
+        },
+        "text_997": {
+            "metadata": {
+                "text": "Vous avez vaincu la menace! Vous retournez au village en héros."
+            }
+        },
+        "text_998": {
+            "metadata": {
+                "text": "Vous êtes mort..."
+            }
+        },
+        "text_999": {
+            "metadata": {
+                "text": "Fin de l'histoire Test"
+            }
+        }
+    },
+    "edges": [
+        {
+            "source": "text_1",
+            "target": "text_2",
+            "metadata": {
+                "text": "Continuer"
+            }
+        },
+        {
+            "source": "text_2",
+            "target": "text_3",
+            "metadata": {
+                "text": "Prendre le chemin de droite"
+            }
+        },
+        {
+            "source": "text_2",
+            "target": "text_5",
+            "metadata": {
+                "text": "Prendre le chemin de gauche"
+            }
+        },
+        {
+            "source": "text_3",
+            "target": "text_4",
+            "metadata": {
+                "text": "Combattre"
+            }
+        },
+        {
+            "source": "text_4",
+            "target": "text_997",
+            "metadata": {
+                "text": "Vous avez vaincu!",
+                "conditions": {
+                    "numberRequired": 1,
+                    "conditions": [
+                        {
+                            "type": "enemy.abilities.vitality",
+                            "condition": "value<=0",
+                            "is": true
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "source": "text_4",
+            "target": "text_998",
+            "metadata": {
+                "text": "Vous êtes mort...",
+                "conditions": {
+                    "numberRequired": 1,
+                    "conditions": [
+                        {
+                            "type": "self.abilities.vitality",
+                            "condition": "value<=0",
+                            "is": true
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "source": "text_3",
+            "target": "text_999",
+            "metadata": {
+                "text": "Fuir"
+            }
+        },
+        {
+            "source": "text_5",
+            "target": "text_999",
+            "metadata": {
+                "text": "Fuir"
+            }
+        }
+    ]
+}
