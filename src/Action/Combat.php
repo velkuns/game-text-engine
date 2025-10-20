@@ -27,11 +27,11 @@ readonly class Combat
         $attackerModifiers = $attacker->getModifiers($defender);
         $defenderModifiers = $defender->getModifiers($attacker);
 
-        $attack   = $attacker->getAbilities()->get('attack')?->getCurrentWithModifiers($attackerModifiers);
-        $strength = $attacker->getAbilities()->get('strength')?->getCurrentWithModifiers($attackerModifiers);
+        $attack   = $attacker->getAbilities()->get('attack')?->getValueWithModifiers($attackerModifiers);
+        $strength = $attacker->getAbilities()->get('strength')?->getValueWithModifiers($attackerModifiers);
 
-        $defense   = $defender->getAbilities()->get('defense')?->getCurrentWithModifiers($defenderModifiers);
-        $endurance = $defender->getAbilities()->get('endurance')?->getCurrentWithModifiers($defenderModifiers);
+        $defense   = $defender->getAbilities()->get('defense')?->getValueWithModifiers($defenderModifiers);
+        $endurance = $defender->getAbilities()->get('endurance')?->getValueWithModifiers($defenderModifiers);
 
         if ($attack === null || $defense === null || $strength === null || $endurance === null) {
             throw new \UnexpectedValueException('Both attacker and defender must have attack and defense abilities'); // @codeCoverageIgnore
@@ -42,7 +42,7 @@ readonly class Combat
 
         //~ Damages formula: ((attacker strength * 1.5) - defender endurance) + item damages
         $itemDamages = $attacker->getInventory()->getEquippedWeapon()?->getDamages() ?? 0;
-        $damages     = (int) floor((($strength * 2) / $endurance) + $itemDamages);
+        $damages     = (int) round((($strength * 2) / $endurance) + $itemDamages);
 
         //~ Roll between 0 and 1 (equidistributed)
         $hitRoll = $this->randomizer->nextFloat();

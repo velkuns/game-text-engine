@@ -14,15 +14,14 @@ So we need to define number of conditions required from a list to be considered 
 - list: list of conditions
 
 Condition types:
-- ability: check an ability value
-- skill: check if a skill is present or not
-- state: check if a state is present or not
-- blessing: check if a blessing is present or not
-- curse: check if a curse is present or not
-- title: check if a title is present or not
-- item: check if an item is present or not (in inventory or equipped)
-- entity_size: check size of the entity (player or enemy)
-- entity_race: check race of the entity (player or enemy)
+- self.ability: check an ability value
+- self.statuses.skill: check if a skill is present or not
+- self.statuses.state: check if a state is present or not
+- self.statuses.blessing: check if a blessing is present or not
+- self.statuses.curse: check if a curse is present or not
+- self.statuses.title: check if a title is present or not
+- self.inventory.item: check if an item is present or not (in inventory or equipped)
+- enemy.info: check for enemy information value (like race or size)
 
 ## Decision
 
@@ -31,74 +30,68 @@ Condition format:
 ```json
 {
     "number": "int",
-    "list": [
+    "conditions": [
         {
-            "type": "string",
-            "operator": ">|<|>=|<=|=|!=",
-            "value": "int",
-            "name?": "string",
-            "subtype?": "string",
-            "equipped?": "boolean",
-            "flags?": "int"
+            "from": "string",
+            "condition": "string",
+            "is": "bool"
         }
     ]
 }
 ```
 
-### Ability conditions type
-```json
-{
-    "type": "ability",
-    "name": "string",
-    "operator": ">|<|>=|<=|=|!=",
-    "value": "int"
-}
+condition node format:
+```
+"element=value"
 ```
 
-### State conditions type
-```json
-{
-    "type": "skill|state|blessing|curse|title",
-    "name": "string",
-    "operator": "=",
-    "value": "0|1"
-}
+if the condition must meet multiple criteria, we can use:
 ```
-> Value is 1 if the state must be present, 0 if it must not be present.
-
-### Item conditions type
-```json
-{
-    "type": "item",
-    "name": "string (can be empty)",
-    "operator": "=",
-    "value": "0|1",
-    "equipped?": "boolean",
-    "flags?": "int",
-    "subtype?": "string"
-}
+"element1=value1,element2=value2"
 ```
-> Value is 1 if the item must be present, 0 if it must not be present.
-> Equipped and flags are optional and can be used to match more precisely the condition.
 
-### Entities conditions type
+### Operators
+List of supported operators are:
+- `=`
+- `!=`
+- `>`
+- `<`
+- `>=`
+- `<=`
+- `&` (when condition value is a flag bitmask)
+
+### Some examples
 #### Size of the entity (player or enemy)
 ```json
 {
-    "type": "entity_size",
-    "name": "tiny|small|medium|large|huge",
-    "operator": "=",
-    "value": "0|1"
+    "type": "self.ability.base.strength",
+    "condition": "value>5",
+    "is": true
+}
+```
+#### Skill presence
+```json
+{
+    "type": "self.statuses.skills",
+    "condition": "name=lockpicking",
+    "is": true
+}
+```
+#### Size of the entity (player or enemy)
+```json
+{
+    "type": "enemy.info",
+    "condition": "size=tiny",
+    "is": true
 }
 ```
 
-#### Race of the entity (player or enemy)
+#### Race of the entity
 ```json
 {
-    "type": "entity_race",
-    "name": "rat|goblin|human|elf|dwarf|orc|troll|...",
-    "operator": "=",
-    "value": "0|1"
+   "type": "enemy.info",
+   "condition": "race=goblin",
+   "is": true
 }
 ```
 
@@ -116,19 +109,17 @@ Ability condition example:
 ```json
 {
     "conditions": {
-        "numberRequired": "1",
-        "list": [
+        "numberRequired": 1,
+        "conditions": [
             {
-                "type": "ability",
-                "name": "strength",
-                "operator": ">",
-                "value": 6
+               "type": "self.ability.bases.strength",
+               "condition": "value>6",
+               "is": true
             },
             {
-                "type": "ability",
-                "name": "endurance",
-                "operator": ">=",
-                "value": 5
+               "type": "self.ability.bases.endurance",
+               "condition": "value>=5",
+               "is": true
             }
         ]
     }
@@ -139,29 +130,26 @@ State condition example:
 
 ```json
 {
-    "conditions": {
-        "numberRequired": "3",
-        "list": [
-            {
-                "type": "skill",
-                "name": "lockpicking",
-                "operator": "=",
-                "value": 1
-            },
-            {
-                "type": "state",
-                "name": "blindness",
-                "operator": "=",
-                "value": 0
-            },
-            {
-                "type": "ability",
-                "name": "agility",
-                "operator": ">=",
-                "value": 8
-            }
-        ]
-    }
+   "conditions": {
+      "numberRequired": 3,
+      "conditions": [
+         {
+            "type": "self.statuses.skills",
+            "condition": "name=lockpicking",
+            "is": true
+         },
+         {
+            "type": "self.statuses.states",
+            "condition": "name=blindness",
+            "is": false
+         },
+         {
+            "type": "self.ability.base.agility",
+            "condition": "value>=6",
+            "is": true
+         }
+      ]
+   }
 }
 ```
 
@@ -171,14 +159,12 @@ Weapon condition example:
 ```json
 {
     "conditions": {
-        "numberRequired": "1",
-        "list": [
+        "numberRequired": 1,
+        "conditions": [
             {
-                "type": "item",
-                "name": "",
-                "operator": "=",
-                "value": 1,
-                "subtype": "axe"
+                "type": "self.inventory.items",
+                "condition": "subType=axe",
+                "is": true
             }
         ]
     }
@@ -186,19 +172,17 @@ Weapon condition example:
 ```
 
 Weapon condition example:
-- Must have at least 1 item that can be used as a weapon in inventory to break a simple closed locked door.
+- Must have at least 1 weapon equipped item to attack.
 
 ```json
 {
     "conditions": {
         "numberRequired": "1",
-        "list": [
+        "conditions": [
             {
-                "type": "item",
-                "name": "",
-                "operator": "=",
-                "value": 1,
-                "flags": 4
+                "type": "self.inventory.items",
+                "condition": "flags&4;equipped=true",
+                "is": true
             }
         ]
     }

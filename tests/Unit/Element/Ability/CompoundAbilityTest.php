@@ -29,7 +29,7 @@ class CompoundAbilityTest extends TestCase
 
         self::assertSame(AbilityType::Compound, $ability->getType());
         self::assertSame('attack', $ability->getName());
-        self::assertSame(5, $ability->getCurrent());
+        self::assertSame(5, $ability->getValue());
         self::assertSame(11, $ability->getMax());
         self::assertSame(10, $ability->getInitial());
         self::assertSame('strength + agility', $ability->getRule());
@@ -37,7 +37,7 @@ class CompoundAbilityTest extends TestCase
         self::assertSame(20, $ability->getConstraints()->max);
     }
 
-    public function testCurrentValueWithModifiers(): void
+    public function testValueValueWithModifiers(): void
     {
         $ability = new CompoundAbility(
             name: 'attack',
@@ -45,7 +45,7 @@ class CompoundAbilityTest extends TestCase
             abilities: $this->getBaseAbilities(),
         );
 
-        self::assertSame(5, $ability->getCurrent());
+        self::assertSame(5, $ability->getValue());
         self::assertSame(11, $ability->getMax());
 
         $modifiers = [
@@ -54,7 +54,7 @@ class CompoundAbilityTest extends TestCase
             new Modifier('defense', 5), // Should be ignored
         ];
 
-        self::assertSame(6, $ability->getCurrentWithModifiers($modifiers)); // 5 + 2 - 1 = 6
+        self::assertSame(6, $ability->getValueWithModifiers($modifiers)); // 5 + 2 - 1 = 6
     }
 
     /**
@@ -65,14 +65,14 @@ class CompoundAbilityTest extends TestCase
         return [
             'strength' => new BaseAbility(
                 name: 'strength',
-                current: 3,
+                value: 3,
                 max: 6,
                 constraints: new ConstraintsAbility(min: 0, max: 10),
                 initial: 5,
             ),
             'agility'  => new BaseAbility(
                 name: 'agility',
-                current: 2,
+                value: 2,
                 max: 5,
                 constraints: new ConstraintsAbility(min: 0, max: 10),
                 initial: 5,

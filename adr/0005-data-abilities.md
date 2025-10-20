@@ -11,7 +11,7 @@ We have two types of abilities: base & compound.
 Base abilities are simple, with a value that can be changed (increased or decreased) during the game.
 - type: base
 - initial: the initial value of the ability (immutable)
-- current: the current value of the ability
+- value: the current value of the ability
 - max: the maximum value of the ability (generally >= initial)
 - constraints: (immutable, limits min & max of the ability values)
   - min: min value for the ability (in absolute, generally 0 or 1)
@@ -31,7 +31,7 @@ Base ability format:
 {
     "type": "base",
     "name": "string",
-    "current": "int",
+    "value": "int",
     "max": "int",
     "constraints": {
         "min": "int",
@@ -49,7 +49,7 @@ Example (for a vitality ability):
     "name": "vitality",
     "rule": "strength + endurance",
     "initial": 12,
-    "current": 3,
+    "value": 3,
     "max": 13,
     "constraints": {
         "min": 1,

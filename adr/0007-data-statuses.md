@@ -104,27 +104,26 @@ Title status example:
 
 Skill status example:
 ```json
+
 {
+    "name": "Sword (Mastery)",
     "type": "skill",
-    "name": "Sword Mastery",
-    "description": "You have mastered the art of sword fighting. Your strength is increased by 2 and your agility by 1 when you have a weapon.",
-    "modifier": [
+    "description": "Mastering sword techniques increases damage dealt with swords by 2.",
+    "modifiers": [
         {
-            "ability": "strength",
+            "combat" : "combat.damages",
             "value": 2
-        },
-        {
-            "ability": "agility",
-            "value": 1
         }
     ],
-    "condition": {
-        "has": "item",
-        "item": {
-            "type": "weapon",
-            "subtype": "sword",
-            "equipped": true
-        }
+    "conditions": {
+        "numberRequired": 1,
+        "list": [
+            {
+                "type": "self.inventory.item",
+                "condition": "subType=sword;equipped=true",
+                "is": true
+            }
+        ]
     }
-}
+},
 ```

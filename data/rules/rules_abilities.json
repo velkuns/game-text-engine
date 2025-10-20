@@ -1,0 +1,81 @@
+{
+    "description": "This section defines base and compound abilities for characters.\n\nThe system is based on four primary base abilities: strength, endurance, agility, and intuition. Each base ability has an initial value of 10 and a maximum value of 20.\n\nCompound abilities are derived from base abilities. For example, the 'attack' compound ability is calculated as the sum of strength and agility, while the 'defense' compound ability is calculated as the sum of endurance and intuition.\n\nAbilities values are constrained within defined limits to ensure balanced gameplay.\n\nMedium values are 10, and are between 0 and 20.",
+    "attribution_points": 10,
+    "attribution_points_max_per_ability": 5,
+    "bases": {
+        "strength": {
+            "type": "base",
+            "name": "strength",
+            "initial": 10,
+            "max": 20,
+            "value": 10,
+            "constraints": {
+                "min": 0,
+                "max": 20
+            },
+            "rule": null
+        },
+        "endurance": {
+            "type": "base",
+            "name": "endurance",
+            "initial": 10,
+            "max": 20,
+            "value": 10,
+            "constraints": {
+                "min": 0,
+                "max": 20
+            },
+            "rule": null
+        },
+        "agility": {
+            "type": "base",
+            "name": "agility",
+            "initial": 10,
+            "max": 20,
+            "value": 10,
+            "constraints": {
+                "min": 0,
+                "max": 20
+            },
+            "rule": null
+        },
+        "intuition": {
+            "type": "base",
+            "name": "intuition",
+            "initial": 10,
+            "max": 20,
+            "value": 10,
+            "constraints": {
+                "min": 0,
+                "max": 20
+            },
+            "rule": null
+        },
+        "vitality": {
+            "type": "base",
+            "name": "vitality",
+            "initial": 0,
+            "max": 0,
+            "value": 0,
+            "constraints": {
+                "min": 0,
+                "max": 40
+            },
+            "rule": "strength + endurance"
+        }
+    },
+    "compounds": {
+        "attack": {
+            "type": "compound",
+            "name": "attack",
+            "rule": "strength + agility",
+            "description": "Calculates attack ability as the sum of strength and agility."
+        },
+        "defense": {
+            "type": "compound",
+            "name": "defense",
+            "rule": "endurance + intuition",
+            "description": "Calculates defense ability as the sum of endurance and intuition."
+        }
+    }
+}

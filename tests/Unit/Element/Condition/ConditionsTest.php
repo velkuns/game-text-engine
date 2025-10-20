@@ -11,27 +11,37 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Condition;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
+use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Element\Condition\Conditions;
+use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
 use Velkuns\GameTextEngine\Element\Entity\Entity;
+use Velkuns\GameTextEngine\Element\Exception\AbilityTypeParseException;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
 use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
+use Velkuns\GameTextEngine\Tests\Unit\Helper\EntityTrait;
 use PHPUnit\Framework\TestCase;
 
 class ConditionsTest extends TestCase
 {
+    use EntityTrait;
+
     private static ConditionsFactory $conditionFactory;
-    private static EntityFactory $entityFactory;
 
     public static function setUpBeforeClass(): void
     {
-        self::$conditionFactory = new ConditionsFactory();
+        self::$conditionFactory = new ConditionsFactory(
+            new ConditionParser(),
+            new ConditionElementResolver(),
+            new ConditionValidator(),
+        );
         self::$entityFactory    = new EntityFactory(
             new AbilityFactory(),
-            new StatusFactory(new ModifierFactory(), new ConditionsFactory()),
+            new StatusFactory(new ModifierFactory(), self::$conditionFactory),
             new ItemFactory(new ModifierFactory()),
         );
     }
@@ -40,6 +50,14 @@ class ConditionsTest extends TestCase
     public function testEvaluate(Conditions $conditions, Entity $player, Entity $enemy, bool $evaluation): void
     {
         self::assertSame($evaluation, $conditions->evaluate($player, $enemy));
+    }
+
+    #[DataProvider('evaluateExceptionDataProvider')]
+    public function testEvaluateThatThrowException(Conditions $conditions, Entity $player, Entity $enemy, int $code): void
+    {
+        self::expectException(AbilityTypeParseException::class);
+        self::expectExceptionCode($code);
+        $conditions->evaluate($player, $enemy);
     }
 
     /**
@@ -55,15 +73,29 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'self.ability',
-                            'name'     => 'strength',
-                            'operator' => '>=',
-                            'value'    => 10,
+                            'type'      => 'self.abilities.bases.strength',
+                            'condition' => 'value >=  10 ',
+                            'is'        => true,
                         ],
                     ],
                 ]),
-                self::getHero(),
-                self::getEnemy(),
+                self::getPlayer(),
+                self::getGoblin(),
+                true,
+            ],
+            'evaluate required 1 condition with list of 1 conditions (use get method)' => [
+                self::$conditionFactory->from([
+                    'numberRequired' => 1,
+                    'conditions' => [
+                        [
+                            'type'      => 'self.abilities.strength',
+                            'condition' => 'value >=  10 ',
+                            'is'        => true,
+                        ],
+                    ],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
                 true,
             ],
             'evaluate required 1 condition with list of 1 conditions but evaluation failed' => [
@@ -71,15 +103,14 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'self.statuses.skill',
-                            'name'     => 'swordsmanship',
-                            'operator' => '=',
-                            'value'    => 0,
+                            'type'      => 'self.statuses.skills',
+                            'condition' => 'name=Sword (Mastery)',
+                            'is'        => false,
                         ],
                     ],
                 ]),
-                self::getHero(),
-                self::getEnemy(),
+                self::getPlayer(),
+                self::getGoblin(),
                 false,
             ],
             'evaluate required 1 condition with list of 2 conditions' => [
@@ -87,21 +118,19 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'self.ability',
-                            'name'     => 'strength',
-                            'operator' => '>',
-                            'value'    => 10,
+                            'type'     => 'self.abilities.bases.strength',
+                            'condition' => 'value>10',
+                            'is'        => true,
                         ],
                         [
-                            'type'     => 'self.ability',
-                            'name'     => 'agility',
-                            'operator' => '=',
-                            'value'    => 15,
+                            'type'      => 'self.abilities.bases.agility',
+                            'condition' => 'value=15',
+                            'is'        => true,
                         ],
                     ],
                 ]),
-                self::getHero(),
-                self::getEnemy(),
+                self::getPlayer(),
+                self::getGoblin(),
                 true,
             ],
             'evaluate required 2 condition with list of 2 conditions' => [
@@ -109,21 +138,19 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 2,
                     'conditions' => [
                         [
-                            'type'     => 'self.ability',
-                            'name'     => 'strength',
-                            'operator' => '<=',
-                            'value'    => 10,
+                            'type'      => 'self.abilities.bases.strength',
+                            'condition' => 'value<=10',
+                            'is'        => true,
                         ],
                         [
-                            'type'     => 'self.ability',
-                            'name'     => 'agility',
-                            'operator' => '>',
-                            'value'    => 0,
+                            'type'      => 'self.abilities.bases.agility',
+                            'condition' => 'value>0',
+                            'is'        => true,
                         ],
                     ],
                 ]),
-                self::getHero(),
-                self::getEnemy(),
+                self::getPlayer(),
+                self::getGoblin(),
                 true,
             ],
             'evaluate required 1 condition with list of 1 conditions on specific item' => [
@@ -131,18 +158,14 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'self.inventory.item',
-                            'name'     => 'The Sword',
-                            'subType'  => 'sword',
-                            'operator' => '=',
-                            'value'    => 1,
-                            'equipped' => true,
-                            'flags'    => 3,
+                            'type'      => 'self.inventory.items',
+                            'condition' => 'name=The Sword;subType=sword;equipped=true;flags&3',
+                            'is'        => true,
                         ],
                     ],
                 ]),
-                self::getHero(),
-                self::getEnemy(),
+                self::getPlayer(),
+                self::getGoblin(),
                 true,
             ],
             'evaluate required 1 condition with list of 1 conditions on specific item but evaluation failed' => [
@@ -150,260 +173,102 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'self.inventory.item',
-                            'name'     => 'The Sword',
-                            'subType'  => 'sword',
-                            'operator' => '=',
-                            'value'    => 1,
-                            'equipped' => false,
-                            'flags'    => 3,
+                            'type'      => 'self.inventory.items',
+                            'condition' => 'name=The Sword;subType=sword;equipped=false;flags&3',
+                            'is'        => true,
                         ],
                     ],
                 ]),
-                self::getHero(),
-                self::getEnemy(),
+                self::getPlayer(),
+                self::getGoblin(),
                 false,
             ],
         ];
     }
 
-    public static function getHero(): Entity
+    /**
+     * @return array<string, array{0: Conditions|null, 1: Entity, 2: Entity, 3: int}>
+     */
+    public static function evaluateExceptionDataProvider(): array
     {
-        $data = [
-            'name'  => 'Brave Test Hero #1',
-            'type'  => 'player',
-            'coins' => 100,
-            'info'  => [
-                'level'       => 5,
-                'age'         => 30,
-                'size'        => '1m75',
-                'race'        => 'elf',
-                'description' => 'A brave hero',
-                'background'  => 'Born in a small village',
-                'notes'       => 'No special notes',
+        self::setUpBeforeClass();
+
+        return [
+            'evaluate with not objects in middle of type' => [
+                self::$conditionFactory->from([
+                    'numberRequired' => 1,
+                    'conditions'     => [
+                        [
+                            'type'      => 'self.abilities.bases.strength.value.deeper',
+                            'condition' => 'value >=  10 ',
+                            'is'        => true,
+                        ],
+                    ],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
+                1100,
             ],
-            'abilities' => [
-                'bases' => [
-                    'strength' => [
-                        'type'    => 'base',
-                        'name'    => 'strength',
-                        'current' => 10,
-                        'max'     => 20,
-                        'constraints' => [
-                            'min' => 0,
-                            'max' => 100,
+            //'evaluate with array but no key exists - no concret example' => [
+            //    self::$conditionFactory->from([
+            //        'numberRequired' => 1,
+            //        'conditions'     => [
+            //            [
+            //                'type'      => 'self.abilities.bases.strength.value',
+            //                'condition' => 'value >=  10 ',
+            //                'is'        => true,
+            //            ],
+            //        ],
+            //    ]),
+            //    self::getPlayer(),
+            //    self::getGoblin(),
+            //    1101,
+            //],
+            'evaluate with not found type property' => [
+                self::$conditionFactory->from([
+                    'numberRequired' => 1,
+                    'conditions'     => [
+                        [
+                            'type'      => 'self.unknown.property',
+                            'condition' => 'value >=  10 ',
+                            'is'        => true,
                         ],
-                        'initial' => 10,
-                        'rule'    => null,
                     ],
-                    'agility' => [
-                        'type'    => 'base',
-                        'name'    => 'agility',
-                        'current' => 15,
-                        'max'     => 30,
-                        'constraints' => [
-                            'min' => 0,
-                            'max' => 100,
-                        ],
-                        'initial' => 15,
-                        'rule'    => null,
-                    ],
-                    'endurance' => [
-                        'type'    => 'base',
-                        'name'    => 'endurance',
-                        'current' => 12,
-                        'max'     => 25,
-                        'constraints' => [
-                            'min' => 0,
-                            'max' => 100,
-                        ],
-                        'initial' => 12,
-                        'rule'    => null,
-                    ],
-                    'intuition' => [
-                        'type'    => 'base',
-                        'name'    => 'intuition',
-                        'current' => 8,
-                        'max'     => 20,
-                        'constraints' => [
-                            'min' => 0,
-                            'max' => 100,
-                        ],
-                        'initial' => 8,
-                        'rule'    => null,
-                    ],
-                ],
-                'compounds' => [
-                    'attack' => [
-                        'type' => 'compound',
-                        'name' => 'attack',
-                        'rule' => 'strength + agility',
-                    ],
-                    'defense' => [
-                        'type' => 'compound',
-                        'name' => 'defense',
-                        'rule' => 'endurance + intuition',
-                    ],
-                ],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
+                1102,
             ],
-            'statuses' => [
-                'skills' => [
-                    'swordsmanship' => [
-                        'type'        => 'skill',
-                        'name'        => 'swordsmanship',
-                        'description' => 'Super skill',
-                        'modifiers'   => [
-                            [
-                                'ability' => 'agility',
-                                'value'   => 5,
-                            ],
-                            [
-                                'ability' => 'attack',
-                                'value'   => 10,
-                            ],
+            'evaluate with not enough part in type' => [
+                self::$conditionFactory->from([
+                    'numberRequired' => 1,
+                    'conditions'     => [
+                        [
+                            'type'      => 'self',
+                            'condition' => 'value >=  10 ',
+                            'is'        => true,
                         ],
-                        'conditions' => [
-                            'numberRequired' => 1,
-                            'conditions'     => [
-                                [
-                                    'type'     => 'self.inventory.item',
-                                    'name'     => '',
-                                    'operator' => '=',
-                                    'value'    => 1,
-                                    'subType'  => 'sword',
-                                    'equipped' => true,
-                                    'flags'    => 3,
-                                ],
-                            ],
-                        ],
-                        'durationTurns'  => 0,
-                        'remainingTurns' => 0,
                     ],
-                ],
-                'states'    => [],
-                'blessings' => [],
-                'curses'    => [],
-                'titles'    => [],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
+                1103,
             ],
-            'inventory' => [
-                [
-                    'type'        => 'self.inventory.item',
-                    'name'        => 'The Sword',
-                    'subType'     => 'sword',
-                    'description' => 'A sharp blade',
-                    'modifiers'   => [],
-                    'flags'       => 7,
-                    'equipped'    => true,
-                    'damages'     => 2,
-                    'price'       => 0,
-                ],
+            'evaluate with not object as end part' => [
+                self::$conditionFactory->from([
+                    'numberRequired' => 1,
+                    'conditions'     => [
+                        [
+                            'type'      => 'self.abilities.bases.strength.value',
+                            'condition' => 'value >=  10 ',
+                            'is'        => true,
+                        ],
+                    ],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
+                1104,
             ],
         ];
-
-        return self::$entityFactory->from($data);
-    }
-
-    public static function getEnemy(): Entity
-    {
-        $data = [
-            'name'  => 'Gobelin #1',
-            'type'  => 'creature',
-            'coins' => 2,
-            'info'  => [
-                'level'       => 2,
-                'age'         => 20,
-                'size'        => 'small',
-                'race'        => 'gobelin',
-                'description' => 'An evil gobelin',
-                'background'  => 'Born in a small village',
-                'notes'       => 'No special notes',
-            ],
-            'abilities' => [
-                'bases' => [
-                    'strength' => [
-                        'type'    => 'base',
-                        'name'    => 'strength',
-                        'current' => 10,
-                        'max'     => 20,
-                        'constraints' => [
-                            'min' => 0,
-                            'max' => 100,
-                        ],
-                        'initial' => 10,
-                        'rule'    => null,
-                    ],
-                    'agility' => [
-                        'type'    => 'base',
-                        'name'    => 'agility',
-                        'current' => 15,
-                        'max'     => 30,
-                        'constraints' => [
-                            'min' => 0,
-                            'max' => 100,
-                        ],
-                        'initial' => 15,
-                        'rule'    => null,
-                    ],
-                    'endurance' => [
-                        'type'    => 'base',
-                        'name'    => 'endurance',
-                        'current' => 12,
-                        'max'     => 25,
-                        'constraints' => [
-                            'min' => 0,
-                            'max' => 100,
-                        ],
-                        'initial' => 12,
-                        'rule'    => null,
-                    ],
-                    'intuition' => [
-                        'type'    => 'base',
-                        'name'    => 'intuition',
-                        'current' => 8,
-                        'max'     => 20,
-                        'constraints' => [
-                            'min' => 0,
-                            'max' => 100,
-                        ],
-                        'initial' => 8,
-                        'rule'    => null,
-                    ],
-                ],
-                'compounds' => [
-                    'attack' => [
-                        'type' => 'compound',
-                        'name' => 'attack',
-                        'rule' => 'strength + agility',
-                    ],
-                    'defense' => [
-                        'type' => 'compound',
-                        'name' => 'defense',
-                        'rule' => 'endurance + intuition',
-                    ],
-                ],
-            ],
-            'statuses' => [
-                'skills'    => [],
-                'states'    => [],
-                'blessings' => [],
-                'curses'    => [],
-                'titles'    => [],
-            ],
-            'inventory' => [
-                [
-                    'type'        => 'self.inventory.item',
-                    'name'        => 'The Dagger',
-                    'subType'     => 'dagger',
-                    'description' => 'A sharp dagger',
-                    'modifiers'   => [],
-                    'flags'       => 7,
-                    'equipped'    => true,
-                    'damages'     => 1,
-                    'price'       => 0,
-                ],
-            ],
-        ];
-
-        return self::$entityFactory->from($data);
     }
 }

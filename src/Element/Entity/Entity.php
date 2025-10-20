@@ -19,13 +19,13 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 class Entity implements EntityInterface
 {
     public function __construct(
-        private readonly string $name,
-        private readonly string $type,
-        private int $coins,
-        private readonly EntityInfo $info,
-        private readonly EntityAbilities $abilities,
-        private readonly EntityStatuses $statuses,
-        private readonly EntityInventory $inventory,
+        public readonly string $name,
+        public readonly string $type,
+        public int $coins,
+        public readonly EntityInfo $info,
+        public readonly EntityAbilities $abilities,
+        public readonly EntityStatuses $statuses,
+        public readonly EntityInventory $inventory,
     ) {}
 
     public function getName(): string
