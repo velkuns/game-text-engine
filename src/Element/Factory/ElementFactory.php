@@ -46,7 +46,7 @@ readonly class ElementFactory
     /**
      * @throws ElementJsonParseException
      */
-    public function entityFromJson(string $json): Entity
+    public function entityFromJson(string $json): EntityInterface
     {
         try {
             /** @var EntityData $data */
@@ -142,7 +142,7 @@ readonly class ElementFactory
     /**
      * @throws ElementJsonParseException
      */
-    public function itemFromJson(string $json): Item
+    public function itemFromJson(string $json): ItemInterface
     {
         try {
             /** @var ItemData $data */

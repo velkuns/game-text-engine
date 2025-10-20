@@ -13,14 +13,14 @@ namespace Velkuns\GameTextEngine\Element\Modifier;
 
 /**
  * @phpstan-type ModifierData array{
- *     ability: string,
+ *     type: string,
  *     value: int,
  * }
  */
 readonly class Modifier implements \JsonSerializable
 {
     public function __construct(
-        public string $ability,
+        public string $type,
         public int $value,
     ) {}
 
@@ -30,8 +30,8 @@ readonly class Modifier implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'ability' => $this->ability,
-            'value'   => $this->value,
+            'type'  => $this->type,
+            'value' => $this->value,
         ];
     }
 }

@@ -49,9 +49,9 @@ class CompoundAbilityTest extends TestCase
         self::assertSame(11, $ability->getMax());
 
         $modifiers = [
-            new Modifier('attack', 2),
-            new Modifier('attack', -1),
-            new Modifier('defense', 5), // Should be ignored
+            new Modifier('ability.attack', 2),
+            new Modifier('ability.attack', -1),
+            new Modifier('ability.defense', 5), // Should be ignored
         ];
 
         self::assertSame(6, $ability->getValueWithModifiers($modifiers)); // 5 + 2 - 1 = 6

@@ -12,9 +12,10 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Factory;
 
 use Velkuns\GameTextEngine\Element\Item\Item;
+use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 
 /**
- * @phpstan-import-type ItemData from Item
+ * @phpstan-import-type ItemData from ItemInterface
  */
 readonly class ItemFactory
 {
@@ -25,7 +26,7 @@ readonly class ItemFactory
     /**
      * @param ItemData $data
      */
-    public function from(array $data): Item
+    public function from(array $data): ItemInterface
     {
         $name        = $data['name'];
         $subType     = $data['subType'] ?? null;

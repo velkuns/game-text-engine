@@ -8,10 +8,10 @@
  */
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Action;
+namespace Velkuns\GameTextEngine\Api;
 
 use Random\Randomizer;
-use Velkuns\GameTextEngine\Element\Entity\Entity;
+use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 
 readonly class Combat
 {
@@ -22,7 +22,7 @@ readonly class Combat
     /**
      * @return array{hit: bool, damages: int, chance: float, roll: float, debug: array{"hit chance": string, damages: string}}
      */
-    public function turn(Entity $attacker, Entity $defender): array
+    public function turn(EntityInterface $attacker, EntityInterface $defender): array
     {
         $attackerModifiers = $attacker->getModifiers($defender);
         $defenderModifiers = $defender->getModifiers($attacker);
@@ -71,7 +71,7 @@ readonly class Combat
         return $result;
     }
 
-    private function inflictDamagesTo(Entity $defender, int $damages): void
+    private function inflictDamagesTo(EntityInterface $defender, int $damages): void
     {
         $vitality = $defender->getAbilities()->get('vitality');
 

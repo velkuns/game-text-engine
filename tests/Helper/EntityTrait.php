@@ -9,51 +9,23 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Tests\Unit\Helper;
+namespace Velkuns\GameTextEngine\Tests\Helper;
 
-use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
-use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
-use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
-use Velkuns\GameTextEngine\Element\Entity\Entity;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
-use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
-use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
-use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
-use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
-use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface
  */
 trait EntityTrait
 {
-    private static ?EntityFactory $entityFactory = null;
+    use FactoryTrait;
 
-    private static function getEntityFactory(): EntityFactory
-    {
-        if (self::$entityFactory === null) {
-            $conditionFactory = new ConditionsFactory(
-                new ConditionParser(),
-                new ConditionElementResolver(),
-                new ConditionValidator(),
-            );
-            self::$entityFactory = new EntityFactory(
-                new AbilityFactory(),
-                new StatusFactory(new ModifierFactory(), $conditionFactory),
-                new ItemFactory(new ModifierFactory()),
-            );
-        }
-
-        return self::$entityFactory;
-    }
-
-    private static function getPlayer(): Entity
+    private static function getPlayer(): EntityInterface
     {
         return self::getEntityFactory()->from(self::getPlayerData());
     }
 
-    private static function getGoblin(): Entity
+    private static function getGoblin(): EntityInterface
     {
         return self::getEntityFactory()->from(self::getGoblinData());
     }
@@ -154,18 +126,18 @@ trait EntityTrait
             ],
             'statuses' => [
                 'skills' => [
-                    'swordsmanship' => [
+                    'Sword (Mastery)' => [
                         'type'        => 'skill',
                         'name'        => 'Sword (Mastery)',
                         'description' => 'Super skill',
                         'modifiers'   => [
                             [
-                                'ability' => 'agility',
-                                'value'   => 1,
+                                'type'  => 'ability.agility',
+                                'value' => 1,
                             ],
                             [
-                                'ability' => 'attack',
-                                'value'   => 2,
+                                'type'  => 'ability.attack',
+                                'value' => 2,
                             ],
                         ],
                         'conditions' => [
@@ -173,7 +145,7 @@ trait EntityTrait
                             'conditions' => [
                                 [
                                     'type'      => 'self.inventory.items',
-                                    'condition' => 'subType=sword;equipped=true;flag&3',
+                                    'condition' => 'subType=sword;equipped=true;flag&4',
                                     'is'        => true,
                                 ],
                             ],
@@ -189,13 +161,13 @@ trait EntityTrait
                         'description' => 'You are well rested',
                         'modifiers'   => [
                             [
-                                'ability' => 'vitality',
-                                'value'   => 0,
+                                'type'  => 'ability.vitality',
+                                'value' => 2,
                             ],
                         ],
                         'conditions'  => null,
-                        'durationTurns'  => 0,
-                        'remainingTurns' => 0,
+                        'durationTurns'  => 3,
+                        'remainingTurns' => 1,
                     ],
                 ],
                 'blessings' => [],
@@ -230,7 +202,7 @@ trait EntityTrait
                     'subType'     => 'sword',
                     'description' => 'A sharp blade',
                     'modifiers'   => [],
-                    'flags'       => 7,
+                    'flags'       => 6,
                     'equipped'    => true,
                     'damages'     => 2,
                     'price'       => 0,

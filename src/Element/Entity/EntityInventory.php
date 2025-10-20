@@ -12,17 +12,18 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Entity;
 
 use Velkuns\GameTextEngine\Element\Item\Item;
+use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 
 /**
  * @phpstan-import-type ItemData from Item
  */
 class EntityInventory implements \JsonSerializable
 {
-    /** @var \WeakMap<Item, Item> */
+    /** @var \WeakMap<ItemInterface, ItemInterface> */
     public \WeakMap $items;
 
     /**
-     * @param list<Item> $items
+     * @param list<ItemInterface> $items
      */
     public function __construct(
         array $items = [],
@@ -33,10 +34,12 @@ class EntityInventory implements \JsonSerializable
         }
     }
 
-    public function get(string $name): ?Item
+    public function get(string $name): ?ItemInterface
     {
+        $name = \strtolower($name);
+
         foreach ($this->items as $item) {
-            if ($item->getName() === $name) {
+            if (\strtolower($item->getName()) === $name) {
                 return $item;
             }
         }
@@ -44,7 +47,7 @@ class EntityInventory implements \JsonSerializable
         return null;
     }
 
-    public function getEquippedWeapon(): ?Item
+    public function getEquippedWeapon(): ?ItemInterface
     {
         foreach ($this->items as $item) {
             if ($item->isWeapon() && $item->equipped()) {
@@ -55,18 +58,18 @@ class EntityInventory implements \JsonSerializable
         return null;
     }
 
-    public function add(Item $item): void
+    public function add(ItemInterface $item): void
     {
         $this->items[$item] = $item;
     }
 
-    public function drop(Item $item): void
+    public function drop(ItemInterface $item): void
     {
         unset($this->items[$item]);
     }
 
     /**
-     * @return list<ItemData>
+     * @phpstan-return list<ItemData>
      */
     public function jsonSerialize(): array
     {

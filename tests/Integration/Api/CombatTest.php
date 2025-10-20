@@ -8,13 +8,13 @@
  */
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Tests\Unit\Action;
+namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
+use PHPUnit\Framework\TestCase;
 use Random\Engine\Mt19937;
 use Random\Randomizer;
-use Velkuns\GameTextEngine\Action\Combat;
-use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Tests\Unit\Helper\EntityTrait;
+use Velkuns\GameTextEngine\Api\Combat;
+use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 
 class CombatTest extends TestCase
 {

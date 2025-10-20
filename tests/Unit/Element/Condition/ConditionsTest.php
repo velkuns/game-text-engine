@@ -11,11 +11,12 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Condition;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
 use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Element\Condition\Conditions;
 use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
-use Velkuns\GameTextEngine\Element\Entity\Entity;
+use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Exception\AbilityTypeParseException;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
@@ -23,8 +24,7 @@ use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
-use Velkuns\GameTextEngine\Tests\Unit\Helper\EntityTrait;
-use PHPUnit\Framework\TestCase;
+use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 
 class ConditionsTest extends TestCase
 {
@@ -47,21 +47,29 @@ class ConditionsTest extends TestCase
     }
 
     #[DataProvider('evaluateDataProvider')]
-    public function testEvaluate(Conditions $conditions, Entity $player, Entity $enemy, bool $evaluation): void
-    {
+    public function testEvaluate(
+        Conditions $conditions,
+        EntityInterface $player,
+        EntityInterface $enemy,
+        bool $evaluation,
+    ): void {
         self::assertSame($evaluation, $conditions->evaluate($player, $enemy));
     }
 
     #[DataProvider('evaluateExceptionDataProvider')]
-    public function testEvaluateThatThrowException(Conditions $conditions, Entity $player, Entity $enemy, int $code): void
-    {
+    public function testEvaluateThatThrowException(
+        Conditions $conditions,
+        EntityInterface $player,
+        EntityInterface $enemy,
+        int $code,
+    ): void {
         self::expectException(AbilityTypeParseException::class);
         self::expectExceptionCode($code);
         $conditions->evaluate($player, $enemy);
     }
 
     /**
-     * @return array<string, array{0: Conditions|null, 1: Entity, 2: Entity, 3: bool}>
+     * @return array<string, array{0: Conditions|null, 1: EntityInterface, 2: EntityInterface, 3: bool}>
      */
     public static function evaluateDataProvider(): array
     {
@@ -159,7 +167,7 @@ class ConditionsTest extends TestCase
                     'conditions' => [
                         [
                             'type'      => 'self.inventory.items',
-                            'condition' => 'name=The Sword;subType=sword;equipped=true;flags&3',
+                            'condition' => 'name=The Sword;subType=sword;equipped=true;flags&4',
                             'is'        => true,
                         ],
                     ],
@@ -174,7 +182,7 @@ class ConditionsTest extends TestCase
                     'conditions' => [
                         [
                             'type'      => 'self.inventory.items',
-                            'condition' => 'name=The Sword;subType=sword;equipped=false;flags&3',
+                            'condition' => 'name=The Sword;subType=sword;equipped=false;flags&4',
                             'is'        => true,
                         ],
                     ],
@@ -187,7 +195,7 @@ class ConditionsTest extends TestCase
     }
 
     /**
-     * @return array<string, array{0: Conditions|null, 1: Entity, 2: Entity, 3: int}>
+     * @return array<string, array{0: Conditions|null, 1: EntityInterface, 2: EntityInterface, 3: int}>
      */
     public static function evaluateExceptionDataProvider(): array
     {

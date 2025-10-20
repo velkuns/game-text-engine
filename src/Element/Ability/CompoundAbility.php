@@ -113,7 +113,7 @@ readonly class CompoundAbility implements AbilityInterface
     {
         $value = $this->getValue();
         foreach ($modifiers as $modifier) {
-            if ($modifier->ability !== $this->name) {
+            if ($modifier->type !== 'ability.' . $this->name) {
                 continue;
             }
 

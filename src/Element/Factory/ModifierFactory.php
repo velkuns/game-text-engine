@@ -23,9 +23,9 @@ readonly class ModifierFactory
      */
     public function from(array $data): Modifier
     {
-        $ability = $data['ability'];
-        $value   = $data['value'];
+        $type  = $data['type'];
+        $value = $data['value'];
 
-        return new Modifier($ability, $value);
+        return new Modifier($type, $value);
     }
 }

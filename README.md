@@ -21,13 +21,98 @@ composer require velkuns/game-text-engine
 
 
 
-## Usage
+## API Documentation
 
-Usage:
+### Loader (to load data from files / strings):
+
 ```php
 <?php
 
-// Sample code here
+declare(strict_types=1);
+
+namespace Application;
+
+use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
+
+$loader  = new JsonLoader();
+
+//~ To load data from a file
+$data = $loader->fromFile('/path/to/data.json');
+
+//~ To load data from a string (JSON format, can be stored in database)
+$data = $loader->fromString('{"key": "value"}');
+
+```
+
+### Items dictionary
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Application;
+
+use Velkuns\GameTextEngine\Api\Items;
+use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
+use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
+use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
+
+//~ Required factories
+$itemFactory = new ItemFactory(new ModifierFactory());
+
+//~ Loader
+$loader    = new JsonLoader();
+$itemsData = $loader->fromFile('/path/to/items.json');
+
+//~ Items dictionary
+$items = new Items($itemFactory);
+$item->load($itemsData);
+
+//~ Get an item by its name
+$item = $items->get('Rusty Sword');
+```
+
+### Bestiary dictionary
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Application;
+
+use Velkuns\GameTextEngine\Api\Bestiary;use Velkuns\GameTextEngine\Api\Items;
+use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
+use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;use Velkuns\GameTextEngine\Element\Condition\ConditionParser;use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
+use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
+use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
+use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
+use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
+
+//~ Required factories
+$modifierFactory  = new ModifierFactory();
+$itemFactory      = new ItemFactory($modifierFactory);
+$conditionFactory = new ConditionsFactory(new ConditionParser(), new ConditionElementResolver(), new ConditionValidator());
+$entityFactory    = new EntityFactory(
+    new AbilityFactory(), 
+    new StatusFactory($modifierFactory, $conditionFactory), 
+    $itemFactory
+);
+
+//~ Loader
+$loader = new JsonLoader();
+
+//~ Items dictionary (required to resolve item references in creatures inventory)
+$items = new Items($itemFactory);
+$item->load($loader->fromFile('/path/to/items.json'));
+
+//~ Bestiary dictionary
+$bestiary = new Bestiary($entityFactory, $items);
+$bestiary->load($loader->fromFile('/path/to/bestiary.json'));
+
+//~ Get a creature by its name
+$entity = $bestiary->get('Goblin');
 ```
 
 

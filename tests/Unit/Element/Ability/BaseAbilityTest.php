@@ -148,9 +148,9 @@ class BaseAbilityTest extends TestCase
         self::assertSame(10, $ability->getMax());
 
         $modifiers = [
-            new Modifier('vitality', 2),
-            new Modifier('vitality', -1),
-            new Modifier('strength', 5), // Should be ignored
+            new Modifier('ability.vitality', 2),
+            new Modifier('ability.vitality', -1),
+            new Modifier('ability.strength', 5), // Should be ignored
         ];
 
         self::assertSame(6, $ability->getValueWithModifiers($modifiers)); // 5 + 2 - 1 = 6

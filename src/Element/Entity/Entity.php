@@ -78,7 +78,7 @@ class Entity implements EntityInterface
     /**
      * @return list<Modifier>
      */
-    public function getModifiers(Entity $enemy): array
+    public function getModifiers(EntityInterface $enemy): array
     {
         return $this->statuses->getAllModifiers($this, $enemy);
     }
