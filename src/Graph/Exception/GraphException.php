@@ -9,11 +9,6 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Graph\Enum;
+namespace Velkuns\GameTextEngine\Graph\Exception;
 
-enum NodeType: int
-{
-    case Root = 1;
-    case Link = 2;
-    case Leaf = 3;
-}
+class GraphException extends \UnexpectedValueException {}

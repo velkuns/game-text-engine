@@ -47,6 +47,8 @@ interface EntityInterface extends \JsonSerializable
 
     public function hasStatus(string $statusType, string $statusName): bool;
 
+    public function isAlive(): bool;
+
     /**
      * @return list<Modifier>
      */

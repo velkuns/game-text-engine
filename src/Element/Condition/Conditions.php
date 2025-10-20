@@ -43,13 +43,17 @@ readonly class Conditions implements \JsonSerializable
         return $this->conditions;
     }
 
-    public function evaluate(EntityInterface $player, EntityInterface $enemy): bool
+    public function evaluate(EntityInterface $player, ?EntityInterface $enemy = null): bool
     {
         $validConditions = 0;
 
         foreach ($this->conditions as $condition) {
             //~ Some conditions are evaluated on the player, others on the enemy, depending on their type
             $entity = \str_starts_with($condition->getType(), 'self') ? $player : $enemy;
+
+            if ($entity === null) {
+                continue; // Cannot evaluate condition without the required entity
+            }
 
             //~ Evaluate condition and increment valid conditions count if true
             $validConditions += $condition->evaluate($entity) ? 1 : 0;

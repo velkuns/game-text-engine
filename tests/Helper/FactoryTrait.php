@@ -21,6 +21,7 @@ use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
+use Velkuns\GameTextEngine\Graph\Factory\GraphFactory;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface
@@ -69,5 +70,10 @@ trait FactoryTrait
     private static function getStatusFactory(): StatusFactory
     {
         return new StatusFactory(self::getModifierFactory(), self::getConditionFactory());
+    }
+
+    private static function getGraphFactory(): GraphFactory
+    {
+        return new GraphFactory(self::getConditionFactory());
     }
 }
