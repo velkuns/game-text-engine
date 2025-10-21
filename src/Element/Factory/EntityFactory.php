@@ -63,6 +63,8 @@ readonly class EntityFactory
     private function fromEntityInfo(array $data): EntityInfo
     {
         $level       = $data['level'];
+        $xp          = $data['xp'];
+        $damages     = $data['damages'];
         $age         = $data['age'];
         $size        = $data['size'];
         $race        = $data['race'];
@@ -70,7 +72,7 @@ readonly class EntityFactory
         $background  = $data['background'];
         $notes       = $data['notes'];
 
-        return new EntityInfo($level, $age, $size, $race, $description, $background, $notes);
+        return new EntityInfo($level, $xp, $damages, $age, $size, $race, $description, $background, $notes);
     }
 
     /**

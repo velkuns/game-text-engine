@@ -34,7 +34,7 @@
     },
     {
         "type": "item",
-        "name": "Rusty dagger",
+        "name": "Rusty Dagger",
         "subType": "dagger",
         "description": "A rusty dagger",
         "modifiers": [
@@ -50,7 +50,7 @@
     },
     {
         "type": "item",
-        "name": "Iron dagger",
+        "name": "Iron Dagger",
         "subType": "dagger",
         "description": "An iron dagger",
         "modifiers": [

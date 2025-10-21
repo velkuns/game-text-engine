@@ -355,6 +355,8 @@ class ElementFactoryTest extends TestCase
             "coins": 100,
             "info": {
                 "level": 5,
+                "xp": 1500,
+                "damages": 0,
                 "age": 30,
                 "size": "1m75",
                 "race": "elf",

@@ -41,6 +41,8 @@ trait EntityTrait
             'coins' => 100,
             'info'  => [
                 'level'       => 5,
+                'xp'          => 500,
+                'damages'     => 0,
                 'age'         => 30,
                 'size'        => '1m75',
                 'race'        => 'elf',
@@ -222,6 +224,8 @@ trait EntityTrait
             'coins' => 2,
             'info'  => [
                 'level'       => 2,
+                'xp'          => 200,
+                'damages'     => 0,
                 'age'         => 20,
                 'size'        => 'small',
                 'race'        => 'gobelin',

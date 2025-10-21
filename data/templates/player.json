@@ -4,6 +4,8 @@
     "coins": 10,
     "info": {
         "level": 1,
+        "xp": 0,
+        "damages": 0,
         "age": 20,
         "size": "medium",
         "race": "human",
