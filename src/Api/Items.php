@@ -47,4 +47,18 @@ class Items
 
         return $this->items[$lowerCaseName];
     }
+
+    public function dump(bool $prettyPrint = false): string
+    {
+        try {
+            return \json_encode(
+                \array_values($this->items),
+                flags: \JSON_THROW_ON_ERROR | ($prettyPrint ? \JSON_PRETTY_PRINT : 0),
+            );
+            // @codeCoverageIgnoreStart
+        } catch (\JsonException $exception) {
+            throw new ItemException("Unable to dump items data: " . $exception->getMessage(), 1600, $exception); // @codeCoverageIgnore
+        }
+        // @codeCoverageIgnoreEnd
+    }
 }

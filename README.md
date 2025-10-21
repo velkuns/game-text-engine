@@ -23,6 +23,54 @@ composer require velkuns/game-text-engine
 
 ## API Documentation
 
+### Game Object
+
+```php
+
+declare(strict_types=1);
+
+namespace Application;
+
+use Velkuns\GameTextEngine\Api\Items;
+use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
+use Velunns\GameTextEngine\Api\GameApi
+
+//~ Factories
+$modifierFactory  = new ModifierFactory();
+$itemFactory      = new ItemFactory($modifierFactory);
+$conditionFactory = new ConditionsFactory(new ConditionParser(), new ConditionElementResolver(), new ConditionValidator());
+$graphFactory     = new GraphFactory($conditionFactory);
+$entityFactory    = new EntityFactory(
+    new AbilityFactory(), 
+    new StatusFactory($modifierFactory, $conditionFactory), 
+    $itemFactory
+);
+
+$items   = new Items($itemFactory);
+$gameApi = new GameApi(
+    new JsonLoader(),
+    new Story($graphFactory),
+    $items,
+    new Bestiary($entityFactory, $items),
+    new Combat(new Randomizer(new Mt19937())),
+);
+
+//~ Load json data (can be from files or strings if came from database)
+$storyData    = $game->loader->fromFile($dataDir . '/stories/test.json');
+$itemsData    = $game->loader->fromFile($dataDir . '/items.json');
+$bestiaryData = $game->loader->fromFile($dataDir . '/bestiary.json');
+
+//~ Load data into the game api
+$gameApi->load($storyData, $itemsData, $bestiaryData);
+
+/**
+ * @param array{story: string, items: string, bestiary: string} $data Array of json data, to save in files or database
+ */
+$data = $gameApi->dump(/* true */); // true to pretty json output
+
+
+```
+
 ### Loader (to load data from files / strings):
 
 ```php
@@ -53,24 +101,10 @@ declare(strict_types=1);
 
 namespace Application;
 
-use Velkuns\GameTextEngine\Api\Items;
-use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
-use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
-use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
-
-//~ Required factories
-$itemFactory = new ItemFactory(new ModifierFactory());
-
-//~ Loader
-$loader    = new JsonLoader();
-$itemsData = $loader->fromFile('/path/to/items.json');
-
-//~ Items dictionary
-$items = new Items($itemFactory);
-$item->load($itemsData);
+// [... game api init code here ... ]
 
 //~ Get an item by its name
-$item = $items->get('Rusty Sword');
+$item = $game->items->get('Rusty Sword');
 ```
 
 ### Bestiary dictionary
@@ -82,42 +116,10 @@ declare(strict_types=1);
 
 namespace Application;
 
-use Velkuns\GameTextEngine\Api\Bestiary;
-use Velkuns\GameTextEngine\Api\Items;
-use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
-use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
-use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
-use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
-use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
-use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
-use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
-use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
-use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
-use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
-
-//~ Required factories
-$modifierFactory  = new ModifierFactory();
-$itemFactory      = new ItemFactory($modifierFactory);
-$conditionFactory = new ConditionsFactory(new ConditionParser(), new ConditionElementResolver(), new ConditionValidator());
-$entityFactory    = new EntityFactory(
-    new AbilityFactory(), 
-    new StatusFactory($modifierFactory, $conditionFactory), 
-    $itemFactory
-);
-
-//~ Loader
-$loader = new JsonLoader();
-
-//~ Items dictionary (required to resolve item references in creatures inventory)
-$items = new Items($itemFactory);
-$item->load($loader->fromFile('/path/to/items.json'));
-
-//~ Bestiary dictionary
-$bestiary = new Bestiary($entityFactory, $items);
-$bestiary->load($loader->fromFile('/path/to/bestiary.json'));
+// [... game api init code here ... ]
 
 //~ Get a creature by its name
-$entity = $bestiary->get('Goblin');
+$entity = $gameApi->bestiary->get('Goblin');
 ```
 
 ### Story API
@@ -129,30 +131,19 @@ declare(strict_types=1);
 
 namespace Application;
 
-use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
-use Velkuns\GameTextEngine\Api\Story;
-
-//~ Factories
-// ... define here your graph factory creation method ...
-
-//~ Loader
-$dataDir = __DIR__ . '/../../../data';
-$loader = new JsonLoader();
-
-$story = new Story($conditionFactory);
-$story->load($loader->fromFile'/path/to/story.json'));
+// [... game api init code here ... ]
 
 //~ Start the story - retrieve the first node of the story
-$text = $story->start();
+$text = $gameApi->story->start();
 
 // define $player before
   
 //~ Get possible choices
-$choices = $story->getPossibleChoices($node->id, $player);
+$choices = $gameApi->story->getPossibleChoices($node->id, $player);
 
 //~ Then display choices to the player, get his choice and advance the story
 $playerChoice = $choices[0];
-$nextText = $story->goto($playerChoice->source, $playerChoice->target, $player/*[, $enemy]*/); // A validation is made to be sure the choice is valid
+$nextText = $gameApi->story->goto($playerChoice->source, $playerChoice->target, $player/*[, $enemy]*/); // A validation is made to be sure the choice is valid
 ```
 
 ### Combat API
@@ -164,40 +155,17 @@ declare(strict_types=1);
 
 namespace Application;
 
-use Random\Engine\Mt19937;
-use Random\Randomizer;
-use Velkuns\GameTextEngine\Api\Combat;
-
-//~ Factories
-// ... define here your graph factory creation method ...
-
-$story = new Story($conditionFactory);
-
-//~ Check if the current text node triggers a combat
-$text = $story->goto('text_4', $player, $enemy);
-if (!isset($text->trigger->combat)) {
-    return;
-}
-
-//~ load enemies entities from bestiary
-$enemies = [];
-foreach ($text->trigger->combat->enemies as $enemyName) {;
-    $enemies[] = $bestiary->get($enemyName);
-}
-
-//~ Randomizer
-$randomizer = new Randomizer(new Mt19937());
-$combat = new Combat($randomizer);
+// [... game api init code here ... ]
 
 $turns = [];
 foreach ($enemies as $enemy) {
     do {
-        $turns[] = $combat->turn($player, $enemy);
+        $turns[] = $gameApi->combat->turn($player, $enemy);
         if (!$enemy->isAlive()) {
             break; // stop combat with this enemy if it is dead
         }
         
-        $turns[] = $combat->turn($enemy, $player);
+        $turns[] = $gameApi->combat->turn($enemy, $player);
     } while ($player->isAlive() && $enemy->isAlive())
     
     if (!$player->isAlive()) {

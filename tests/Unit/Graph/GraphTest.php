@@ -64,7 +64,6 @@ class GraphTest extends TestCase
                     'label'  => 'action',
                     'metadata' => [
                         'text'       => 'Continue to text 2',
-                        'conditions' => null,
                     ],
                 ],
             ],

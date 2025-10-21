@@ -88,4 +88,18 @@ class Story
 
         return \array_values(\array_filter($edges, fn(Edge $edge) => $edge->available($player, $enemy)));
     }
+
+    public function dump(bool $prettyPrint = false): string
+    {
+        try {
+            return \json_encode(
+                $this->graph->jsonSerialize(),
+                flags: \JSON_THROW_ON_ERROR | ($prettyPrint ? \JSON_PRETTY_PRINT : 0),
+            );
+            // @codeCoverageIgnoreStart
+        } catch (\JsonException) {
+            throw new StoryException('Unable to dump story graph to JSON.', 1401); // @codeCoverageIgnore
+        }
+        // @codeCoverageIgnoreEnd
+    }
 }

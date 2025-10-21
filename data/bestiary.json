@@ -4,6 +4,7 @@
         "type": "creature",
         "race": "rat",
         "size": "tiny",
+        "damages": 0,
         "abilities": {
             "strength": 4,
             "endurance": 4,
@@ -16,175 +17,197 @@
         "type": "creature",
         "race": "wolf",
         "size": "medium",
+        "damages": 0,
         "abilities": {
             "strength": 12,
             "endurance": 14,
             "agility": 12,
             "intuition": 14
-        },
-        "damages": 3
+        }
     },
     {
         "name": "Brown Bear",
         "type": "creature",
         "race": "bear",
         "size": "large",
+        "damages": 5,
         "abilities": {
             "strength": 15,
             "endurance": 10,
             "agility": 10,
             "intuition": 12
-        },
-        "damages": 5
+        }
     },
     {
         "name": "Goblin",
         "type": "creature",
         "race": "goblin",
         "size": "small",
+        "damages": 0,
         "abilities": {
             "strength": 8,
             "endurance": 8,
             "agility": 12,
             "intuition": 12
         },
-        "inventory": ["Rusty Dagger"]
+        "inventory": [
+            "Rusty Dagger"
+        ]
     },
     {
         "name": "Brute Goblin",
         "type": "creature",
         "race": "goblin",
         "size": "small",
+        "damages": 1,
         "abilities": {
             "strength": 12,
             "endurance": 10,
             "agility": 10,
             "intuition": 8
         },
-        "inventory": ["Wood Mass"]
+        "inventory": [
+            "Wood Mass"
+        ]
     },
     {
         "name": "Chief Goblin",
         "type": "creature",
         "race": "goblin",
         "size": "medium",
+        "damages": 1,
         "abilities": {
             "strength": 12,
             "endurance": 10,
             "agility": 12,
             "intuition": 14
         },
-        "inventory": ["Iron Sword"]
+        "inventory": [
+            "Iron Sword"
+        ]
     },
     {
         "name": "Imp",
         "type": "creature",
         "race": "demon",
         "size": "small",
+        "damages": 2,
         "abilities": {
             "strength": 8,
             "endurance": 8,
             "agility": 14,
             "intuition": 12
-        },
-        "damages": 2
+        }
     },
     {
         "name": "Minor Demon",
         "type": "creature",
         "race": "demon",
         "size": "medium",
+        "damages": 3,
         "abilities": {
             "strength": 12,
             "endurance": 10,
             "agility": 12,
             "intuition": 12
-        },
-        "damages": 3
+        }
     },
     {
         "name": "Major Demon",
         "type": "creature",
         "race": "demon",
         "size": "medium",
+        "damages": 4,
         "abilities": {
             "strength": 14,
             "endurance": 12,
             "agility": 12,
             "intuition": 14
-        },
-        "damages": 4
+        }
     },
     {
         "name": "Skeleton",
         "type": "creature",
         "race": "demon",
         "size": "medium",
+        "damages": 0,
         "abilities": {
             "strength": 10,
             "endurance": 10,
             "agility": 8,
             "intuition": 6
         },
-        "inventory": ["Rusty Sword"]
+        "inventory": [
+            "Rusty Sword"
+        ]
     },
     {
         "name": "Zombie",
         "type": "creature",
         "race": "demon",
         "size": "medium",
+        "damages": 4,
         "abilities": {
             "strength": 12,
             "endurance": 10,
             "agility": 6,
             "intuition": 6
-        },
-        "damages": 4
+        }
     },
     {
         "name": "Thief",
         "type": "npc",
         "race": "human",
         "size": "medium",
+        "damages": 0,
         "abilities": {
             "strength": 10,
             "endurance": 12,
             "agility": 14,
             "intuition": 12
         },
-        "inventory": ["Iron Dagger"]
+        "inventory": [
+            "Iron Dagger"
+        ]
     },
     {
         "name": "Brigand",
         "type": "npc",
         "race": "human",
         "size": "medium",
+        "damages": 0,
         "abilities": {
             "strength": 12,
             "endurance": 12,
             "agility": 10,
             "intuition": 12
         },
-        "inventory": ["Iron Sword"]
+        "inventory": [
+            "Iron Sword"
+        ]
     },
     {
         "name": "Mercenary",
         "type": "npc",
         "race": "human",
         "size": "medium",
+        "damages": 0,
         "abilities": {
             "strength": 13,
             "endurance": 12,
             "agility": 11,
             "intuition": 12
         },
-        "inventory": ["Iron Sword"]
+        "inventory": [
+            "Iron Sword"
+        ]
     },
     {
         "name": "Human",
         "type": "npc",
         "race": "human",
         "size": "medium",
+        "damages": 0,
         "abilities": {
             "strength": 10,
             "endurance": 10,
