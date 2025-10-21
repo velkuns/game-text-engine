@@ -13,11 +13,14 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 use PHPUnit\Framework\TestCase;
 use Random\Engine\Mt19937;
 use Random\Randomizer;
+use Velkuns\GameTextEngine\Api\Bestiary;
 use Velkuns\GameTextEngine\Api\Combat;
+use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 
 class CombatTest extends TestCase
 {
+    use ApiTrait;
     use EntityTrait;
 
     private Combat $combat;
@@ -87,5 +90,18 @@ class CombatTest extends TestCase
 
         self::assertTrue($player->isAlive());
         self::assertTrue($goblin->isAlive());
+    }
+
+    public function testCombat2(): void
+    {
+        $player  = self::getPlayer()->clone();
+        $rat1    = self::getBestiary()->get('rat'); // get cloned rat
+        $rat2    = self::getBestiary()->get('rat'); // get cloned rat
+
+        $this->combat->start($player, [$rat1, $rat2]);
+
+        self::assertTrue($player->isAlive());
+        self::assertFalse($rat1->isAlive());
+        self::assertFalse($rat2->isAlive());
     }
 }

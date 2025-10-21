@@ -38,14 +38,14 @@ class Items
         }
     }
 
-    public function get(string $name): ItemInterface
+    public function get(string $name, bool $asClone = true): ItemInterface
     {
         $lowerCaseName = \strtolower($name);
         if (!isset($this->items[$lowerCaseName])) {
             throw new ItemException("Item '$name' not found in item list.");
         }
 
-        return $this->items[$lowerCaseName];
+        return $asClone ? clone $this->items[$lowerCaseName] : $this->items[$lowerCaseName];
     }
 
     public function dump(bool $prettyPrint = false): string

@@ -103,4 +103,17 @@ class Entity implements EntityInterface
             'inventory' => $this->inventory->jsonSerialize(),
         ];
     }
+
+    public function clone(): self
+    {
+        return new self(
+            name: $this->name,
+            type: $this->type,
+            coins: $this->coins,
+            info: $this->info->clone(),
+            abilities: $this->abilities->clone(),
+            statuses: $this->statuses->clone(),
+            inventory: $this->inventory->clone(),
+        );
+    }
 }

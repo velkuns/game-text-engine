@@ -49,4 +49,12 @@ readonly class EntityAbilities implements \JsonSerializable
             'compounds' => \array_map(fn(AbilityInterface $ability) => $ability->jsonSerialize(), $this->compounds),
         ];
     }
+
+    public function clone(): self
+    {
+        return new self(
+            \array_map(fn(AbilityInterface $ability) => $ability->clone(), $this->bases),
+            \array_map(fn(AbilityInterface $ability) => $ability->clone(), $this->compounds),
+        );
+    }
 }

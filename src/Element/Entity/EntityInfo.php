@@ -55,4 +55,19 @@ readonly class EntityInfo implements \JsonSerializable
             'notes'       => $this->notes,
         ];
     }
+
+    public function clone(): self
+    {
+        return new self(
+            $this->level,
+            $this->xp,
+            $this->damages,
+            $this->age,
+            $this->size,
+            $this->race,
+            $this->description,
+            $this->background,
+            $this->notes,
+        );
+    }
 }

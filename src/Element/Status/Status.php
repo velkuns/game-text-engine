@@ -85,4 +85,20 @@ readonly class Status implements StatusInterface
             'remainingTurns' => $this->getRemainingTurns(),
         ];
     }
+
+    public function clone(): self
+    {
+        return new self(
+            type: $this->type,
+            name: $this->name,
+            description: $this->description,
+            modifiers: array_map(
+                fn(Modifier $modifier): Modifier => $modifier->clone(),
+                $this->modifiers,
+            ),
+            conditions: $this->conditions?->clone() ?? null,
+            durationTurns: $this->durationTurns,
+            remainingTurns: $this->remainingTurns,
+        );
+    }
 }

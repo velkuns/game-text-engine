@@ -13,11 +13,40 @@ namespace Velkuns\GameTextEngine\Api;
 use Random\Randomizer;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 
+/**
+ * @phpstan-type TurnLogData array{hit: bool, damages: int, chance: float, roll: float, debug: array{"hit chance": string, damages: string}}
+ */
 readonly class Combat
 {
     public function __construct(
         private Randomizer $randomizer,
     ) {}
+
+    /**
+     * @param EntityInterface[] $enemies
+     * @return array<int, array{0: TurnLogData, 1?: TurnLogData}>
+     */
+    public function start(EntityInterface $player, array $enemies): array
+    {
+        $logs = [];
+        $turn = 1;
+        foreach ($enemies as $enemy) {
+            do {
+                $logs[$turn][0] = $this->turn($player, $enemy);
+                if (!$enemy->isAlive()) {
+                    break; // stop combat with this enemy if it is dead
+                }
+
+                $logs[$turn][1] = $this->turn($enemy, $player);
+            } while ($player->isAlive());
+
+            if (!$player->isAlive()) {
+                break; // stop combat if player is dead
+            }
+        }
+
+        return $logs;
+    }
 
     /**
      * @return array{hit: bool, damages: int, chance: float, roll: float, debug: array{"hit chance": string, damages: string}}

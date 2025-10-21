@@ -71,4 +71,16 @@ readonly class Condition implements ConditionInterface
             'is'        => $this->is,
         ];
     }
+
+    public function clone(): self
+    {
+        return new self(
+            $this->parser,
+            $this->resolver,
+            $this->validator,
+            $this->type,
+            $this->condition,
+            $this->is,
+        );
+    }
 }

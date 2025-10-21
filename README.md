@@ -33,6 +33,7 @@ namespace Application;
 
 use Velkuns\GameTextEngine\Api\Items;
 use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
+use Velkuns\GameTextEngine\Api\Player;
 use Velunns\GameTextEngine\Api\GameApi
 
 //~ Factories
@@ -52,6 +53,7 @@ $gameApi = new GameApi(
     new Story($graphFactory),
     $items,
     new Bestiary($entityFactory, $items),
+    new Player($entityFactory, $items),
     new Combat(new Randomizer(new Mt19937())),
 );
 
@@ -59,12 +61,13 @@ $gameApi = new GameApi(
 $storyData    = $game->loader->fromFile($dataDir . '/stories/test.json');
 $itemsData    = $game->loader->fromFile($dataDir . '/items.json');
 $bestiaryData = $game->loader->fromFile($dataDir . '/bestiary.json');
+$playerData   = $game->loader->fromFile($dataDir . '/templates/player.json');
 
 //~ Load data into the game api
-$gameApi->load($storyData, $itemsData, $bestiaryData);
+$gameApi->load($storyData, $itemsData, $bestiaryData, $playerData);
 
 /**
- * @param array{story: string, items: string, bestiary: string} $data Array of json data, to save in files or database
+ * @param array{story: string, items: string, bestiary: string, player: string} $data Array of json data, to save in files or database
  */
 $data = $gameApi->dump(/* true */); // true to pretty json output
 
@@ -146,6 +149,41 @@ $playerChoice = $choices[0];
 $nextText = $gameApi->story->goto($playerChoice->source, $playerChoice->target, $player/*[, $enemy]*/); // A validation is made to be sure the choice is valid
 ```
 
+### Player API
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Application;
+
+// [... game api init code here ... ]
+
+//~ Create a new player based on the given data
+$data = [
+    'name'        => 'New Hero',
+    'age'         => 25, // optional, default 20
+    'race'        => 'elf', // optional, default 'human'
+    'description' => 'A brave adventurer.', // optional, default ''
+    'background'  => 'Born in a small village.', // optional, default ''
+    'abilities'   => [,
+        'strength'  => 10,
+        'endurance' => 12,
+        'agility'   => 14,
+        'intuition' => 13,
+    ], 
+    'inventory' => ['Rusty Sword'], // optional, default []
+];
+
+$gameApi->player->new($data);
+
+//~ Get player object
+$player = $gameApi->player->player;
+
+
+```
+
 ### Combat API
 
 ```php
@@ -157,21 +195,12 @@ namespace Application;
 
 // [... game api init code here ... ]
 
-$turns = [];
-foreach ($enemies as $enemy) {
-    do {
-        $turns[] = $gameApi->combat->turn($player, $enemy);
-        if (!$enemy->isAlive()) {
-            break; // stop combat with this enemy if it is dead
-        }
-        
-        $turns[] = $gameApi->combat->turn($enemy, $player);
-    } while ($player->isAlive() && $enemy->isAlive())
-    
-    if (!$player->isAlive()) {
-        break; // stop combat if player is dead
-    }
-}
+$enemies = [
+    $gameApi->bestiary->get('Rat'), // get clone
+    $gameApi->bestiary->get('Rat'), // get clone
+];
+
+$logs = $gameApi->combat->start($gameApi->player->player, $enemies);
 
 //~ Display combat results
 // ... your code to display combat turns ...

@@ -116,4 +116,15 @@ class EntityStatuses implements \JsonSerializable
             'titles'    => \array_map(fn(Status $titles) => $titles->jsonSerialize(), $this->titles),
         ];
     }
+
+    public function clone(): self
+    {
+        return new self(
+            skills: \array_map(fn(Status $status) => $status->clone(), $this->skills),
+            states: \array_map(fn(Status $status) => $status->clone(), $this->states),
+            blessings: \array_map(fn(Status $status) => $status->clone(), $this->blessings),
+            curses: \array_map(fn(Status $status) => $status->clone(), $this->curses),
+            titles: \array_map(fn(Status $status) => $status->clone(), $this->titles),
+        );
+    }
 }

@@ -148,4 +148,17 @@ class BaseAbility implements AbilityInterface
             'rule'        => $this->rule,
         ];
     }
+
+    public function clone(): self
+    {
+        return new self(
+            name: $this->name,
+            value: $this->value,
+            max: $this->max,
+            constraints: new ConstraintsAbility($this->constraints->min, $this->constraints->max),
+            initial: $this->initial,
+            rule: $this->rule,
+            abilities: $this->abilities,
+        );
+    }
 }

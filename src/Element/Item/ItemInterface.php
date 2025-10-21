@@ -62,4 +62,6 @@ interface ItemInterface extends \JsonSerializable
      * @return ItemData
      */
     public function jsonSerialize(): array;
+
+    public function clone(): self;
 }

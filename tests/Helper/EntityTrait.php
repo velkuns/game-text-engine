@@ -20,9 +20,11 @@ trait EntityTrait
 {
     use FactoryTrait;
 
-    private static function getPlayer(): EntityInterface
+    private static function getPlayer(bool $new = false): EntityInterface
     {
-        return self::getEntityFactory()->from(self::getPlayerData());
+        $data = $new ? self::getNewPlayerData() : self::getPlayerData();
+
+        return self::getEntityFactory()->from($data);
     }
 
     private static function getGoblin(): EntityInterface
@@ -206,6 +208,125 @@ trait EntityTrait
                     'modifiers'   => [],
                     'flags'       => 6,
                     'equipped'    => true,
+                    'damages'     => 2,
+                    'price'       => 0,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @phpstan-return EntityData
+     */
+    private static function getNewPlayerData(): array
+    {
+        return [
+            'name'  => 'New Hero',
+            'type'  => 'player',
+            'coins' => 10,
+            'info'  => [
+                'level'       => 1,
+                'xp'          => 0,
+                'damages'     => 0,
+                'age'         => 25,
+                'size'        => 'medium',
+                'race'        => 'elf',
+                'description' => 'A brave hero',
+                'background'  => 'Born in a small village',
+                'notes'       => '',
+            ],
+            'abilities' => [
+                'bases' => [
+                    'strength' => [
+                        'type'    => 'base',
+                        'name'    => 'strength',
+                        'initial' => 11,
+                        'max'     => 11,
+                        'value'   => 11,
+                        'constraints' => [
+                            'min' => 0,
+                            'max' => 20,
+                        ],
+                        'rule'    => null,
+                    ],
+                    'endurance' => [
+                        'type'    => 'base',
+                        'name'    => 'endurance',
+                        'initial' => 12,
+                        'max'     => 12,
+                        'value'   => 12,
+                        'constraints' => [
+                            'min' => 0,
+                            'max' => 20,
+                        ],
+                        'rule'    => null,
+                    ],
+                    'agility' => [
+                        'type'    => 'base',
+                        'name'    => 'agility',
+                        'initial' => 13,
+                        'max'     => 13,
+                        'value'   => 13,
+                        'constraints' => [
+                            'min' => 0,
+                            'max' => 20,
+                        ],
+                        'rule'    => null,
+                    ],
+                    'intuition' => [
+                        'type'    => 'base',
+                        'name'    => 'intuition',
+                        'initial' => 14,
+                        'max'     => 14,
+                        'value'   => 14,
+                        'constraints' => [
+                            'min' => 0,
+                            'max' => 20,
+                        ],
+                        'rule'    => null,
+                    ],
+                    'vitality' => [
+                        'type'    => 'base',
+                        'name'    => 'vitality',
+                        'initial' => 23,
+                        'max'     => 23,
+                        'value'   => 23,
+                        'constraints' => [
+                            'min' => 0,
+                            'max' => 40,
+                        ],
+                        'rule'    => 'strength + endurance',
+                    ],
+                ],
+                'compounds' => [
+                    'attack' => [
+                        'type' => 'compound',
+                        'name' => 'attack',
+                        'rule' => 'strength + agility',
+                    ],
+                    'defense' => [
+                        'type' => 'compound',
+                        'name' => 'defense',
+                        'rule' => 'endurance + intuition',
+                    ],
+                ],
+            ],
+            'statuses' => [
+                'skills'    => [],
+                'states'    => [],
+                'blessings' => [],
+                'curses'    => [],
+                'titles'    => [],
+            ],
+            'inventory' => [
+                [
+                    'type'        => 'item',
+                    'name'        => 'Rusty Sword',
+                    'subType'     => 'sword',
+                    'description' => 'A rusty sword',
+                    'modifiers'   => [],
+                    'flags'       => 6,
+                    'equipped'    => false,
                     'damages'     => 2,
                     'price'       => 0,
                 ],
