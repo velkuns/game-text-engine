@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
@@ -29,6 +30,7 @@ class GameApi
         public readonly Story $story,
         public readonly Items $items,
         public readonly Bestiary $bestiary,
+        public readonly Player $player,
         public readonly Combat $combat,
     ) {}
 
@@ -36,12 +38,14 @@ class GameApi
      * @phpstan-param GraphData $storyData
      * @phpstan-param list<ItemData> $itemsData
      * @phpstan-param list<BestiaryData> $bestiaryData
+     * @phpstan-param EntityData $playerData
      */
-    public function load(array $storyData, array $itemsData, array $bestiaryData): self
+    public function load(array $storyData, array $itemsData, array $bestiaryData, array $playerData): self
     {
         $this->story->load($storyData);
         $this->items->load($itemsData);
         $this->bestiary->load($bestiaryData);
+        $this->player->load($playerData);
 
         return $this;
     }
@@ -51,15 +55,17 @@ class GameApi
      *     story: string,
      *     items: string,
      *     bestiary: string,
+     *     player: string,
      * }
      */
     public function dump(bool $prettyPrint = false): array
     {
         try {
             return [
-                'story' => $this->story->dump($prettyPrint),
-                'items' => $this->items->dump($prettyPrint),
+                'story'    => $this->story->dump($prettyPrint),
+                'items'    => $this->items->dump($prettyPrint),
                 'bestiary' => $this->bestiary->dump($prettyPrint),
+                'player'   => $this->player->dump($prettyPrint),
             ];
             // @codeCoverageIgnoreStart
         } catch (\Throwable $exception) {

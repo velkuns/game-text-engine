@@ -50,14 +50,14 @@ class Bestiary
         }
     }
 
-    public function get(string $name): EntityInterface
+    public function get(string $name, bool $asClone = true): EntityInterface
     {
         $lowerCaseName = \strtolower($name);
         if (!isset($this->bestiary[$lowerCaseName])) {
             throw new BestiaryException("Entity '$name' not found in bestiary.");
         }
 
-        return $this->bestiary[$lowerCaseName];
+        return $asClone ? clone $this->bestiary[$lowerCaseName] : $this->bestiary[$lowerCaseName];
     }
 
     /**

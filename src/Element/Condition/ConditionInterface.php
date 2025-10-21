@@ -25,4 +25,6 @@ interface ConditionInterface
     public function getCondition(): string;
 
     public function is(): bool;
+
+    public function clone(): self;
 }

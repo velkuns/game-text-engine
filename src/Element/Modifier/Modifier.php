@@ -34,4 +34,12 @@ readonly class Modifier implements \JsonSerializable
             'value' => $this->value,
         ];
     }
+
+    public function clone(): self
+    {
+        return new self(
+            type: $this->type,
+            value: $this->value,
+        );
+    }
 }

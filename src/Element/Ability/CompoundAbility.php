@@ -134,4 +134,13 @@ readonly class CompoundAbility implements AbilityInterface
             'rule' => $this->rule,
         ];
     }
+
+    public function clone(): self
+    {
+        return new self(
+            name: $this->name,
+            rule: $this->rule,
+            abilities: $this->abilities,
+        );
+    }
 }

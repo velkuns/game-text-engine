@@ -80,4 +80,14 @@ class EntityInventory implements \JsonSerializable
 
         return $items;
     }
+
+    public function clone(): self
+    {
+        $items = [];
+        foreach ($this->items as $item) {
+            $items[] = $item->clone();
+        }
+
+        return new self($items);
+    }
 }

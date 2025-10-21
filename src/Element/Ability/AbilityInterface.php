@@ -43,4 +43,6 @@ interface AbilityInterface extends \JsonSerializable
      * @param list<Modifier> $modifiers
      */
     public function getValueWithModifiers(array $modifiers): int;
+
+    public function clone(): self;
 }

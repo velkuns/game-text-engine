@@ -10,11 +10,8 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
-use Velkuns\GameTextEngine\Api\Exception\ItemException;
 use Velkuns\GameTextEngine\Api\Exception\StoryException;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
-use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Graph\Edge;
 use Velkuns\GameTextEngine\Graph\Factory\GraphFactory;
 use Velkuns\GameTextEngine\Graph\Graph;
@@ -25,7 +22,7 @@ use Velkuns\GameTextEngine\Graph\Node;
  */
 class Story
 {
-    private Graph $graph;
+    public Graph $graph;
 
     public function __construct(
         private readonly GraphFactory $graphFactory,

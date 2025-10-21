@@ -77,4 +77,12 @@ readonly class Conditions implements \JsonSerializable
             'conditions'     => \array_map(fn(Condition $condition) => $condition->jsonSerialize(), $this->conditions),
         ];
     }
+
+    public function clone(): self
+    {
+        return new self(
+            $this->numberRequired,
+            \array_map(fn(Condition $condition) => $condition->clone(), $this->conditions),
+        );
+    }
 }

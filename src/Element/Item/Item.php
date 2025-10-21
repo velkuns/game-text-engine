@@ -123,4 +123,22 @@ readonly class Item implements ItemInterface
             'price'       => $this->price,
         ];
     }
+
+    public function clone(): self
+    {
+        return new self(
+            $this->name,
+            $this->subType,
+            $this->description,
+            \array_map(
+                fn(Modifier $modifier): Modifier => $modifier->clone(),
+                $this->modifiers,
+            ),
+            $this->flags,
+            $this->equipped,
+            $this->damages,
+            $this->price,
+            $this->type,
+        );
+    }
 }

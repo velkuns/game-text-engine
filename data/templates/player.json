@@ -66,9 +66,9 @@
             "vitality": {
                 "type": "base",
                 "name": "vitality",
-                "initial": 0,
-                "max": 0,
-                "value": 0,
+                "initial": 20,
+                "max": 20,
+                "value": 20,
                 "constraints": {
                     "min": 0,
                     "max": 40
