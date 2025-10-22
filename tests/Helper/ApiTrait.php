@@ -13,8 +13,8 @@ namespace Velkuns\GameTextEngine\Tests\Helper;
 
 use Velkuns\GameTextEngine\Api\Bestiary;
 use Velkuns\GameTextEngine\Api\Items;
-use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type BestiaryData from Bestiary

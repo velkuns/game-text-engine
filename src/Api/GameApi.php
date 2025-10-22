@@ -12,10 +12,10 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Api;
 
 use Velkuns\GameTextEngine\Api\Exception\GameException;
-use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Graph\Graph;
+use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type GraphData from Graph

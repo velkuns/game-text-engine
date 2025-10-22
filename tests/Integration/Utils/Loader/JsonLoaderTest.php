@@ -6,14 +6,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Tests\Integration\Api\Loader;
+namespace Velkuns\GameTextEngine\Tests\Integration\Utils\Loader;
 
-use Velkuns\GameTextEngine\Api\Exception\LoaderException;
-use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Utils\Exception\LoaderException;
+use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type ItemData from ItemInterface
