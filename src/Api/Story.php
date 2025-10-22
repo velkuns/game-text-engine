@@ -61,7 +61,7 @@ class Story
         EntityInterface $player,
         ?EntityInterface $enemy = null,
     ): bool {
-        $edges = $this->graph->getEdges($source);
+        $edges = $this->graph->getEdgesFromSource($source);
 
         foreach ($edges as $edge) {
             if ($edge->target === $target && $edge->available($player, $enemy)) {
@@ -81,7 +81,7 @@ class Story
      */
     public function getPossibleChoices(string $id, EntityInterface $player, ?EntityInterface $enemy = null): array
     {
-        $edges = $this->graph->getEdges($id);
+        $edges = $this->graph->getEdgesFromSource($id);
 
         return \array_values(\array_filter($edges, fn(Edge $edge) => $edge->available($player, $enemy)));
     }

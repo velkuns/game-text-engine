@@ -207,6 +207,32 @@ $logs = $gameApi->combat->start($gameApi->player->player, $enemies);
 
 ```
 
+### Access to the Story's graph
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Application;
+
+// [... game api init code here ... ]
+
+$graph = $gameApi->story->graph;
+
+//~ Manipulate graph nodes
+$graph->addNode(new Node(...));
+$graph->removeNode('node_id');
+
+//~ Manipulate graph edges (between nodes).
+$graph->addEdge(new Edge(...));
+$graph->removeEdgeBetweenNodes('node_id_source', 'node_id_target');
+
+```
+
+> [!IMPORTANT]
+> When add edges, source node and target node must have already been added to the graph.
+
 ## Contributing
 
 See the [CONTRIBUTING](CONTRIBUTING.md) file.
