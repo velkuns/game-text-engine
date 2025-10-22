@@ -8,9 +8,9 @@
  */
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Api\Loader;
+namespace Velkuns\GameTextEngine\Utils\Loader;
 
-use Velkuns\GameTextEngine\Api\Exception\LoaderException;
+use Velkuns\GameTextEngine\Utils\Exception\LoaderException;
 
 readonly class JsonLoader
 {

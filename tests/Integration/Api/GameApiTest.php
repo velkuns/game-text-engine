@@ -11,13 +11,13 @@ declare(strict_types=1);
 
 namespace Api;
 
+use PHPUnit\Framework\TestCase;
 use Random\Engine\Mt19937;
 use Random\Randomizer;
 use Velkuns\GameTextEngine\Api\Bestiary;
 use Velkuns\GameTextEngine\Api\Combat;
 use Velkuns\GameTextEngine\Api\GameApi;
 use Velkuns\GameTextEngine\Api\Items;
-use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Api\Player;
 use Velkuns\GameTextEngine\Api\Story;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
@@ -25,7 +25,7 @@ use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
-use PHPUnit\Framework\TestCase;
+use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type GraphData from Graph

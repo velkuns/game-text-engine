@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Graph;
 
-use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
+use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Graph\Edge;
 use Velkuns\GameTextEngine\Graph\Exception\GraphException;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Graph\Node;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
-use PHPUnit\Framework\TestCase;
+use Velkuns\GameTextEngine\Tests\Helper\GraphTrait;
 
 /**
  * @phpstan-import-type GraphData from Graph
@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 class GraphTest extends TestCase
 {
     use FactoryTrait;
+    use GraphTrait;
 
     public function testGraph(): void
     {
@@ -81,41 +82,7 @@ class GraphTest extends TestCase
 
     public function testRemoveNode(): void
     {
-        $graph = new Graph('Test Graph');
-
-        $node1 = new Node('text_1', 'Start');
-        $node2 = new Node('text_2', '2 -> 3, 2 -> 5');
-        $node3 = new Node('text_3', '3 -> 4');
-        $node4 = new Node('text_4', '4 -> Death, 4 -> End');
-        $node5 = new Node('text_5', '5 -> End');
-        $node8 = new Node('text_8', 'Death');
-        $node9 = new Node('text_9', 'End');
-
-        $edge1_2 = new Edge('text_1', 'text_2', 'Continue to 2');
-        $edge2_3 = new Edge('text_2', 'text_3', 'Continue to 3');
-        $edge3_4 = new Edge('text_3', 'text_4', 'Continue to 4');
-        $edge4_8 = new Edge('text_4', 'text_8', 'Continue to death');
-        $edge4_9 = new Edge('text_4', 'text_9', 'Continue to end');
-        $edge2_5 = new Edge('text_2', 'text_5', 'Continue to 5');
-        $edge5_9 = new Edge('text_2', 'text_9', 'Continue to end');
-
-        //~ Add all nodes
-        $graph->addNode($node1);
-        $graph->addNode($node2);
-        $graph->addNode($node3);
-        $graph->addNode($node4);
-        $graph->addNode($node5);
-        $graph->addNode($node8);
-        $graph->addNode($node9);
-
-        //~ Add all edges
-        $graph->addEdge($edge1_2);
-        $graph->addEdge($edge2_3);
-        $graph->addEdge($edge3_4);
-        $graph->addEdge($edge4_8);
-        $graph->addEdge($edge4_9);
-        $graph->addEdge($edge2_5);
-        $graph->addEdge($edge5_9);
+        $graph = self::getComplexGraph();
 
         $expectedBefore = [
             'metadata' => ['title' => 'Test Graph',],
@@ -135,7 +102,7 @@ class GraphTest extends TestCase
                 ['source' => 'text_4', 'target' => 'text_8', 'label'  => 'action', 'metadata' => ['text' => 'Continue to death']],
                 ['source' => 'text_4', 'target' => 'text_9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
                 ['source' => 'text_2', 'target' => 'text_5', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 5']],
-                ['source' => 'text_2', 'target' => 'text_9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
+                ['source' => 'text_5', 'target' => 'text_9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
             ],
         ];
 
@@ -153,7 +120,7 @@ class GraphTest extends TestCase
                 ['source' => 'text_1', 'target' => 'text_2', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 2']],
                 ['source' => 'text_2', 'target' => 'text_3', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 3']],
                 ['source' => 'text_2', 'target' => 'text_5', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 5']],
-                ['source' => 'text_2', 'target' => 'text_9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
+                ['source' => 'text_5', 'target' => 'text_9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
             ],
         ];
 
@@ -171,7 +138,7 @@ class GraphTest extends TestCase
             'edges' => [
                 ['source' => 'text_1', 'target' => 'text_2', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 2']],
                 ['source' => 'text_2', 'target' => 'text_5', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 5']],
-                ['source' => 'text_2', 'target' => 'text_9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
+                ['source' => 'text_5', 'target' => 'text_9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
             ],
         ];
 

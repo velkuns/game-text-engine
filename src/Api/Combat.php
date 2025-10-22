@@ -41,7 +41,8 @@ readonly class Combat
             } while ($player->isAlive());
 
             if (!$player->isAlive()) {
-                break; // stop combat if player is dead
+                //~ stop combat if player is dead
+                break; // @codeCoverageIgnore
             }
         }
 

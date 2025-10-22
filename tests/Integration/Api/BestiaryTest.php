@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
-use Velkuns\GameTextEngine\Api\Bestiary;
 use PHPUnit\Framework\TestCase;
+use Velkuns\GameTextEngine\Api\Bestiary;
 use Velkuns\GameTextEngine\Api\Exception\BestiaryException;
 use Velkuns\GameTextEngine\Api\Items;
-use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
+use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type ItemData from ItemInterface

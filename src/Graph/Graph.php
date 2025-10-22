@@ -54,6 +54,22 @@ class Graph implements \JsonSerializable
         return $this->edgesFromSource[$source] ?? [];
     }
 
+    /**
+     * @return array<string, Node>
+     */
+    public function getAllNodes(): array
+    {
+        return $this->nodes;
+    }
+
+    /**
+     * @return array<string, Edge>
+     */
+    public function getAllEdges(): array
+    {
+        return $this->edges;
+    }
+
     public function addNode(Node $node): self
     {
         if (isset($this->nodes[$node->id])) {

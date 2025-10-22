@@ -31,10 +31,7 @@ declare(strict_types=1);
 
 namespace Application;
 
-use Velkuns\GameTextEngine\Api\Items;
-use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
-use Velkuns\GameTextEngine\Api\Player;
-use Velunns\GameTextEngine\Api\GameApi
+use Velkuns\GameTextEngine\Api\Items;use Velkuns\GameTextEngine\Api\Player;use Velkuns\GameTextEngine\Util\Loader\JsonLoader;use Velunns\GameTextEngine\Api\GameApi;
 
 //~ Factories
 $modifierFactory  = new ModifierFactory();
@@ -83,7 +80,7 @@ declare(strict_types=1);
 
 namespace Application;
 
-use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
+use Velkuns\GameTextEngine\Util\Loader\JsonLoader;
 
 $loader  = new JsonLoader();
 

@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
+use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Api\Exception\StoryException;
-use Velkuns\GameTextEngine\Api\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Api\Story;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
-use PHPUnit\Framework\TestCase;
+use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type GraphData from Graph

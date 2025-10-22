@@ -1,0 +1,22 @@
+digraph story {
+
+  node [shape=box,style=rounded]
+
+  text_1 [label="Marie vous salue de la main.\n \n Vous vous engagez sur la route, en direction des champs qui bordent le village.\n Vous voici maintenant aventurier. Enfin, un aventurier qui débute.\n \n Votre coeur tamb..."]
+  text_2 [label="2 chemin s'offre à vous..."]
+  text_3 [label="Vous vous enfoncez dans la forêt, et vous tombez sur un loup au détour du chemin..."]
+  text_4 [label="Vous décidez de combattre le loup! Préparez-vous..."]
+  text_5 [label="Vous avancez sur le chemin et devant vous se dresse une sombre masure. Vous vous approchez de la porte..."]
+  text_997 [label="Vous avez vaincu la menace! Vous retournez au village en héros."]
+  text_998 [label="Vous êtes mort..."]
+  text_999 [label="Fin de l'histoire Test"]
+
+  text_1 -> text_2 [label="Continuer"]
+  text_2 -> text_3 [label="Prendre le chemin de droite"]
+  text_2 -> text_5 [label="Prendre le chemin de gauche"]
+  text_3 -> text_4 [label="Combattre"]
+  text_4 -> text_997 [label="Vous avez vaincu!"]
+  text_4 -> text_998 [label="Vous êtes mort..."]
+  text_3 -> text_999 [label="Fuir"]
+  text_5 -> text_999 [label="Fuir"]
+}

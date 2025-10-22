@@ -9,6 +9,6 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Api\Exception;
+namespace Velkuns\GameTextEngine\Utils\Exception;
 
-class LoaderException extends \RuntimeException {}
+class ExporterException extends \RuntimeException {}
