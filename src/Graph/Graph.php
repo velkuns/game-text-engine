@@ -20,17 +20,21 @@ use Velkuns\GameTextEngine\Graph\Exception\GraphException;
  */
 class Graph implements \JsonSerializable
 {
+    /** @var array<string, array<string, Edge>> */
+    private array $edgesFromSource = [];
+
+    /** @var array<string, array<string, Edge>> */
+    private array $edgesToTarget = [];
+
     /**
      * @param string $title
      * @param array<string, Node> $nodes
-     * @param list<Edge> $edges
-     * @param array<string, list<Edge>> $choices
+     * @param array<string, Edge> $edges
      */
     public function __construct(
         public readonly string $title,
         private array $nodes = [],
         private array $edges = [],
-        private array $choices = [],
     ) {}
 
     public function getNode(string $id): Node
@@ -43,11 +47,11 @@ class Graph implements \JsonSerializable
     }
 
     /**
-     * @return list<Edge>
+     * @return array<string, Edge>
      */
-    public function getEdges(string $source): array
+    public function getEdgesFromSource(string $source): array
     {
-        return $this->choices[$source] ?? [];
+        return $this->edgesFromSource[$source] ?? [];
     }
 
     public function addNode(Node $node): self
@@ -66,8 +70,48 @@ class Graph implements \JsonSerializable
             throw new GraphException('Both nodes must exist in the graph before adding an edge.', 1301);
         }
 
-        $this->edges[]                  = $edge;
-        $this->choices[$edge->source][] = $edge;
+        $this->edges[$edge->source . '.' . $edge->target]    = $edge;
+        $this->edgesFromSource[$edge->source][$edge->target] = $edge;
+        $this->edgesToTarget[$edge->target][$edge->source]   = $edge;
+
+        return $this;
+    }
+
+    public function removeNode(string $id): self
+    {
+        if (!isset($this->nodes[$id])) {
+            throw new GraphException("The node '$id' does not exists in the graph.", 1303);
+        }
+
+        //~ Remove all edge from this node source if exist
+        foreach ($this->edgesFromSource[$id] ?? [] as $edge) {
+            $this->removeEdge($edge);
+        }
+
+        //~ Remove the edges to this source if exist
+        foreach ($this->edgesToTarget[$id] ?? [] as $edge) {
+            $this->removeEdge($edge);
+        }
+
+        //~ Then remove node
+        unset($this->nodes[$id]);
+
+        return $this;
+    }
+
+    public function removeEdgeBetweenNodes(string $source, string $target): self
+    {
+        if (!isset($this->edges[$source . '.' . $target])) {
+            throw new GraphException("The edge between nodes '$source' and '$target' does not exist.", 1304);
+        }
+        return $this->removeEdge($this->edges[$source . '.' . $target]);
+    }
+
+    private function removeEdge(Edge $edge): self
+    {
+        unset($this->edgesToTarget[$edge->target][$edge->source]);
+        unset($this->edgesFromSource[$edge->source][$edge->target]);
+        unset($this->edges[$edge->source . '.' . $edge->target]);
 
         return $this;
     }
@@ -80,7 +124,7 @@ class Graph implements \JsonSerializable
         return [
             'metadata' => ['title' => $this->title],
             'nodes'    => \array_map(fn(Node $node) => $node->jsonSerialize(), $this->nodes),
-            'edges'    => \array_map(fn(Edge $edge) => $edge->jsonSerialize(), $this->edges),
+            'edges'    => \array_values(\array_map(fn(Edge $edge) => $edge->jsonSerialize(), $this->edges)),
         ];
     }
 }
