@@ -48,6 +48,47 @@ class BestiaryTest extends TestCase
         self::assertSame('creature', $entity->getType());
         self::assertEquals($items->get('Rusty Dagger'), $entity->getInventory()->get('Rusty Dagger'));
     }
+    public function testAddAndRemoveEntity(): void
+    {
+        $dataDir = (string) realpath(__DIR__ . '/../../../data');
+        $loader  = new JsonLoader();
+        $items   = new Items(self::getItemFactory());
+
+        /** @var list<ItemData> $itemsData */
+        $itemsData = $loader->fromFile($dataDir . '/items.json');
+        $items->load($itemsData);
+
+        $bestiary = new Bestiary(self::getEntityFactory(), $items);
+
+        /** @var list<BestiaryData> $bestiaryData */
+        $bestiaryData = $loader->fromFile($dataDir . '/bestiary.json');
+        $bestiary->load($bestiaryData);
+
+        //~ Get existing entity, transform to data, modify name & strength, create new entity and add it to bestiary
+        $entity = $bestiary->get('Goblin');
+
+        $entityData = $entity->jsonSerialize();
+        $entityData['name'] = 'Goblin Warrior';
+
+        self::assertArrayHasKey('strength', $entityData['abilities']['bases']);
+
+        $entityData['abilities']['bases']['strength']['value'] = 20;
+
+        $goblinWarrior = self::getEntityFactory()->from($entityData);
+
+        $bestiary->set($goblinWarrior);
+
+        $goblinWarriorFromBestiary = $bestiary->get('Goblin Warrior', false);
+
+        self::assertSame($goblinWarrior, $goblinWarriorFromBestiary); // get as no clone
+        self::assertSame(20, $goblinWarriorFromBestiary->getAbilities()->get('strength')?->getValue());
+
+        //~ Now remove original Goblin entity and check it is removed
+        $bestiary->remove($entity->getName());
+        self::expectException(BestiaryException::class);
+        self::expectExceptionCode(1701);
+        $bestiary->get('Goblin');
+    }
 
     public function testLoadWhenThrowException(): void
     {

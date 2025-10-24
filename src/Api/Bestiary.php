@@ -54,17 +54,75 @@ class Bestiary
     {
         $lowerCaseName = \strtolower($name);
         if (!isset($this->bestiary[$lowerCaseName])) {
-            throw new BestiaryException("Entity '$name' not found in bestiary.");
+            throw new BestiaryException("Entity '$name' not found in bestiary.", 1701);
         }
 
         return $asClone ? clone $this->bestiary[$lowerCaseName] : $this->bestiary[$lowerCaseName];
+    }
+
+    public function set(EntityInterface $entity): self
+    {
+        $this->bestiary[\strtolower($entity->getName())] = $entity;
+
+        return $this;
+    }
+
+    public function remove(string $name): self
+    {
+        $lowerCaseName = \strtolower($name);
+        if (isset($this->bestiary[$lowerCaseName])) {
+            unset($this->bestiary[$lowerCaseName]);
+        }
+
+        return $this;
+    }
+
+    public function dump(bool $prettyPrint = false): string
+    {
+        /** @var list<BestiaryData> $data */
+        $data = [];
+
+        try {
+            foreach ($this->bestiary as $entity) {
+                $bestiaryData = [
+                    'name'      => $entity->getName(),
+                    'type'      => $entity->getType(),
+                    'race'      => $entity->getInfo()->race,
+                    'size'      => $entity->getInfo()->size,
+                    'damages'   => $entity->getInfo()->damages,
+                    'abilities' => [
+                        'strength'  => $entity->getAbilities()->get('strength')?->getValue() ?? 0,
+                        'endurance' => $entity->getAbilities()->get('endurance')?->getValue() ?? 0,
+                        'agility'   => $entity->getAbilities()->get('agility')?->getValue() ?? 0,
+                        'intuition' => $entity->getAbilities()->get('intuition')?->getValue() ?? 0,
+                    ],
+                ];
+
+                $inventory = [];
+                foreach ($entity->getInventory()->items as $item) {
+                    $inventory[] = $item->getName();
+                }
+
+                if ($inventory !== []) {
+                    $bestiaryData['inventory'] = $inventory;
+                }
+
+                $data[] = $bestiaryData;
+            }
+
+            return \json_encode($data, flags: \JSON_THROW_ON_ERROR | ($prettyPrint ? \JSON_PRETTY_PRINT : 0));
+            // @codeCoverageIgnoreStart
+        } catch (\JsonException $exception) {
+            throw new BestiaryException('Unable to dump bestiary data: ' . $exception->getMessage(), 1700, $exception);
+        }
+        // @codeCoverageIgnoreEnd
     }
 
     /**
      * @phpstan-param BestiaryData $data
      * @phpstan-return EntityData
      */
-    public function fromBestiary(array $data): array
+    private function fromBestiary(array $data): array
     {
         $coins = $data['coins'] ?? 0;
         $info  = [
@@ -123,46 +181,5 @@ class Bestiary
             'statuses'  => $statuses,
             'inventory' => $inventory,
         ];
-    }
-
-    public function dump(bool $prettyPrint = false): string
-    {
-        /** @var list<BestiaryData> $data */
-        $data = [];
-
-        try {
-            foreach ($this->bestiary as $entity) {
-                $bestiaryData = [
-                    'name'      => $entity->getName(),
-                    'type'      => $entity->getType(),
-                    'race'      => $entity->getInfo()->race,
-                    'size'      => $entity->getInfo()->size,
-                    'damages'   => $entity->getInfo()->damages,
-                    'abilities' => [
-                        'strength'  => $entity->getAbilities()->get('strength')?->getValue() ?? 0,
-                        'endurance' => $entity->getAbilities()->get('endurance')?->getValue() ?? 0,
-                        'agility'   => $entity->getAbilities()->get('agility')?->getValue() ?? 0,
-                        'intuition' => $entity->getAbilities()->get('intuition')?->getValue() ?? 0,
-                    ],
-                ];
-
-                $inventory = [];
-                foreach ($entity->getInventory()->items as $item) {
-                    $inventory[] = $item->getName();
-                }
-
-                if ($inventory !== []) {
-                    $bestiaryData['inventory'] = $inventory;
-                }
-
-                $data[] = $bestiaryData;
-            }
-
-            return \json_encode($data, flags: \JSON_THROW_ON_ERROR | ($prettyPrint ? \JSON_PRETTY_PRINT : 0));
-            // @codeCoverageIgnoreStart
-        } catch (\JsonException $exception) {
-            throw new BestiaryException('Unable to dump bestiary data: ' . $exception->getMessage(), 1700, $exception);
-        }
-        // @codeCoverageIgnoreEnd
     }
 }

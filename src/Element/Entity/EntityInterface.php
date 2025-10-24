@@ -55,4 +55,9 @@ interface EntityInterface extends \JsonSerializable
     public function getModifiers(EntityInterface $enemy): array;
 
     public function clone(): self;
+
+    /**
+     * @return EntityData
+     */
+    public function jsonSerialize(): array;
 }

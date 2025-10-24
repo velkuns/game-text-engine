@@ -42,10 +42,27 @@ class Items
     {
         $lowerCaseName = \strtolower($name);
         if (!isset($this->items[$lowerCaseName])) {
-            throw new ItemException("Item '$name' not found in item list.");
+            throw new ItemException("Item '$name' not found in item list.", 1601);
         }
 
         return $asClone ? clone $this->items[$lowerCaseName] : $this->items[$lowerCaseName];
+    }
+
+    public function set(ItemInterface $item): self
+    {
+        $this->items[\strtolower($item->getName())] = $item;
+
+        return $this;
+    }
+
+    public function remove(string $name): self
+    {
+        $lowerCaseName = \strtolower($name);
+        if (isset($this->items[$lowerCaseName])) {
+            unset($this->items[$lowerCaseName]);
+        }
+
+        return $this;
     }
 
     public function dump(bool $prettyPrint = false): string

@@ -105,6 +105,10 @@ namespace Application;
 
 //~ Get an item by its name
 $item = $game->items->get('Rusty Sword');
+
+$staff = $itemFactory->from(['name' => 'Staff', ...]);
+$gameApi->items->set($staff); // Adds or replaces the item in the items dictionary
+$gameApi->items->remove($staff->getName()); // Removes the item from the items dictionary
 ```
 
 ### Bestiary dictionary
@@ -120,6 +124,10 @@ namespace Application;
 
 //~ Get a creature by its name
 $entity = $gameApi->bestiary->get('Goblin');
+
+$goblinWarrior = $entityFactory->from(['name' => 'Goblin Warrior', ...]);
+$gameApi->bestiary->set($goblinWarrior); // Adds or replaces the creature in the bestiary
+$gameApi->bestiary->remove('Goblin'); // Removes the creature from the bestiary
 ```
 
 ### Story API

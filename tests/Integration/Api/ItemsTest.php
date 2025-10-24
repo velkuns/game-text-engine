@@ -43,6 +43,40 @@ class ItemsTest extends TestCase
         self::assertSame('sword', $item->getSubType());
     }
 
+    public function testAndAndRemoveItem(): void
+    {
+        $dataDir = (string) realpath(__DIR__ . '/../../../data');
+        $loader  = new JsonLoader();
+        $items   = new Items(self::getItemFactory());
+
+        /** @var list<ItemData> $itemsData */
+        $itemsData = $loader->fromFile($dataDir . '/items.json');
+        $items->load($itemsData);
+
+        $staff = self::getItemFactory()->from([
+            'name'        => 'Staff',
+            'type'        => 'weapon',
+            'subType'     => 'staff',
+            'description' => 'A basic wooden staff.',
+            'modifiers'   => [],
+            'flags'       => 6,
+            'equipped'    => false,
+            'damages'     => 2,
+            'price'       => 0,
+        ]);
+
+        $items->set($staff);
+        self::assertSame($staff, $items->get('Staff', false));
+
+        //~ Remove item
+        $items->remove($staff->getName());
+
+        self::expectException(ItemException::class);
+        self::expectExceptionCode(1601);
+
+        $items->get($staff->getName());
+    }
+
     public function testLoadWhenThrowException(): void
     {
         $dataDir = (string) realpath(__DIR__ . '/../../../data');
