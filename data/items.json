@@ -8,6 +8,7 @@
         "flags": 6,
         "equipped": false,
         "damages": 3,
+        "quantity": 1,
         "price": 0
     },
     {
@@ -19,6 +20,7 @@
         "flags": 6,
         "equipped": false,
         "damages": 4,
+        "quantity": 1,
         "price": 10
     },
     {
@@ -30,6 +32,7 @@
         "flags": 6,
         "equipped": false,
         "damages": 5,
+        "quantity": 1,
         "price": 0
     },
     {
@@ -39,13 +42,14 @@
         "description": "A rusty dagger",
         "modifiers": [
             {
-                "type": "self.abilities.bases.agility.value",
+                "type": "self.abilities.agility.value",
                 "value": 2
             }
         ],
         "flags": 6,
         "equipped": false,
         "damages": 2,
+        "quantity": 1,
         "price": 0
     },
     {
@@ -62,6 +66,7 @@
         "flags": 6,
         "equipped": false,
         "damages": 3,
+        "quantity": 1,
         "price": 0
     },
     {
@@ -78,6 +83,7 @@
         "flags": 6,
         "equipped": false,
         "damages": 4,
+        "quantity": 1,
         "price": 0
     },
     {
@@ -89,6 +95,7 @@
         "flags": 6,
         "equipped": false,
         "damages": 3,
+        "quantity": 1,
         "price": 0
     },
     {
@@ -100,6 +107,7 @@
         "flags": 6,
         "equipped": false,
         "damages": 4,
+        "quantity": 1,
         "price": 0
     },
     {
@@ -111,6 +119,7 @@
         "flags": 6,
         "equipped": false,
         "damages": 2,
+        "quantity": 1,
         "price": 0
     },
     {
@@ -122,6 +131,7 @@
         "flags": 1,
         "equipped": false,
         "damages": 4,
+        "quantity": 1,
         "price": 0
     },
     {
@@ -133,6 +143,7 @@
         "flags": 0,
         "equipped": false,
         "damages": 4,
+        "quantity": 1,
         "price": 0
     },
     {
@@ -142,13 +153,14 @@
         "description": "Simple food. Can restore some health.",
         "modifiers": [
             {
-                "type": "ability.vitality",
+                "type": "self.abilities.vitality.value",
                 "value": 5
             }
         ],
         "flags": 1,
         "equipped": false,
         "damages": 0,
+        "quantity": 1,
         "price": 5
     },
     {
@@ -158,61 +170,65 @@
         "description": "Rich food. Can restore more health.",
         "modifiers": [
             {
-                "type": "ability.vitality",
+                "type": "self.abilities.vitality.value",
                 "value": 10
             }
         ],
         "flags": 1,
         "equipped": false,
         "damages": 0,
+        "quantity": 1,
         "price": 10
     },
     {
         "type": "item",
-        "name": "Small Potion of Life",
+        "name": "Small Health Potion",
         "subType": "potion",
-        "description": "Small Potion of Life. Can restore some health.",
+        "description": "Small health potion. Can restore some health.",
         "modifiers": [
             {
-                "type": "ability.vitality",
+                "type": "self.abilities.vitality.value",
                 "value": 5
             }
         ],
         "flags": 1,
         "equipped": false,
         "damages": 0,
+        "quantity": 1,
         "price": 10
     },
     {
         "type": "item",
-        "name": "Medium Life Potion",
+        "name": "Medium Health Potion",
         "subType": "potion",
-        "description": "Medium Potion of Life. Can restore some health.",
+        "description": "Medium health potion. Can restore some health.",
         "modifiers": [
             {
-                "type": "ability.vitality",
+                "type": "self.abilities.vitality.value",
                 "value": 10
             }
         ],
         "flags": 1,
         "equipped": false,
         "damages": 0,
+        "quantity": 1,
         "price": 20
     },
     {
         "type": "item",
-        "name": "Great Life Potion",
+        "name": "Great Health Potion",
         "subType": "potion",
-        "description": "Great Potion of Life. Can restore some health.",
+        "description": "Great health potion. Can restore some health.",
         "modifiers": [
             {
-                "type": "ability.vitality",
+                "type": "self.abilities.vitality.value",
                 "value": 10
             }
         ],
         "flags": 1,
         "equipped": false,
         "damages": 0,
+        "quantity": 1,
         "price": 20
     }
 ]

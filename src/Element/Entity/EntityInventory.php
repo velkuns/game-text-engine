@@ -68,6 +68,20 @@ class EntityInventory implements \JsonSerializable
         unset($this->items[$item]);
     }
 
+    public function consume(string $itemName): void
+    {
+        $item = $this->get($itemName);
+        if ($item === null) {
+            return;
+        }
+
+        if ($item->getQuantity() > 1) {
+            $item->setQuantity($item->getQuantity() - 1);
+        } else {
+            $this->drop($item);
+        }
+    }
+
     /**
      * @phpstan-return list<ItemData>
      */

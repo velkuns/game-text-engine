@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Factory;
 
 use Velkuns\GameTextEngine\Element\Condition\Condition;
-use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
 use Velkuns\GameTextEngine\Element\Condition\ConditionInterface;
 use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Element\Condition\Conditions;
 use Velkuns\GameTextEngine\Element\Condition\ConditionValidatorInterface;
+use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
 
 /**
  * @phpstan-import-type ConditionsData from Conditions
@@ -26,7 +26,7 @@ readonly class ConditionsFactory
 {
     public function __construct(
         private ConditionParser $parser,
-        private ConditionElementResolver $resolver,
+        private TypeElementResolver $resolver,
         private ConditionValidatorInterface $validator,
     ) {}
 

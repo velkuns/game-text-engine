@@ -24,6 +24,7 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  *      flags: int,
  *      equipped: bool,
  *      damages: int,
+ *      quantity?: int,
  *      price: int,
  *  }
  */
@@ -57,6 +58,10 @@ interface ItemInterface extends \JsonSerializable
     public function isWeapon(): bool;
 
     public function isGear(): bool;
+
+    public function getQuantity(): int;
+
+    public function setQuantity(int $quantity): self;
 
     /**
      * @return ItemData

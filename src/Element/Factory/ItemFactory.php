@@ -35,8 +35,9 @@ readonly class ItemFactory
         $flags       = $data['flags'];
         $equipped    = $data['equipped'];
         $damages     = $data['damages'];
+        $quantity    = $data['quantity'] ?? 1;
         $price       = $data['price'];
 
-        return new Item($name, $subType, $description, $modifiers, $flags, $equipped, $damages, $price);
+        return new Item($name, $subType, $description, $modifiers, $flags, $equipped, $damages, $quantity, $price);
     }
 }

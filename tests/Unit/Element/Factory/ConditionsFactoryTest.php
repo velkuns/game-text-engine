@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
 
-use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
+use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
-use PHPUnit\Framework\TestCase;
+use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
 
 class ConditionsFactoryTest extends TestCase
 {
@@ -24,7 +24,7 @@ class ConditionsFactoryTest extends TestCase
     {
         $this->factory = new ConditionsFactory(
             new ConditionParser(),
-            new ConditionElementResolver(),
+            new TypeElementResolver(),
             new ConditionValidator(),
         );
     }

@@ -24,7 +24,7 @@ namespace Velkuns\GameTextEngine\Element\Entity;
  *     notes: string,
  * }
  */
-readonly class EntityInfo implements \JsonSerializable
+class EntityInfo implements \JsonSerializable
 {
     public function __construct(
         public int $level,

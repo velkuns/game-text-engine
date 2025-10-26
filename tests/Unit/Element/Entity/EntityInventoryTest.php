@@ -54,6 +54,7 @@ class EntityInventoryTest extends TestCase
                 'flags'       => ItemFlag::WEAPON,
                 'equipped'    => true,
                 'damages'     => 0,
+                'quantity'    => 1,
                 'price'       => 0,
             ],
         ];

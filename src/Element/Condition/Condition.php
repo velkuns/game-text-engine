@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Condition;
 
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
+use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
 
 /**
  * @phpstan-import-type ConditionData from ConditionInterface
@@ -20,7 +21,7 @@ readonly class Condition implements ConditionInterface
 {
     public function __construct(
         public ConditionParser $parser,
-        public ConditionElementResolver $resolver,
+        public TypeElementResolver $resolver,
         public ConditionValidatorInterface $validator,
         public string $type,
         public string $condition,
@@ -44,7 +45,7 @@ readonly class Condition implements ConditionInterface
 
     public function evaluate(EntityInterface $entity): bool
     {
-        $elements   = $this->resolver->resolve($entity, $this);
+        $elements   = $this->resolver->resolve($entity, $this->getType());
         $conditions = $this->parser->parse($this->condition);
 
         $evaluation = false;

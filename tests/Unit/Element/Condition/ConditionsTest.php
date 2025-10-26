@@ -12,18 +12,18 @@ namespace Velkuns\GameTextEngine\Tests\Unit\Element\Condition;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
 use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Element\Condition\Conditions;
 use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Exception\AbilityTypeParseException;
+use Velkuns\GameTextEngine\Element\Exception\TypeElementResolveException;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
 use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
+use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 
 class ConditionsTest extends TestCase
@@ -36,7 +36,7 @@ class ConditionsTest extends TestCase
     {
         self::$conditionFactory = new ConditionsFactory(
             new ConditionParser(),
-            new ConditionElementResolver(),
+            new TypeElementResolver(),
             new ConditionValidator(),
         );
         self::$entityFactory    = new EntityFactory(
@@ -63,7 +63,7 @@ class ConditionsTest extends TestCase
         EntityInterface $enemy,
         int $code,
     ): void {
-        self::expectException(AbilityTypeParseException::class);
+        self::expectException(TypeElementResolveException::class);
         self::expectExceptionCode($code);
         $conditions->evaluate($player, $enemy);
     }
@@ -267,7 +267,7 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions'     => [
                         [
-                            'type'      => 'self.abilities.bases.strength.value',
+                            'type'      => 'self.abilities.strength.value',
                             'condition' => 'value >=  10 ',
                             'is'        => true,
                         ],
