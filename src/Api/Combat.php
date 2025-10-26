@@ -12,19 +12,22 @@ namespace Velkuns\GameTextEngine\Api;
 
 use Random\Randomizer;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
+use Velkuns\GameTextEngine\Element\Processor\TimeProcessor;
 
 /**
- * @phpstan-type TurnLogData array{hit: bool, damages: int, chance: float, roll: float, debug: array{"hit chance": string, damages: string}}
+ * @phpstan-type TickLogData array{hit: bool, damages: int, chance: float, roll: float, debug: array{"hit chance": string, damages: string}}
+ * @phpstan-type TurnLogData array{player: TickLogData, enemy?: TickLogData}
  */
 readonly class Combat
 {
     public function __construct(
         private Randomizer $randomizer,
+        private TimeProcessor $timeResolver,
     ) {}
 
     /**
      * @param EntityInterface[] $enemies
-     * @return array<int, array{0: TurnLogData, 1?: TurnLogData}>
+     * @return array<int, TurnLogData>
      */
     public function start(EntityInterface $player, array $enemies): array
     {
@@ -32,13 +35,10 @@ readonly class Combat
         $turn = 1;
         foreach ($enemies as $enemy) {
             do {
-                $logs[$turn][0] = $this->turn($player, $enemy);
-                if (!$enemy->isAlive()) {
-                    break; // stop combat with this enemy if it is dead
-                }
+                $logs[$turn] = $this->turn($player, $enemy);
 
-                $logs[$turn][1] = $this->turn($enemy, $player);
-            } while ($player->isAlive());
+                $this->timeResolver->processTurnOnAll([$player, ...$enemies]);
+            } while ($player->isAlive() && $enemy->isAlive());
 
             if (!$player->isAlive()) {
                 //~ stop combat if player is dead
@@ -50,9 +50,27 @@ readonly class Combat
     }
 
     /**
-     * @return array{hit: bool, damages: int, chance: float, roll: float, debug: array{"hit chance": string, damages: string}}
+     * @return TurnLogData
      */
-    public function turn(EntityInterface $attacker, EntityInterface $defender): array
+    public function turn(EntityInterface $player, EntityInterface $enemy): array
+    {
+        $turnLogs = [];
+
+        $turnLogs['player'] = $this->tick($player, $enemy);
+
+        if (!$enemy->isAlive()) {
+            return $turnLogs; // stop combat with this enemy if it is dead
+        }
+
+        $turnLogs['enemy'] = $this->tick($enemy, $player);
+
+        return $turnLogs;
+    }
+
+    /**
+     * @return TickLogData
+     */
+    public function tick(EntityInterface $attacker, EntityInterface $defender): array
     {
         $attackerModifiers = $attacker->getModifiers($defender);
         $defenderModifiers = $defender->getModifiers($attacker);

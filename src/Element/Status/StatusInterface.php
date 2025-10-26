@@ -46,5 +46,12 @@ interface StatusInterface extends \JsonSerializable
 
     public function getRemainingTurns(): int;
 
+    public function decreaseRemainingTurns(): self;
+
     public function clone(): self;
+
+    /**
+     * @return StatusData
+     */
+    public function jsonSerialize(): array;
 }

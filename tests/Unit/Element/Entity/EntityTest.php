@@ -12,6 +12,7 @@ namespace Velkuns\GameTextEngine\Tests\Unit\Element\Entity;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
+use Velkuns\GameTextEngine\Element\Status\Status;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 
 class EntityTest extends TestCase
@@ -31,8 +32,15 @@ class EntityTest extends TestCase
         $player  = self::getPlayer();
         $gobelin = self::getGoblin();
 
+        $player->getStatuses()->set('skill', new Status('skill', 'test', '', []));
+        $player->getStatuses()->set('state', new Status('state', 'test', '', []));
+        $player->getStatuses()->set('blessing', new Status('blessing', 'test', '', []));
+        $player->getStatuses()->set('curse', new Status('curse', 'test', '', []));
+        $player->getStatuses()->set('title', new Status('title', 'test', '', []));
+        $player->getStatuses()->set('unknown', new Status('unknown', 'test', '', []));
+
         $expected  = [
-            new Modifier('ability.vitality', 2),
+            new Modifier('self.abilities.vitality.value', 2),
         ];
         $modifiers = $player->getModifiers($gobelin);
 
