@@ -16,21 +16,22 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 /**
  * @phpstan-import-type ItemData from ItemInterface
  */
-readonly class Item implements ItemInterface
+class Item implements ItemInterface
 {
     /**
      * @param list<Modifier> $modifiers
      */
     public function __construct(
-        private string $name,
-        private ?string $subType = null,
-        private string $description = '',
-        private array $modifiers = [],
-        private int $flags = 0,
-        private bool $equipped = false,
-        private int $damages = 0,
-        private int $price = 0,
-        private string $type = 'item',
+        private readonly string $name,
+        private readonly ?string $subType = null,
+        private readonly string $description = '',
+        private readonly array $modifiers = [],
+        private readonly int $flags = 0,
+        private readonly bool $equipped = false,
+        private readonly int $damages = 0,
+        private int $quantity = 1,
+        private readonly int $price = 0,
+        private readonly string $type = 'item',
     ) {}
 
     public function getType(): string
@@ -71,6 +72,11 @@ readonly class Item implements ItemInterface
         return $this->flags;
     }
 
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
     public function getPrice(): int
     {
         return $this->price;
@@ -106,6 +112,17 @@ readonly class Item implements ItemInterface
         return ($this->flags & $flag) === $flag;
     }
 
+    public function setQuantity(int $quantity): self
+    {
+        if ($quantity < 0) {
+            throw new \InvalidArgumentException('Quantity cannot be negative.', 1299);
+        }
+
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
     /**
      * @return ItemData
      */
@@ -120,6 +137,7 @@ readonly class Item implements ItemInterface
             'flags'       => $this->flags,
             'equipped'    => $this->equipped,
             'damages'     => $this->damages,
+            'quantity'    => $this->quantity,
             'price'       => $this->price,
         ];
     }
@@ -137,6 +155,7 @@ readonly class Item implements ItemInterface
             $this->flags,
             $this->equipped,
             $this->damages,
+            $this->quantity,
             $this->price,
             $this->type,
         );

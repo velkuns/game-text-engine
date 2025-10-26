@@ -10,9 +10,10 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
-use Velkuns\GameTextEngine\Api\Exception\StoryException;
+use Velkuns\GameTextEngine\Api\Exception\PlayerException;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
+use Velkuns\GameTextEngine\Element\Modifier\ModifierProcessor;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface
@@ -33,6 +34,7 @@ class Player
     public function __construct(
         private readonly EntityFactory $entityFactory,
         private readonly Items $items,
+        private readonly ModifierProcessor $modifierProcessor,
     ) {}
 
     /**
@@ -41,6 +43,26 @@ class Player
     public function load(array $data): void
     {
         $this->player = $this->entityFactory->from($data);
+    }
+
+    public function consume(string $itemName, ?EntityInterface $enemy = null): self
+    {
+        $item = $this->player->getInventory()->get($itemName);
+        if ($item === null) {
+            throw new PlayerException('Cannot consume item "' . $itemName . '": item not found in inventory.', 1410);
+        }
+
+        if (!$item->isConsumable()) {
+            throw new PlayerException('Cannot consume item "' . $itemName . '": item is not consumable.', 1411);
+        }
+
+        foreach ($item->getModifiers() as $modifier) {
+            $this->modifierProcessor->apply($modifier, $this->player, $enemy);
+        }
+
+        $this->player->getInventory()->consume($itemName);
+
+        return $this;
     }
 
     /**
@@ -60,7 +82,7 @@ class Player
             return \json_encode($this->player, flags: \JSON_THROW_ON_ERROR | ($prettyPrint ? \JSON_PRETTY_PRINT : 0));
             // @codeCoverageIgnoreStart
         } catch (\JsonException) {
-            throw new StoryException('Unable to dump player to JSON.', 1401); // @codeCoverageIgnore
+            throw new PlayerException('Unable to dump player to JSON.', 1401); // @codeCoverageIgnore
         }
         // @codeCoverageIgnoreEnd
     }

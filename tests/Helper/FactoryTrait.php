@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
-use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
 use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
@@ -21,6 +20,7 @@ use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
+use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
 use Velkuns\GameTextEngine\Graph\Factory\GraphFactory;
 
 /**
@@ -52,7 +52,7 @@ trait FactoryTrait
     {
         return new ConditionsFactory(
             new ConditionParser(),
-            new ConditionElementResolver(),
+            new TypeElementResolver(),
             new ConditionValidator(),
         );
     }

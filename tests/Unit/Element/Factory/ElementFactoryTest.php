@@ -10,21 +10,20 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
 
+use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
 use Velkuns\GameTextEngine\Element\Ability\ConstraintsAbility;
-use Velkuns\GameTextEngine\Element\Condition\ConditionElementResolver;
-use Velkuns\GameTextEngine\Element\Condition\ConditionOperatorType;
 use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
 use Velkuns\GameTextEngine\Element\Exception\ElementJsonParseException;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
 use Velkuns\GameTextEngine\Element\Factory\ElementFactory;
-use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
+use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
 
 class ElementFactoryTest extends TestCase
 {
@@ -36,7 +35,7 @@ class ElementFactoryTest extends TestCase
         $modifierFactory   = new ModifierFactory();
         $conditionsFactory = new ConditionsFactory(
             new ConditionParser(),
-            new ConditionElementResolver(),
+            new TypeElementResolver(),
             new ConditionValidator(),
         );
         $itemFactory       = new ItemFactory($modifierFactory);

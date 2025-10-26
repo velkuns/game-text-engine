@@ -9,6 +9,6 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Element\Exception;
+namespace Velkuns\GameTextEngine\Api\Exception;
 
-class AbilityTypeParseException extends \UnexpectedValueException {}
+class PlayerException extends \RuntimeException {}
