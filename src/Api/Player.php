@@ -21,6 +21,7 @@ use Velkuns\GameTextEngine\Element\Modifier\ModifierProcessor;
  *    name: string,
  *    age?: int,
  *    race?: string,
+ *    gender?: string,
  *    description?: string,
  *    background?: string,
  *    abilities: array<string, int>,
@@ -93,7 +94,6 @@ class Player
      */
     private function fromNewData(array $data): array
     {
-        $coins = 10;
         $info  = [
             'level'       => 1,
             'xp'          => 0,
@@ -101,6 +101,7 @@ class Player
             'age'         => $data['age'] ?? 20,
             'race'        => $data['race'] ?? 'human',
             'size'        => 'medium',
+            'gender'      => $data['gender'] ?? 'unknown',
             'description' => $data['description'] ?? '',
             'background'  => $data['background'] ?? '',
             'notes'       => '',
@@ -141,16 +142,15 @@ class Player
         ];
 
         //~ Build inventory
-        $inventory = [];
+        $inventory = ['coins' => 10, 'items' => []];
         foreach ($data['inventory'] ?? [] as $itemName) {
-            $inventory[] = $this->items->get($itemName)->jsonSerialize();
+            $inventory['items'][] = $this->items->get($itemName)->jsonSerialize();
         }
 
         //~ Return full data for factory
         return [
             'name'      => $data['name'],
             'type'      => 'player',
-            'coins'     => $coins,
             'info'      => $info,
             'abilities' => $abilities,
             'statuses'  => $statuses,

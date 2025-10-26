@@ -30,7 +30,7 @@ class EntityFactoryTest extends TestCase
 
         self::assertSame('Brave Test Hero #1', $hero->getName());
         self::assertSame('player', $hero->getType());
-        self::assertSame(100, $hero->getCoins());
+        self::assertSame(100, $hero->getInventory()->coins);
 
         $info = $hero->getInfo();
         self::assertSame(5, $info->level);

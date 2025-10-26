@@ -44,6 +44,7 @@ class PlayerTest extends TestCase
             'name'        => 'New Hero',
             'age'         => 25,
             'race'        => 'elf',
+            'gender'      => 'non-binary',
             'description' => 'A brave hero',
             'background'  => 'Born in a small village',
             'abilities' => [
@@ -77,6 +78,7 @@ class PlayerTest extends TestCase
             'name'        => 'New Hero',
             'age'         => 25,
             'race'        => 'elf',
+            'gender'      => 'non-binary',
             'description' => 'A brave hero',
             'background'  => 'Born in a small village',
             'abilities' => [
@@ -116,6 +118,7 @@ class PlayerTest extends TestCase
             'name'        => 'New Hero',
             'age'         => 25,
             'race'        => 'elf',
+            'gender'      => 'non-binary',
             'description' => 'A brave hero',
             'background'  => 'Born in a small village',
             'abilities' => [
@@ -149,6 +152,7 @@ class PlayerTest extends TestCase
             'name'        => 'New Hero',
             'age'         => 25,
             'race'        => 'elf',
+            'gender'      => 'non-binary',
             'description' => 'A brave hero',
             'background'  => 'Born in a small village',
             'abilities' => [

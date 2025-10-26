@@ -20,10 +20,10 @@ use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
  *    name: string,
  *    type: string,
  *    race: string,
+ *    gender?: string,
  *    size: string,
- *    coins?: int,
  *    abilities: array<string, int>,
- *    inventory?: list<string>,
+ *    inventory?: array{coins?: int, items?: list<string>},
  *    damages?: int,
  * }
  */
@@ -88,6 +88,7 @@ class Bestiary
                     'name'      => $entity->getName(),
                     'type'      => $entity->getType(),
                     'race'      => $entity->getInfo()->race,
+                    'gender'    => $entity->getInfo()->gender,
                     'size'      => $entity->getInfo()->size,
                     'damages'   => $entity->getInfo()->damages,
                     'abilities' => [
@@ -103,8 +104,11 @@ class Bestiary
                     $inventory[] = $item->getName();
                 }
 
-                if ($inventory !== []) {
-                    $bestiaryData['inventory'] = $inventory;
+                if ($inventory !== [] || $entity->getInventory()->coins > 0) {
+                    $bestiaryData['inventory'] = [
+                        'coins' => $entity->getInventory()->coins,
+                        'items' => $inventory,
+                    ];
                 }
 
                 $data[] = $bestiaryData;
@@ -124,13 +128,13 @@ class Bestiary
      */
     private function fromBestiary(array $data): array
     {
-        $coins = $data['coins'] ?? 0;
         $info  = [
             'level'       => 1,
             'xp'          => 0,
             'damages'     => $data['damages'] ?? 0,
             'age'         => 0,
             'race'        => $data['race'],
+            'gender'      => $data['gender'] ?? 'unknown',
             'size'        => $data['size'],
             'description' => '',
             'background'  => '',
@@ -166,16 +170,18 @@ class Bestiary
         $statuses  = ['skills' => [], 'states' => [], 'blessings' => [], 'curses' => [], 'titles' => []];
 
         //~ Build inventory
-        $inventory = [];
-        foreach ($data['inventory'] ?? [] as $itemName) {
-            $inventory[] = $this->items->get($itemName)->jsonSerialize();
+        $inventory = [
+            'coins' => $data['inventory']['coins'] ?? 0,
+            'items' => [],
+        ];
+        foreach ($data['inventory']['items'] ?? [] as $itemName) {
+            $inventory['items'][] = $this->items->get($itemName)->jsonSerialize();
         }
 
         //~ Return full data for factory
         return [
             'name'      => $data['name'],
             'type'      => $data['type'],
-            'coins'     => $coins,
             'info'      => $info,
             'abilities' => $abilities,
             'statuses'  => $statuses,

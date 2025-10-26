@@ -351,7 +351,6 @@ class ElementFactoryTest extends TestCase
         $json = '{
             "name": "Brave Test Hero #1",
             "type": "player",
-            "coins": 100,
             "info": {
                 "level": 5,
                 "xp": 1500,
@@ -359,6 +358,7 @@ class ElementFactoryTest extends TestCase
                 "age": 30,
                 "size": "1m75",
                 "race": "elf",
+                "gender": "non-binary",
                 "description": "A brave hero",
                 "background": "Born in a small village",
                 "notes": "No special notes"
@@ -462,26 +462,29 @@ class ElementFactoryTest extends TestCase
                 "curses": [],
                 "titles": []
             },
-            "inventory": [
-                {
-                    "type": "item",
-                    "name": "The Sword",
-                    "subType": "sword",
-                    "description": "A sharp blade",
-                    "modifiers": [],
-                    "flags": 7,
-                    "equipped": true,
-                    "damages": 2,
-                    "price": 0
-                }
-            ]
+            "inventory": {
+                "coins": 100,
+                "items": [
+                    {
+                        "type": "item",
+                        "name": "The Sword",
+                        "subType": "sword",
+                        "description": "A sharp blade",
+                        "modifiers": [],
+                        "flags": 7,
+                        "equipped": true,
+                        "damages": 2,
+                        "price": 0
+                    }
+                ]
+            }
         }';
 
         $hero = $this->elementFactory->entityFromJson($json);
 
         self::assertSame('Brave Test Hero #1', $hero->getName());
         self::assertSame('player', $hero->getType());
-        self::assertSame(100, $hero->getCoins());
+        self::assertSame(100, $hero->getInventory()->coins);
 
         $info = $hero->getInfo();
         self::assertSame(5, $info->level);
