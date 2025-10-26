@@ -16,16 +16,15 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 /**
  * @phpstan-import-type EntityData from EntityInterface
  */
-class Entity implements EntityInterface
+readonly class Entity implements EntityInterface
 {
     public function __construct(
-        public readonly string $name,
-        public readonly string $type,
-        public int $coins,
-        public readonly EntityInfo $info,
-        public readonly EntityAbilities $abilities,
-        public readonly EntityStatuses $statuses,
-        public readonly EntityInventory $inventory,
+        public string $name,
+        public string $type,
+        public EntityInfo $info,
+        public EntityAbilities $abilities,
+        public EntityStatuses $statuses,
+        public EntityInventory $inventory,
     ) {}
 
     public function getName(): string
@@ -36,11 +35,6 @@ class Entity implements EntityInterface
     public function getType(): string
     {
         return $this->type;
-    }
-
-    public function getCoins(): int
-    {
-        return $this->coins;
     }
 
     public function getInfo(): EntityInfo
@@ -96,7 +90,6 @@ class Entity implements EntityInterface
         return [
             'name'      => $this->name,
             'type'      => $this->type,
-            'coins'     => $this->coins,
             'info'      => $this->info->jsonSerialize(),
             'abilities' => $this->abilities->jsonSerialize(),
             'statuses'  => $this->statuses->jsonSerialize(),
@@ -109,7 +102,6 @@ class Entity implements EntityInterface
         return new self(
             name: $this->name,
             type: $this->type,
-            coins: $this->coins,
             info: $this->info->clone(),
             abilities: $this->abilities->clone(),
             statuses: $this->statuses->clone(),

@@ -30,6 +30,7 @@ use Velkuns\GameTextEngine\Element\Status\StatusInterface;
  * @phpstan-import-type AbilitiesData from EntityAbilities
  * @phpstan-import-type StatusesData from EntityStatuses
  * @phpstan-import-type StatusData from StatusInterface
+ * @phpstan-import-type InventoryData from EntityInventory
  * @phpstan-import-type ItemData from Item
  */
 readonly class EntityFactory
@@ -47,13 +48,12 @@ readonly class EntityFactory
     {
         $name      = $data['name'];
         $type      = $data['type'];
-        $coins     = $data['coins'];
         $info      = $this->fromEntityInfo($data['info']);
         $abilities = $this->fromEntityAbilities($data['abilities']);
         $statuses  = $this->fromEntityStatuses($data['statuses']);
         $inventory = $this->fromEntityInventory($data['inventory']);
 
-        return new Entity($name, $type, $coins, $info, $abilities, $statuses, $inventory);
+        return new Entity($name, $type, $info, $abilities, $statuses, $inventory);
     }
 
     /**
@@ -67,11 +67,12 @@ readonly class EntityFactory
         $age         = $data['age'];
         $size        = $data['size'];
         $race        = $data['race'];
+        $gender      = $data['gender'];
         $description = $data['description'];
         $background  = $data['background'];
         $notes       = $data['notes'];
 
-        return new EntityInfo($level, $xp, $damages, $age, $size, $race, $description, $background, $notes);
+        return new EntityInfo($level, $xp, $damages, $age, $size, $race, $gender, $description, $background, $notes);
     }
 
     /**
@@ -100,12 +101,12 @@ readonly class EntityFactory
     }
 
     /**
-     * @param list<ItemData> $data
+     * @param InventoryData $data
      */
     private function fromEntityInventory(array $data): EntityInventory
     {
-        $items = \array_map(fn(array $itemData) => $this->itemFactory->from($itemData), $data);
+        $items = \array_map(fn(array $itemData) => $this->itemFactory->from($itemData), $data['items']);
 
-        return new EntityInventory($items);
+        return new EntityInventory($data['coins'], $items);
     }
 }

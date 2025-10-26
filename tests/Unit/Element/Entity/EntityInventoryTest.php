@@ -22,7 +22,7 @@ class EntityInventoryTest extends TestCase
     public function testDrop(): void
     {
         $item = new Item('The Sword', 'sword');
-        $inventory = new EntityInventory();
+        $inventory = new EntityInventory(0);
         $inventory->add($item);
 
         self::assertCount(1, $inventory->items);
@@ -33,7 +33,7 @@ class EntityInventoryTest extends TestCase
     public function testGetEquippedWeapon(): void
     {
         $item = new Item('The Sword', 'sword', equipped: true);
-        $inventory = new EntityInventory();
+        $inventory = new EntityInventory(0);
         $inventory->add($item);
 
         self::assertNull($inventory->getEquippedWeapon());
@@ -47,7 +47,7 @@ class EntityInventoryTest extends TestCase
     public function testConsumeItem(): void
     {
         $item = new Item('Health Potion', 'potion', flags: 1);
-        $inventory = new EntityInventory();
+        $inventory = new EntityInventory(0);
         $inventory->add($item);
 
         $inventory->consume('Health Potion');
@@ -58,7 +58,7 @@ class EntityInventoryTest extends TestCase
     public function testConsumeItemButItemDoesNotExists(): void
     {
         $item = new Item('Health Potion', 'potion', flags: 1);
-        $inventory = new EntityInventory();
+        $inventory = new EntityInventory(0);
         $inventory->add($item);
 
         self::expectException(InventoryException::class);
@@ -78,22 +78,25 @@ class EntityInventoryTest extends TestCase
     public function testJsonSerialize(): void
     {
         $data = [
-            [
-                'type'        => 'item',
-                'name'        => 'The Sword #2',
-                'subType'     => 'sword',
-                'description' => '',
-                'modifiers'   => [],
-                'flags'       => ItemFlag::WEAPON,
-                'equipped'    => true,
-                'damages'     => 0,
-                'quantity'    => 1,
-                'price'       => 0,
+            'coins' => 10,
+            'items' => [
+                [
+                    'type'        => 'item',
+                    'name'        => 'The Sword #2',
+                    'subType'     => 'sword',
+                    'description' => '',
+                    'modifiers'   => [],
+                    'flags'       => ItemFlag::WEAPON,
+                    'equipped'    => true,
+                    'damages'     => 0,
+                    'quantity'    => 1,
+                    'price'       => 0,
+                ],
             ],
         ];
         $item = new Item('The Sword #2', 'sword', flags: ItemFlag::WEAPON, equipped: true);
 
-        $inventory = new EntityInventory();
+        $inventory = new EntityInventory(10);
         $inventory->add($item);
 
         self::assertSame($data, $inventory->jsonSerialize());

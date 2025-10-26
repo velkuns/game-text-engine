@@ -18,15 +18,15 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  * @phpstan-import-type EntityInfoData from EntityInfo
  * @phpstan-import-type AbilitiesData from EntityAbilities
  * @phpstan-import-type StatusesData from EntityStatuses
+ * @phpstan-import-type InventoryData from EntityInventory
  * @phpstan-import-type ItemData from ItemInterface
  * @phpstan-type EntityData array{
  *     name: string,
  *     type: string,
- *     coins: int,
  *     info: EntityInfoData,
  *     abilities: AbilitiesData,
  *     statuses: StatusesData,
- *     inventory: list<ItemData>,
+ *     inventory: InventoryData,
  * }
  */
 interface EntityInterface extends \JsonSerializable
@@ -34,8 +34,6 @@ interface EntityInterface extends \JsonSerializable
     public function getName(): string;
 
     public function getType(): string;
-
-    public function getCoins(): int;
 
     public function getInfo(): EntityInfo;
 

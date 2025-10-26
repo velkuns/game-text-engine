@@ -1,7 +1,6 @@
 {
     "name": "Player Name",
     "type": "player",
-    "coins": 10,
     "info": {
         "level": 1,
         "xp": 0,
@@ -9,6 +8,7 @@
         "age": 20,
         "size": "medium",
         "race": "human",
+        "gender": "non-binary",
         "description": "A brave hero",
         "background": "",
         "notes": ""
@@ -96,18 +96,21 @@
         "curses": [],
         "titles": []
     },
-    "inventory": [
-        {
-            "type": "item",
-            "name": "Rusted Sword",
-            "subType": "sword",
-            "description": "A rusted sword",
-            "modifiers": [],
-            "flags": 6,
-            "equipped": true,
-            "damages": 3,
-            "quantity": 1,
-            "price": 0
-        }
-    ]
+    "inventory": {
+        "coins": 10,
+        "items": [
+            {
+                "type": "item",
+                "name": "Rusted Sword",
+                "subType": "sword",
+                "description": "A rusted sword",
+                "modifiers": [],
+                "flags": 6,
+                "equipped": true,
+                "damages": 3,
+                "quantity": 1,
+                "price": 0
+            }
+        ]
+    }
 }

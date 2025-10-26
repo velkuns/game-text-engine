@@ -17,6 +17,7 @@ use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 
 /**
  * @phpstan-import-type ItemData from Item
+ * @phpstan-type InventoryData array{coins: int, items: list<ItemData>}
  */
 class EntityInventory implements \JsonSerializable
 {
@@ -27,6 +28,7 @@ class EntityInventory implements \JsonSerializable
      * @param list<ItemInterface> $items
      */
     public function __construct(
+        public int $coins,
         array $items = [],
     ) {
         $this->items = new \WeakMap();
@@ -84,7 +86,7 @@ class EntityInventory implements \JsonSerializable
     }
 
     /**
-     * @phpstan-return list<ItemData>
+     * @phpstan-return InventoryData
      */
     public function jsonSerialize(): array
     {
@@ -93,7 +95,10 @@ class EntityInventory implements \JsonSerializable
             $items[] = $item->jsonSerialize();
         }
 
-        return $items;
+        return [
+            'coins' => $this->coins,
+            'items' => $items,
+        ];
     }
 
     public function clone(): self
@@ -103,6 +108,6 @@ class EntityInventory implements \JsonSerializable
             $items[] = $item->clone();
         }
 
-        return new self($items);
+        return new self($this->coins, $items);
     }
 }
