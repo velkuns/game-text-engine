@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Item;
 
+use Velkuns\GameTextEngine\Element\Exception\ItemException;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 
 /**
@@ -115,7 +116,7 @@ class Item implements ItemInterface
     public function setQuantity(int $quantity): self
     {
         if ($quantity < 0) {
-            throw new \InvalidArgumentException('Quantity cannot be negative.', 1299);
+            throw new ItemException('Quantity cannot be negative.', 1301);
         }
 
         $this->quantity = $quantity;

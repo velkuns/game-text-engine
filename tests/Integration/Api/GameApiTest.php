@@ -23,6 +23,7 @@ use Velkuns\GameTextEngine\Api\Story;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Element\Modifier\ModifierProcessor;
+use Velkuns\GameTextEngine\Element\Processor\TimeProcessor;
 use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
@@ -50,7 +51,7 @@ class GameApiTest extends TestCase
             $items,
             new Bestiary(self::getEntityFactory(), $items),
             new Player(self::getEntityFactory(), $items, new ModifierProcessor(new TypeElementResolver())),
-            new Combat(new Randomizer(new Mt19937())),
+            new Combat(new Randomizer(new Mt19937()), new TimeProcessor()),
         );
 
         /** @var GraphData $storyData */

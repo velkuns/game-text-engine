@@ -17,18 +17,18 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 /**
  * @phpstan-import-type StatusData from StatusInterface
  */
-readonly class Status implements StatusInterface
+class Status implements StatusInterface
 {
     /**
      * @param list<Modifier> $modifiers
      */
     public function __construct(
-        private string $type,
-        private string $name,
-        private string $description,
-        private array $modifiers,
-        private ?Conditions $conditions = null,
-        private int $durationTurns = 0,
+        private readonly string $type,
+        private readonly string $name,
+        private readonly string $description,
+        private readonly array $modifiers,
+        private readonly ?Conditions $conditions = null,
+        private readonly int $durationTurns = 0,
         private int $remainingTurns = 0,
     ) {}
 
@@ -68,6 +68,13 @@ readonly class Status implements StatusInterface
     public function getRemainingTurns(): int
     {
         return $this->remainingTurns;
+    }
+
+    public function decreaseRemainingTurns(): self
+    {
+        $this->remainingTurns = \max($this->remainingTurns - 1, 0);
+
+        return $this;
     }
 
     /**

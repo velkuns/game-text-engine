@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Entity;
 
+use Velkuns\GameTextEngine\Element\Exception\InventoryException;
 use Velkuns\GameTextEngine\Element\Item\Item;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 
@@ -72,7 +73,7 @@ class EntityInventory implements \JsonSerializable
     {
         $item = $this->get($itemName);
         if ($item === null) {
-            return;
+            throw new InventoryException('Cannot consume unknown item: ' . $itemName, 1700);
         }
 
         if ($item->getQuantity() > 1) {

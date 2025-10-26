@@ -8,7 +8,7 @@
                 "description": "Mastering sword techniques increases damage dealt with swords by 2.",
                 "modifiers": [
                     {
-                        "combat" : "combat.damages",
+                        "type" : "combat.damages",
                         "value": 2
                     }
                 ],
@@ -29,7 +29,7 @@
                 "description": "Mastering dagger techniques increases damage dealt with daggers by 2.",
                 "modifiers": [
                     {
-                        "combat": "combat.damages",
+                        "type": "combat.damages",
                         "value": 2
                     }
                 ],
@@ -50,7 +50,7 @@
                 "description": "Mastering archery techniques increases damage dealt with bows by 2.",
                 "modifiers": [
                     {
-                        "combat": "combat.damages",
+                        "type": "combat.damages",
                         "value": 2
                     }
                 ],
@@ -71,7 +71,7 @@
                 "description": "Mastering dodge techniques increases defense by 2 during combat.",
                 "modifiers": [
                     {
-                        "ability": "defense",
+                        "type": "self.abilities.defense.value",
                         "value": 2
                     }
                 ]
@@ -88,7 +88,7 @@
                 "description": "Specialized skill in hunting goblins increases damage dealt to goblins by 2.",
                 "modifiers": [
                     {
-                        "combat": "combat.damages",
+                        "type": "combat.damages",
                         "value": 2
                     }
                 ],
@@ -109,7 +109,7 @@
                 "description": "Specialized skill in hunting wolfs increases damage dealt to wolfs by 2.",
                 "modifiers": [
                     {
-                        "combat": "combat.damages",
+                        "type": "combat.damages",
                         "value": 2
                     }
                 ],
@@ -130,7 +130,7 @@
                 "description": "Specialized skill in hunting small creatures increases damage dealt to small creatures by 2.",
                 "modifiers": [
                     {
-                        "combat": "combat.damages",
+                        "type": "combat.damages",
                         "value": 2
                     }
                 ],
@@ -161,10 +161,11 @@
                 "description": "The character is poisoned, losing 1 vitality point at the start of each turn.",
                 "modifiers": [
                     {
-                        "ability": "vitality",
+                        "type": "self.abilities.vitality.value",
                         "value": -1
                     }
                 ],
+                "durationTurns": 5,
                 "remainingTurns": 5
             },
             {
@@ -172,6 +173,7 @@
                 "type": "state",
                 "description": "The character is stunned and cannot perform any actions for 1 turn.",
                 "modifiers": [],
+                "durationTurns": 1,
                 "remainingTurns": 1
             },
             {
@@ -180,14 +182,15 @@
                 "description": "The character is blinded, reducing agility by 10, but increase intuition by 5.",
                 "modifiers": [
                     {
-                        "ability": "agility",
+                        "type": "self.abilities.agility.value",
                         "value": -10
                     },
                     {
-                        "ability": "intuition",
+                        "type": "self.abilities.intuition.value",
                         "value": 5
                     }
                 ],
+                "durationTurns": 2,
                 "remainingTurns": 2
             },
             {
@@ -196,14 +199,15 @@
                 "description": "The character is well rested, gaining 2 agility and 2 intuition points for 3 turn.",
                 "modifiers": [
                     {
-                        "ability": "agility",
+                        "type": "self.abilities.agility.value",
                         "value": 2
                     },
                     {
-                        "ability": "intuition",
+                        "type": "self.abilities.intuition.value",
                         "value": 2
                     }
                 ],
+                "durationTurns": 3,
                 "remainingTurns": 3
             }
         ]

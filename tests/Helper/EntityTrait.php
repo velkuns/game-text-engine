@@ -136,11 +136,11 @@ trait EntityTrait
                         'description' => 'Super skill',
                         'modifiers'   => [
                             [
-                                'type'  => 'ability.agility',
+                                'type'  => 'self.abilities.agility.value',
                                 'value' => 1,
                             ],
                             [
-                                'type'  => 'ability.attack',
+                                'type'  => 'self.abilities.attack.value',
                                 'value' => 2,
                             ],
                         ],
@@ -157,6 +157,33 @@ trait EntityTrait
                         'durationTurns'  => 0,
                         'remainingTurns' => 0,
                     ],
+                    'Dragon Hunter' => [
+                        'type'        => 'skill',
+                        'name'        => 'Dragon Hunter',
+                        'description' => 'To help to chase dragon.',
+                        'modifiers'   => [
+                            [
+                                'type'  => 'self.abilities.agility.value',
+                                'value' => 1,
+                            ],
+                            [
+                                'type'  => 'self.abilities.attack.value',
+                                'value' => 2,
+                            ],
+                        ],
+                        'conditions' => [
+                            'numberRequired' => 1,
+                            'conditions' => [
+                                [
+                                    'type'      => 'enemy.info',
+                                    'condition' => 'race=dragon',
+                                    'is'        => true,
+                                ],
+                            ],
+                        ],
+                        'durationTurns'  => 0,
+                        'remainingTurns' => 0,
+                    ],
                 ],
                 'states'    => [
                     'Rested' => [
@@ -165,7 +192,7 @@ trait EntityTrait
                         'description' => 'You are well rested',
                         'modifiers'   => [
                             [
-                                'type'  => 'ability.vitality',
+                                'type'  => 'self.abilities.vitality.value',
                                 'value' => 2,
                             ],
                         ],

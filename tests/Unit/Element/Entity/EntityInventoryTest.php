@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Entity;
 
 use Velkuns\GameTextEngine\Element\Entity\EntityInventory;
+use Velkuns\GameTextEngine\Element\Exception\InventoryException;
+use Velkuns\GameTextEngine\Element\Exception\ItemException;
 use Velkuns\GameTextEngine\Element\Item\Item;
 use Velkuns\GameTextEngine\Element\Item\ItemFlag;
 use PHPUnit\Framework\TestCase;
@@ -40,6 +42,37 @@ class EntityInventoryTest extends TestCase
         $inventory->add($item2);
 
         self::assertSame($item2, $inventory->getEquippedWeapon());
+    }
+
+    public function testConsumeItem(): void
+    {
+        $item = new Item('Health Potion', 'potion', flags: 1);
+        $inventory = new EntityInventory();
+        $inventory->add($item);
+
+        $inventory->consume('Health Potion');
+
+        self::assertNull($inventory->get('Health Potion'));
+    }
+
+    public function testConsumeItemButItemDoesNotExists(): void
+    {
+        $item = new Item('Health Potion', 'potion', flags: 1);
+        $inventory = new EntityInventory();
+        $inventory->add($item);
+
+        self::expectException(InventoryException::class);
+        self::expectExceptionCode(1700);
+        $inventory->consume('Great Health Potion');
+    }
+
+    public function testSetQuantityOnItemButWithValueBelowZero(): void
+    {
+        $item = new Item('Health Potion', 'potion', flags: 1);
+
+        self::expectException(ItemException::class);
+        self::expectExceptionCode(1301);
+        $item->setQuantity(-1);
     }
 
     public function testJsonSerialize(): void
