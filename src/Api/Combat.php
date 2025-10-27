@@ -13,10 +13,10 @@ namespace Velkuns\GameTextEngine\Api;
 use Random\Randomizer;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Processor\TimeProcessor;
+use Velkuns\GameTextEngine\Utils\Log\CombatLog;
 
 /**
- * @phpstan-type TickLogData array{hit: bool, damages: int, chance: float, roll: float, debug: array{"hit chance": string, damages: string}}
- * @phpstan-type TurnLogData array{player: TickLogData, enemy?: TickLogData}
+ * @phpstan-type TurnLogData array{player: CombatLog, enemy?: CombatLog}
  */
 readonly class Combat
 {
@@ -67,10 +67,7 @@ readonly class Combat
         return $turnLogs;
     }
 
-    /**
-     * @return TickLogData
-     */
-    public function tick(EntityInterface $attacker, EntityInterface $defender): array
+    public function tick(EntityInterface $attacker, EntityInterface $defender): CombatLog
     {
         $attackerModifiers = $attacker->getModifiers($defender);
         $defenderModifiers = $defender->getModifiers($attacker);
@@ -88,35 +85,35 @@ readonly class Combat
         //~ hit chance = attack / (defense * 2)
         $hitChance = $attack / ($defense * 2);
 
+        $equippedWeapon = $attacker->getInventory()->getEquippedWeapon();
+
         //~ Damages formula: ((attacker strength * 1.5) - defender endurance) + item damages
-        $itemDamages = $attacker->getInventory()->getEquippedWeapon()?->getDamages() ?? 0;
+        $itemDamages = $equippedWeapon?->getDamages()?->get('physical')?->getValueWithModifiers($attackerModifiers) ?? 0;
         $damages     = (int) round((($strength * 2) / $endurance) + $itemDamages);
 
         //~ Roll between 0 and 1 (equidistributed)
         $hitRoll = $this->randomizer->nextFloat();
 
-        $result = [
-            'hit'     => false,
-            'damages' => $damages,
-            'chance'  => $hitChance,
-            'roll'    => $hitRoll,
-            'debug' => [
-                'hit chance' => "hit chance = $attack / ($defense * 2) = $attack / " . ($defense * 2) . " = $hitChance",
-                'damages'    => "damages = (($strength * 2 ) / $endurance) + $itemDamages = " . (($strength * 2) / $endurance) . " + $itemDamages = $damages",
+        $log = new CombatLog(
+            $attacker,
+            $defender,
+            $equippedWeapon,
+            $damages,
+            $hitChance,
+            $hitRoll,
+            [
+                'hitChance' => "hit chance = $attack / ($defense * 2) = $attack / " . ($defense * 2) . " = $hitChance",
+                'damages'   => "damages = (($strength * 2 ) / $endurance) + $itemDamages = " . (($strength * 2) / $endurance) . " + $itemDamages = $damages",
             ],
-        ];
+        );
 
         //~ Miss
-        if ($hitRoll > $hitChance) {
-            return $result;
+        if ($hitRoll <= $hitChance) {
+            //~ Hit
+            $this->inflictDamagesTo($defender, $damages);
         }
 
-        //~ Hit
-        $this->inflictDamagesTo($defender, $damages);
-
-        $result['hit'] = true;
-
-        return $result;
+        return $log;
     }
 
     private function inflictDamagesTo(EntityInterface $defender, int $damages): void

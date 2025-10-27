@@ -7,7 +7,12 @@
         "modifiers": [],
         "flags": 6,
         "equipped": false,
-        "damages": 3,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 3
+            }
+        },
         "quantity": 1,
         "price": 0
     },
@@ -19,7 +24,12 @@
         "modifiers": [],
         "flags": 6,
         "equipped": false,
-        "damages": 4,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 4
+            }
+        },
         "quantity": 1,
         "price": 10
     },
@@ -31,7 +41,12 @@
         "modifiers": [],
         "flags": 6,
         "equipped": false,
-        "damages": 5,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 5
+            }
+        },
         "quantity": 1,
         "price": 0
     },
@@ -48,7 +63,12 @@
         ],
         "flags": 6,
         "equipped": false,
-        "damages": 2,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 2
+            }
+        },
         "quantity": 1,
         "price": 0
     },
@@ -65,7 +85,12 @@
         ],
         "flags": 6,
         "equipped": false,
-        "damages": 3,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 3
+            }
+        },
         "quantity": 1,
         "price": 0
     },
@@ -82,7 +107,12 @@
         ],
         "flags": 6,
         "equipped": false,
-        "damages": 4,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 4
+            }
+        },
         "quantity": 1,
         "price": 0
     },
@@ -94,7 +124,12 @@
         "modifiers": [],
         "flags": 6,
         "equipped": false,
-        "damages": 3,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 3
+            }
+        },
         "quantity": 1,
         "price": 0
     },
@@ -106,7 +141,12 @@
         "modifiers": [],
         "flags": 6,
         "equipped": false,
-        "damages": 4,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 4
+            }
+        },
         "quantity": 1,
         "price": 0
     },
@@ -118,7 +158,12 @@
         "modifiers": [],
         "flags": 6,
         "equipped": false,
-        "damages": 2,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 2
+            }
+        },
         "quantity": 1,
         "price": 0
     },
@@ -130,7 +175,12 @@
         "modifiers": [],
         "flags": 1,
         "equipped": false,
-        "damages": 4,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 4
+            }
+        },
         "quantity": 1,
         "price": 0
     },
@@ -142,7 +192,12 @@
         "modifiers": [],
         "flags": 0,
         "equipped": false,
-        "damages": 4,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 4
+            }
+        },
         "quantity": 1,
         "price": 0
     },
@@ -159,7 +214,7 @@
         ],
         "flags": 1,
         "equipped": false,
-        "damages": 0,
+        "damages": null,
         "quantity": 1,
         "price": 5
     },
@@ -176,7 +231,7 @@
         ],
         "flags": 1,
         "equipped": false,
-        "damages": 0,
+        "damages": null,
         "quantity": 1,
         "price": 10
     },
@@ -193,7 +248,7 @@
         ],
         "flags": 1,
         "equipped": false,
-        "damages": 0,
+        "damages": null,
         "quantity": 1,
         "price": 10
     },
@@ -210,7 +265,7 @@
         ],
         "flags": 1,
         "equipped": false,
-        "damages": 0,
+        "damages": null,
         "quantity": 1,
         "price": 20
     },
@@ -227,7 +282,7 @@
         ],
         "flags": 1,
         "equipped": false,
-        "damages": 0,
+        "damages": null,
         "quantity": 1,
         "price": 20
     }

@@ -64,7 +64,7 @@ List of supported operators are:
 #### Size of the entity (player or enemy)
 ```json
 {
-    "type": "self.ability.base.strength",
+    "type": "self.abilities.strength",
     "condition": "value>5",
     "is": true
 }
@@ -112,12 +112,12 @@ Ability condition example:
         "numberRequired": 1,
         "conditions": [
             {
-               "type": "self.ability.bases.strength",
+               "type": "self.abilities.strength",
                "condition": "value>6",
                "is": true
             },
             {
-               "type": "self.ability.bases.endurance",
+               "type": "self.abilities.endurance",
                "condition": "value>=5",
                "is": true
             }
@@ -144,7 +144,7 @@ State condition example:
             "is": false
          },
          {
-            "type": "self.ability.base.agility",
+            "type": "self.abilities.agility",
             "condition": "value>=6",
             "is": true
          }

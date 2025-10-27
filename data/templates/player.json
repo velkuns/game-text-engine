@@ -4,7 +4,6 @@
     "info": {
         "level": 1,
         "xp": 0,
-        "damages": 0,
         "age": 20,
         "size": "medium",
         "race": "human",
@@ -12,6 +11,12 @@
         "description": "A brave hero",
         "background": "",
         "notes": ""
+    },
+    "damages": {
+        "physical": {
+            "type": "physical",
+            "value": 0
+        }
     },
     "abilities": {
         "bases": {
@@ -107,7 +112,12 @@
                 "modifiers": [],
                 "flags": 6,
                 "equipped": true,
-                "damages": 3,
+                "damages": {
+                    "physical": {
+                        "type": "physical",
+                        "value": 0
+                    }
+                },
                 "quantity": 1,
                 "price": 0
             }

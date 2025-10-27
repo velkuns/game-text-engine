@@ -11,10 +11,12 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Item;
 
+use Velkuns\GameTextEngine\Element\Damage\Damages;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 
 /**
  * @phpstan-import-type ModifierData from Modifier
+ * @phpstan-import-type DamagesData from Damages
  * @phpstan-type ItemData array{
  *      name: string,
  *      type: string,
@@ -23,7 +25,7 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  *      modifiers: list<ModifierData>,
  *      flags: int,
  *      equipped: bool,
- *      damages: int,
+ *      damages: DamagesData|null,
  *      quantity?: int,
  *      price: int,
  *  }
@@ -43,7 +45,7 @@ interface ItemInterface extends \JsonSerializable
      */
     public function getModifiers(): array;
 
-    public function getDamages(): int;
+    public function getDamages(): Damages;
 
     public function getFlags(): int;
 

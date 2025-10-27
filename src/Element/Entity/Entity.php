@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Entity;
 
+use Velkuns\GameTextEngine\Element\Damage\Damages;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 
 /**
@@ -22,6 +23,7 @@ readonly class Entity implements EntityInterface
         public string $name,
         public string $type,
         public EntityInfo $info,
+        public Damages $damages,
         public EntityAbilities $abilities,
         public EntityStatuses $statuses,
         public EntityInventory $inventory,
@@ -40,6 +42,11 @@ readonly class Entity implements EntityInterface
     public function getInfo(): EntityInfo
     {
         return $this->info;
+    }
+
+    public function getDamages(): Damages
+    {
+        return $this->damages;
     }
 
     public function getAbilities(): EntityAbilities
@@ -88,24 +95,26 @@ readonly class Entity implements EntityInterface
     public function jsonSerialize(): array
     {
         return [
-            'name'      => $this->name,
-            'type'      => $this->type,
-            'info'      => $this->info->jsonSerialize(),
-            'abilities' => $this->abilities->jsonSerialize(),
-            'statuses'  => $this->statuses->jsonSerialize(),
-            'inventory' => $this->inventory->jsonSerialize(),
+            'name'      => $this->getName(),
+            'type'      => $this->getType(),
+            'info'      => $this->getInfo()->jsonSerialize(),
+            'damages'   => $this->getDamages()->jsonSerialize(),
+            'abilities' => $this->getAbilities()->jsonSerialize(),
+            'statuses'  => $this->getStatuses()->jsonSerialize(),
+            'inventory' => $this->getInventory()->jsonSerialize(),
         ];
     }
 
     public function clone(): self
     {
         return new self(
-            name: $this->name,
-            type: $this->type,
-            info: $this->info->clone(),
-            abilities: $this->abilities->clone(),
-            statuses: $this->statuses->clone(),
-            inventory: $this->inventory->clone(),
+            name: $this->getName(),
+            type: $this->getType(),
+            info: $this->getInfo()->clone(),
+            damages: $this->getDamages()->clone(),
+            abilities: $this->getAbilities()->clone(),
+            statuses: $this->getStatuses()->clone(),
+            inventory: $this->getInventory()->clone(),
         );
     }
 }

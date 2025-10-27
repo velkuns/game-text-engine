@@ -111,7 +111,7 @@ Skill status example:
     "description": "Mastering sword techniques increases damage dealt with swords by 2.",
     "modifiers": [
         {
-            "combat" : "combat.damages",
+            "combat" : "self.damages.physical.value",
             "value": 2
         }
     ],

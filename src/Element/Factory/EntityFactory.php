@@ -13,6 +13,7 @@ namespace Velkuns\GameTextEngine\Element\Factory;
 
 use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
 use Velkuns\GameTextEngine\Element\Ability\CompoundAbility;
+use Velkuns\GameTextEngine\Element\Damage\Damages;
 use Velkuns\GameTextEngine\Element\Entity\Entity;
 use Velkuns\GameTextEngine\Element\Entity\EntityAbilities;
 use Velkuns\GameTextEngine\Element\Entity\EntityInfo;
@@ -30,6 +31,7 @@ use Velkuns\GameTextEngine\Element\Status\StatusInterface;
  * @phpstan-import-type AbilitiesData from EntityAbilities
  * @phpstan-import-type StatusesData from EntityStatuses
  * @phpstan-import-type StatusData from StatusInterface
+ * @phpstan-import-type DamagesData from Damages
  * @phpstan-import-type InventoryData from EntityInventory
  * @phpstan-import-type ItemData from Item
  */
@@ -39,31 +41,32 @@ readonly class EntityFactory
         private AbilityFactory $abilityFactory,
         private StatusFactory $statusFactory,
         private ItemFactory $itemFactory,
+        private DamageFactory $damageFactory,
     ) {}
 
     /**
-     * @param EntityData $data
+     * @phpstan-param EntityData $data
      */
     public function from(array $data): EntityInterface
     {
         $name      = $data['name'];
         $type      = $data['type'];
         $info      = $this->fromEntityInfo($data['info']);
+        $damages   = $this->fromEntityDamages($data['damages'] ?? []);
         $abilities = $this->fromEntityAbilities($data['abilities']);
         $statuses  = $this->fromEntityStatuses($data['statuses']);
         $inventory = $this->fromEntityInventory($data['inventory']);
 
-        return new Entity($name, $type, $info, $abilities, $statuses, $inventory);
+        return new Entity($name, $type, $info, $damages, $abilities, $statuses, $inventory);
     }
 
     /**
-     * @param EntityInfoData $data
+     * @phpstan-param EntityInfoData $data
      */
     private function fromEntityInfo(array $data): EntityInfo
     {
         $level       = $data['level'];
         $xp          = $data['xp'];
-        $damages     = $data['damages'];
         $age         = $data['age'];
         $size        = $data['size'];
         $race        = $data['race'];
@@ -72,11 +75,11 @@ readonly class EntityFactory
         $background  = $data['background'];
         $notes       = $data['notes'];
 
-        return new EntityInfo($level, $xp, $damages, $age, $size, $race, $gender, $description, $background, $notes);
+        return new EntityInfo($level, $xp, $age, $size, $race, $gender, $description, $background, $notes);
     }
 
     /**
-     * @param AbilitiesData $data
+     * @phpstan-param AbilitiesData $data
      */
     private function fromEntityAbilities(array $data): EntityAbilities
     {
@@ -87,7 +90,15 @@ readonly class EntityFactory
     }
 
     /**
-     * @param StatusesData $data
+     * @phpstan-param DamagesData $data
+     */
+    private function fromEntityDamages(array $data): Damages
+    {
+        return $this->damageFactory->fromDamages($data);
+    }
+
+    /**
+     * @phpstan-param StatusesData $data
      */
     private function fromEntityStatuses(array $data): EntityStatuses
     {
@@ -101,7 +112,7 @@ readonly class EntityFactory
     }
 
     /**
-     * @param InventoryData $data
+     * @phpstan-param InventoryData $data
      */
     private function fromEntityInventory(array $data): EntityInventory
     {

@@ -15,6 +15,8 @@ use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
 use Velkuns\GameTextEngine\Element\Ability\ConstraintsAbility;
 use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
+use Velkuns\GameTextEngine\Element\Damage\Damage;
+use Velkuns\GameTextEngine\Element\Damage\Damages;
 use Velkuns\GameTextEngine\Element\Exception\ElementJsonParseException;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
@@ -24,33 +26,11 @@ use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
 use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
+use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
 class ElementFactoryTest extends TestCase
 {
-    private ElementFactory $elementFactory;
-
-    public function setUp(): void
-    {
-        $abilityFactory    = new AbilityFactory();
-        $modifierFactory   = new ModifierFactory();
-        $conditionsFactory = new ConditionsFactory(
-            new ConditionParser(),
-            new TypeElementResolver(),
-            new ConditionValidator(),
-        );
-        $itemFactory       = new ItemFactory($modifierFactory);
-        $statusFactory     = new StatusFactory($modifierFactory, $conditionsFactory);
-        $entityFactory     = new EntityFactory($abilityFactory, $statusFactory, $itemFactory);
-
-        $this->elementFactory = new ElementFactory(
-            $entityFactory,
-            $abilityFactory,
-            $statusFactory,
-            $itemFactory,
-            $conditionsFactory,
-            $modifierFactory,
-        );
-    }
+    use FactoryTrait;
 
     public function testStatusFromJson(): void
     {
@@ -60,11 +40,11 @@ class ElementFactoryTest extends TestCase
             "description": "Skill in using swords.",
             "modifiers": [
                 {
-                    "type": "ability.agility",
+                    "type": "self.abilities.agility.value",
                     "value": 5
                 },
                 {
-                    "type": "ability.attack",
+                    "type": "self.abilities.attack.value",
                     "value": 10
                 }
             ],
@@ -82,7 +62,7 @@ class ElementFactoryTest extends TestCase
             "remainingTurns": 0
         }';
 
-        $status = $this->elementFactory->statusFromJson($json);
+        $status = self::getElementFactory()->statusFromJson($json);
 
         self::assertSame('skill', $status->getType());
         self::assertSame('swordsmanship', $status->getName());
@@ -104,11 +84,11 @@ class ElementFactoryTest extends TestCase
             "description": "Skill in using swords.",
             "modifiers": [
                 {
-                    "type": "ability.agility",
+                    "type": "self.abilities.agility.value",
                     "value": 5
                 },
                 {
-                    "type": "ability.attack",
+                    "type": "self.abilities.attack.value",
                     "value": 10
                 }
             ],
@@ -128,32 +108,32 @@ class ElementFactoryTest extends TestCase
 
         self::expectExceptionCode(2013);
         self::expectException(ElementJsonParseException::class);
-        $this->elementFactory->statusFromJson($json);
+        self::getElementFactory()->statusFromJson($json);
     }
 
     public function testModifierFromJson(): void
     {
         $json = '{
-            "type": "ability.strength",
+            "type": "self.abilities.strength.value",
             "value": 5
         }';
 
-        $modifier = $this->elementFactory->modifierFromJson($json);
+        $modifier = self::getElementFactory()->modifierFromJson($json);
 
-        self::assertSame('ability.strength', $modifier->type);
+        self::assertSame('self.abilities.strength.value', $modifier->type);
         self::assertSame(5, $modifier->value);
     }
 
     public function testModifierFromJsonWithInvalidJson(): void
     {
         $json = '{
-            "type": "ability.strength",
+            "type": "self.abilities.strength.value",
             "value": 5
         ';
 
         self::expectExceptionCode(2014);
         self::expectException(ElementJsonParseException::class);
-        $this->elementFactory->modifierFromJson($json);
+        self::getElementFactory()->modifierFromJson($json);
     }
 
     public function testConditionsFromJson(): void
@@ -169,7 +149,7 @@ class ElementFactoryTest extends TestCase
             ]
         }';
 
-        $conditions = $this->elementFactory->conditionsFromJson($json);
+        $conditions = self::getElementFactory()->conditionsFromJson($json);
         self::assertSame(1, $conditions->getNumberRequired());
         self::assertCount(1, $conditions->getConditions());
 
@@ -194,7 +174,7 @@ class ElementFactoryTest extends TestCase
 
         self::expectExceptionCode(2015);
         self::expectException(ElementJsonParseException::class);
-        $this->elementFactory->conditionsFromJson($json);
+        self::getElementFactory()->conditionsFromJson($json);
     }
 
     public function testConditionsFromJsonWithNullJson(): void
@@ -203,7 +183,7 @@ class ElementFactoryTest extends TestCase
 
         self::expectExceptionCode(2016);
         self::expectException(ElementJsonParseException::class);
-        $this->elementFactory->conditionsFromJson($json);
+        self::getElementFactory()->conditionsFromJson($json);
     }
 
     public function testAbilityBaseFromJson(): void
@@ -220,7 +200,7 @@ class ElementFactoryTest extends TestCase
             "initial": 10,
             "rule": null
         }';
-        $ability = $this->elementFactory->abilityBaseFromJson($json);
+        $ability = self::getElementFactory()->abilityBaseFromJson($json);
 
         self::assertSame('strength', $ability->getName());
         self::assertSame(10, $ability->getValue());
@@ -249,7 +229,7 @@ class ElementFactoryTest extends TestCase
 
         self::expectExceptionCode(2011);
         self::expectException(ElementJsonParseException::class);
-        $this->elementFactory->abilityBaseFromJson($json);
+        self::getElementFactory()->abilityBaseFromJson($json);
     }
 
     public function testAbilityCompoundFromJson(): void
@@ -264,7 +244,7 @@ class ElementFactoryTest extends TestCase
             'agility'  => new BaseAbility('agility', 15, 30, new ConstraintsAbility(0, 100), 15),
         ];
 
-        $ability = $this->elementFactory->abilityCompoundFromJson($json, $bases);
+        $ability = self::getElementFactory()->abilityCompoundFromJson($json, $bases);
 
         self::assertSame('attack', $ability->getName());
         self::assertSame(25, $ability->getValue());
@@ -287,7 +267,7 @@ class ElementFactoryTest extends TestCase
 
         self::expectExceptionCode(2012);
         self::expectException(ElementJsonParseException::class);
-        $this->elementFactory->abilityCompoundFromJson($json, $bases);
+        self::getElementFactory()->abilityCompoundFromJson($json, $bases);
     }
 
     public function testItemFromJson(): void
@@ -299,24 +279,29 @@ class ElementFactoryTest extends TestCase
             "description": "A sharp blade.",
             "modifiers": [
                 {
-                    "type": "ability.attack",
+                    "type": "self.abilities.attack.value",
                     "value": 10
                 }
             ],
             "flags": 1,
             "equipped": false,
-            "damages": 2,
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 2
+                }
+            },
             "price": 100
         }';
 
-        $item = $this->elementFactory->itemFromJson($json);
+        $item = self::getElementFactory()->itemFromJson($json);
 
         self::assertSame('The Sword', $item->getName());
         self::assertSame('sword', $item->getSubType());
         self::assertSame("A sharp blade.", $item->getDescription());
         self::assertSame(1, $item->getFlags());
         self::assertFalse($item->equipped());
-        self::assertSame(2, $item->getDamages());
+        self::assertEquals(new Damages(['physical' => new Damage('physical', 2)]), $item->getDamages());
         self::assertSame(100, $item->getPrice());
         self::assertSame('item', $item->getType());
         self::assertCount(1, $item->getModifiers());
@@ -331,19 +316,24 @@ class ElementFactoryTest extends TestCase
             "description": "A sharp blade.",
             "modifiers": [
                 {
-                    "type": "ability.attack",
+                    "type": "self.abilities.attack.value",
                     "value": 10
                 }
             ],
             "flags": 1,
             "equipped": false,
-            "damages": 2,
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 2
+                }
+            },
             "price": 100
         ';
 
         self::expectExceptionCode(2016);
         self::expectException(ElementJsonParseException::class);
-        $this->elementFactory->itemFromJson($json);
+        self::getElementFactory()->itemFromJson($json);
     }
 
     public function testEntityFromJson(): void
@@ -354,7 +344,6 @@ class ElementFactoryTest extends TestCase
             "info": {
                 "level": 5,
                 "xp": 1500,
-                "damages": 0,
                 "age": 30,
                 "size": "1m75",
                 "race": "elf",
@@ -362,6 +351,12 @@ class ElementFactoryTest extends TestCase
                 "description": "A brave hero",
                 "background": "Born in a small village",
                 "notes": "No special notes"
+            },
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 0
+                }
             },
             "abilities": {
                 "bases": {
@@ -435,7 +430,7 @@ class ElementFactoryTest extends TestCase
                         "description": "Super skill",
                         "modifiers": [
                             {
-                                "type": "ability.agility",
+                                "type": "self.abilities.agility.value",
                                 "value": 5
                             },
                             {
@@ -473,14 +468,19 @@ class ElementFactoryTest extends TestCase
                         "modifiers": [],
                         "flags": 7,
                         "equipped": true,
-                        "damages": 2,
+                        "damages": {
+                            "physical": {
+                                "type": "physical",
+                                "value": 2
+                            }
+                        },
                         "price": 0
                     }
                 ]
             }
         }';
 
-        $hero = $this->elementFactory->entityFromJson($json);
+        $hero = self::getElementFactory()->entityFromJson($json);
 
         self::assertSame('Brave Test Hero #1', $hero->getName());
         self::assertSame('player', $hero->getType());
@@ -523,7 +523,7 @@ class ElementFactoryTest extends TestCase
         self::assertSame('sword', $item->getSubType());
         self::assertSame('A sharp blade', $item->getDescription());
         self::assertTrue($item->equipped());
-        self::assertSame(2, $item->getDamages());
+        self::assertEquals(new Damages(['physical' => new Damage('physical', 2)]), $item->getDamages());
         self::assertSame(7, $item->getFlags());
         self::assertSame(0, $item->getPrice());
         self::assertEmpty($item->getModifiers());
@@ -544,6 +544,6 @@ class ElementFactoryTest extends TestCase
 
         self::expectExceptionCode(2010);
         self::expectException(ElementJsonParseException::class);
-        $this->elementFactory->entityFromJson($json);
+        self::getElementFactory()->entityFromJson($json);
     }
 }

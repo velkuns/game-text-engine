@@ -97,7 +97,6 @@ class Player
         $info  = [
             'level'       => 1,
             'xp'          => 0,
-            'damages'     => 0,
             'age'         => $data['age'] ?? 20,
             'race'        => $data['race'] ?? 'human',
             'size'        => 'medium',
@@ -152,6 +151,7 @@ class Player
             'name'      => $data['name'],
             'type'      => 'player',
             'info'      => $info,
+            'damages'   => ['physical' => ['type' => 'physical', 'value' => 0]],
             'abilities' => $abilities,
             'statuses'  => $statuses,
             'inventory' => $inventory,

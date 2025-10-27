@@ -8,7 +8,7 @@
                 "description": "Mastering sword techniques increases damage dealt with swords by 2.",
                 "modifiers": [
                     {
-                        "type" : "combat.damages",
+                        "type" : "self.damages.physical.value",
                         "value": 2
                     }
                 ],
@@ -29,7 +29,7 @@
                 "description": "Mastering dagger techniques increases damage dealt with daggers by 2.",
                 "modifiers": [
                     {
-                        "type": "combat.damages",
+                        "type": "self.damages.physical.value",
                         "value": 2
                     }
                 ],
@@ -50,7 +50,7 @@
                 "description": "Mastering archery techniques increases damage dealt with bows by 2.",
                 "modifiers": [
                     {
-                        "type": "combat.damages",
+                        "type": "self.damages.physical.value",
                         "value": 2
                     }
                 ],
@@ -88,7 +88,7 @@
                 "description": "Specialized skill in hunting goblins increases damage dealt to goblins by 2.",
                 "modifiers": [
                     {
-                        "type": "combat.damages",
+                        "type": "self.damages.physical.value",
                         "value": 2
                     }
                 ],
@@ -109,7 +109,7 @@
                 "description": "Specialized skill in hunting wolfs increases damage dealt to wolfs by 2.",
                 "modifiers": [
                     {
-                        "type": "combat.damages",
+                        "type": "self.damages.physical.value",
                         "value": 2
                     }
                 ],
@@ -130,7 +130,7 @@
                 "description": "Specialized skill in hunting small creatures increases damage dealt to small creatures by 2.",
                 "modifiers": [
                     {
-                        "type": "combat.damages",
+                        "type": "self.damages.physical.value",
                         "value": 2
                     }
                 ],

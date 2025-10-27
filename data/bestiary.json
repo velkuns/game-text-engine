@@ -5,7 +5,12 @@
         "race": "rat",
         "gender": "unknown",
         "size": "tiny",
-        "damages": 0,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 0
+            }
+        },
         "abilities": {
             "strength": 4,
             "endurance": 4,
@@ -19,7 +24,12 @@
         "race": "wolf",
         "gender": "unknown",
         "size": "medium",
-        "damages": 0,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 0
+            }
+        },
         "abilities": {
             "strength": 12,
             "endurance": 14,
@@ -33,7 +43,12 @@
         "race": "bear",
         "gender": "unknown",
         "size": "large",
-        "damages": 5,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 5
+            }
+        },
         "abilities": {
             "strength": 15,
             "endurance": 10,
@@ -47,7 +62,12 @@
         "race": "goblin",
         "gender": "unknown",
         "size": "small",
-        "damages": 0,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 0
+            }
+        },
         "abilities": {
             "strength": 8,
             "endurance": 8,
@@ -67,7 +87,12 @@
         "race": "goblin",
         "gender": "unknown",
         "size": "small",
-        "damages": 1,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 1
+            }
+        },
         "abilities": {
             "strength": 12,
             "endurance": 10,
@@ -87,7 +112,12 @@
         "race": "goblin",
         "gender": "unknown",
         "size": "medium",
-        "damages": 1,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 1
+            }
+        },
         "abilities": {
             "strength": 12,
             "endurance": 10,
@@ -107,7 +137,12 @@
         "race": "demon",
         "gender": "unknown",
         "size": "small",
-        "damages": 2,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 2
+            }
+        },
         "abilities": {
             "strength": 8,
             "endurance": 8,
@@ -121,7 +156,12 @@
         "race": "demon",
         "gender": "unknown",
         "size": "medium",
-        "damages": 3,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 3
+            }
+        },
         "abilities": {
             "strength": 12,
             "endurance": 10,
@@ -135,7 +175,12 @@
         "race": "demon",
         "gender": "unknown",
         "size": "medium",
-        "damages": 4,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 4
+            }
+        },
         "abilities": {
             "strength": 14,
             "endurance": 12,
@@ -149,7 +194,12 @@
         "race": "demon",
         "gender": "unknown",
         "size": "medium",
-        "damages": 0,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 0
+            }
+        },
         "abilities": {
             "strength": 10,
             "endurance": 10,
@@ -169,7 +219,12 @@
         "race": "demon",
         "gender": "unknown",
         "size": "medium",
-        "damages": 4,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 4
+            }
+        },
         "abilities": {
             "strength": 12,
             "endurance": 10,
@@ -183,7 +238,12 @@
         "race": "human",
         "gender": "unknown",
         "size": "medium",
-        "damages": 0,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 0
+            }
+        },
         "abilities": {
             "strength": 10,
             "endurance": 12,
@@ -203,7 +263,12 @@
         "race": "human",
         "gender": "unknown",
         "size": "medium",
-        "damages": 0,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 0
+            }
+        },
         "abilities": {
             "strength": 12,
             "endurance": 12,
@@ -223,7 +288,12 @@
         "race": "human",
         "gender": "unknown",
         "size": "medium",
-        "damages": 0,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 0
+            }
+        },
         "abilities": {
             "strength": 13,
             "endurance": 12,
@@ -243,7 +313,12 @@
         "race": "human",
         "gender": "unknown",
         "size": "medium",
-        "damages": 0,
+        "damages": {
+            "physical": {
+                "type": "physical",
+                "value": 0
+            }
+        },
         "abilities": {
             "strength": 10,
             "endurance": 10,

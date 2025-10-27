@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Item;
 
+use Velkuns\GameTextEngine\Element\Damage\Damages;
 use Velkuns\GameTextEngine\Element\Exception\ItemException;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 
@@ -29,7 +30,7 @@ class Item implements ItemInterface
         private readonly array $modifiers = [],
         private readonly int $flags = 0,
         private readonly bool $equipped = false,
-        private readonly int $damages = 0,
+        private readonly Damages $damages = new Damages(),
         private int $quantity = 1,
         private readonly int $price = 0,
         private readonly string $type = 'item',
@@ -63,7 +64,7 @@ class Item implements ItemInterface
         return $this->subType;
     }
 
-    public function getDamages(): int
+    public function getDamages(): Damages
     {
         return $this->damages;
     }
@@ -137,7 +138,7 @@ class Item implements ItemInterface
             'modifiers'   => \array_map(fn(Modifier $modifier) => $modifier->jsonSerialize(), $this->modifiers),
             'flags'       => $this->flags,
             'equipped'    => $this->equipped,
-            'damages'     => $this->damages,
+            'damages'     => $this->damages->jsonSerialize(),
             'quantity'    => $this->quantity,
             'price'       => $this->price,
         ];
@@ -155,7 +156,7 @@ class Item implements ItemInterface
             ),
             $this->flags,
             $this->equipped,
-            $this->damages,
+            $this->damages->clone(),
             $this->quantity,
             $this->price,
             $this->type,

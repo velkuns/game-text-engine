@@ -1,7 +1,7 @@
 {
     "hit_chance": {
         "name": "combat.hit_chance",
-        "rule": "(attacker.ability.attack / (defender.ability.defense * 2) * 100)",
+        "rule": "(attacker.abilities.attack / (defender.abilities.defense * 2) * 100)",
         "description": "Calculates the chance to hit based on attacker's attack ability and defender's defense ability."
     },
     "hit_roll": {
@@ -11,7 +11,7 @@
     },
     "hit_damages": {
         "name": "combat.hit_damages",
-        "rule": "(attacker.ability.strength * 2) - defender.ability.endurance + attacker.inventory.item",
+        "rule": "(attacker.abilities.strength * 2) - defender.abilities.endurance + attacker.inventory.item",
         "description": "Calculates the damage dealt on a successful hit based on attacker's strength, defender's endurance, and any item bonuses."
     }
 }

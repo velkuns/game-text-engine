@@ -40,6 +40,7 @@ class EntityTest extends TestCase
         $player->getStatuses()->set('unknown', new Status('unknown', 'test', '', []));
 
         $expected  = [
+            new Modifier('self.damages.physical.value', 1),
             new Modifier('self.abilities.vitality.value', 2),
         ];
         $modifiers = $player->getModifiers($gobelin);

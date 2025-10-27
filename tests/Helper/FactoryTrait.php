@@ -16,6 +16,8 @@ use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
+use Velkuns\GameTextEngine\Element\Factory\DamageFactory;
+use Velkuns\GameTextEngine\Element\Factory\ElementFactory;
 use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
@@ -37,10 +39,23 @@ trait FactoryTrait
                 self::getAbilityFactory(),
                 self::getStatusFactory(),
                 self::getItemFactory(),
+                self::getDamageFactory(),
             );
         }
 
         return self::$entityFactory;
+    }
+
+    private static function getElementFactory(): ElementFactory
+    {
+        return new ElementFactory(
+            self::getEntityFactory(),
+            self::getAbilityFactory(),
+            self::getStatusFactory(),
+            self::getItemFactory(),
+            self::getConditionFactory(),
+            self::getModifierFactory(),
+        );
     }
 
     private static function getAbilityFactory(): AbilityFactory
@@ -59,7 +74,7 @@ trait FactoryTrait
 
     private static function getItemFactory(): ItemFactory
     {
-        return new ItemFactory(self::getModifierFactory());
+        return new ItemFactory(self::getModifierFactory(), self::getDamageFactory());
     }
 
     private static function getModifierFactory(): ModifierFactory
@@ -70,6 +85,11 @@ trait FactoryTrait
     private static function getStatusFactory(): StatusFactory
     {
         return new StatusFactory(self::getModifierFactory(), self::getConditionFactory());
+    }
+
+    private static function getDamageFactory(): DamageFactory
+    {
+        return new DamageFactory();
     }
 
     private static function getGraphFactory(): GraphFactory

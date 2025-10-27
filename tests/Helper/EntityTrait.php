@@ -24,12 +24,16 @@ trait EntityTrait
     {
         $data = $new ? self::getNewPlayerData() : self::getPlayerData();
 
-        return self::getEntityFactory()->from($data);
+        return self::getEntityFactory()
+            ->from($data)
+        ;
     }
 
     private static function getGoblin(): EntityInterface
     {
-        return self::getEntityFactory()->from(self::getGoblinData());
+        return self::getEntityFactory()
+            ->from(self::getGoblinData())
+        ;
     }
 
     /**
@@ -38,12 +42,11 @@ trait EntityTrait
     private static function getPlayerData(): array
     {
         return [
-            'name'  => 'Brave Test Hero #1',
-            'type'  => 'player',
-            'info'  => [
+            'name'      => 'Brave Test Hero #1',
+            'type'      => 'player',
+            'info'      => [
                 'level'       => 5,
                 'xp'          => 500,
-                'damages'     => 0,
                 'age'         => 30,
                 'size'        => '1m75',
                 'race'        => 'elf',
@@ -52,71 +55,77 @@ trait EntityTrait
                 'background'  => 'Born in a small village',
                 'notes'       => 'No special notes',
             ],
+            'damages'   => [
+                'physical' => [
+                    'type'  => 'physical',
+                    'value' => 0,
+                ],
+            ],
             'abilities' => [
-                'bases' => [
-                    'strength' => [
-                        'type'    => 'base',
-                        'name'    => 'strength',
-                        'initial' => 10,
-                        'max'     => 10,
-                        'value'   => 10,
+                'bases'     => [
+                    'strength'  => [
+                        'type'        => 'base',
+                        'name'        => 'strength',
+                        'initial'     => 10,
+                        'max'         => 10,
+                        'value'       => 10,
                         'constraints' => [
                             'min' => 0,
                             'max' => 20,
                         ],
-                        'rule'    => null,
+                        'rule'        => null,
                     ],
                     'endurance' => [
-                        'type'    => 'base',
-                        'name'    => 'endurance',
-                        'initial' => 14,
-                        'max'     => 14,
-                        'value'   => 14,
+                        'type'        => 'base',
+                        'name'        => 'endurance',
+                        'initial'     => 14,
+                        'max'         => 14,
+                        'value'       => 14,
                         'constraints' => [
                             'min' => 0,
                             'max' => 20,
                         ],
-                        'rule'    => null,
+                        'rule'        => null,
                     ],
-                    'agility' => [
-                        'type'    => 'base',
-                        'name'    => 'agility',
-                        'initial' => 15,
-                        'max'     => 15,
-                        'value'   => 15,
+                    'agility'   => [
+                        'type'        => 'base',
+                        'name'        => 'agility',
+                        'initial'     => 15,
+                        'max'         => 15,
+                        'value'       => 15,
                         'constraints' => [
                             'min' => 0,
                             'max' => 20,
                         ],
-                        'rule'    => null,
+                        'rule'        => null,
                     ],
                     'intuition' => [
-                        'type'    => 'base',
-                        'name'    => 'intuition',
-                        'initial' => 12,
-                        'max'     => 12,
-                        'value'   => 12,
+                        'type'        => 'base',
+                        'name'        => 'intuition',
+                        'initial'     => 12,
+                        'max'         => 12,
+                        'value'       => 12,
                         'constraints' => [
                             'min' => 0,
                             'max' => 20,
                         ],
-                        'rule'    => null,
+                        'rule'        => null,
                     ],
-                    'vitality' => [
-                        'type'    => 'base',
-                        'name'    => 'vitality',
-                        'initial' => 24,
-                        'max'     => 24,
-                        'value'   => 24,
+                    'vitality'  => [
+                        'type'        => 'base',
+                        'name'        => 'vitality',
+                        'initial'     => 24,
+                        'max'         => 24,
+                        'value'       => 24,
                         'constraints' => [
                             'min' => 0,
                             'max' => 40,
                         ],
-                        'rule'    => 'strength + endurance',
+                        'rule'        => 'strength + endurance',
                     ],
                 ],
                 'compounds' => [
-                    'attack' => [
+                    'attack'  => [
                         'type' => 'compound',
                         'name' => 'attack',
                         'rule' => 'strength + agility',
@@ -128,13 +137,13 @@ trait EntityTrait
                     ],
                 ],
             ],
-            'statuses' => [
-                'skills' => [
+            'statuses'  => [
+                'skills'    => [
                     'Sword (Mastery)' => [
-                        'type'        => 'skill',
-                        'name'        => 'Sword (Mastery)',
-                        'description' => 'Super skill',
-                        'modifiers'   => [
+                        'type'           => 'skill',
+                        'name'           => 'Sword (Mastery)',
+                        'description'    => 'Super skill',
+                        'modifiers'      => [
                             [
                                 'type'  => 'self.abilities.agility.value',
                                 'value' => 1,
@@ -144,9 +153,9 @@ trait EntityTrait
                                 'value' => 2,
                             ],
                         ],
-                        'conditions' => [
+                        'conditions'     => [
                             'numberRequired' => 1,
-                            'conditions' => [
+                            'conditions'     => [
                                 [
                                     'type'      => 'self.inventory.items',
                                     'condition' => 'subType=sword;equipped=true;flag&4',
@@ -157,11 +166,11 @@ trait EntityTrait
                         'durationTurns'  => 0,
                         'remainingTurns' => 0,
                     ],
-                    'Dragon Hunter' => [
-                        'type'        => 'skill',
-                        'name'        => 'Dragon Hunter',
-                        'description' => 'To help to chase dragon.',
-                        'modifiers'   => [
+                    'Dragon Hunter'   => [
+                        'type'           => 'skill',
+                        'name'           => 'Dragon Hunter',
+                        'description'    => 'To help to chase dragon.',
+                        'modifiers'      => [
                             [
                                 'type'  => 'self.abilities.agility.value',
                                 'value' => 1,
@@ -171,9 +180,9 @@ trait EntityTrait
                                 'value' => 2,
                             ],
                         ],
-                        'conditions' => [
+                        'conditions'     => [
                             'numberRequired' => 1,
-                            'conditions' => [
+                            'conditions'     => [
                                 [
                                     'type'      => 'enemy.info',
                                     'condition' => 'race=dragon',
@@ -184,19 +193,42 @@ trait EntityTrait
                         'durationTurns'  => 0,
                         'remainingTurns' => 0,
                     ],
+                    'Goblin Hunter'   => [
+                        'type'           => 'skill',
+                        'name'           => 'Goblin Hunter',
+                        'description'    => 'To help to chase goblin.',
+                        'modifiers'      => [
+                            [
+                                'type'  => 'self.damages.physical.value',
+                                'value' => 1,
+                            ],
+                        ],
+                        'conditions'     => [
+                            'numberRequired' => 1,
+                            'conditions'     => [
+                                [
+                                    'type'      => 'enemy.info',
+                                    'condition' => 'race=goblin',
+                                    'is'        => true,
+                                ],
+                            ],
+                        ],
+                        'durationTurns'  => 0,
+                        'remainingTurns' => 0,
+                    ],
                 ],
                 'states'    => [
                     'Rested' => [
-                        'type'        => 'state',
-                        'name'        => 'Rested',
-                        'description' => 'You are well rested',
-                        'modifiers'   => [
+                        'type'           => 'state',
+                        'name'           => 'Rested',
+                        'description'    => 'You are well rested',
+                        'modifiers'      => [
                             [
                                 'type'  => 'self.abilities.vitality.value',
                                 'value' => 2,
                             ],
                         ],
-                        'conditions'  => null,
+                        'conditions'     => null,
                         'durationTurns'  => 3,
                         'remainingTurns' => 1,
                     ],
@@ -205,11 +237,11 @@ trait EntityTrait
                 'curses'    => [],
                 'titles'    => [
                     'Dragon Slayer' => [
-                        'type'        => 'title',
-                        'name'        => 'Dragon Slayer',
-                        'description' => 'You have slain a dragon',
-                        'modifiers'   => [],
-                        'conditions'  => null,
+                        'type'           => 'title',
+                        'name'           => 'Dragon Slayer',
+                        'description'    => 'You have slain a dragon',
+                        'modifiers'      => [],
+                        'conditions'     => null,
                         'durationTurns'  => 0,
                         'remainingTurns' => 0,
                     ],
@@ -226,7 +258,7 @@ trait EntityTrait
                         'modifiers'   => [],
                         'flags'       => 7,
                         'equipped'    => false,
-                        'damages'     => 2,
+                        'damages'     => ['physical' => ['type' => 'physical', 'value' => 2]],
                         'quantity'    => 1,
                         'price'       => 0,
                     ],
@@ -238,7 +270,7 @@ trait EntityTrait
                         'modifiers'   => [],
                         'flags'       => 6,
                         'equipped'    => true,
-                        'damages'     => 2,
+                        'damages'     => ['physical' => ['type' => 'physical', 'value' => 2]],
                         'quantity'    => 1,
                         'price'       => 0,
                     ],
@@ -253,12 +285,11 @@ trait EntityTrait
     private static function getNewPlayerData(): array
     {
         return [
-            'name'  => 'New Hero',
-            'type'  => 'player',
-            'info'  => [
+            'name'      => 'New Hero',
+            'type'      => 'player',
+            'info'      => [
                 'level'       => 1,
                 'xp'          => 0,
-                'damages'     => 0,
                 'age'         => 25,
                 'size'        => 'medium',
                 'race'        => 'elf',
@@ -267,71 +298,72 @@ trait EntityTrait
                 'background'  => 'Born in a small village',
                 'notes'       => '',
             ],
+            'damages'   => ['physical' => ['type' => 'physical', 'value' => 0]],
             'abilities' => [
-                'bases' => [
-                    'strength' => [
-                        'type'    => 'base',
-                        'name'    => 'strength',
-                        'initial' => 11,
-                        'max'     => 11,
-                        'value'   => 11,
+                'bases'     => [
+                    'strength'  => [
+                        'type'        => 'base',
+                        'name'        => 'strength',
+                        'initial'     => 11,
+                        'max'         => 11,
+                        'value'       => 11,
                         'constraints' => [
                             'min' => 0,
                             'max' => 20,
                         ],
-                        'rule'    => null,
+                        'rule'        => null,
                     ],
                     'endurance' => [
-                        'type'    => 'base',
-                        'name'    => 'endurance',
-                        'initial' => 12,
-                        'max'     => 12,
-                        'value'   => 12,
+                        'type'        => 'base',
+                        'name'        => 'endurance',
+                        'initial'     => 12,
+                        'max'         => 12,
+                        'value'       => 12,
                         'constraints' => [
                             'min' => 0,
                             'max' => 20,
                         ],
-                        'rule'    => null,
+                        'rule'        => null,
                     ],
-                    'agility' => [
-                        'type'    => 'base',
-                        'name'    => 'agility',
-                        'initial' => 13,
-                        'max'     => 13,
-                        'value'   => 13,
+                    'agility'   => [
+                        'type'        => 'base',
+                        'name'        => 'agility',
+                        'initial'     => 13,
+                        'max'         => 13,
+                        'value'       => 13,
                         'constraints' => [
                             'min' => 0,
                             'max' => 20,
                         ],
-                        'rule'    => null,
+                        'rule'        => null,
                     ],
                     'intuition' => [
-                        'type'    => 'base',
-                        'name'    => 'intuition',
-                        'initial' => 14,
-                        'max'     => 14,
-                        'value'   => 14,
+                        'type'        => 'base',
+                        'name'        => 'intuition',
+                        'initial'     => 14,
+                        'max'         => 14,
+                        'value'       => 14,
                         'constraints' => [
                             'min' => 0,
                             'max' => 20,
                         ],
-                        'rule'    => null,
+                        'rule'        => null,
                     ],
-                    'vitality' => [
-                        'type'    => 'base',
-                        'name'    => 'vitality',
-                        'initial' => 23,
-                        'max'     => 23,
-                        'value'   => 23,
+                    'vitality'  => [
+                        'type'        => 'base',
+                        'name'        => 'vitality',
+                        'initial'     => 23,
+                        'max'         => 23,
+                        'value'       => 23,
                         'constraints' => [
                             'min' => 0,
                             'max' => 40,
                         ],
-                        'rule'    => 'strength + endurance',
+                        'rule'        => 'strength + endurance',
                     ],
                 ],
                 'compounds' => [
-                    'attack' => [
+                    'attack'  => [
                         'type' => 'compound',
                         'name' => 'attack',
                         'rule' => 'strength + agility',
@@ -343,7 +375,7 @@ trait EntityTrait
                     ],
                 ],
             ],
-            'statuses' => [
+            'statuses'  => [
                 'skills'    => [],
                 'states'    => [],
                 'blessings' => [],
@@ -361,7 +393,7 @@ trait EntityTrait
                         'modifiers'   => [],
                         'flags'       => 6,
                         'equipped'    => false,
-                        'damages'     => 2,
+                        'damages'     => ['physical' => ['type' => 'physical', 'value' => 2]],
                         'quantity'    => 1,
                         'price'       => 0,
                     ],
@@ -376,85 +408,85 @@ trait EntityTrait
     private static function getGoblinData(): array
     {
         return [
-            'name'  => 'Gobelin #1',
-            'type'  => 'creature',
-            'info'  => [
+            'name'      => 'Goblin #1',
+            'type'      => 'creature',
+            'info'      => [
                 'level'       => 2,
                 'xp'          => 200,
-                'damages'     => 0,
                 'age'         => 20,
                 'size'        => 'small',
-                'race'        => 'gobelin',
+                'race'        => 'goblin',
                 'gender'      => 'unknown',
-                'description' => 'An evil gobelin',
+                'description' => 'An evil goblin',
                 'background'  => 'Born in a small village',
                 'notes'       => 'No special notes',
             ],
+            'damages'   => ['physical' => ['type' => 'physical', 'value' => 2]],
             'abilities' => [
-                'bases' => [
-                    'strength' => [
-                        'type'    => 'base',
-                        'name'    => 'strength',
-                        'initial' => 8,
-                        'max'     => 8,
-                        'value'   => 8,
+                'bases'     => [
+                    'strength'  => [
+                        'type'        => 'base',
+                        'name'        => 'strength',
+                        'initial'     => 8,
+                        'max'         => 8,
+                        'value'       => 8,
                         'constraints' => [
                             'min' => 0,
                             'max' => 20,
                         ],
-                        'rule'    => null,
+                        'rule'        => null,
                     ],
                     'endurance' => [
-                        'type'    => 'base',
-                        'name'    => 'endurance',
-                        'initial' => 8,
-                        'max'     => 8,
-                        'value'   => 8,
+                        'type'        => 'base',
+                        'name'        => 'endurance',
+                        'initial'     => 8,
+                        'max'         => 8,
+                        'value'       => 8,
                         'constraints' => [
                             'min' => 0,
                             'max' => 20,
                         ],
-                        'rule'    => null,
+                        'rule'        => null,
                     ],
-                    'agility' => [
-                        'type'    => 'base',
-                        'name'    => 'agility',
-                        'initial' => 14,
-                        'max'     => 14,
-                        'value'   => 14,
+                    'agility'   => [
+                        'type'        => 'base',
+                        'name'        => 'agility',
+                        'initial'     => 14,
+                        'max'         => 14,
+                        'value'       => 14,
                         'constraints' => [
                             'min' => 0,
                             'max' => 20,
                         ],
-                        'rule'    => null,
+                        'rule'        => null,
                     ],
                     'intuition' => [
-                        'type'    => 'base',
-                        'name'    => 'intuition',
-                        'initial' => 10,
-                        'max'     => 10,
-                        'value'   => 10,
+                        'type'        => 'base',
+                        'name'        => 'intuition',
+                        'initial'     => 10,
+                        'max'         => 10,
+                        'value'       => 10,
                         'constraints' => [
                             'min' => 0,
                             'max' => 20,
                         ],
-                        'rule'    => null,
+                        'rule'        => null,
                     ],
-                    'vitality' => [
-                        'type'    => 'base',
-                        'name'    => 'vitality',
-                        'initial' => 0,
-                        'max'     => 0,
-                        'value'   => 0,
+                    'vitality'  => [
+                        'type'        => 'base',
+                        'name'        => 'vitality',
+                        'initial'     => 0,
+                        'max'         => 0,
+                        'value'       => 0,
                         'constraints' => [
                             'min' => 0,
                             'max' => 40,
                         ],
-                        'rule'    => 'strength + endurance',
+                        'rule'        => 'strength + endurance',
                     ],
                 ],
                 'compounds' => [
-                    'attack' => [
+                    'attack'  => [
                         'type' => 'compound',
                         'name' => 'attack',
                         'rule' => 'strength + agility',
@@ -466,7 +498,7 @@ trait EntityTrait
                     ],
                 ],
             ],
-            'statuses' => [
+            'statuses'  => [
                 'skills'    => [],
                 'states'    => [],
                 'blessings' => [],
@@ -484,7 +516,7 @@ trait EntityTrait
                         'modifiers'   => [],
                         'flags'       => 7,
                         'equipped'    => true,
-                        'damages'     => 1,
+                        'damages'     => ['physical' => ['type' => 'physical', 'value' => 1]],
                         'quantity'    => 1,
                         'price'       => 0,
                     ],

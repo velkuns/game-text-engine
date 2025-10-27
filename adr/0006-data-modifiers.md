@@ -25,7 +25,7 @@ Example:
 
 ```json
 {
-    "type": "ability.strength",
+    "type": "self.abilities.strength.value",
     "value": 2
 }
 ```

@@ -25,26 +25,12 @@ use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
 use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
+use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
 class ConditionsTest extends TestCase
 {
     use EntityTrait;
-
-    private static ConditionsFactory $conditionFactory;
-
-    public static function setUpBeforeClass(): void
-    {
-        self::$conditionFactory = new ConditionsFactory(
-            new ConditionParser(),
-            new TypeElementResolver(),
-            new ConditionValidator(),
-        );
-        self::$entityFactory    = new EntityFactory(
-            new AbilityFactory(),
-            new StatusFactory(new ModifierFactory(), self::$conditionFactory),
-            new ItemFactory(new ModifierFactory()),
-        );
-    }
+    use FactoryTrait;
 
     #[DataProvider('evaluateDataProvider')]
     public function testEvaluate(
@@ -77,7 +63,7 @@ class ConditionsTest extends TestCase
 
         return [
             'evaluate required 1 condition with list of 1 conditions' => [
-                self::$conditionFactory->from([
+                self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions' => [
                         [
@@ -92,7 +78,7 @@ class ConditionsTest extends TestCase
                 true,
             ],
             'evaluate required 1 condition with list of 1 conditions (use get method)' => [
-                self::$conditionFactory->from([
+                self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions' => [
                         [
@@ -107,7 +93,7 @@ class ConditionsTest extends TestCase
                 true,
             ],
             'evaluate required 1 condition with list of 1 conditions but evaluation failed' => [
-                self::$conditionFactory->from([
+                self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions' => [
                         [
@@ -122,7 +108,7 @@ class ConditionsTest extends TestCase
                 false,
             ],
             'evaluate required 1 condition with list of 2 conditions' => [
-                self::$conditionFactory->from([
+                self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions' => [
                         [
@@ -142,7 +128,7 @@ class ConditionsTest extends TestCase
                 true,
             ],
             'evaluate required 2 condition with list of 2 conditions' => [
-                self::$conditionFactory->from([
+                self::getConditionFactory()->from([
                     'numberRequired' => 2,
                     'conditions' => [
                         [
@@ -162,7 +148,7 @@ class ConditionsTest extends TestCase
                 true,
             ],
             'evaluate required 1 condition with list of 1 conditions on specific item' => [
-                self::$conditionFactory->from([
+                self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions' => [
                         [
@@ -177,7 +163,7 @@ class ConditionsTest extends TestCase
                 true,
             ],
             'evaluate required 1 condition with list of 1 conditions on specific item but evaluation failed' => [
-                self::$conditionFactory->from([
+                self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions' => [
                         [
@@ -203,7 +189,7 @@ class ConditionsTest extends TestCase
 
         return [
             'evaluate with not objects in middle of type' => [
-                self::$conditionFactory->from([
+                self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions'     => [
                         [
@@ -233,7 +219,7 @@ class ConditionsTest extends TestCase
             //    1101,
             //],
             'evaluate with not found type property' => [
-                self::$conditionFactory->from([
+                self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions'     => [
                         [
@@ -248,7 +234,7 @@ class ConditionsTest extends TestCase
                 1102,
             ],
             'evaluate with not enough part in type' => [
-                self::$conditionFactory->from([
+                self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions'     => [
                         [
@@ -263,7 +249,7 @@ class ConditionsTest extends TestCase
                 1103,
             ],
             'evaluate with not object as end part' => [
-                self::$conditionFactory->from([
+                self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions'     => [
                         [
