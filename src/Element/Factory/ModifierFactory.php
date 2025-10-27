@@ -19,7 +19,7 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 readonly class ModifierFactory
 {
     /**
-     * @param ModifierData $data
+     * @phpstan-param ModifierData $data
      */
     public function from(array $data): Modifier
     {

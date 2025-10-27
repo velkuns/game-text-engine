@@ -11,11 +11,13 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Api;
 
 use Velkuns\GameTextEngine\Api\Exception\BestiaryException;
+use Velkuns\GameTextEngine\Element\Damage\Damages;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface
+ * @phpstan-import-type DamagesData from Damages
  * @phpstan-type BestiaryData array{
  *    name: string,
  *    type: string,
@@ -24,7 +26,7 @@ use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
  *    size: string,
  *    abilities: array<string, int>,
  *    inventory?: array{coins?: int, items?: list<string>},
- *    damages?: int,
+ *    damages?: DamagesData|null,
  * }
  */
 class Bestiary
@@ -90,7 +92,7 @@ class Bestiary
                     'race'      => $entity->getInfo()->race,
                     'gender'    => $entity->getInfo()->gender,
                     'size'      => $entity->getInfo()->size,
-                    'damages'   => $entity->getInfo()->damages,
+                    'damages'   => $entity->getDamages()->jsonSerialize(),
                     'abilities' => [
                         'strength'  => $entity->getAbilities()->get('strength')?->getValue() ?? 0,
                         'endurance' => $entity->getAbilities()->get('endurance')?->getValue() ?? 0,
@@ -128,10 +130,9 @@ class Bestiary
      */
     private function fromBestiary(array $data): array
     {
-        $info  = [
+        $info = [
             'level'       => 1,
             'xp'          => 0,
-            'damages'     => $data['damages'] ?? 0,
             'age'         => 0,
             'race'        => $data['race'],
             'gender'      => $data['gender'] ?? 'unknown',
@@ -140,6 +141,8 @@ class Bestiary
             'background'  => '',
             'notes'       => '',
         ];
+
+        $damages = $data['damages'] ?? [];
 
         //~ Build abilities
         $abilities = ['bases' => [], 'compounds' => []];
@@ -183,6 +186,7 @@ class Bestiary
             'name'      => $data['name'],
             'type'      => $data['type'],
             'info'      => $info,
+            'damages'   => $damages,
             'abilities' => $abilities,
             'statuses'  => $statuses,
             'inventory' => $inventory,

@@ -11,10 +11,13 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
 
 use PHPUnit\Framework\TestCase;
+use Velkuns\GameTextEngine\Element\Damage\Damage;
+use Velkuns\GameTextEngine\Element\Damage\Damages;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
+use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface
@@ -22,6 +25,7 @@ use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 class EntityFactoryTest extends TestCase
 {
     use EntityTrait;
+    use FactoryTrait;
 
     public function testFrom(): void
     {
@@ -50,7 +54,7 @@ class EntityFactoryTest extends TestCase
         self::assertSame('strength', $ability->getName());
 
         $statuses = $hero->getStatuses();
-        self::assertCount(2, $statuses->skills);
+        self::assertCount(3, $statuses->skills);
         self::assertCount(1, $statuses->states);
         self::assertCount(0, $statuses->blessings);
         self::assertCount(0, $statuses->curses);
@@ -69,7 +73,7 @@ class EntityFactoryTest extends TestCase
         self::assertSame('sword', $item->getSubType());
         self::assertSame('A sharp blade', $item->getDescription());
         self::assertTrue($item->equipped());
-        self::assertSame(2, $item->getDamages());
+        self::assertEquals(new Damages(['physical' => new Damage('physical', 2)]), $item->getDamages());
         self::assertSame(6, $item->getFlags());
         self::assertSame(0, $item->getPrice());
         self::assertEmpty($item->getModifiers());
@@ -84,7 +88,7 @@ class EntityFactoryTest extends TestCase
 
         self::assertNull($hero->getInventory()->get('The Bow'));
 
-        $axe = (new ItemFactory(new ModifierFactory()))->from([
+        $axe = self::getItemFactory()->from([
             'type'        => 'item',
             'name'        => 'The Bow',
             'subType'     => 'bow',
@@ -92,7 +96,7 @@ class EntityFactoryTest extends TestCase
             'modifiers'   => [],
             'flags'       => 6,
             'equipped'    => false,
-            'damages'     => 2,
+            'damages'     => ['physical' => ['type' => 'physical', 'value' => 2]],
             'price'       => 10,
         ]);
         $hero->getInventory()->add($axe);

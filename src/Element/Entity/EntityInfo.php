@@ -15,7 +15,6 @@ namespace Velkuns\GameTextEngine\Element\Entity;
  * @phpstan-type EntityInfoData array{
  *     level: int,
  *     xp: int,
- *     damages: int,
  *     age: int,
  *     size: string,
  *     race: string,
@@ -30,7 +29,6 @@ class EntityInfo implements \JsonSerializable
     public function __construct(
         public int $level,
         public int $xp,
-        public int $damages,
         public int $age,
         public string $size,
         public string $race,
@@ -48,7 +46,6 @@ class EntityInfo implements \JsonSerializable
         return [
             'level'       => $this->level,
             'xp'          => $this->xp,
-            'damages'     => $this->damages,
             'age'         => $this->age,
             'size'        => $this->size,
             'race'        => $this->race,
@@ -64,7 +61,6 @@ class EntityInfo implements \JsonSerializable
         return new self(
             $this->level,
             $this->xp,
-            $this->damages,
             $this->age,
             $this->size,
             $this->race,

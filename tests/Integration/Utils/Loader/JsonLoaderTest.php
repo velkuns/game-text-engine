@@ -37,7 +37,7 @@ class JsonLoaderTest extends TestCase
         self::assertSame([], $item['modifiers']);
         self::assertSame(6, $item['flags']);
         self::assertFalse($item['equipped']);
-        self::assertSame(3, $item['damages']);
+        self::assertSame(['physical' => ['type' => 'physical', 'value' => 3]], $item['damages']);
         self::assertSame(0, $item['price']);
     }
 

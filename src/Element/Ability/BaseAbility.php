@@ -123,7 +123,7 @@ class BaseAbility implements AbilityInterface
     {
         $value = $this->getValue();
         foreach ($modifiers as $modifier) {
-            if ($modifier->type !== 'ability.' . $this->name) {
+            if (!\str_contains($modifier->type, 'abilities.' . $this->name)) {
                 continue;
             }
 

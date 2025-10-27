@@ -41,50 +41,38 @@ class CombatTest extends TestCase
         self::assertSame(16, $goblin->getAbilities()->get('vitality')?->getValue());
 
         //~ Turn #1 - Player attacks Goblin
-        //echo "Turn #1 - Player attacks Goblin\n";
-        $result = $this->combat->tick($player, $goblin);
-        $chance = round($result['chance'] * 100) . '%';
-        $roll   = round($result['roll'] * 100);
-        //echo " > Player 'miss' Goblin (hit chance: $chance, roll: $roll)\n\n";
+        $log = $this->combat->tick($player, $goblin);
 
-        self::assertFalse($result['hit'], var_export($result, true));
-        self::assertSame(5, $result['damages'], $result['debug']['damages']);
+        self::assertFalse($log->isHit(), $log->debug['hitChance'] ?? '');
+        self::assertSame(6, $log->damages, $log->debug['damages'] ?? '');
         self::assertSame(24, $player->getAbilities()->get('vitality')->getValue());
         self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
+        self::assertSame("Brave Test Hero #1 'miss' Goblin #1 with The Sword.", (string) $log);
+        self::assertSame('damages = ((10 * 2 ) / 8) + 3 = 2.5 + 3 = 6', $log->debug['damages'] ?? '');
 
         //~ Turn #2 - Goblin attacks Player
-        //echo "Turn #2 - Goblin attacks Player\n";
-        $result = $this->combat->tick($goblin, $player);
-        $chance = round($result['chance'] * 100) . '%';
-        $roll   = round($result['roll'] * 100);
-        //echo " > Goblin 'hit' and inflicts " . $result['damages'] . " damages to Player (hit chance: $chance, roll: $roll)\n\n";
+        $log = $this->combat->tick($goblin, $player);
 
-        self::assertTrue($result['hit'], $result['debug']['hit chance']);
-        self::assertSame(2, $result['damages'], $result['debug']['damages']);
+        self::assertTrue($log->isHit(), $log->debug['hitChance'] ?? '');
+        self::assertSame(2, $log->damages, $log->debug['damages'] ?? '');
         self::assertSame(22, $player->getAbilities()->get('vitality')->getValue());
         self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
+        self::assertSame("Goblin #1 'hit' Brave Test Hero #1 with The Dagger and make 2 damage(s).", (string) $log);
+        self::assertSame('damages = ((8 * 2 ) / 14) + 1 = 1.1428571428571 + 1 = 2', $log->debug['damages'] ?? '');
 
         //~ Turn #3 - Player attacks Goblin
-        //echo "Turn #3 - Player attacks Goblin\n";
-        $result = $this->combat->tick($player, $goblin);
-        $chance = round($result['chance'] * 100) . '%';
-        $roll   = round($result['roll'] * 100);
-        //echo " > Player 'miss' Goblin (hit chance: $chance, roll: $roll)\n\n";
+        $log = $this->combat->tick($player, $goblin);
 
-        self::assertFalse($result['hit'], $result['debug']['hit chance']);
-        self::assertSame(5, $result['damages'], $result['debug']['damages']);
+        self::assertFalse($log->isHit(), $log->debug['hitChance'] ?? '');
+        self::assertSame(6, $log->damages, $log->debug['damages'] ?? '');
         self::assertSame(22, $player->getAbilities()->get('vitality')->getValue());
         self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
 
         //~ Turn #4 - Goblin attacks Player
-        //echo "Turn #4 - Goblin attacks Player\n";
-        $result = $this->combat->tick($goblin, $player);
-        $chance = round($result['chance'] * 100) . '%';
-        $roll   = round($result['roll'] * 100);
-        //echo " > Goblin 'miss' Player (hit chance: $chance, roll: $roll)\n\n";
+        $log = $this->combat->tick($goblin, $player);
 
-        self::assertFalse($result['hit'], $result['debug']['hit chance']);
-        self::assertSame(2, $result['damages'], $result['debug']['damages']);
+        self::assertFalse($log->isHit(), $log->debug['hitChance'] ?? '');
+        self::assertSame(2, $log->damages, $log->debug['damages'] ?? '');
         self::assertSame(22, $player->getAbilities()->get('vitality')->getValue());
         self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
 

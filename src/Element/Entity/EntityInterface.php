@@ -11,11 +11,13 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Entity;
 
+use Velkuns\GameTextEngine\Element\Damage\Damages;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 
 /**
  * @phpstan-import-type EntityInfoData from EntityInfo
+ * @phpstan-import-type DamagesData from Damages
  * @phpstan-import-type AbilitiesData from EntityAbilities
  * @phpstan-import-type StatusesData from EntityStatuses
  * @phpstan-import-type InventoryData from EntityInventory
@@ -24,6 +26,7 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  *     name: string,
  *     type: string,
  *     info: EntityInfoData,
+ *     damages: DamagesData|null,
  *     abilities: AbilitiesData,
  *     statuses: StatusesData,
  *     inventory: InventoryData,
@@ -36,6 +39,8 @@ interface EntityInterface extends \JsonSerializable
     public function getType(): string;
 
     public function getInfo(): EntityInfo;
+
+    public function getDamages(): Damages;
 
     public function getAbilities(): EntityAbilities;
 

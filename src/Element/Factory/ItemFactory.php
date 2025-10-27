@@ -21,10 +21,11 @@ readonly class ItemFactory
 {
     public function __construct(
         private ModifierFactory $modifierFactory,
+        private DamageFactory $damageFactory,
     ) {}
 
     /**
-     * @param ItemData $data
+     * @phpstan-param ItemData $data
      */
     public function from(array $data): ItemInterface
     {
@@ -34,7 +35,7 @@ readonly class ItemFactory
         $modifiers   = \array_map(fn($modifier) => $this->modifierFactory->from($modifier), $data['modifiers']);
         $flags       = $data['flags'];
         $equipped    = $data['equipped'];
-        $damages     = $data['damages'];
+        $damages     = $this->damageFactory->fromDamages($data['damages'] ?? []);
         $quantity    = $data['quantity'] ?? 1;
         $price       = $data['price'];
 

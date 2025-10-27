@@ -61,7 +61,7 @@ class ItemsTest extends TestCase
             'modifiers'   => [],
             'flags'       => 6,
             'equipped'    => false,
-            'damages'     => 2,
+            'damages'     => ['physical' => ['type' => 'physical', 'value' => 2]],
             'price'       => 0,
         ]);
 
