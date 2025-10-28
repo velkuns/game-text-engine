@@ -12,11 +12,12 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Api\Exception\PlayerException;
-use Velkuns\GameTextEngine\Api\Items;
-use Velkuns\GameTextEngine\Api\Player;
+use Velkuns\GameTextEngine\Api\ItemsApi;
+use Velkuns\GameTextEngine\Api\PlayerApi;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Element\Modifier\ModifierProcessor;
 use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
+use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
@@ -24,21 +25,15 @@ use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 /**
  * @phpstan-import-type ItemData from ItemInterface
  */
-class PlayerTest extends TestCase
+class PlayerApiTest extends TestCase
 {
+    use ApiTrait;
     use EntityTrait;
     use FactoryTrait;
 
     public function testNew(): void
     {
-        $dataDir = __DIR__ . '/../../../data';
-        $items   = new Items(self::getItemFactory());
-
-        /** @var list<ItemData> $itemsData */
-        $itemsData = (new JsonLoader())->fromFile($dataDir . '/items.json');
-        $items->load($itemsData);
-
-        $playerApi = new Player(self::getEntityFactory(), $items, new ModifierProcessor(new TypeElementResolver()));
+        $playerApi = self::getPlayerApi();
 
         $newPlayerData = [
             'name'        => 'New Hero',
@@ -65,14 +60,7 @@ class PlayerTest extends TestCase
 
     public function testConsume(): void
     {
-        $dataDir = __DIR__ . '/../../../data';
-        $items   = new Items(self::getItemFactory());
-
-        /** @var list<ItemData> $itemsData */
-        $itemsData = (new JsonLoader())->fromFile($dataDir . '/items.json');
-        $items->load($itemsData);
-
-        $playerApi = new Player(self::getEntityFactory(), $items, new ModifierProcessor(new TypeElementResolver()));
+        $playerApi = self::getPlayerApi();
 
         $newPlayerData = [
             'name'        => 'New Hero',
@@ -105,14 +93,7 @@ class PlayerTest extends TestCase
 
     public function testConsumeButItemNotInInventory(): void
     {
-        $dataDir = __DIR__ . '/../../../data';
-        $items   = new Items(self::getItemFactory());
-
-        /** @var list<ItemData> $itemsData */
-        $itemsData = (new JsonLoader())->fromFile($dataDir . '/items.json');
-        $items->load($itemsData);
-
-        $playerApi = new Player(self::getEntityFactory(), $items, new ModifierProcessor(new TypeElementResolver()));
+        $playerApi = self::getPlayerApi();
 
         $newPlayerData = [
             'name'        => 'New Hero',
@@ -139,14 +120,7 @@ class PlayerTest extends TestCase
 
     public function testConsumeButItemIsNotConsumable(): void
     {
-        $dataDir = __DIR__ . '/../../../data';
-        $items   = new Items(self::getItemFactory());
-
-        /** @var list<ItemData> $itemsData */
-        $itemsData = (new JsonLoader())->fromFile($dataDir . '/items.json');
-        $items->load($itemsData);
-
-        $playerApi = new Player(self::getEntityFactory(), $items, new ModifierProcessor(new TypeElementResolver()));
+        $playerApi = self::getPlayerApi();
 
         $newPlayerData = [
             'name'        => 'New Hero',

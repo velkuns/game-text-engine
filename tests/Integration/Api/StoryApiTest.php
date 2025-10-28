@@ -12,7 +12,7 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Api\Exception\StoryException;
-use Velkuns\GameTextEngine\Api\Story;
+use Velkuns\GameTextEngine\Api\StoryApi;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
@@ -21,7 +21,7 @@ use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 /**
  * @phpstan-import-type GraphData from Graph
  */
-class StoryTest extends TestCase
+class StoryApiTest extends TestCase
 {
     use EntityTrait;
     use FactoryTrait;
@@ -97,7 +97,7 @@ class StoryTest extends TestCase
         self::assertSame('Vous êtes mort...', $edges[0]->content);
     }
 
-    private function getStory(): Story
+    private function getStory(): StoryApi
     {
         $dataDir = __DIR__ . '/../../../data';
         $loader = new JsonLoader();
@@ -105,7 +105,7 @@ class StoryTest extends TestCase
         /** @var GraphData $data */
         $data = $loader->fromFile($dataDir . '/stories/test.json');
 
-        $story = new Story(self::getGraphFactory());
+        $story = new StoryApi(self::getGraphFactory());
         $story->load($data);
 
         return $story;

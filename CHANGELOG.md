@@ -16,29 +16,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ```
 
 ----
-
-## [1.1.0] - 2023-03-15
-### Changed
-- Update Makefile
-- Update CI GitHub Action
-- Update composer.json
-- Now compatible with PHP 8.2
-
-## [1.0.2] - 2022-11-13
-### Changed
-- Update Makefile
-- Update CI GitHub Action
-- Update composer.json
-
-## [1.0.1] - 2022-06-12
-### Changed
-- Fix changelog template link
-- Update github workflow ci file
-
-## [1.0.0] - 2022-06-12
-### Added
-- Add phpstan for static analyze & php compatibility
-- Add Check compatibility with PHP 7.4 & 8.1 in CI
-- Add Makefile & .dist files for CI
-- Add Dummy Source & Dummy Test
-- Add GitHub CI file & sonar project file

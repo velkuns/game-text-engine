@@ -20,7 +20,7 @@ use Velkuns\GameTextEngine\Graph\Node;
 /**
  * @phpstan-import-type GraphData from Graph
  */
-class Story
+class StoryApi
 {
     public Graph $graph;
 

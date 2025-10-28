@@ -29,14 +29,14 @@ use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
  *    damages?: DamagesData|null,
  * }
  */
-class Bestiary
+class BestiaryApi
 {
     /** @var array<string, EntityInterface> $bestiary */
     private array $bestiary = [];
 
     public function __construct(
         private readonly EntityFactory $entityFactory,
-        private readonly Items $items,
+        private readonly ItemsApi $items,
     ) {}
 
     /**

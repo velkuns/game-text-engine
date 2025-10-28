@@ -11,26 +11,35 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
-use Velkuns\GameTextEngine\Api\Bestiary;
-use Velkuns\GameTextEngine\Api\Items;
+use Velkuns\GameTextEngine\Api\AbilitiesApi;
+use Velkuns\GameTextEngine\Api\BestiaryApi;
+use Velkuns\GameTextEngine\Api\ItemsApi;
+use Velkuns\GameTextEngine\Api\PlayerApi;
+use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Element\Modifier\ModifierProcessor;
+use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
- * @phpstan-import-type BestiaryData from Bestiary
+ * @phpstan-import-type BestiaryData from BestiaryApi
  * @phpstan-import-type ItemData from ItemInterface
+ * @phpstan-import-type EntityData from EntityInterface
+ * @phpstan-import-type AbilitiesRulesData from AbilitiesApi
  */
 trait ApiTrait
 {
     use FactoryTrait;
 
-    private static ?Bestiary $bestiary = null;
-    private static ?Items $items = null;
+    private static ?BestiaryApi $bestiary = null;
+    private static ?ItemsApi $items = null;
+    private static ?AbilitiesApi $abilitiesApi = null;
+    private static ?PlayerApi $playerApi = null;
 
-    private static function getBestiary(): Bestiary
+    private static function getBestiaryApi(): BestiaryApi
     {
         if (self::$bestiary === null) {
-            self::$bestiary = new Bestiary(self::getEntityFactory(), self::getItems());
+            self::$bestiary = new BestiaryApi(self::getEntityFactory(), self::getItemsApi());
 
             /** @var list<BestiaryData> $data */
             $data = (new JsonLoader())->fromFile(__DIR__ . '/../../data/bestiary.json');
@@ -41,10 +50,10 @@ trait ApiTrait
     }
 
 
-    private static function getItems(): Items
+    private static function getItemsApi(): ItemsApi
     {
         if (self::$items === null) {
-            self::$items = new Items(self::getItemFactory());
+            self::$items = new ItemsApi(self::getItemFactory());
 
             /** @var list<ItemData> $data */
             $data = (new JsonLoader())->fromFile(__DIR__ . '/../../data/items.json');
@@ -52,5 +61,36 @@ trait ApiTrait
         }
 
         return self::$items;
+    }
+
+    private static function getAbilitiesApi(): AbilitiesApi
+    {
+        if (self::$abilitiesApi === null) {
+            self::$abilitiesApi = new AbilitiesApi(self::getAbilityFactory());
+
+            /** @var AbilitiesRulesData $data */
+            $data = (new JsonLoader())->fromFile(__DIR__ . '/../../data/rules/rules_abilities.json');
+            self::$abilitiesApi->load($data);
+        }
+
+        return self::$abilitiesApi;
+    }
+
+    private static function getPlayerApi(): PlayerApi
+    {
+        if (self::$playerApi === null) {
+            self::$playerApi = new PlayerApi(
+                self::getEntityFactory(),
+                self::getItemsApi(),
+                self::getAbilitiesApi(),
+                new ModifierProcessor(new TypeElementResolver()),
+            );
+
+            /** @var EntityData $data */
+            $data = (new JsonLoader())->fromFile(__DIR__ . '/../../data/templates/player.json');
+            self::$playerApi->load($data);
+        }
+
+        return self::$playerApi;
     }
 }
