@@ -57,9 +57,7 @@ class ElementFactoryTest extends TestCase
                         "is": true
                     }
                 ]
-            },
-            "durationTurns": 0,
-            "remainingTurns": 0
+            }
         }';
 
         $status = self::getElementFactory()->statusFromJson($json);
@@ -102,8 +100,6 @@ class ElementFactoryTest extends TestCase
                     }
                 ]
             },
-            "durationTurns": 0
-            "remainingTurns": 0
         }';
 
         self::expectExceptionCode(2013);
@@ -423,7 +419,7 @@ class ElementFactoryTest extends TestCase
                 }
             },
             "statuses": {
-                "skills": {
+                "skill": {
                     "swordsmanship": {
                         "type": "skill",
                         "name": "swordsmanship",
@@ -452,10 +448,10 @@ class ElementFactoryTest extends TestCase
                         "remainingTurns": 0
                     }
                 },
-                "states": [],
-                "blessings": [],
-                "curses": [],
-                "titles": []
+                "state": [],
+                "blessing": [],
+                "curse": [],
+                "title": []
             },
             "inventory": {
                 "coins": 100,
@@ -504,11 +500,11 @@ class ElementFactoryTest extends TestCase
         self::assertSame('strength', $ability->getName());
 
         $statuses = $hero->getStatuses();
-        self::assertCount(1, $statuses->skills);
-        self::assertCount(0, $statuses->states);
-        self::assertCount(0, $statuses->blessings);
-        self::assertCount(0, $statuses->curses);
-        self::assertCount(0, $statuses->titles);
+        self::assertCount(1, $statuses->statuses['skill']);
+        self::assertCount(0, $statuses->statuses['state']);
+        self::assertCount(0, $statuses->statuses['blessing']);
+        self::assertCount(0, $statuses->statuses['curse']);
+        self::assertCount(0, $statuses->statuses['title']);
 
         self::assertFalse($hero->hasStatus('skill', 'non-existing-skill'));
         self::assertFalse($hero->hasStatus('state', 'non-existing-skill'));

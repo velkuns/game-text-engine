@@ -18,6 +18,7 @@ use Velkuns\GameTextEngine\Api\AbilitiesApi;
 use Velkuns\GameTextEngine\Api\BestiaryApi;
 use Velkuns\GameTextEngine\Api\CombatApi;
 use Velkuns\GameTextEngine\Api\GameApi;
+use Velkuns\GameTextEngine\Api\StatusesApi;
 use Velkuns\GameTextEngine\Api\StoryApi;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
@@ -35,6 +36,7 @@ use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
  * @phpstan-import-type BestiaryData from BestiaryApi
  * @phpstan-import-type EntityData from EntityInterface
  * @phpstan-import-type AbilitiesRulesData from AbilitiesApi
+ * @phpstan-import-type StatusesRulesData from StatusesApi
  */
 class GameApiTest extends TestCase
 {
@@ -52,6 +54,7 @@ class GameApiTest extends TestCase
             self::getItemsApi(),
             self::getBestiaryApi(),
             self::getAbilitiesApi(),
+            self::getStatusesApi(),
             self::getPlayerApi(),
             new CombatApi(new Randomizer(new Mt19937()), new TimeProcessor()),
         );
@@ -64,10 +67,12 @@ class GameApiTest extends TestCase
         $bestiaryData = $game->loader->fromFile($dataDir . '/bestiary.json');
         /** @var AbilitiesRulesData $abilitiesRulesData */
         $abilitiesRulesData = $game->loader->fromFile($dataDir . '/rules/rules_abilities.json');
+        /** @var StatusesRulesData $statusesRulesData */
+        $statusesRulesData = $game->loader->fromFile($dataDir . '/rules/rules_statuses.json');
         /** @var EntityData $playerData */
         $playerData = $game->loader->fromFile($dataDir . '/templates/player.json');
 
-        $game->load($storyData, $itemsData, $bestiaryData, $abilitiesRulesData, $playerData);
+        $game->load($storyData, $itemsData, $bestiaryData, $abilitiesRulesData, $statusesRulesData, $playerData);
 
         $dump = $game->dump(true);
 
@@ -75,6 +80,7 @@ class GameApiTest extends TestCase
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/items.json')), $dump['items']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/bestiary.json')), $dump['bestiary']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_abilities.json')), $dump['abilities']);
+        self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_statuses.json')), $dump['statuses']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/templates/player.json')), $dump['player']);
     }
 }

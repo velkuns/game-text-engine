@@ -21,10 +21,10 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  *    type: string,
  *    name: string,
  *    description: string,
- *    conditions: ConditionsData|null,
  *    modifiers: list<ModifierData>,
- *    durationTurns: int,
- *    remainingTurns: int,
+ *    conditions?: ConditionsData|null,
+ *    durationTurns?: int,
+ *    remainingTurns?: int,
  * }
  */
 interface StatusInterface extends \JsonSerializable

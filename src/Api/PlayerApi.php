@@ -26,6 +26,7 @@ use Velkuns\GameTextEngine\Element\Modifier\ModifierProcessor;
  *    description?: string,
  *    background?: string,
  *    abilities: array<string, int>,
+ *    statuses?: array<string, list<string>>,
  *    inventory?: list<string>,
  * }
  */
@@ -37,6 +38,7 @@ class PlayerApi
         private readonly EntityFactory $entityFactory,
         private readonly ItemsApi $items,
         private readonly AbilitiesApi $abilitiesApi,
+        private readonly StatusesApi $statusesApi,
         private readonly ModifierProcessor $modifierProcessor,
     ) {}
 
@@ -112,13 +114,7 @@ class PlayerApi
         $abilities = $this->abilitiesApi->fromNewPlayer($data['abilities']);
 
         //~ Initialize empty statuses
-        $statuses = [
-            'skills'    => [],
-            'states'    => [],
-            'blessings' => [],
-            'curses'    => [],
-            'titles'    => [],
-        ];
+        $statuses = $this->statusesApi->fromNewPlayer($data['statuses'] ?? []);
 
         //~ Build inventory
         $inventory = ['coins' => 10, 'items' => []];

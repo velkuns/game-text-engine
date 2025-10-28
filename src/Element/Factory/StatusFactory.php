@@ -34,8 +34,8 @@ readonly class StatusFactory
         $description    = $data['description'];
         $modifiers      = \array_map(fn($modifier) => $this->modifierFactory->from($modifier), $data['modifiers']);
         $conditions     = $this->conditionsFactory->from($data['conditions'] ?? null);
-        $durationTurns  = $data['durationTurns'];
-        $remainingTurns = $data['remainingTurns'];
+        $durationTurns  = $data['durationTurns'] ?? 0;
+        $remainingTurns = $data['remainingTurns'] ?? 0;
 
         return new Status($type, $name, $description, $modifiers, $conditions, $durationTurns, $remainingTurns);
     }

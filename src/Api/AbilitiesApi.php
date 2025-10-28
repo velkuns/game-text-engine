@@ -59,6 +59,14 @@ class AbilitiesApi
         $this->compoundAbilities = $this->abilityFactory->fromCompounds($data['compounds'], $this->baseAbilities);
     }
 
+    /**
+     * @return array{bases: array<string, BaseAbility>, compounds: array<string, CompoundAbility>}
+     */
+    public function getAll(): array
+    {
+        return (['bases' => $this->baseAbilities, 'compounds' => $this->compoundAbilities]);
+    }
+
     public function get(string $name, bool $asClone = true): ?AbilityInterface
     {
         $ability = $this->baseAbilities[$name] ?? $this->compoundAbilities[$name] ?? null;

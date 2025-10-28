@@ -32,12 +32,11 @@ class EntityTest extends TestCase
         $player  = self::getPlayer();
         $gobelin = self::getGoblin();
 
-        $player->getStatuses()->set('skill', new Status('skill', 'test', '', []));
-        $player->getStatuses()->set('state', new Status('state', 'test', '', []));
-        $player->getStatuses()->set('blessing', new Status('blessing', 'test', '', []));
-        $player->getStatuses()->set('curse', new Status('curse', 'test', '', []));
-        $player->getStatuses()->set('title', new Status('title', 'test', '', []));
-        $player->getStatuses()->set('unknown', new Status('unknown', 'test', '', []));
+        $player->getStatuses()->set(new Status('skill', 'test', '', []));
+        $player->getStatuses()->set(new Status('state', 'test', '', []));
+        $player->getStatuses()->set(new Status('blessing', 'test', '', []));
+        $player->getStatuses()->set(new Status('curse', 'test', '', []));
+        $player->getStatuses()->set(new Status('title', 'test', '', []));
 
         $expected  = [
             new Modifier('self.damages.physical.value', 1),

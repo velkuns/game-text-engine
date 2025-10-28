@@ -31,15 +31,16 @@ declare(strict_types=1);
 
 namespace Application;
 
-use Velkuns\GameTextEngine\Api\ItemsApi;use Velkuns\GameTextEngine\Api\PlayerApi;use Velkuns\GameTextEngine\Util\Loader\JsonLoader;use Velunns\GameTextEngine\Api\GameApi;
+use Velkuns\GameTextEngine\Api\ItemsApi;use Velkuns\GameTextEngine\Api\PlayerApi;use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;use Velkuns\GameTextEngine\Util\Loader\JsonLoader;use Velunns\GameTextEngine\Api\GameApi;
 
 //~ Factories
 $modifierFactory  = new ModifierFactory();
 $itemFactory      = new ItemFactory($modifierFactory);
 $conditionFactory = new ConditionsFactory(new ConditionParser(), new ConditionElementResolver(), new ConditionValidator());
 $graphFactory     = new GraphFactory($conditionFactory);
+$abilityFactory   = new AbilityFactory();
 $entityFactory    = new EntityFactory(
-    new AbilityFactory(), 
+    $abilityFactory, 
     new StatusFactory($modifierFactory, $conditionFactory), 
     $itemFactory
 );
@@ -50,6 +51,7 @@ $gameApi = new GameApi(
     new StoryApi($graphFactory),
     $items,
     new BestiaryApi($entityFactory, $items),
+    new AbilitiesApi($abilityFactory),
     new PlayerApi($entityFactory, $items),
     new CombatApi(new Randomizer(new Mt19937())),
 );
@@ -59,6 +61,7 @@ $storyData          = $game->loader->fromFile($dataDir . '/stories/test.json');
 $itemsData          = $game->loader->fromFile($dataDir . '/items.json');
 $bestiaryData       = $game->loader->fromFile($dataDir . '/bestiary.json');
 $abilitiesRulesData = $game->loader->fromFile($dataDir . '/rules/rules_abilities.json');
+$statusesRulesData  = $game->loader->fromFile($dataDir . '/rules/rules_statuses.json');
 $playerData         = $game->loader->fromFile($dataDir . '/templates/player.json');
 
 //~ Load data into the game api
@@ -69,14 +72,23 @@ $gameApi->storyApi->[...];
 $gameApi->bestiaryApi->[...];
 $gameApi->itemsApi->[...];
 $gameApi->abilitiesApi->[...];
+$gameApi->statusesApi->[...];
 $gameApi->playerApi->[...];
 
+//~ Dumping apis into json data
 /**
- * @param array{story: string, items: string, bestiary: string, abilities: string, player: string} $data Array of json data, to save in files or database
+ * @param array{
+*     story: string, 
+*     items: string, 
+*     bestiary: string, 
+*     abilities: string,
+*     statuses: string,
+*     player: string
+ * } $data Array of json data, to save in files or database
  */
 $data = $gameApi->dump(/* true */); // true to pretty json output
 
-
+//~ Exporting story graph into DOT data
 $gameApi->exporter->toFile($gameApi->storyApi->graph, [...]);      // export story graph to file
 $string = $gameApi->exporter->toString($gameApi->storyApi->graph); // export story graph to string
 
@@ -104,7 +116,7 @@ $data = $loader->fromString('{"key": "value"}');
 
 ```
 
-### Items dictionary
+### Items API
 
 ```php
 <?php
@@ -123,7 +135,7 @@ $gameApi->itemsApi->set($staff); // Adds or replaces the item in the items dicti
 $gameApi->itemsApi->remove($staff->getName()); // Removes the item from the items dictionary
 ```
 
-### Bestiary dictionary
+### Bestiary API
 
 ```php
 <?php
@@ -140,6 +152,44 @@ $entity = $gameApi->bestiaryApi->get('Goblin');
 $goblinWarrior = $entityFactory->from(['name' => 'Goblin Warrior', ...]);
 $gameApi->bestiaryApi->set($goblinWarrior); // Adds or replaces the creature in the bestiary
 $gameApi->bestiaryApi->remove('Goblin'); // Removes the creature from the bestiary
+```
+
+### Abilities API
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Application;
+
+// [... game api init code here ... ]
+
+//~ Return all abilities: array{bases: array<string, AbilityInterface>, compounds: array<string, AbilityInterface>}
+$abilities = $gameApi->abilitiesApi->getAll();
+
+$ability = $gameApi->abilitiesApi->get('strength'); // Get one ability (cloned)
+$gameApi->abilitiesApi->set($ability); // Set an ability
+$gameApi->abilitiesApi->remove('strength');
+```
+
+### Statuses API
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Application;
+
+// [... game api init code here ... ]
+
+//~ Return all statuses: array<string, array<string, StatusInterface>>
+$statuses = $gameApi->statusesApi->getAll();
+
+$status = $gameApi->statusesApi->get('skill', 'Goblin Hunter'); // Get one status (cloned)
+$gameApi->statusesApi->set($status); // Set an ability
+$gameApi->statusesApi->remove('skill', 'Goblin Hunter');
 ```
 
 ### Story API

@@ -24,6 +24,7 @@ use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
  * @phpstan-import-type BestiaryData from BestiaryApi
  * @phpstan-import-type EntityData from EntityInterface
  * @phpstan-import-type AbilitiesRulesData from AbilitiesApi
+ * @phpstan-import-type StatusesRulesData from StatusesApi
  */
 readonly class GameApi
 {
@@ -34,6 +35,7 @@ readonly class GameApi
         public ItemsApi $itemsApi,
         public BestiaryApi $bestiaryApi,
         public AbilitiesApi $abilitiesApi,
+        public StatusesApi $statusesApi,
         public PlayerApi $playerApi,
         public CombatApi $combatApi,
     ) {}
@@ -43,6 +45,7 @@ readonly class GameApi
      * @phpstan-param list<ItemData> $itemsData
      * @phpstan-param list<BestiaryData> $bestiaryData
      * @phpstan-param AbilitiesRulesData $abilitiesRulesData
+     * @phpstan-param StatusesRulesData $statusesRulesData
      * @phpstan-param EntityData $playerData
      */
     public function load(
@@ -50,12 +53,14 @@ readonly class GameApi
         array $itemsData,
         array $bestiaryData,
         array $abilitiesRulesData,
+        array $statusesRulesData,
         array $playerData,
     ): self {
         $this->storyApi->load($storyData);
         $this->itemsApi->load($itemsData);
         $this->bestiaryApi->load($bestiaryData);
         $this->abilitiesApi->load($abilitiesRulesData);
+        $this->statusesApi->load($statusesRulesData);
         $this->playerApi->load($playerData);
 
         return $this;
@@ -67,6 +72,7 @@ readonly class GameApi
      *     items: string,
      *     bestiary: string,
      *     abilities: string,
+     *     statuses: string,
      *     player: string,
      * }
      */
@@ -78,6 +84,7 @@ readonly class GameApi
                 'items'     => $this->itemsApi->dump($prettyPrint),
                 'bestiary'  => $this->bestiaryApi->dump($prettyPrint),
                 'abilities' => $this->abilitiesApi->dump($prettyPrint),
+                'statuses'  => $this->statusesApi->dump($prettyPrint),
                 'player'    => $this->playerApi->dump($prettyPrint),
             ];
             // @codeCoverageIgnoreStart

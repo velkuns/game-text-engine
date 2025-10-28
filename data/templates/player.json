@@ -95,11 +95,11 @@
         }
     },
     "statuses": {
-        "skills": [],
-        "states": [],
-        "blessings": [],
-        "curses": [],
-        "titles": []
+        "skill": [],
+        "state": [],
+        "blessing": [],
+        "curse": [],
+        "title": []
     },
     "inventory": {
         "coins": 10,

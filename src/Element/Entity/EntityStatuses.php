@@ -11,84 +11,45 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Entity;
 
+use Velkuns\GameTextEngine\Element\Exception\StatusException;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
-use Velkuns\GameTextEngine\Element\Status\Status;
 use Velkuns\GameTextEngine\Element\Status\StatusInterface;
 
 /**
  * @phpstan-import-type StatusData from StatusInterface
- * @phpstan-type StatusesData array{
- *     skills: array<string, StatusData>,
- *     states: array<string, StatusData>,
- *     blessings: array<string, StatusData>,
- *     curses: array<string, StatusData>,
- *     titles: array<string, StatusData>,
- * }
+ * @phpstan-type StatusesData array<string, array<string, StatusData>>
  */
 class EntityStatuses implements \JsonSerializable
 {
-    /** @var array<string, StatusInterface> $skills */
-    public array $skills = [];
-
-    /** @var array<string, StatusInterface> $states */
-    public array $states = [];
-
-    /** @var array<string, StatusInterface> $blessings */
-    public array $blessings = [];
-
-    /** @var array<string, StatusInterface> $curses */
-    public array $curses = [];
-
-    /** @var array<string, StatusInterface> $titles */
-    public array $titles = [];
-
     /**
-     * @param array<string, StatusInterface> $skills
-     * @param array<string, StatusInterface> $states
-     * @param array<string, StatusInterface> $blessings
-     * @param array<string, StatusInterface> $curses
-     * @param array<string, StatusInterface> $titles
+     * @param array<string, array<string, StatusInterface>> $statuses
      */
     public function __construct(
-        array $skills = [],
-        array $states = [],
-        array $blessings = [],
-        array $curses = [],
-        array $titles = [],
-    ) {
-        $this->skills    = $skills;
-        $this->states    = $states;
-        $this->blessings = $blessings;
-        $this->curses    = $curses;
-        $this->titles    = $titles;
+        public array $statuses = [],
+    ) {}
+
+    public function getByType(string $type, string $name): ?StatusInterface
+    {
+        return $this->statuses[$type][$name] ?? null;
     }
 
-    public function set(string $statusType, StatusInterface $status): self
+    public function set(StatusInterface $status): self
     {
-        match ($statusType) {
-            'skill'    => $this->skills[$status->getName()] = $status,
-            'state'    => $this->states[$status->getName()] = $status,
-            'blessing' => $this->blessings[$status->getName()] = $status,
-            'curse'    => $this->curses[$status->getName()] = $status,
-            'title'    => $this->titles[$status->getName()] = $status,
-            default    => null,
-        };
+        if (!isset($this->statuses[$status->getType()])) {
+            throw new StatusException("Unknown status type '{$status->getType()}'", 1500);
+        }
+
+        $this->statuses[$status->getType()][$status->getName()] = $status;
 
         return $this;
     }
 
     /**
-     * @return list<StatusInterface>
+     * @return array<string, StatusInterface>
      */
     public function getAll(): array
     {
-        return \array_merge(
-            \array_values($this->skills),
-            \array_values($this->states),
-            \array_values($this->blessings),
-            \array_values($this->curses),
-            \array_values($this->titles),
-        );
+        return \array_merge(...\array_values($this->statuses));
     }
 
     /**
@@ -96,15 +57,12 @@ class EntityStatuses implements \JsonSerializable
      */
     public function getAllModifiers(EntityInterface $player, EntityInterface $enemy): array
     {
-        return \array_values(
-            \array_merge(
-                $this->getModifiers($this->skills, $player, $enemy),
-                $this->getModifiers($this->states, $player, $enemy),
-                $this->getModifiers($this->blessings, $player, $enemy),
-                $this->getModifiers($this->curses, $player, $enemy),
-                $this->getModifiers($this->titles, $player, $enemy),
-            ),
-        );
+        $modifiers = [];
+        foreach ($this->statuses as $statuses) {
+            $modifiers[] = $this->getModifiers($statuses, $player, $enemy);
+        }
+
+        return \array_values(\array_merge(...$modifiers));
     }
 
     /**
@@ -139,23 +97,21 @@ class EntityStatuses implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return [
-            'skills'    => \array_map(fn(StatusInterface $skill) => $skill->jsonSerialize(), $this->skills),
-            'states'    => \array_map(fn(StatusInterface $states) => $states->jsonSerialize(), $this->states),
-            'blessings' => \array_map(fn(StatusInterface $blessings) => $blessings->jsonSerialize(), $this->blessings),
-            'curses'    => \array_map(fn(StatusInterface $curses) => $curses->jsonSerialize(), $this->curses),
-            'titles'    => \array_map(fn(StatusInterface $titles) => $titles->jsonSerialize(), $this->titles),
-        ];
+        $data = [];
+        foreach ($this->statuses as $type => $statuses) {
+            $data[$type] = \array_map(fn(StatusInterface $status) => $status->jsonSerialize(), $statuses);
+        }
+
+        return $data;
     }
 
     public function clone(): self
     {
-        return new self(
-            skills: \array_map(fn(StatusInterface $status) => $status->clone(), $this->skills),
-            states: \array_map(fn(StatusInterface $status) => $status->clone(), $this->states),
-            blessings: \array_map(fn(StatusInterface $status) => $status->clone(), $this->blessings),
-            curses: \array_map(fn(StatusInterface $status) => $status->clone(), $this->curses),
-            titles: \array_map(fn(StatusInterface $status) => $status->clone(), $this->titles),
-        );
+        $clonedStatuses = [];
+        foreach ($this->statuses as $type => $statuses) {
+            $clonedStatuses[$type] = \array_map(fn(StatusInterface $status) => $status->clone(), $statuses);
+        }
+
+        return new self($clonedStatuses);
     }
 }
