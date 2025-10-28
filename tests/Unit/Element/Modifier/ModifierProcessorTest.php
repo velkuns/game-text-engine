@@ -57,7 +57,7 @@ class ModifierProcessorTest extends TestCase
     public function testApplyButTypeRefersToList(): void
     {
         $player    = self::getPlayer();
-        $player->getInventory()->add(self::getItems()->get('Small Health Potion'));
+        $player->getInventory()->add(self::getItemsApi()->get('Small Health Potion'));
 
         $processor = new ModifierProcessor(new TypeElementResolver());
         $modifier  = new Modifier('self.inventory.items.name', -5);

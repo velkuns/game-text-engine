@@ -31,7 +31,7 @@ declare(strict_types=1);
 
 namespace Application;
 
-use Velkuns\GameTextEngine\Api\Items;use Velkuns\GameTextEngine\Api\Player;use Velkuns\GameTextEngine\Util\Loader\JsonLoader;use Velunns\GameTextEngine\Api\GameApi;
+use Velkuns\GameTextEngine\Api\ItemsApi;use Velkuns\GameTextEngine\Api\PlayerApi;use Velkuns\GameTextEngine\Util\Loader\JsonLoader;use Velunns\GameTextEngine\Api\GameApi;
 
 //~ Factories
 $modifierFactory  = new ModifierFactory();
@@ -44,29 +44,41 @@ $entityFactory    = new EntityFactory(
     $itemFactory
 );
 
-$items   = new Items($itemFactory);
+$items   = new ItemsApi($itemFactory);
 $gameApi = new GameApi(
     new JsonLoader(),
-    new Story($graphFactory),
+    new StoryApi($graphFactory),
     $items,
-    new Bestiary($entityFactory, $items),
-    new Player($entityFactory, $items),
-    new Combat(new Randomizer(new Mt19937())),
+    new BestiaryApi($entityFactory, $items),
+    new PlayerApi($entityFactory, $items),
+    new CombatApi(new Randomizer(new Mt19937())),
 );
 
 //~ Load json data (can be from files or strings if came from database)
-$storyData    = $game->loader->fromFile($dataDir . '/stories/test.json');
-$itemsData    = $game->loader->fromFile($dataDir . '/items.json');
-$bestiaryData = $game->loader->fromFile($dataDir . '/bestiary.json');
-$playerData   = $game->loader->fromFile($dataDir . '/templates/player.json');
+$storyData          = $game->loader->fromFile($dataDir . '/stories/test.json');
+$itemsData          = $game->loader->fromFile($dataDir . '/items.json');
+$bestiaryData       = $game->loader->fromFile($dataDir . '/bestiary.json');
+$abilitiesRulesData = $game->loader->fromFile($dataDir . '/rules/rules_abilities.json');
+$playerData         = $game->loader->fromFile($dataDir . '/templates/player.json');
 
 //~ Load data into the game api
 $gameApi->load($storyData, $itemsData, $bestiaryData, $playerData);
 
+//~ Access to the other apis
+$gameApi->storyApi->[...];
+$gameApi->bestiaryApi->[...];
+$gameApi->itemsApi->[...];
+$gameApi->abilitiesApi->[...];
+$gameApi->playerApi->[...];
+
 /**
- * @param array{story: string, items: string, bestiary: string, player: string} $data Array of json data, to save in files or database
+ * @param array{story: string, items: string, bestiary: string, abilities: string, player: string} $data Array of json data, to save in files or database
  */
 $data = $gameApi->dump(/* true */); // true to pretty json output
+
+
+$gameApi->exporter->toFile($gameApi->storyApi->graph, [...]);      // export story graph to file
+$string = $gameApi->exporter->toString($gameApi->storyApi->graph); // export story graph to string
 
 
 ```
@@ -104,11 +116,11 @@ namespace Application;
 // [... game api init code here ... ]
 
 //~ Get an item by its name
-$item = $game->items->get('Rusty Sword');
+$item = $game->itemsApi->get('Rusty Sword');
 
 $staff = $itemFactory->from(['name' => 'Staff', ...]);
-$gameApi->items->set($staff); // Adds or replaces the item in the items dictionary
-$gameApi->items->remove($staff->getName()); // Removes the item from the items dictionary
+$gameApi->itemsApi->set($staff); // Adds or replaces the item in the items dictionary
+$gameApi->itemsApi->remove($staff->getName()); // Removes the item from the items dictionary
 ```
 
 ### Bestiary dictionary
@@ -123,11 +135,11 @@ namespace Application;
 // [... game api init code here ... ]
 
 //~ Get a creature by its name
-$entity = $gameApi->bestiary->get('Goblin');
+$entity = $gameApi->bestiaryApi->get('Goblin');
 
 $goblinWarrior = $entityFactory->from(['name' => 'Goblin Warrior', ...]);
-$gameApi->bestiary->set($goblinWarrior); // Adds or replaces the creature in the bestiary
-$gameApi->bestiary->remove('Goblin'); // Removes the creature from the bestiary
+$gameApi->bestiaryApi->set($goblinWarrior); // Adds or replaces the creature in the bestiary
+$gameApi->bestiaryApi->remove('Goblin'); // Removes the creature from the bestiary
 ```
 
 ### Story API
@@ -142,16 +154,16 @@ namespace Application;
 // [... game api init code here ... ]
 
 //~ Start the story - retrieve the first node of the story
-$text = $gameApi->story->start();
+$text = $gameApi->storyApi->start();
 
 // define $player before
   
 //~ Get possible choices
-$choices = $gameApi->story->getPossibleChoices($node->id, $player);
+$choices = $gameApi->storyApi->getPossibleChoices($node->id, $player);
 
 //~ Then display choices to the player, get his choice and advance the story
 $playerChoice = $choices[0];
-$nextText = $gameApi->story->goto($playerChoice->source, $playerChoice->target, $player/*[, $enemy]*/); // A validation is made to be sure the choice is valid
+$nextText = $gameApi->storyApi->goto($playerChoice->source, $playerChoice->target, $player/*[, $enemy]*/); // A validation is made to be sure the choice is valid
 ```
 
 ### Player API
@@ -181,10 +193,10 @@ $data = [
     'inventory' => ['Rusty Sword'], // optional, default []
 ];
 
-$gameApi->player->new($data);
+$gameApi->playerApi->new($data);
 
 //~ Get player object
-$player = $gameApi->player->player;
+$player = $gameApi->playerApi->player;
 
 
 ```
@@ -201,11 +213,11 @@ namespace Application;
 // [... game api init code here ... ]
 
 $enemies = [
-    $gameApi->bestiary->get('Rat'), // get clone
-    $gameApi->bestiary->get('Rat'), // get clone
+    $gameApi->bestiaryApi->get('Rat'), // get clone
+    $gameApi->bestiaryApi->get('Rat'), // get clone
 ];
 
-$logs = $gameApi->combat->start($gameApi->player->player, $enemies);
+$logs = $gameApi->combatApi->start($gameApi->player->player, $enemies);
 
 //~ Display combat results
 // ... your code to display combat turns ...
@@ -223,7 +235,7 @@ namespace Application;
 
 // [... game api init code here ... ]
 
-$graph = $gameApi->story->graph;
+$graph = $gameApi->storyApi->graph;
 
 //~ Manipulate graph nodes
 $graph->addNode(new Node(...));
@@ -232,7 +244,6 @@ $graph->removeNode('node_id');
 //~ Manipulate graph edges (between nodes).
 $graph->addEdge(new Edge(...));
 $graph->removeEdgeBetweenNodes('node_id_source', 'node_id_target');
-
 ```
 
 > [!IMPORTANT]

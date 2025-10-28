@@ -15,37 +15,48 @@ use Velkuns\GameTextEngine\Api\Exception\GameException;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Graph\Graph;
+use Velkuns\GameTextEngine\Utils\Exporter\DOTExporter;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type GraphData from Graph
  * @phpstan-import-type ItemData from ItemInterface
- * @phpstan-import-type BestiaryData from Bestiary
+ * @phpstan-import-type BestiaryData from BestiaryApi
  * @phpstan-import-type EntityData from EntityInterface
+ * @phpstan-import-type AbilitiesRulesData from AbilitiesApi
  */
-class GameApi
+readonly class GameApi
 {
     public function __construct(
-        public readonly JsonLoader $loader,
-        public readonly Story $story,
-        public readonly Items $items,
-        public readonly Bestiary $bestiary,
-        public readonly Player $player,
-        public readonly Combat $combat,
+        public JsonLoader $loader,
+        public DOTExporter $exporter,
+        public StoryApi $storyApi,
+        public ItemsApi $itemsApi,
+        public BestiaryApi $bestiaryApi,
+        public AbilitiesApi $abilitiesApi,
+        public PlayerApi $playerApi,
+        public CombatApi $combatApi,
     ) {}
 
     /**
      * @phpstan-param GraphData $storyData
      * @phpstan-param list<ItemData> $itemsData
      * @phpstan-param list<BestiaryData> $bestiaryData
+     * @phpstan-param AbilitiesRulesData $abilitiesRulesData
      * @phpstan-param EntityData $playerData
      */
-    public function load(array $storyData, array $itemsData, array $bestiaryData, array $playerData): self
-    {
-        $this->story->load($storyData);
-        $this->items->load($itemsData);
-        $this->bestiary->load($bestiaryData);
-        $this->player->load($playerData);
+    public function load(
+        array $storyData,
+        array $itemsData,
+        array $bestiaryData,
+        array $abilitiesRulesData,
+        array $playerData,
+    ): self {
+        $this->storyApi->load($storyData);
+        $this->itemsApi->load($itemsData);
+        $this->bestiaryApi->load($bestiaryData);
+        $this->abilitiesApi->load($abilitiesRulesData);
+        $this->playerApi->load($playerData);
 
         return $this;
     }
@@ -55,6 +66,7 @@ class GameApi
      *     story: string,
      *     items: string,
      *     bestiary: string,
+     *     abilities: string,
      *     player: string,
      * }
      */
@@ -62,10 +74,11 @@ class GameApi
     {
         try {
             return [
-                'story'    => $this->story->dump($prettyPrint),
-                'items'    => $this->items->dump($prettyPrint),
-                'bestiary' => $this->bestiary->dump($prettyPrint),
-                'player'   => $this->player->dump($prettyPrint),
+                'story'     => $this->storyApi->dump($prettyPrint),
+                'items'     => $this->itemsApi->dump($prettyPrint),
+                'bestiary'  => $this->bestiaryApi->dump($prettyPrint),
+                'abilities' => $this->abilitiesApi->dump($prettyPrint),
+                'player'    => $this->playerApi->dump($prettyPrint),
             ];
             // @codeCoverageIgnoreStart
         } catch (\Throwable $exception) {

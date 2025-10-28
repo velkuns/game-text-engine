@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
@@ -28,13 +29,14 @@ use Velkuns\GameTextEngine\Element\Modifier\ModifierProcessor;
  *    inventory?: list<string>,
  * }
  */
-class Player
+class PlayerApi
 {
     public EntityInterface $player;
 
     public function __construct(
         private readonly EntityFactory $entityFactory,
-        private readonly Items $items,
+        private readonly ItemsApi $items,
+        private readonly AbilitiesApi $abilitiesApi,
         private readonly ModifierProcessor $modifierProcessor,
     ) {}
 
@@ -107,29 +109,7 @@ class Player
         ];
 
         //~ Build abilities
-        $abilities = ['bases' => [], 'compounds' => []];
-        foreach ($data['abilities'] as $name => $value) {
-            $abilities['bases'][$name] = [
-                'type'        => 'base',
-                'name'        => $name,
-                'initial'     => $value,
-                'max'         => $value,
-                'value'       => $value,
-                'constraints' => ['min' => 0, 'max' => 20],
-                'rule'        => null,
-            ];
-        }
-        $abilities['bases']['vitality']    = [
-            'type'        => 'base',
-            'name'        => 'vitality',
-            'initial'     => 0,
-            'max'         => 0,
-            'value'       => 0,
-            'constraints' => ['min' => 0, 'max' => 40],
-            'rule'        => 'strength + endurance',
-        ];
-        $abilities['compounds']['attack']  = ['type' => 'compound', 'name' => 'attack', 'rule' => 'strength + agility'];
-        $abilities['compounds']['defense'] = ['type' => 'compound', 'name' => 'defense', 'rule' => 'endurance + intuition'];
+        $abilities = $this->abilitiesApi->fromNewPlayer($data['abilities']);
 
         //~ Initialize empty statuses
         $statuses = [

@@ -13,23 +13,23 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 use PHPUnit\Framework\TestCase;
 use Random\Engine\Mt19937;
 use Random\Randomizer;
-use Velkuns\GameTextEngine\Api\Combat;
+use Velkuns\GameTextEngine\Api\CombatApi;
 use Velkuns\GameTextEngine\Element\Processor\TimeProcessor;
 use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 
-class CombatTest extends TestCase
+class CombatApiTest extends TestCase
 {
     use ApiTrait;
     use EntityTrait;
 
-    private Combat $combat;
+    private CombatApi $combat;
 
     private const int SEED = 42; // For reproducible tests
 
     public function setUp(): void
     {
-        $this->combat = new Combat(new Randomizer(new Mt19937(self::SEED)), new TimeProcessor());
+        $this->combat = new CombatApi(new Randomizer(new Mt19937(self::SEED)), new TimeProcessor());
     }
 
     public function testCombat1(): void
@@ -83,8 +83,8 @@ class CombatTest extends TestCase
     public function testCombat2(): void
     {
         $player  = self::getPlayer()->clone(); // Player already have rested with remaining turn = 1
-        $rat1    = self::getBestiary()->get('rat'); // get cloned rat
-        $rat2    = self::getBestiary()->get('rat'); // get cloned rat
+        $rat1    = self::getBestiaryApi()->get('rat'); // get cloned rat
+        $rat2    = self::getBestiaryApi()->get('rat'); // get cloned rat
 
         self::assertSame(1, $player->getStatuses()->states['Rested']->getRemainingTurns());
         $this->combat->start($player, [$rat1, $rat2]);

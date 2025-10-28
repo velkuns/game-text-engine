@@ -11,18 +11,18 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Api\Bestiary;
+use Velkuns\GameTextEngine\Api\BestiaryApi;
 use Velkuns\GameTextEngine\Api\Exception\BestiaryException;
-use Velkuns\GameTextEngine\Api\Items;
+use Velkuns\GameTextEngine\Api\ItemsApi;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type ItemData from ItemInterface
- * @phpstan-import-type BestiaryData from Bestiary
+ * @phpstan-import-type BestiaryData from BestiaryApi
  */
-class BestiaryTest extends TestCase
+class BestiaryApiTest extends TestCase
 {
     use FactoryTrait;
 
@@ -30,13 +30,13 @@ class BestiaryTest extends TestCase
     {
         $dataDir = (string) realpath(__DIR__ . '/../../../data');
         $loader  = new JsonLoader();
-        $items   = new Items(self::getItemFactory());
+        $items   = new ItemsApi(self::getItemFactory());
 
         /** @var list<ItemData> $itemsData */
         $itemsData = $loader->fromFile($dataDir . '/items.json');
         $items->load($itemsData);
 
-        $bestiary = new Bestiary(self::getEntityFactory(), $items);
+        $bestiary = new BestiaryApi(self::getEntityFactory(), $items);
 
         /** @var list<BestiaryData> $bestiaryData */
         $bestiaryData = $loader->fromFile($dataDir . '/bestiary.json');
@@ -52,13 +52,13 @@ class BestiaryTest extends TestCase
     {
         $dataDir = (string) realpath(__DIR__ . '/../../../data');
         $loader  = new JsonLoader();
-        $items   = new Items(self::getItemFactory());
+        $items   = new ItemsApi(self::getItemFactory());
 
         /** @var list<ItemData> $itemsData */
         $itemsData = $loader->fromFile($dataDir . '/items.json');
         $items->load($itemsData);
 
-        $bestiary = new Bestiary(self::getEntityFactory(), $items);
+        $bestiary = new BestiaryApi(self::getEntityFactory(), $items);
 
         /** @var list<BestiaryData> $bestiaryData */
         $bestiaryData = $loader->fromFile($dataDir . '/bestiary.json');
@@ -94,13 +94,13 @@ class BestiaryTest extends TestCase
     {
         $dataDir = (string) realpath(__DIR__ . '/../../../data');
         $loader  = new JsonLoader();
-        $items   = new Items(self::getItemFactory());
+        $items   = new ItemsApi(self::getItemFactory());
 
         /** @var list<ItemData> $itemsData */
         $itemsData = $loader->fromFile($dataDir . '/items.json');
         $items->load($itemsData);
 
-        $bestiary = new Bestiary(self::getEntityFactory(), $items);
+        $bestiary = new BestiaryApi(self::getEntityFactory(), $items);
 
         /** @var list<BestiaryData> $bestiaryData */
         $bestiaryData = $loader->fromFile($dataDir . '/bestiary.json');

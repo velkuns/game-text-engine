@@ -18,7 +18,7 @@ use Velkuns\GameTextEngine\Utils\Log\CombatLog;
 /**
  * @phpstan-type TurnLogData array{player: CombatLog, enemy?: CombatLog}
  */
-readonly class Combat
+readonly class CombatApi
 {
     public function __construct(
         private Randomizer $randomizer,

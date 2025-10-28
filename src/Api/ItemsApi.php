@@ -17,7 +17,7 @@ use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 /**
  * @phpstan-import-type ItemData from ItemInterface
  */
-class Items
+class ItemsApi
 {
     /** @var array<string, ItemInterface> $items */
     private array $items = [];

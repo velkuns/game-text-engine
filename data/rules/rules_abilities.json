@@ -1,7 +1,7 @@
 {
     "description": "This section defines base and compound abilities for characters.\n\nThe system is based on four primary base abilities: strength, endurance, agility, and intuition. Each base ability has an initial value of 10 and a maximum value of 20.\n\nCompound abilities are derived from base abilities. For example, the 'attack' compound ability is calculated as the sum of strength and agility, while the 'defense' compound ability is calculated as the sum of endurance and intuition.\n\nAbilities values are constrained within defined limits to ensure balanced gameplay.\n\nMedium values are 10, and are between 0 and 20.",
-    "attribution_points": 10,
-    "attribution_points_max_per_ability": 5,
+    "attributionPoints": 10,
+    "attributionPointsMaxPerAbility": 5,
     "bases": {
         "strength": {
             "type": "base",
@@ -68,14 +68,12 @@
         "attack": {
             "type": "compound",
             "name": "attack",
-            "rule": "strength + agility",
-            "description": "Calculates attack ability as the sum of strength and agility."
+            "rule": "strength + agility"
         },
         "defense": {
             "type": "compound",
             "name": "defense",
-            "rule": "endurance + intuition",
-            "description": "Calculates defense ability as the sum of endurance and intuition."
+            "rule": "endurance + intuition"
         }
     }
 }
