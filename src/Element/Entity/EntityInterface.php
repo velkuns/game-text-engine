@@ -48,7 +48,7 @@ interface EntityInterface extends \JsonSerializable
 
     public function getInventory(): EntityInventory;
 
-    public function hasStatus(string $statusType, string $statusName): bool;
+    public function hasStatus(string $type, string $name): bool;
 
     public function isAlive(): bool;
 

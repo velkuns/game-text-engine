@@ -102,13 +102,12 @@ readonly class EntityFactory
      */
     private function fromEntityStatuses(array $data): EntityStatuses
     {
-        $skills    = \array_map(fn(array $statusData) => $this->statusFactory->from($statusData), $data['skills']);
-        $states    = \array_map(fn(array $statusData) => $this->statusFactory->from($statusData), $data['states']);
-        $blessings = \array_map(fn(array $statusData) => $this->statusFactory->from($statusData), $data['blessings']);
-        $curses    = \array_map(fn(array $statusData) => $this->statusFactory->from($statusData), $data['curses']);
-        $titles    = \array_map(fn(array $statusData) => $this->statusFactory->from($statusData), $data['titles']);
+        $statuses = [];
+        foreach ($data as $type => $list) {
+            $statuses[$type] = \array_map(fn(array $statusData) => $this->statusFactory->from($statusData), $list);
+        }
 
-        return new EntityStatuses($skills, $states, $blessings, $curses, $titles);
+        return new EntityStatuses($statuses);
     }
 
     /**

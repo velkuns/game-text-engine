@@ -15,6 +15,7 @@ use Velkuns\GameTextEngine\Api\AbilitiesApi;
 use Velkuns\GameTextEngine\Api\BestiaryApi;
 use Velkuns\GameTextEngine\Api\ItemsApi;
 use Velkuns\GameTextEngine\Api\PlayerApi;
+use Velkuns\GameTextEngine\Api\StatusesApi;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Element\Modifier\ModifierProcessor;
@@ -26,6 +27,7 @@ use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
  * @phpstan-import-type ItemData from ItemInterface
  * @phpstan-import-type EntityData from EntityInterface
  * @phpstan-import-type AbilitiesRulesData from AbilitiesApi
+ * @phpstan-import-type StatusesRulesData from StatusesApi
  */
 trait ApiTrait
 {
@@ -34,6 +36,7 @@ trait ApiTrait
     private static ?BestiaryApi $bestiary = null;
     private static ?ItemsApi $items = null;
     private static ?AbilitiesApi $abilitiesApi = null;
+    private static ?StatusesApi $statusesApi = null;
     private static ?PlayerApi $playerApi = null;
 
     private static function getBestiaryApi(): BestiaryApi
@@ -76,6 +79,19 @@ trait ApiTrait
         return self::$abilitiesApi;
     }
 
+    private static function getStatusesApi(): StatusesApi
+    {
+        if (self::$statusesApi === null) {
+            self::$statusesApi = new StatusesApi(self::getStatusFactory());
+
+            /** @var StatusesRulesData $data */
+            $data = (new JsonLoader())->fromFile(__DIR__ . '/../../data/rules/rules_statuses.json');
+            self::$statusesApi->load($data);
+        }
+
+        return self::$statusesApi;
+    }
+
     private static function getPlayerApi(): PlayerApi
     {
         if (self::$playerApi === null) {
@@ -83,6 +99,7 @@ trait ApiTrait
                 self::getEntityFactory(),
                 self::getItemsApi(),
                 self::getAbilitiesApi(),
+                self::getStatusesApi(),
                 new ModifierProcessor(new TypeElementResolver()),
             );
 

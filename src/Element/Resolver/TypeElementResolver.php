@@ -33,16 +33,11 @@ readonly class TypeElementResolver
 
             //~ Pre-check element type
             if (!\is_object($element) && !\is_iterable($element)) {
-                throw new TypeElementResolveException('Invalid "condition.type" (should end with an object or array element)', 1100);
+                throw new TypeElementResolveException('Invalid type to resolve (should end with an object or array element)', 1100);
             }
 
-            //~ Check for array
-            if (\is_array($element)) {
-                if (!\array_key_exists($property, $element)) {
-                    throw new TypeElementResolveException('Invalid "condition.type" (array key does not exist)', 1101); // @codeCoverageIgnore
-                }
-                $element = $element[$property];
-                continue;
+            if (\is_iterable($element)) {
+                break; // @codeCoverageIgnore
             }
 
             $reflectionClass = new \ReflectionClass($element);
@@ -68,16 +63,16 @@ readonly class TypeElementResolver
                 continue;
             }
 
-            throw new TypeElementResolveException('Invalid "condition.type" (cannot find property)', 1102);
+            throw new TypeElementResolveException('Invalid type to resolve (cannot find property)', 1102);
         }
 
         if ($element === $entity) {
-            throw new TypeElementResolveException('Invalid "condition.type" (not enough part)', 1103);
+            throw new TypeElementResolveException('Invalid type to resolve (not enough part)', 1103);
         }
 
         //~ Pre-check element type
         if (!\is_object($element) && !\is_iterable($element) && !\is_countable($element)) {
-            throw new TypeElementResolveException('Invalid "condition.type" (should end with an object or array element)', 1104);
+            throw new TypeElementResolveException('Invalid type to resolve (should end with an object or array element)', 1104);
         }
 
         /** @var \Countable&iterable<object> $elements */

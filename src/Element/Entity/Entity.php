@@ -64,16 +64,9 @@ readonly class Entity implements EntityInterface
         return $this->inventory;
     }
 
-    public function hasStatus(string $statusType, string $statusName): bool
+    public function hasStatus(string $type, string $name): bool
     {
-        return match ($statusType) {
-            'skill'    => isset($this->statuses->skills[$statusName]),
-            'state'    => isset($this->statuses->states[$statusName]),
-            'blessing' => isset($this->statuses->blessings[$statusName]),
-            'curse'    => isset($this->statuses->curses[$statusName]),
-            'title'    => isset($this->statuses->titles[$statusName]),
-            default    => false, // Unknown status type
-        };
+        return $this->getStatuses()->getByType($type, $name) !== null;
     }
 
     public function isAlive(): bool

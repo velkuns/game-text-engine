@@ -138,7 +138,7 @@ trait EntityTrait
                 ],
             ],
             'statuses'  => [
-                'skills'    => [
+                'skill'    => [
                     'Sword (Mastery)' => [
                         'type'           => 'skill',
                         'name'           => 'Sword (Mastery)',
@@ -163,8 +163,6 @@ trait EntityTrait
                                 ],
                             ],
                         ],
-                        'durationTurns'  => 0,
-                        'remainingTurns' => 0,
                     ],
                     'Dragon Hunter'   => [
                         'type'           => 'skill',
@@ -190,8 +188,6 @@ trait EntityTrait
                                 ],
                             ],
                         ],
-                        'durationTurns'  => 0,
-                        'remainingTurns' => 0,
                     ],
                     'Goblin Hunter'   => [
                         'type'           => 'skill',
@@ -213,11 +209,9 @@ trait EntityTrait
                                 ],
                             ],
                         ],
-                        'durationTurns'  => 0,
-                        'remainingTurns' => 0,
                     ],
                 ],
-                'states'    => [
+                'state'    => [
                     'Rested' => [
                         'type'           => 'state',
                         'name'           => 'Rested',
@@ -228,22 +222,18 @@ trait EntityTrait
                                 'value' => 2,
                             ],
                         ],
-                        'conditions'     => null,
                         'durationTurns'  => 3,
                         'remainingTurns' => 1,
                     ],
                 ],
-                'blessings' => [],
-                'curses'    => [],
-                'titles'    => [
+                'blessing' => [],
+                'curse'    => [],
+                'title'    => [
                     'Dragon Slayer' => [
                         'type'           => 'title',
                         'name'           => 'Dragon Slayer',
                         'description'    => 'You have slain a dragon',
                         'modifiers'      => [],
-                        'conditions'     => null,
-                        'durationTurns'  => 0,
-                        'remainingTurns' => 0,
                     ],
                 ],
             ],
@@ -376,11 +366,11 @@ trait EntityTrait
                 ],
             ],
             'statuses'  => [
-                'skills'    => [],
-                'states'    => [],
-                'blessings' => [],
-                'curses'    => [],
-                'titles'    => [],
+                'skill'    => [],
+                'state'    => [],
+                'blessing' => [],
+                'curse'    => [],
+                'title'    => [],
             ],
             'inventory' => [
                 'coins' => 10,
@@ -499,11 +489,11 @@ trait EntityTrait
                 ],
             ],
             'statuses'  => [
-                'skills'    => [],
-                'states'    => [],
-                'blessings' => [],
-                'curses'    => [],
-                'titles'    => [],
+                'skill'    => [],
+                'state'    => [],
+                'blessing' => [],
+                'curse'    => [],
+                'title'    => [],
             ],
             'inventory' => [
                 'coins' => 2,

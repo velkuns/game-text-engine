@@ -54,11 +54,11 @@ class EntityFactoryTest extends TestCase
         self::assertSame('strength', $ability->getName());
 
         $statuses = $hero->getStatuses();
-        self::assertCount(3, $statuses->skills);
-        self::assertCount(1, $statuses->states);
-        self::assertCount(0, $statuses->blessings);
-        self::assertCount(0, $statuses->curses);
-        self::assertCount(1, $statuses->titles);
+        self::assertCount(3, $statuses->statuses['skill']);
+        self::assertCount(1, $statuses->statuses['state']);
+        self::assertCount(0, $statuses->statuses['blessing']);
+        self::assertCount(0, $statuses->statuses['curse']);
+        self::assertCount(1, $statuses->statuses['title']);
 
         self::assertFalse($hero->hasStatus('skill', 'non-existing-skill'));
         self::assertFalse($hero->hasStatus('state', 'non-existing-skill'));

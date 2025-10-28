@@ -67,7 +67,7 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'      => 'self.abilities.bases.strength',
+                            'type'      => 'self.abilities.strength',
                             'condition' => 'value >=  10 ',
                             'is'        => true,
                         ],
@@ -97,8 +97,8 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'      => 'self.statuses.skills',
-                            'condition' => 'name=Sword (Mastery)',
+                            'type'      => 'self.statuses.all',
+                            'condition' => 'type=skill;name=Sword (Mastery)',
                             'is'        => false,
                         ],
                     ],
@@ -112,12 +112,12 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'self.abilities.bases.strength',
+                            'type'     => 'self.abilities.strength',
                             'condition' => 'value>10',
                             'is'        => true,
                         ],
                         [
-                            'type'      => 'self.abilities.bases.agility',
+                            'type'      => 'self.abilities.agility',
                             'condition' => 'value=15',
                             'is'        => true,
                         ],
@@ -132,12 +132,12 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 2,
                     'conditions' => [
                         [
-                            'type'      => 'self.abilities.bases.strength',
+                            'type'      => 'self.abilities.strength',
                             'condition' => 'value<=10',
                             'is'        => true,
                         ],
                         [
-                            'type'      => 'self.abilities.bases.agility',
+                            'type'      => 'self.abilities.agility',
                             'condition' => 'value>0',
                             'is'        => true,
                         ],
@@ -193,7 +193,7 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions'     => [
                         [
-                            'type'      => 'self.abilities.bases.strength.value.deeper',
+                            'type'      => 'self.abilities.strength.value.deeper',
                             'condition' => 'value >=  10 ',
                             'is'        => true,
                         ],

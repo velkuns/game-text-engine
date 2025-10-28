@@ -82,15 +82,23 @@ class Status implements StatusInterface
      */
     public function jsonSerialize(): array
     {
-        return [
+        $data = [
             'type'           => $this->getType(),
             'name'           => $this->getName(),
             'description'    => $this->getDescription(),
             'modifiers'      => array_map(fn(Modifier $modifier) => $modifier->jsonSerialize(), $this->getModifiers()),
-            'conditions'     => $this->getConditions()?->jsonSerialize(),
-            'durationTurns'  => $this->getDurationTurns(),
-            'remainingTurns' => $this->getRemainingTurns(),
         ];
+
+        if ($this->getConditions() !== null) {
+            $data['conditions'] = $this->getConditions()->jsonSerialize();
+        }
+
+        if ($this->getDurationTurns() > 0) {
+            $data['durationTurns']  = $this->getDurationTurns();
+            $data['remainingTurns'] = $this->getRemainingTurns();
+        }
+
+        return $data;
     }
 
     public function clone(): self

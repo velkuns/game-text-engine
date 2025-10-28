@@ -86,9 +86,9 @@ class CombatApiTest extends TestCase
         $rat1    = self::getBestiaryApi()->get('rat'); // get cloned rat
         $rat2    = self::getBestiaryApi()->get('rat'); // get cloned rat
 
-        self::assertSame(1, $player->getStatuses()->states['Rested']->getRemainingTurns());
+        self::assertSame(1, $player->getStatuses()->getByType('state', 'Rested')?->getRemainingTurns());
         $this->combat->start($player, [$rat1, $rat2]);
-        self::assertSame(0, $player->getStatuses()->states['Rested']->getRemainingTurns());
+        self::assertSame(0, $player->getStatuses()->getByType('state', 'Rested')->getRemainingTurns());
 
         self::assertTrue($player->isAlive());
         self::assertFalse($rat1->isAlive());

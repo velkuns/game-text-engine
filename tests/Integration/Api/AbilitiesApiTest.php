@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Integration\Api;
@@ -48,6 +49,15 @@ Medium values are 10, and are between 0 and 20.", $api->description);
         $content = (string) \file_get_contents($this->getDataDir() . '/rules/rules_abilities.json');
 
         self::assertSame(\trim($content), $api->dump(true));
+    }
+
+    public function testGetAll(): void
+    {
+        $api = $this->getApi();
+
+        $abilities = $api->getAll();
+        self::assertCount(5, $abilities['bases']);
+        self::assertCount(2, $abilities['compounds']);
     }
 
     public function testGetAndSetAndRemove(): void
