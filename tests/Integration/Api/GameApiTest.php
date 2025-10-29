@@ -47,7 +47,7 @@ class GameApiTest extends TestCase
     public function testLoad(): void
     {
         $dataDir = (string) realpath(__DIR__ . '/../../../data');
-        $game = new GameApi(
+        $gameApi = new GameApi(
             new JsonLoader(),
             new DOTExporter(),
             new StoryApi(self::getGraphFactory()),
@@ -59,22 +59,16 @@ class GameApiTest extends TestCase
             new CombatApi(new Randomizer(new Mt19937()), new TimeProcessor()),
         );
 
-        /** @var GraphData $storyData */
-        $storyData    = $game->loader->fromFile($dataDir . '/stories/test.json');
-        /** @var list<ItemData> $itemsData */
-        $itemsData    = $game->loader->fromFile($dataDir . '/items.json');
-        /** @var list<BestiaryData> $bestiaryData */
-        $bestiaryData = $game->loader->fromFile($dataDir . '/bestiary.json');
-        /** @var AbilitiesRulesData $abilitiesRulesData */
-        $abilitiesRulesData = $game->loader->fromFile($dataDir . '/rules/rules_abilities.json');
-        /** @var StatusesRulesData $statusesRulesData */
-        $statusesRulesData = $game->loader->fromFile($dataDir . '/rules/rules_statuses.json');
-        /** @var EntityData $playerData */
-        $playerData = $game->loader->fromFile($dataDir . '/templates/player.json');
+        $gameApi->loadFromFiles(
+            $dataDir . '/stories/test.json',
+            $dataDir . '/items.json',
+            $dataDir . '/bestiary.json',
+            $dataDir . '/rules/rules_abilities.json',
+            $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/templates/player.json',
+        );
 
-        $game->load($storyData, $itemsData, $bestiaryData, $abilitiesRulesData, $statusesRulesData, $playerData);
-
-        $dump = $game->dump(true);
+        $dump = $gameApi->dump(true);
 
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/stories/test.json')), $dump['story']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/items.json')), $dump['items']);
