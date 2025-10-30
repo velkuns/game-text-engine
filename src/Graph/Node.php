@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Graph;
 
 /**
- * @phpstan-type NodeData array{metadata: array{text: string, trigger?: TriggerData|null}}
+ * @phpstan-type NodeData array{metadata: array{text: string, isEnd?: bool, trigger?: TriggerData|null}}
  * @phpstan-type TriggerData array{combat?: array{enemies: list<string>}}
  */
 readonly class Node implements \JsonSerializable
@@ -23,6 +23,7 @@ readonly class Node implements \JsonSerializable
     public function __construct(
         public string $id,
         public string $content,
+        public bool $isEnd = false,
         public ?array $trigger = null,
     ) {}
 
@@ -36,6 +37,10 @@ readonly class Node implements \JsonSerializable
                 'text'    => $this->content,
             ],
         ];
+
+        if ($this->isEnd === true) {
+            $data['metadata']['isEnd'] = true;
+        }
 
         if ($this->trigger !== null) {
             $data['metadata']['trigger'] = $this->trigger;

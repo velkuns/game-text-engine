@@ -23,7 +23,7 @@
                 "text": "Vous d\u00e9cidez de combattre le loup! Pr\u00e9parez-vous...",
                 "trigger": {
                     "combat": {
-                        "entities": [
+                        "enemies": [
                             "Gray Wolf"
                         ]
                     }
@@ -37,17 +37,20 @@
         },
         "text_997": {
             "metadata": {
-                "text": "Vous avez vaincu la menace! Vous retournez au village en h\u00e9ros."
+                "text": "Vous avez vaincu la menace! Vous retournez au village en h\u00e9ros.",
+                "isEnd": true
             }
         },
         "text_998": {
             "metadata": {
-                "text": "Vous \u00eates mort..."
+                "text": "Vous \u00eates mort...",
+                "isEnd": true
             }
         },
         "text_999": {
             "metadata": {
-                "text": "Fin de l'histoire Test"
+                "text": "Fin de l'histoire Test",
+                "isEnd": true
             }
         }
     },

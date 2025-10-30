@@ -14,9 +14,12 @@ namespace Velkuns\GameTextEngine\Api;
 use Velkuns\GameTextEngine\Api\Exception\GameException;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Graph\Edge;
 use Velkuns\GameTextEngine\Graph\Graph;
+use Velkuns\GameTextEngine\Graph\Node;
 use Velkuns\GameTextEngine\Utils\Exporter\DOTExporter;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
+use Velkuns\GameTextEngine\Utils\Log\CombatLog;
 
 /**
  * @phpstan-import-type GraphData from Graph
@@ -31,13 +34,13 @@ readonly class GameApi
     public function __construct(
         public JsonLoader $loader,
         public DOTExporter $exporter,
-        public StoryApi $storyApi,
-        public ItemsApi $itemsApi,
-        public BestiaryApi $bestiaryApi,
-        public AbilitiesApi $abilitiesApi,
-        public StatusesApi $statusesApi,
-        public PlayerApi $playerApi,
-        public CombatApi $combatApi,
+        public StoryApi $story,
+        public ItemsApi $items,
+        public BestiaryApi $bestiary,
+        public AbilitiesApi $abilities,
+        public StatusesApi $statuses,
+        public PlayerApi $player,
+        public CombatApi $combat,
     ) {}
 
     /**
@@ -46,7 +49,7 @@ readonly class GameApi
      * @phpstan-param list<BestiaryData> $bestiaryData
      * @phpstan-param AbilitiesRulesData $abilitiesRulesData
      * @phpstan-param StatusesRulesData $statusesRulesData
-     * @phpstan-param EntityData $playerData
+     * @phpstan-param EntityData|null $playerData
      */
     public function load(
         array $storyData,
@@ -54,16 +57,16 @@ readonly class GameApi
         array $bestiaryData,
         array $abilitiesRulesData,
         array $statusesRulesData,
-        array $playerData,
+        ?array $playerData = null,
     ): self {
-        $this->storyApi->load($storyData);
-        $this->itemsApi->load($itemsData);
-        $this->bestiaryApi->load($bestiaryData);
-        $this->abilitiesApi->load($abilitiesRulesData);
-        $this->statusesApi->load($statusesRulesData);
+        $this->story->load($storyData);
+        $this->items->load($itemsData);
+        $this->bestiary->load($bestiaryData);
+        $this->abilities->load($abilitiesRulesData);
+        $this->statuses->load($statusesRulesData);
 
-        if ($playerData !== []) {
-            $this->playerApi->load($playerData);
+        if ($playerData !== null) {
+            $this->player->load($playerData);
         }
 
         return $this;
@@ -75,7 +78,7 @@ readonly class GameApi
         string $bestiaryFile,
         string $abilitiesRulesFile,
         string $statusesRulesFile,
-        string $playerFile,
+        ?string $playerFile = null,
     ): self {
 
         /** @var GraphData $storyData */
@@ -94,7 +97,7 @@ readonly class GameApi
         $statusesRulesData = $this->loader->fromFile($statusesRulesFile);
 
         /** @var EntityData $playerData */
-        $playerData = $this->loader->fromFile($playerFile);
+        $playerData = $playerFile !== null ? $this->loader->fromFile($playerFile) : null;
 
         $this->load(
             $storyData,
@@ -114,7 +117,7 @@ readonly class GameApi
         string $bestiaryJson,
         string $abilitiesRulesJson,
         string $statusesRulesJson,
-        string $playerJson,
+        ?string $playerJson = null,
     ): self {
 
         /** @var GraphData $storyData */
@@ -133,7 +136,7 @@ readonly class GameApi
         $statusesRulesData = $this->loader->fromString($statusesRulesJson);
 
         /** @var EntityData $playerData */
-        $playerData = $this->loader->fromString($playerJson);
+        $playerData = $playerJson !== null ? $this->loader->fromString($playerJson) : null;
 
         $this->load(
             $storyData,
@@ -145,6 +148,31 @@ readonly class GameApi
         );
 
         return $this;
+    }
+
+    /**
+     * @return array{0: Node, 1: Edge[], 2: array<int, array{player: CombatLog, enemy?: CombatLog}>}
+     */
+    public function read(string $source, string $target): array
+    {
+        $logs = [];
+
+        //~ Validate the path
+        $node = $this->story->goto($source, $target, $this->player->player);
+
+        //~ Handle trigger if necessary
+        if ($node->trigger !== null && isset($node->trigger['combat'])) {
+            $enemies = [];
+            foreach ($node->trigger['combat']['enemies'] as $name) {
+                $enemies[] = $this->bestiary->get($name);
+            }
+            $logs = $this->combat->start($this->player->player, $enemies);
+        }
+
+        //~ Get choices
+        $choices = $this->story->getPossibleChoices($target, $this->player->player);
+
+        return [$node, $choices, $logs];
     }
 
     /**
@@ -161,12 +189,12 @@ readonly class GameApi
     {
         try {
             return [
-                'story'     => $this->storyApi->dump($prettyPrint),
-                'items'     => $this->itemsApi->dump($prettyPrint),
-                'bestiary'  => $this->bestiaryApi->dump($prettyPrint),
-                'abilities' => $this->abilitiesApi->dump($prettyPrint),
-                'statuses'  => $this->statusesApi->dump($prettyPrint),
-                'player'    => $this->playerApi->dump($prettyPrint),
+                'story'     => $this->story->dump($prettyPrint),
+                'items'     => $this->items->dump($prettyPrint),
+                'bestiary'  => $this->bestiary->dump($prettyPrint),
+                'abilities' => $this->abilities->dump($prettyPrint),
+                'statuses'  => $this->statuses->dump($prettyPrint),
+                'player'    => $this->player->dump($prettyPrint),
             ];
             // @codeCoverageIgnoreStart
         } catch (\Throwable $exception) {

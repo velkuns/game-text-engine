@@ -61,6 +61,10 @@ class StoryApi
         EntityInterface $player,
         ?EntityInterface $enemy = null,
     ): bool {
+        if ($source === $target) {
+            return true;
+        }
+
         $edges = $this->graph->getEdgesFromSource($source);
 
         foreach ($edges as $edge) {
