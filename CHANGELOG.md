@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ----
 
+## [0.2.1] - 2025-10-30
+[0.2.1]: https://github.com/velkuns/game-text-engine/compare/0.1.0...master
+### Added
+- Add ItemInterface::equip() method to equip an item
+### Changed
+- GameApi::read(): if source = target, do not apply the trigger (already be applied)
+- Fix story test on condition for edge
+
 ## [0.2.0] - 2025-10-30
 [0.2.0]: https://github.com/velkuns/game-text-engine/compare/0.1.0...master
 ### Added

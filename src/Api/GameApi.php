@@ -161,7 +161,7 @@ readonly class GameApi
         $node = $this->story->goto($source, $target, $this->player->player);
 
         //~ Handle trigger if necessary
-        if ($node->trigger !== null && isset($node->trigger['combat'])) {
+        if ($source !== $target && $node->trigger !== null && isset($node->trigger['combat'])) {
             $enemies = [];
             foreach ($node->trigger['combat']['enemies'] as $name) {
                 $enemies[] = $this->bestiary->get($name);
