@@ -92,6 +92,10 @@ $data = $gameApi->dump(/* true */); // true to pretty json output
 $gameApi->exporter->toFile($gameApi->storyApi->graph, [...]);      // export story graph to file
 $string = $gameApi->exporter->toString($gameApi->storyApi->graph); // export story graph to string
 
+//~ Game API read
+$source = 'text_1';
+$target = 'text_2';
+$gameApi->read($source, $target);
 
 ```
 
@@ -128,11 +132,11 @@ namespace Application;
 // [... game api init code here ... ]
 
 //~ Get an item by its name
-$item = $game->itemsApi->get('Rusty Sword');
+$item = $game->items->get('Rusty Sword');
 
 $staff = $itemFactory->from(['name' => 'Staff', ...]);
-$gameApi->itemsApi->set($staff); // Adds or replaces the item in the items dictionary
-$gameApi->itemsApi->remove($staff->getName()); // Removes the item from the items dictionary
+$gameApi->items->set($staff); // Adds or replaces the item in the items dictionary
+$gameApi->items->remove($staff->getName()); // Removes the item from the items dictionary
 ```
 
 ### Bestiary API
@@ -147,11 +151,11 @@ namespace Application;
 // [... game api init code here ... ]
 
 //~ Get a creature by its name
-$entity = $gameApi->bestiaryApi->get('Goblin');
+$entity = $gameApi->bestiary->get('Goblin');
 
 $goblinWarrior = $entityFactory->from(['name' => 'Goblin Warrior', ...]);
-$gameApi->bestiaryApi->set($goblinWarrior); // Adds or replaces the creature in the bestiary
-$gameApi->bestiaryApi->remove('Goblin'); // Removes the creature from the bestiary
+$gameApi->bestiary->set($goblinWarrior); // Adds or replaces the creature in the bestiary
+$gameApi->bestiary->remove('Goblin'); // Removes the creature from the bestiary
 ```
 
 ### Abilities API
@@ -166,11 +170,11 @@ namespace Application;
 // [... game api init code here ... ]
 
 //~ Return all abilities: array{bases: array<string, AbilityInterface>, compounds: array<string, AbilityInterface>}
-$abilities = $gameApi->abilitiesApi->getAll();
+$abilities = $gameApi->abilities->getAll();
 
-$ability = $gameApi->abilitiesApi->get('strength'); // Get one ability (cloned)
-$gameApi->abilitiesApi->set($ability); // Set an ability
-$gameApi->abilitiesApi->remove('strength');
+$ability = $gameApi->abilities->get('strength'); // Get one ability (cloned)
+$gameApi->abilities->set($ability); // Set an ability
+$gameApi->abilities->remove('strength');
 ```
 
 ### Statuses API
@@ -185,11 +189,11 @@ namespace Application;
 // [... game api init code here ... ]
 
 //~ Return all statuses: array<string, array<string, StatusInterface>>
-$statuses = $gameApi->statusesApi->getAll();
+$statuses = $gameApi->statuses->getAll();
 
-$status = $gameApi->statusesApi->get('skill', 'Goblin Hunter'); // Get one status (cloned)
-$gameApi->statusesApi->set($status); // Set an ability
-$gameApi->statusesApi->remove('skill', 'Goblin Hunter');
+$status = $gameApi->statuses->get('skill', 'Goblin Hunter'); // Get one status (cloned)
+$gameApi->statuses->set($status); // Set an ability
+$gameApi->statuses->remove('skill', 'Goblin Hunter');
 ```
 
 ### Story API
@@ -204,16 +208,16 @@ namespace Application;
 // [... game api init code here ... ]
 
 //~ Start the story - retrieve the first node of the story
-$text = $gameApi->storyApi->start();
+$text = $gameApi->story->start();
 
 // define $player before
   
 //~ Get possible choices
-$choices = $gameApi->storyApi->getPossibleChoices($node->id, $player);
+$choices = $gameApi->story->getPossibleChoices($node->id, $player);
 
 //~ Then display choices to the player, get his choice and advance the story
 $playerChoice = $choices[0];
-$nextText = $gameApi->storyApi->goto($playerChoice->source, $playerChoice->target, $player/*[, $enemy]*/); // A validation is made to be sure the choice is valid
+$nextText = $gameApi->story->goto($playerChoice->source, $playerChoice->target, $player/*[, $enemy]*/); // A validation is made to be sure the choice is valid
 ```
 
 ### Player API
@@ -243,10 +247,10 @@ $data = [
     'inventory' => ['Rusty Sword'], // optional, default []
 ];
 
-$gameApi->playerApi->new($data);
+$gameApi->player->new($data);
 
 //~ Get player object
-$player = $gameApi->playerApi->player;
+$player = $gameApi->player->player;
 
 
 ```
@@ -263,11 +267,11 @@ namespace Application;
 // [... game api init code here ... ]
 
 $enemies = [
-    $gameApi->bestiaryApi->get('Rat'), // get clone
-    $gameApi->bestiaryApi->get('Rat'), // get clone
+    $gameApi->bestiary->get('Rat'), // get clone
+    $gameApi->bestiary->get('Rat'), // get clone
 ];
 
-$logs = $gameApi->combatApi->start($gameApi->player->player, $enemies);
+$logs = $gameApi->combat->start($gameApi->player->player, $enemies);
 
 //~ Display combat results
 // ... your code to display combat turns ...
@@ -285,7 +289,7 @@ namespace Application;
 
 // [... game api init code here ... ]
 
-$graph = $gameApi->storyApi->graph;
+$graph = $gameApi->story->graph;
 
 //~ Manipulate graph nodes
 $graph->addNode(new Node(...));

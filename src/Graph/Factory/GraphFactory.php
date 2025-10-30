@@ -49,7 +49,12 @@ readonly class GraphFactory
      */
     public function nodeFromData(string $id, array $data): Node
     {
-        return new Node($id, $data['metadata']['text'], $data['metadata']['trigger'] ?? null);
+        return new Node(
+            $id,
+            $data['metadata']['text'],
+            $data['metadata']['isEnd'] ?? false,
+            $data['metadata']['trigger'] ?? null,
+        );
     }
 
     /**

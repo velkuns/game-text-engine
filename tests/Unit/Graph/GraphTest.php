@@ -33,7 +33,7 @@ class GraphTest extends TestCase
         $trigger = ['combat' => ['enemies' => ['Goblin']]];
 
         $node1 = new Node('text_1', 'Text for node text_1.');
-        $node2 = new Node('text_2', 'Text for node text_2.', $trigger);
+        $node2 = new Node('text_2', 'Text for node text_2.', false, $trigger);
         $edge  = new Edge('text_1', 'text_2', 'Continue to text 2');
         $graph->addNode($node1);
         $graph->addNode($node2);
