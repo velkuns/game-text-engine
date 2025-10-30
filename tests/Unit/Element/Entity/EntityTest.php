@@ -23,6 +23,8 @@ class EntityTest extends TestCase
     {
         $player = self::getPlayer();
 
+        $player->getInventory()->get('The Sword')?->equip();
+
         self::assertSame('Brave Test Hero #1', $player->getName());
         self::assertSame(24, $player->getAbilities()->get('vitality')?->getValue());
     }

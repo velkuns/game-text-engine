@@ -65,6 +65,8 @@ interface ItemInterface extends \JsonSerializable
 
     public function setQuantity(int $quantity): self;
 
+    public function equip(): self;
+
     /**
      * @return ItemData
      */

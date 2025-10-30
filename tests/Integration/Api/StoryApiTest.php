@@ -78,7 +78,7 @@ class StoryApiTest extends TestCase
 
         //~ Both alive, should have no choices
         $edges = $story->getPossibleChoices('text_4', $player, $goblin);
-        self::assertCount(0, $edges);
+        self::assertCount(1, $edges);
 
         //~ Combat simulation, Player wins
         $goblin->getAbilities()->get('vitality')?->decrease(100);

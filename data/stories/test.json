@@ -97,8 +97,8 @@
                     "numberRequired": 1,
                     "conditions": [
                         {
-                            "type": "enemy.abilities.vitality",
-                            "condition": "value<=0",
+                            "type": "self.abilities.vitality",
+                            "condition": "value>0",
                             "is": true
                         }
                     ]

@@ -29,7 +29,7 @@ class Item implements ItemInterface
         private readonly string $description = '',
         private readonly array $modifiers = [],
         private readonly int $flags = 0,
-        private readonly bool $equipped = false,
+        private bool $equipped = false,
         private readonly Damages $damages = new Damages(),
         private int $quantity = 1,
         private readonly int $price = 0,
@@ -112,6 +112,13 @@ class Item implements ItemInterface
     private function isItemType(int $flag): bool
     {
         return ($this->flags & $flag) === $flag;
+    }
+
+    public function equip(): self
+    {
+        $this->equipped = true;
+
+        return $this;
     }
 
     public function setQuantity(int $quantity): self
