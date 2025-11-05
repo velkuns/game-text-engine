@@ -93,8 +93,8 @@ $gameApi->exporter->toFile($gameApi->storyApi->graph, [...]);      // export sto
 $string = $gameApi->exporter->toString($gameApi->storyApi->graph); // export story graph to string
 
 //~ Game API read
-$source = 'text_1';
-$target = 'text_2';
+$source = '1';
+$target = '2';
 $gameApi->read($source, $target);
 
 ```
@@ -434,8 +434,8 @@ readonly class StoryPlay
      */
     public function read(BookInteractiveGame $bookGame, int $targetId): array
     {
-        $source = 'text_' . $bookGame->getTextTargetId(); // Previous target become source
-        $target = 'text_' . $targetId;
+        $source = (string) $bookGame->getTextTargetId(); // Previous target become source
+        $target = (string) $targetId;
 
         $result = $this->api->read($source, $target);
 

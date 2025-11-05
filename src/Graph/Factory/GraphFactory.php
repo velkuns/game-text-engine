@@ -34,7 +34,7 @@ readonly class GraphFactory
     {
         $graph = new Graph($data['metadata']['title']);
         foreach ($data['nodes'] as $id => $nodeData) {
-            $graph->addNode($this->nodeFromData($id, $nodeData));
+            $graph->addNode($this->nodeFromData((string) $id, $nodeData));
         }
 
         foreach ($data['edges'] as $edgeData) {
