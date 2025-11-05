@@ -303,6 +303,207 @@ $graph->removeEdgeBetweenNodes('node_id_source', 'node_id_target');
 > [!IMPORTANT]
 > When add edges, source node and target node must have already been added to the graph.
 
+## Symfony Integration
+### Yaml config
+```yaml
+parameters:
+  # Path to initial game data
+  game.data.dir:      '../../vendor/velkuns/game-text-engine/data'
+
+  # Files to load when create new story. Should be stored in database after.
+  game.data.story:    '%game.data.dir%/stories/test.json'
+  game.data.bestiary: '%game.data.dir%/bestiary.json'
+  game.data.items:    '%game.data.dir%/items.json'
+  game.data.player:   '%game.data.dir%/templates/player.json'
+
+  # Rules files to load when create new story. Should be stored in database after.
+  game.data.rules.abilities: '%game.data.dir%/rules/rules_abilities.json'
+  game.data.rules.statuses:  '%game.data.dir%/rules/rules_statuses.json'
+  game.data.rules.combat:    '%game.data.dir%/rules/rules_combat.json'
+
+services:
+  _defaults:
+    autowire: true
+
+  #~ Game text engine source
+  Velkuns\GameTextEngine\:
+    resource: '../../vendor/velkuns/game-text-engine/src'
+
+  #~ Randomizer for random game part like combat
+  Random\Engine\Mt19937: ~
+  Random\Randomizer: ~
+
+```
+
+### Example of brige service between app & Game Text Engine
+```php
+<?php
+
+/*
+ * Copyright (c) velkuns
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Application\Domain\Book\Service;
+
+use Application\Domain\Book\Entity\BookInteractiveGame;
+use Application\Domain\Book\Repository\BookInteractiveGameRepositoryInterface;
+use Application\Domain\Book\Repository\BookInteractiveRepositoryInterface;
+use Velkuns\GameTextEngine\Api\GameApi;
+use Velkuns\GameTextEngine\Api\PlayerApi;
+use Velkuns\GameTextEngine\Graph\Edge;
+use Velkuns\GameTextEngine\Graph\Node;
+use Velkuns\GameTextEngine\Utils\Log\CombatLog;
+
+/**
+ * @phpstan-import-type NewPlayerData from PlayerApi
+ */
+readonly class StoryPlay
+{
+    public function __construct(
+        public GameApi $api,
+        private BookInteractiveRepositoryInterface $bookInteractiveRepository,
+        private BookInteractiveGameRepositoryInterface $bookInteractiveGameRepository,
+    ) {}
+
+    /**
+     * Load a game from database and load content in GameApi to set up the Game Text Engine  
+     */
+    public function load(int $gameId): BookInteractiveGame
+    {
+        $bookGame        = $this->bookInteractiveGameRepository->findByIdWithJoined($gameId, ['BookInteractive']);
+        $bookInteractive = $bookGame->getBookInteractive();
+
+        //~ Load json data into GameApi
+        $this->api->loadFromJsons(
+            $bookInteractive->getStory(),          // json string
+            $bookInteractive->getItems(),          // json string
+            $bookInteractive->getBestiary(),       // json string
+            $bookInteractive->getRulesAbilities(), // json string
+            $bookInteractive->getRulesStatuses(),  // json string
+            $bookGame->getCharacter(),             // json string
+        );
+
+        return $bookGame;
+    }
+
+    /**
+     * Pre-load the Game Text Engine with rules, bestiary & items data, but without player info  
+     */
+    public function preload(int $bookInteractiveId): void
+    {
+        $bookInteractive = $this->bookInteractiveRepository->findById($bookInteractiveId);
+
+        //~ Load json data into GameApi
+        $this->api->loadFromJsons(
+            $bookInteractive->getStory(),          // json string
+            $bookInteractive->getItems(),          // json string
+            $bookInteractive->getBestiary(),       // json string
+            $bookInteractive->getRulesAbilities(), // json string
+            $bookInteractive->getRulesStatuses(),  // json string
+        );
+    }
+
+    /**
+     * Start a new game. Initialize new player with given basic info, and save game state in database.
+     * @phpstan-param NewPlayerData $characterData
+     */
+    public function start(int $bookInteractiveId, int $userId, array $characterData): BookInteractiveGame
+    {
+        $this->preload($bookInteractiveId);
+
+        //~ Init new player from given character data
+        $this->api->player->new($characterData);
+        //$this->api->player->player->getInventory()->get('Rusty Sword')
+
+        $game = $this->bookInteractiveGameRepository->newEntity();
+
+        $game->setBookInteractiveId($bookInteractiveId);
+        $game->setUserId($userId);
+
+        return $this->save($game, 1, 0);
+    }
+
+    /**
+     * Read target node, and if not a page refresh, save new state
+     * @return array{0: Node, 1: Edge[], 2: array<int, array{player: CombatLog, enemy?: CombatLog}>}
+     */
+    public function read(BookInteractiveGame $bookGame, int $targetId): array
+    {
+        $source = 'text_' . $bookGame->getTextTargetId(); // Previous target become source
+        $target = 'text_' . $targetId;
+
+        $result = $this->api->read($source, $target);
+
+        if ($source !== $target) {
+            $this->save($bookGame, $targetId);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Delete game from database 
+     */
+    public function delete(int $gameId): void
+    {
+        //~ Set data into entity
+        $bookGame = $this->bookInteractiveGameRepository->findById($gameId);
+        $this->bookInteractiveGameRepository->delete($bookGame);
+    }
+
+    /**
+     * Save game into database. Overwrite the current saved state. 
+     */
+    public function save(BookInteractiveGame $game, int $textTargetId, ?int $textSourceId = null): BookInteractiveGame
+    {
+        //~ Set data into entity
+        $character = $this->api->player->dump();
+
+        $game->setCharacter($character);
+        $game->setTextSourceId($textSourceId ?? $game->getTextTargetId());
+        $game->setTextTargetId($textTargetId);
+
+        $this->bookInteractiveGameRepository->persist($game);
+
+        return $game;
+    }
+}
+
+```
+
+### Example of database to handle "play book"
+```mermaid
+---
+Tables diagram: nodes (v1)
+---
+classDiagram
+    
+    class book_interactive {
+        int book_interactive_id
+        int book_id
+        string book_interactive_story
+        string book_interactive_items
+        string book_interactive_bestiary
+        string book_interactive_rules_abilities
+        string book_interactive_rules_statuses
+        string book_interactive_rules_combat
+    }
+    
+    class book_interactive_game {
+        int game_id
+        int book_interactive_id
+        int user_id
+        string game_character
+        int game_text_source_id
+        int game_text_target_id
+    }
+```
+
 ## Contributing
 
 See the [CONTRIBUTING](CONTRIBUTING.md) file.
