@@ -32,31 +32,31 @@ class GraphTest extends TestCase
 
         $trigger = ['combat' => ['enemies' => ['Goblin']]];
 
-        $node1 = new Node('text_1', 'Text for node text_1.');
-        $node2 = new Node('text_2', 'Text for node text_2.', false, $trigger);
-        $edge  = new Edge('text_1', 'text_2', 'Continue to text 2');
+        $node1 = new Node('1', 'Text for node 1.');
+        $node2 = new Node('2', 'Text for node 2.', false, $trigger);
+        $edge  = new Edge('1', '2', 'Continue to text 2');
         $graph->addNode($node1);
         $graph->addNode($node2);
         $graph->addEdge($edge);
 
 
-        self::assertSame($node1, $graph->getNode('text_1'));
-        self::assertSame($node2, $graph->getNode('text_2'));
-        self::assertSame(['text_2' => $edge], $graph->getEdgesFromSource('text_1'));
+        self::assertSame($node1, $graph->getNode('1'));
+        self::assertSame($node2, $graph->getNode('2'));
+        self::assertEquals(['2' => $edge], $graph->getEdgesFromSource('1'));
 
         $data = [
             'metadata' => [
                 'title' => 'Test Graph',
             ],
             'nodes' => [
-                'text_1' => [
+                '1' => [
                     'metadata' => [
-                        'text' => 'Text for node text_1.',
+                        'text' => 'Text for node 1.',
                     ],
                 ],
-                'text_2' => [
+                '2' => [
                     'metadata' => [
-                        'text' => 'Text for node text_2.',
+                        'text' => 'Text for node 2.',
                         'trigger' => [
                             'combat' => [
                                 'enemies' => ['Goblin'],
@@ -67,8 +67,8 @@ class GraphTest extends TestCase
             ],
             'edges' => [
                 [
-                    'source' => 'text_1',
-                    'target' => 'text_2',
+                    'source' => '1',
+                    'target' => '2',
                     'label'  => 'action',
                     'metadata' => [
                         'text'       => 'Continue to text 2',
@@ -87,58 +87,58 @@ class GraphTest extends TestCase
         $expectedBefore = [
             'metadata' => ['title' => 'Test Graph',],
             'nodes' => [
-                'text_1' => ['metadata' => ['text' => 'Start']],
-                'text_2' => ['metadata' => ['text' => '2 -> 3, 2 -> 5']],
-                'text_3' => ['metadata' => ['text' => '3 -> 4']],
-                'text_4' => ['metadata' => ['text' => '4 -> Death, 4 -> End']],
-                'text_5' => ['metadata' => ['text' => '5 -> End']],
-                'text_8' => ['metadata' => ['text' => 'Death']],
-                'text_9' => ['metadata' => ['text' => 'End']],
+                '1' => ['metadata' => ['text' => 'Start']],
+                '2' => ['metadata' => ['text' => '2 -> 3, 2 -> 5']],
+                '3' => ['metadata' => ['text' => '3 -> 4']],
+                '4' => ['metadata' => ['text' => '4 -> Death, 4 -> End']],
+                '5' => ['metadata' => ['text' => '5 -> End']],
+                '8' => ['metadata' => ['text' => 'Death']],
+                '9' => ['metadata' => ['text' => 'End']],
             ],
             'edges' => [
-                ['source' => 'text_1', 'target' => 'text_2', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 2']],
-                ['source' => 'text_2', 'target' => 'text_3', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 3']],
-                ['source' => 'text_3', 'target' => 'text_4', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 4']],
-                ['source' => 'text_4', 'target' => 'text_8', 'label'  => 'action', 'metadata' => ['text' => 'Continue to death']],
-                ['source' => 'text_4', 'target' => 'text_9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
-                ['source' => 'text_2', 'target' => 'text_5', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 5']],
-                ['source' => 'text_5', 'target' => 'text_9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
+                ['source' => '1', 'target' => '2', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 2']],
+                ['source' => '2', 'target' => '3', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 3']],
+                ['source' => '3', 'target' => '4', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 4']],
+                ['source' => '4', 'target' => '8', 'label'  => 'action', 'metadata' => ['text' => 'Continue to death']],
+                ['source' => '4', 'target' => '9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
+                ['source' => '2', 'target' => '5', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 5']],
+                ['source' => '5', 'target' => '9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
             ],
         ];
 
         $expectedAfterRemoveNode = [
             'metadata' => ['title' => 'Test Graph',],
             'nodes' => [
-                'text_1' => ['metadata' => ['text' => 'Start']],
-                'text_2' => ['metadata' => ['text' => '2 -> 3, 2 -> 5']],
-                'text_3' => ['metadata' => ['text' => '3 -> 4']],
-                'text_5' => ['metadata' => ['text' => '5 -> End']],
-                'text_8' => ['metadata' => ['text' => 'Death']],
-                'text_9' => ['metadata' => ['text' => 'End']],
+                '1' => ['metadata' => ['text' => 'Start']],
+                '2' => ['metadata' => ['text' => '2 -> 3, 2 -> 5']],
+                '3' => ['metadata' => ['text' => '3 -> 4']],
+                '5' => ['metadata' => ['text' => '5 -> End']],
+                '8' => ['metadata' => ['text' => 'Death']],
+                '9' => ['metadata' => ['text' => 'End']],
             ],
             'edges' => [
-                ['source' => 'text_1', 'target' => 'text_2', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 2']],
-                ['source' => 'text_2', 'target' => 'text_3', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 3']],
-                ['source' => 'text_2', 'target' => 'text_5', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 5']],
-                ['source' => 'text_5', 'target' => 'text_9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
+                ['source' => '1', 'target' => '2', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 2']],
+                ['source' => '2', 'target' => '3', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 3']],
+                ['source' => '2', 'target' => '5', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 5']],
+                ['source' => '5', 'target' => '9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
             ],
         ];
 
-        //~ Remove node text_4. That will remove edges FROM and TO this node
+        //~ Remove node 4. That will remove edges FROM and TO this node
         $expectedAfterRemoveEdge = [
             'metadata' => ['title' => 'Test Graph',],
             'nodes' => [
-                'text_1' => ['metadata' => ['text' => 'Start']],
-                'text_2' => ['metadata' => ['text' => '2 -> 3, 2 -> 5']],
-                'text_3' => ['metadata' => ['text' => '3 -> 4']],
-                'text_5' => ['metadata' => ['text' => '5 -> End']],
-                'text_8' => ['metadata' => ['text' => 'Death']],
-                'text_9' => ['metadata' => ['text' => 'End']],
+                '1' => ['metadata' => ['text' => 'Start']],
+                '2' => ['metadata' => ['text' => '2 -> 3, 2 -> 5']],
+                '3' => ['metadata' => ['text' => '3 -> 4']],
+                '5' => ['metadata' => ['text' => '5 -> End']],
+                '8' => ['metadata' => ['text' => 'Death']],
+                '9' => ['metadata' => ['text' => 'End']],
             ],
             'edges' => [
-                ['source' => 'text_1', 'target' => 'text_2', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 2']],
-                ['source' => 'text_2', 'target' => 'text_5', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 5']],
-                ['source' => 'text_5', 'target' => 'text_9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
+                ['source' => '1', 'target' => '2', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 2']],
+                ['source' => '2', 'target' => '5', 'label'  => 'action', 'metadata' => ['text' => 'Continue to 5']],
+                ['source' => '5', 'target' => '9', 'label'  => 'action', 'metadata' => ['text' => 'Continue to end']],
             ],
         ];
 
@@ -146,12 +146,12 @@ class GraphTest extends TestCase
         self::assertSame($expectedBefore, $graph->jsonSerialize());
 
 
-        //~ Remove node text_4. That will remove edges FROM and TO this node
-        $graph->removeNode('text_4');
+        //~ Remove node 4. That will remove edges FROM and TO this node
+        $graph->removeNode('4');
         self::assertSame($expectedAfterRemoveNode, $graph->jsonSerialize());
 
         //~ Assert graph is ok after the remove of single edge between two node
-        $graph->removeEdgeBetweenNodes('text_2', 'text_3');
+        $graph->removeEdgeBetweenNodes('2', '3');
         self::assertSame($expectedAfterRemoveEdge, $graph->jsonSerialize());
     }
 
@@ -161,14 +161,14 @@ class GraphTest extends TestCase
 
         self::expectException(GraphException::class);
         self::expectExceptionCode(1302);
-        $graph->getNode('text_1');
+        $graph->getNode('1');
     }
 
     public function testGraphWhenAddNodeButNodeWithSameIdAlreadyExists(): void
     {
         $graph = new Graph('Test Graph');
-        $node1 = new Node('text_1', 'Text for node text_1.');
-        $node2 = new Node('text_1', 'Text for node text_2.');
+        $node1 = new Node('1', 'Text for node 1.');
+        $node2 = new Node('1', 'Text for node 2.');
         $graph->addNode($node1);
 
         self::expectException(GraphException::class);
@@ -182,7 +182,7 @@ class GraphTest extends TestCase
 
         self::expectException(GraphException::class);
         self::expectExceptionCode(1301);
-        $graph->addEdge(new Edge('text_1', 'text_2', 'Continue to text 2'));
+        $graph->addEdge(new Edge('1', '2', 'Continue to text 2'));
     }
 
     public function testGraphWhenRemoveNodeDoesNotExist(): void
@@ -191,7 +191,7 @@ class GraphTest extends TestCase
 
         self::expectException(GraphException::class);
         self::expectExceptionCode(1303);
-        $graph->removeNode('text_1');
+        $graph->removeNode('1');
     }
 
     public function testGraphWhenRemoveEdgeDoesNotExist(): void
@@ -200,6 +200,6 @@ class GraphTest extends TestCase
 
         self::expectException(GraphException::class);
         self::expectExceptionCode(1304);
-        $graph->removeEdgeBetweenNodes('text_2', 'text_3');
+        $graph->removeEdgeBetweenNodes('2', '3');
     }
 }

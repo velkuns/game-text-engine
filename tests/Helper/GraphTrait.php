@@ -21,21 +21,21 @@ trait GraphTrait
     {
         $graph = new Graph('Test Graph');
 
-        $node1 = new Node('text_1', 'Start');
-        $node2 = new Node('text_2', '2 -> 3, 2 -> 5');
-        $node3 = new Node('text_3', '3 -> 4');
-        $node4 = new Node('text_4', '4 -> Death, 4 -> End');
-        $node5 = new Node('text_5', '5 -> End');
-        $node8 = new Node('text_8', 'Death');
-        $node9 = new Node('text_9', 'End');
+        $node1 = new Node('1', 'Start');
+        $node2 = new Node('2', '2 -> 3, 2 -> 5');
+        $node3 = new Node('3', '3 -> 4');
+        $node4 = new Node('4', '4 -> Death, 4 -> End');
+        $node5 = new Node('5', '5 -> End');
+        $node8 = new Node('8', 'Death');
+        $node9 = new Node('9', 'End');
 
-        $edge1_2 = new Edge('text_1', 'text_2', 'Continue to 2');
-        $edge2_3 = new Edge('text_2', 'text_3', 'Continue to 3');
-        $edge3_4 = new Edge('text_3', 'text_4', 'Continue to 4');
-        $edge4_8 = new Edge('text_4', 'text_8', 'Continue to death');
-        $edge4_9 = new Edge('text_4', 'text_9', 'Continue to end');
-        $edge2_5 = new Edge('text_2', 'text_5', 'Continue to 5');
-        $edge5_9 = new Edge('text_5', 'text_9', 'Continue to end');
+        $edge1_2 = new Edge('1', '2', 'Continue to 2');
+        $edge2_3 = new Edge('2', '3', 'Continue to 3');
+        $edge3_4 = new Edge('3', '4', 'Continue to 4');
+        $edge4_8 = new Edge('4', '8', 'Continue to death');
+        $edge4_9 = new Edge('4', '9', 'Continue to end');
+        $edge2_5 = new Edge('2', '5', 'Continue to 5');
+        $edge5_9 = new Edge('5', '9', 'Continue to end');
 
         //~ Add all nodes
         $graph->addNode($node1);

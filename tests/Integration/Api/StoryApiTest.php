@@ -33,8 +33,8 @@ class StoryApiTest extends TestCase
 
         $node = $story->start();
 
-        self::assertSame('text_1', $node->id);
-        self::assertSame('text_2', $story->getText('text_2')->id);
+        self::assertSame('1', $node->id);
+        self::assertSame('2', $story->getText('2')->id);
     }
 
     public function testGoto(): void
@@ -43,9 +43,9 @@ class StoryApiTest extends TestCase
 
         $player = self::getPlayer();
 
-        $node = $story->goto('text_1', 'text_2', $player);
+        $node = $story->goto('1', '2', $player);
 
-        self::assertSame('text_2', $node->id);
+        self::assertSame('2', $node->id);
     }
 
     public function testGotoButWithNonPossibleChoice(): void
@@ -58,15 +58,15 @@ class StoryApiTest extends TestCase
         //~ Player is dead
         $player->getAbilities()->get('vitality')?->decrease(100);
 
-        //~ Trying to go to text_998 (player dead)
-        $node = $story->goto('text_4', 'text_998', $player, $goblin);
-        self::assertSame('text_998', $node->id);
+        //~ Trying to go to 998 (player dead)
+        $node = $story->goto('4', '998', $player, $goblin);
+        self::assertSame('998', $node->id);
 
         self::expectException(StoryException::class);
         self::expectExceptionCode(1400);
 
-        //~ Trying to go to text_997 (player win)
-        $story->goto('text_4', 'text_997', $player);
+        //~ Trying to go to 997 (player win)
+        $story->goto('4', '997', $player);
     }
 
     public function testGetPossibleChoices(): void
@@ -77,13 +77,13 @@ class StoryApiTest extends TestCase
         $goblin = self::getGoblin();
 
         //~ Both alive, should have no choices
-        $edges = $story->getPossibleChoices('text_4', $player, $goblin);
+        $edges = $story->getPossibleChoices('4', $player, $goblin);
         self::assertCount(1, $edges);
 
         //~ Combat simulation, Player wins
         $goblin->getAbilities()->get('vitality')?->decrease(100);
 
-        $edges = $story->getPossibleChoices('text_4', $player, $goblin);
+        $edges = $story->getPossibleChoices('4', $player, $goblin);
         self::assertCount(1, $edges);
         self::assertSame('Vous avez vaincu!', $edges[0]->content);
 
@@ -93,7 +93,7 @@ class StoryApiTest extends TestCase
 
         $player->getAbilities()->get('vitality')?->decrease(100);
 
-        $edges = $story->getPossibleChoices('text_4', $player, $goblin);
+        $edges = $story->getPossibleChoices('4', $player, $goblin);
         self::assertCount(1, $edges);
         self::assertSame('Vous êtes mort...', $edges[0]->content);
     }

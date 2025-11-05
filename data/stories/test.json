@@ -3,22 +3,22 @@
         "title": "A Day in the Life of a Developer"
     },
     "nodes": {
-        "text_1": {
+        "1": {
             "metadata": {
                 "text": "Marie vous salue de la main.\n \n Vous vous engagez sur la route, en direction des champs qui bordent le village.\n Vous voici maintenant aventurier. Enfin, un aventurier qui d\u00e9bute.\n \n Votre coeur tambourine dans votre poitrine. Est-ce de l'excitation ? De la peur ?\n Probablement un peu des deux. Apr\u00e8s tout, c'est la premi\u00e8re fois que vous quittez votre village.\n\n Vous vous arr\u00eatez quelques seconde, respirez un bon coup, puis vous reprennez votre route."
             }
         },
-        "text_2": {
+        "2": {
             "metadata": {
                 "text": "2 chemin s'offre \u00e0 vous..."
             }
         },
-        "text_3": {
+        "3": {
             "metadata": {
                 "text": "Vous vous enfoncez dans la for\u00eat, et vous tombez sur un loup au d\u00e9tour du chemin..."
             }
         },
-        "text_4": {
+        "4": {
             "metadata": {
                 "text": "Vous d\u00e9cidez de combattre le loup! Pr\u00e9parez-vous...",
                 "trigger": {
@@ -30,24 +30,24 @@
                 }
             }
         },
-        "text_5": {
+        "5": {
             "metadata": {
                 "text": "Vous avancez sur le chemin et devant vous se dresse une sombre masure. Vous vous approchez de la porte..."
             }
         },
-        "text_997": {
+        "997": {
             "metadata": {
                 "text": "Vous avez vaincu la menace! Vous retournez au village en h\u00e9ros.",
                 "isEnd": true
             }
         },
-        "text_998": {
+        "998": {
             "metadata": {
                 "text": "Vous \u00eates mort...",
                 "isEnd": true
             }
         },
-        "text_999": {
+        "999": {
             "metadata": {
                 "text": "Fin de l'histoire Test",
                 "isEnd": true
@@ -56,40 +56,40 @@
     },
     "edges": [
         {
-            "source": "text_1",
-            "target": "text_2",
+            "source": "1",
+            "target": "2",
             "label": "action",
             "metadata": {
                 "text": "Continuer"
             }
         },
         {
-            "source": "text_2",
-            "target": "text_3",
+            "source": "2",
+            "target": "3",
             "label": "action",
             "metadata": {
                 "text": "Prendre le chemin de droite"
             }
         },
         {
-            "source": "text_2",
-            "target": "text_5",
+            "source": "2",
+            "target": "5",
             "label": "action",
             "metadata": {
                 "text": "Prendre le chemin de gauche"
             }
         },
         {
-            "source": "text_3",
-            "target": "text_4",
+            "source": "3",
+            "target": "4",
             "label": "action",
             "metadata": {
                 "text": "Combattre"
             }
         },
         {
-            "source": "text_4",
-            "target": "text_997",
+            "source": "4",
+            "target": "997",
             "label": "action",
             "metadata": {
                 "text": "Vous avez vaincu!",
@@ -106,8 +106,8 @@
             }
         },
         {
-            "source": "text_4",
-            "target": "text_998",
+            "source": "4",
+            "target": "998",
             "label": "action",
             "metadata": {
                 "text": "Vous \u00eates mort...",
@@ -124,16 +124,16 @@
             }
         },
         {
-            "source": "text_3",
-            "target": "text_999",
+            "source": "3",
+            "target": "999",
             "label": "action",
             "metadata": {
                 "text": "Fuir"
             }
         },
         {
-            "source": "text_5",
-            "target": "text_999",
+            "source": "5",
+            "target": "999",
             "label": "action",
             "metadata": {
                 "text": "Fuir"

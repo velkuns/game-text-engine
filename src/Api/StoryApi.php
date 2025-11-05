@@ -38,7 +38,7 @@ class StoryApi
 
     public function start(): Node
     {
-        return $this->graph->getNode('text_1');
+        return $this->graph->getNode('1');
     }
 
     public function goto(

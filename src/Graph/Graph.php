@@ -16,20 +16,20 @@ use Velkuns\GameTextEngine\Graph\Exception\GraphException;
 /**
  * @phpstan-import-type NodeData from Node
  * @phpstan-import-type EdgeData from Edge
- * @phpstan-type GraphData array{metadata: array{title: string}, nodes: array<string, NodeData>, edges: list<EdgeData>}
+ * @phpstan-type GraphData array{metadata: array{title: string}, nodes: NodeData[], edges: list<EdgeData>}
  */
 class Graph implements \JsonSerializable
 {
-    /** @var array<string, array<string, Edge>> */
+    /** @var array<string, Edge[]> */
     private array $edgesFromSource = [];
 
-    /** @var array<string, array<string, Edge>> */
+    /** @var array<string, Edge[]> */
     private array $edgesToTarget = [];
 
     /**
      * @param string $title
-     * @param array<string, Node> $nodes
-     * @param array<string, Edge> $edges
+     * @param Node[] $nodes
+     * @param Edge[] $edges
      */
     public function __construct(
         public readonly string $title,
@@ -47,7 +47,7 @@ class Graph implements \JsonSerializable
     }
 
     /**
-     * @return array<string, Edge>
+     * @return Edge[]
      */
     public function getEdgesFromSource(string $source): array
     {
@@ -55,7 +55,7 @@ class Graph implements \JsonSerializable
     }
 
     /**
-     * @return array<string, Node>
+     * @return Node[]
      */
     public function getAllNodes(): array
     {
@@ -63,7 +63,7 @@ class Graph implements \JsonSerializable
     }
 
     /**
-     * @return array<string, Edge>
+     * @return Edge[]
      */
     public function getAllEdges(): array
     {

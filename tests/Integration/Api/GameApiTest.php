@@ -17,7 +17,6 @@ use Random\Randomizer;
 use Velkuns\GameTextEngine\Api\AbilitiesApi;
 use Velkuns\GameTextEngine\Api\BestiaryApi;
 use Velkuns\GameTextEngine\Api\CombatApi;
-use Velkuns\GameTextEngine\Api\Exception\GameException;
 use Velkuns\GameTextEngine\Api\Exception\StoryException;
 use Velkuns\GameTextEngine\Api\GameApi;
 use Velkuns\GameTextEngine\Api\StatusesApi;
@@ -116,11 +115,11 @@ class GameApiTest extends TestCase
         );
 
         //~ Test on next node
-        [$node, $edges, $logs] = $gameApi->read('text_1', 'text_2');
+        [$node, $edges, $logs] = $gameApi->read('1', '2');
 
         $graph = $gameApi->story->graph;
-        $expectedNode  = $graph->getNode('text_2');
-        $expectedEdges = \array_values($graph->getEdgesFromSource('text_2'));
+        $expectedNode  = $graph->getNode('2');
+        $expectedEdges = \array_values($graph->getEdgesFromSource('2'));
 
         self::assertSame($expectedNode, $node);
         self::assertSame($expectedEdges, $edges);
@@ -142,11 +141,11 @@ class GameApiTest extends TestCase
         );
 
         //~ Test on next node
-        [$node, $edges, $logs] = $gameApi->read('text_1', 'text_1');
+        [$node, $edges, $logs] = $gameApi->read('1', '1');
 
         $graph = $gameApi->story->graph;
-        $expectedNode  = $graph->getNode('text_1');
-        $expectedEdges = \array_values($graph->getEdgesFromSource('text_1'));
+        $expectedNode  = $graph->getNode('1');
+        $expectedEdges = \array_values($graph->getEdgesFromSource('1'));
 
         self::assertSame($expectedNode, $node);
         self::assertSame($expectedEdges, $edges);
@@ -168,12 +167,12 @@ class GameApiTest extends TestCase
         );
 
         //~ Test on next node
-        [$node, $edges, $logs] = $gameApi->read('text_3', 'text_4');
+        [$node, $edges, $logs] = $gameApi->read('3', '4');
 
         $graph = $gameApi->story->graph;
-        $expectedNode  = $graph->getNode('text_4');
-        $expectedEdges = $graph->getEdgesFromSource('text_4');
-        unset($expectedEdges['text_997']);
+        $expectedNode  = $graph->getNode('4');
+        $expectedEdges = $graph->getEdgesFromSource('4');
+        unset($expectedEdges['997']);
 
         self::assertSame($expectedNode, $node);
         self::assertSame(\array_values($expectedEdges), $edges);
@@ -195,11 +194,11 @@ class GameApiTest extends TestCase
         );
 
         //~ Test on next node
-        [$node, $edges, $logs] = $gameApi->read('text_1', 'text_1');
+        [$node, $edges, $logs] = $gameApi->read('1', '1');
 
         $graph = $gameApi->story->graph;
-        $expectedNode  = $graph->getNode('text_1');
-        $expectedEdges = \array_values($graph->getEdgesFromSource('text_1'));
+        $expectedNode  = $graph->getNode('1');
+        $expectedEdges = \array_values($graph->getEdgesFromSource('1'));
 
         self::assertSame($expectedNode, $node);
         self::assertSame($expectedEdges, $edges);
@@ -222,7 +221,7 @@ class GameApiTest extends TestCase
 
         self::expectException(StoryException::class);
         self::expectExceptionCode(1400);
-        $gameApi->read('text_1', 'text_3');
+        $gameApi->read('1', '3');
     }
 
     private function getGameApi(): GameApi

@@ -25,21 +25,21 @@ class DOTExporterTest extends TestCase
 
   node [shape=box,style=rounded]
 
-  text_1 [label="Start"]
-  text_2 [label="2 -> 3, 2 -> 5"]
-  text_3 [label="3 -> 4"]
-  text_4 [label="4 -> Death, 4 -> End"]
-  text_5 [label="5 -> End"]
-  text_8 [label="Death"]
-  text_9 [label="End"]
+  1 [label="Start"]
+  2 [label="2 -> 3, 2 -> 5"]
+  3 [label="3 -> 4"]
+  4 [label="4 -> Death, 4 -> End"]
+  5 [label="5 -> End"]
+  8 [label="Death"]
+  9 [label="End"]
 
-  text_1 -> text_2 [label="Continue to 2"]
-  text_2 -> text_3 [label="Continue to 3"]
-  text_3 -> text_4 [label="Continue to 4"]
-  text_4 -> text_8 [label="Continue to death"]
-  text_4 -> text_9 [label="Continue to end"]
-  text_2 -> text_5 [label="Continue to 5"]
-  text_5 -> text_9 [label="Continue to end"]
+  1 -> 2 [label="Continue to 2"]
+  2 -> 3 [label="Continue to 3"]
+  3 -> 4 [label="Continue to 4"]
+  4 -> 8 [label="Continue to death"]
+  4 -> 9 [label="Continue to end"]
+  2 -> 5 [label="Continue to 5"]
+  5 -> 9 [label="Continue to end"]
 }
 ';
 

@@ -37,7 +37,7 @@ class EdgeTest extends TestCase
         ];
         $conditions = self::getConditionFactory()->from($data);
 
-        $edge = new Edge('text_1', 'text_2', 'You died!', $conditions);
+        $edge = new Edge('1', '2', 'You died!', $conditions);
 
         //~ Player is alive
         self::assertFalse($edge->available($player, $goblin));
