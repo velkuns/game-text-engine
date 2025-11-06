@@ -18,14 +18,19 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  */
 readonly class ModifierFactory
 {
+    public function __construct(
+        private ConditionsFactory $conditionsFactory,
+    ) {}
+
     /**
      * @phpstan-param ModifierData $data
      */
     public function from(array $data): Modifier
     {
-        $type  = $data['type'];
-        $value = $data['value'];
+        $type       = $data['type'];
+        $value      = $data['value'];
+        $conditions = $this->conditionsFactory->from($data['conditions'] ?? null);
 
-        return new Modifier($type, $value);
+        return new Modifier($type, $value, $conditions);
     }
 }

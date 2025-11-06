@@ -145,21 +145,31 @@ trait EntityTrait
                         'description'    => 'Super skill',
                         'modifiers'      => [
                             [
-                                'type'  => 'self.abilities.agility.value',
+                                'type'  => 'self.ability.agility.value',
                                 'value' => 1,
+                                'conditions'     => [
+                                    'numberRequired' => 1,
+                                    'conditions'     => [
+                                        [
+                                            'type'      => 'self.inventory.item',
+                                            'condition' => 'subType=sword;equipped=true;flags&4',
+                                            'is'        => true,
+                                        ],
+                                    ],
+                                ],
                             ],
                             [
-                                'type'  => 'self.abilities.attack.value',
+                                'type'  => 'self.ability.attack.value',
                                 'value' => 2,
-                            ],
-                        ],
-                        'conditions'     => [
-                            'numberRequired' => 1,
-                            'conditions'     => [
-                                [
-                                    'type'      => 'self.inventory.items',
-                                    'condition' => 'subType=sword;equipped=true;flag&4',
-                                    'is'        => true,
+                                'conditions'     => [
+                                    'numberRequired' => 1,
+                                    'conditions'     => [
+                                        [
+                                            'type'      => 'self.inventory.item',
+                                            'condition' => 'subType=sword;equipped=true;flags&4',
+                                            'is'        => true,
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
@@ -170,21 +180,31 @@ trait EntityTrait
                         'description'    => 'To help to chase dragon.',
                         'modifiers'      => [
                             [
-                                'type'  => 'self.abilities.agility.value',
+                                'type'  => 'self.ability.agility.value',
                                 'value' => 1,
+                                'conditions'     => [
+                                    'numberRequired' => 1,
+                                    'conditions'     => [
+                                        [
+                                            'type'      => 'enemy.info',
+                                            'condition' => 'race=dragon',
+                                            'is'        => true,
+                                        ],
+                                    ],
+                                ],
                             ],
                             [
-                                'type'  => 'self.abilities.attack.value',
+                                'type'  => 'self.ability.attack.value',
                                 'value' => 2,
-                            ],
-                        ],
-                        'conditions'     => [
-                            'numberRequired' => 1,
-                            'conditions'     => [
-                                [
-                                    'type'      => 'enemy.info',
-                                    'condition' => 'race=dragon',
-                                    'is'        => true,
+                                'conditions'     => [
+                                    'numberRequired' => 1,
+                                    'conditions'     => [
+                                        [
+                                            'type'      => 'enemy.info',
+                                            'condition' => 'race=dragon',
+                                            'is'        => true,
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
@@ -197,15 +217,15 @@ trait EntityTrait
                             [
                                 'type'  => 'self.damages.physical.value',
                                 'value' => 1,
-                            ],
-                        ],
-                        'conditions'     => [
-                            'numberRequired' => 1,
-                            'conditions'     => [
-                                [
-                                    'type'      => 'enemy.info',
-                                    'condition' => 'race=goblin',
-                                    'is'        => true,
+                                'conditions'     => [
+                                    'numberRequired' => 1,
+                                    'conditions'     => [
+                                        [
+                                            'type'      => 'enemy.info',
+                                            'condition' => 'race=goblin',
+                                            'is'        => true,
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
@@ -218,7 +238,7 @@ trait EntityTrait
                         'description'    => 'You are well rested',
                         'modifiers'      => [
                             [
-                                'type'  => 'self.abilities.vitality.value',
+                                'type'  => 'self.ability.vitality.value',
                                 'value' => 2,
                             ],
                         ],

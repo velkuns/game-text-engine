@@ -6,18 +6,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Entity;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
-use Velkuns\GameTextEngine\Element\Status\Status;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
+use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
 class EntityTest extends TestCase
 {
     use EntityTrait;
+    use FactoryTrait;
 
     public function testEntity(): void
     {
@@ -34,15 +36,25 @@ class EntityTest extends TestCase
         $player  = self::getPlayer();
         $gobelin = self::getGoblin();
 
-        $player->getStatuses()->set(new Status('skill', 'test', '', []));
-        $player->getStatuses()->set(new Status('state', 'test', '', []));
-        $player->getStatuses()->set(new Status('blessing', 'test', '', []));
-        $player->getStatuses()->set(new Status('curse', 'test', '', []));
-        $player->getStatuses()->set(new Status('title', 'test', '', []));
+        $conditions = self::getConditionFactory()->from(
+            [
+                'numberRequired' => 1,
+                'conditions'     => [
+                    [
+                        'type'      => 'enemy.info',
+                        'condition' => 'race=goblin',
+                        'is'        => true,
+                    ],
+                ],
+            ],
+        );
+
+        //~ Be sure the sword is unequipped before getting the modifiers
+        $player->getInventory()->get('The Sword')?->unequip();
 
         $expected  = [
-            new Modifier('self.damages.physical.value', 1),
-            new Modifier('self.abilities.vitality.value', 2),
+            new Modifier('self.damages.physical.value', 1, $conditions),
+            new Modifier('self.ability.vitality.value', 2),
         ];
         $modifiers = $player->getModifiers($gobelin);
 

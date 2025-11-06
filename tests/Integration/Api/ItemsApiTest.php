@@ -90,6 +90,6 @@ class ItemsApiTest extends TestCase
 
         self::expectException(ItemException::class);
         self::expectExceptionMessage("Item 'Diamond Sword' not found in item list.");
-        $entity = $items->get('Diamond Sword');
+        $items->get('Diamond Sword');
     }
 }

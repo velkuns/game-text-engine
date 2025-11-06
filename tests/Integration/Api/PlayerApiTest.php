@@ -13,15 +13,10 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Api\Exception\PlayerException;
-use Velkuns\GameTextEngine\Api\ItemsApi;
-use Velkuns\GameTextEngine\Api\PlayerApi;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
-use Velkuns\GameTextEngine\Element\Modifier\ModifierProcessor;
-use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
 use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
-use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type ItemData from ItemInterface
@@ -80,10 +75,12 @@ class PlayerApiTest extends TestCase
         ];
 
         $playerApi->new($newPlayerData);
+        self::assertSame(23, $playerApi->player->getAbilities()->get('vitality')?->getValue());
+
         $playerApi->player->getInventory()->get('Small Health Potion')?->setQuantity(2);
         $playerApi->consume('Small Health Potion'); // (11 + 12) +5 vitality => should be 28
 
-        self::assertSame(28, $playerApi->player->getAbilities()->get('vitality')?->getValue());
+        self::assertSame(28, $playerApi->player->getAbilities()->get('vitality')->getValue());
         self::assertSame(1, $playerApi->player->getInventory()->get('Small Health Potion')?->getQuantity());
 
         $playerApi->consume('Small Health Potion');

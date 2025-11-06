@@ -67,6 +67,8 @@ interface ItemInterface extends \JsonSerializable
 
     public function equip(): self;
 
+    public function unequip(): self;
+
     /**
      * @return ItemData
      */

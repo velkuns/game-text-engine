@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Element\Ability;
@@ -49,9 +50,9 @@ class CompoundAbilityTest extends TestCase
         self::assertSame(11, $ability->getMax());
 
         $modifiers = [
-            new Modifier('self.abilities.attack.value', 2),
-            new Modifier('self.abilities.attack.value', -1),
-            new Modifier('self.abilities.defense.value', 5), // Should be ignored
+            new Modifier('self.ability.attack.value', 2),
+            new Modifier('self.ability.attack.value', -1),
+            new Modifier('self.ability.defense.value', 5), // Should be ignored
         ];
 
         self::assertSame(6, $ability->getValueWithModifiers($modifiers)); // 5 + 2 - 1 = 6

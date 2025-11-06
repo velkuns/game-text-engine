@@ -15,8 +15,8 @@ use Velkuns\GameTextEngine\Element\Condition\Condition;
 use Velkuns\GameTextEngine\Element\Condition\ConditionInterface;
 use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Element\Condition\Conditions;
-use Velkuns\GameTextEngine\Element\Condition\ConditionValidatorInterface;
-use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
+use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolverHandler;
+use Velkuns\GameTextEngine\Element\Validator\ValidatorHandler;
 
 /**
  * @phpstan-import-type ConditionsData from Conditions
@@ -26,12 +26,12 @@ readonly class ConditionsFactory
 {
     public function __construct(
         private ConditionParser $parser,
-        private TypeElementResolver $resolver,
-        private ConditionValidatorInterface $validator,
+        private TypeElementResolverHandler $resolverHandler,
+        private ValidatorHandler $validatorHandler,
     ) {}
 
     /**
-     * @param ConditionsData $data
+     * @phpstan-param ConditionsData $data
      */
     public function from(?array $data): ?Conditions
     {
@@ -46,7 +46,7 @@ readonly class ConditionsFactory
     }
 
     /**
-     * @param ConditionData $data
+     * @phpstan-param ConditionData $data
      */
     private function fromCondition(array $data): Condition
     {
@@ -54,6 +54,6 @@ readonly class ConditionsFactory
         $condition = $data['condition'];
         $is        = $data['is'];
 
-        return new Condition($this->parser, $this->resolver, $this->validator, $type, $condition, $is);
+        return new Condition($this->parser, $this->resolverHandler, $this->validatorHandler, $type, $condition, $is);
     }
 }

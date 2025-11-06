@@ -17,7 +17,7 @@ use Velkuns\GameTextEngine\Element\Exception\DamageException;
  * @phpstan-import-type DamageData from DamageInterface
  * @phpstan-type DamagesData array<string, DamageData>
  */
-class Damages
+readonly class Damages
 {
     /**
      * @param array<string, DamageInterface> $damages

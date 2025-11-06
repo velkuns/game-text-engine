@@ -109,6 +109,6 @@ class BestiaryApiTest extends TestCase
 
         self::expectException(BestiaryException::class);
         self::expectExceptionMessage("Entity 'King Goblin' not found in bestiary.");
-        $entity = $bestiary->get('King Goblin');
+        $bestiary->get('King Goblin');
     }
 }

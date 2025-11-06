@@ -12,7 +12,8 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Condition;
 
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
+use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolverHandler;
+use Velkuns\GameTextEngine\Element\Validator\ValidatorHandler;
 
 /**
  * @phpstan-import-type ConditionData from ConditionInterface
@@ -21,8 +22,8 @@ readonly class Condition implements ConditionInterface
 {
     public function __construct(
         public ConditionParser $parser,
-        public TypeElementResolver $resolver,
-        public ConditionValidatorInterface $validator,
+        public TypeElementResolverHandler $resolverHandler,
+        public ValidatorHandler $validatorHandler,
         public string $type,
         public string $condition,
         public bool $is,
@@ -45,17 +46,10 @@ readonly class Condition implements ConditionInterface
 
     public function evaluate(EntityInterface $entity): bool
     {
-        $elements   = $this->resolver->resolve($entity, $this->getType());
+        $element    = $this->resolverHandler->handle($this->getType(), $entity);
         $conditions = $this->parser->parse($this->condition);
 
-        $evaluation = false;
-
-        foreach ($elements as $element) {
-            if ($this->validator->validate($element, $conditions)) {
-                $evaluation = true;
-                break;
-            }
-        }
+        $evaluation = $this->validatorHandler->handle($this->getType(), $element, $conditions);
 
         return $this->is() === $evaluation;
 
@@ -77,8 +71,8 @@ readonly class Condition implements ConditionInterface
     {
         return new self(
             $this->parser,
-            $this->resolver,
-            $this->validator,
+            $this->resolverHandler,
+            $this->validatorHandler,
             $this->type,
             $this->condition,
             $this->is,

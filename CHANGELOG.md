@@ -19,8 +19,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ----
 
+## [0.3.0] - 2025-11
+[0.3.0]: https://github.com/velkuns/game-text-engine/compare/0.2.1...0.3.0
+### Changed
+- Now conditions are under modifiers (not anymore on statuses)
+- Rework resolver handler for type elements of conditions / modifiers
+  - Add resolver by supported element type
+- Rework condition validator
+  - Add validator handler
+  - Add validator by supported element type
+- Rework modifier processors
+  - Add modifier handler
+  - Add modifier process by supported element type
+- Update all tests
+- Update all data / rules according to the changes
+### Added
+- Add TimeResolver::combatEnd() to clean statuses with duration at the end of combats
+- Add some methods in elements classes according to the changes
+
+----
+
 ## [0.2.1] - 2025-10-30
-[0.2.1]: https://github.com/velkuns/game-text-engine/compare/0.1.0...master
+[0.2.1]: https://github.com/velkuns/game-text-engine/compare/0.2.0...0.2.1
 ### Added
 - Add ItemInterface::equip() method to equip an item
 ### Changed

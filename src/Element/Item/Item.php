@@ -121,6 +121,13 @@ class Item implements ItemInterface
         return $this;
     }
 
+    public function unequip(): self
+    {
+        $this->equipped = false;
+
+        return $this;
+    }
+
     public function setQuantity(int $quantity): self
     {
         if ($quantity < 0) {

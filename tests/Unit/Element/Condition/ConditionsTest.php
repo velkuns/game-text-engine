@@ -6,24 +6,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Condition;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Element\Condition\Conditions;
-use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Exception\TypeElementResolveException;
-use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
-use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
-use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
-use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
-use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
-use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
-use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
+use Velkuns\GameTextEngine\Element\Exception\ResolverException;
+use Velkuns\GameTextEngine\Element\Exception\StatusException;
+use Velkuns\GameTextEngine\Element\Exception\UnsupportedConditionTypeException;
+use Velkuns\GameTextEngine\Element\Exception\UnsupportedTypeElementResolverException;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
@@ -36,26 +31,28 @@ class ConditionsTest extends TestCase
     public function testEvaluate(
         Conditions $conditions,
         EntityInterface $player,
-        EntityInterface $enemy,
+        ?EntityInterface $enemy,
         bool $evaluation,
     ): void {
         self::assertSame($evaluation, $conditions->evaluate($player, $enemy));
     }
 
+    /**
+     * @phpstan-param class-string<\Throwable> $exceptionClass
+     */
     #[DataProvider('evaluateExceptionDataProvider')]
     public function testEvaluateThatThrowException(
         Conditions $conditions,
         EntityInterface $player,
         EntityInterface $enemy,
-        int $code,
+        string $exceptionClass,
     ): void {
-        self::expectException(TypeElementResolveException::class);
-        self::expectExceptionCode($code);
+        self::expectException($exceptionClass);
         $conditions->evaluate($player, $enemy);
     }
 
     /**
-     * @return array<string, array{0: Conditions|null, 1: EntityInterface, 2: EntityInterface, 3: bool}>
+     * @return array<string, array{0: Conditions|null, 1: EntityInterface, 2: EntityInterface|null, 3: bool}>
      */
     public static function evaluateDataProvider(): array
     {
@@ -67,7 +64,7 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'      => 'self.abilities.strength',
+                            'type'      => 'self.ability.strength',
                             'condition' => 'value >=  10 ',
                             'is'        => true,
                         ],
@@ -77,13 +74,13 @@ class ConditionsTest extends TestCase
                 self::getGoblin(),
                 true,
             ],
-            'evaluate required 1 condition with list of 1 conditions (use get method)' => [
+            'evaluate required conditions based on entity info level' => [
                 self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'      => 'self.abilities.strength',
-                            'condition' => 'value >=  10 ',
+                            'type'      => 'self.info',
+                            'condition' => 'level>=0',
                             'is'        => true,
                         ],
                     ],
@@ -91,14 +88,44 @@ class ConditionsTest extends TestCase
                 self::getPlayer(),
                 self::getGoblin(),
                 true,
+            ],
+            'evaluate required conditions based on entity info size' => [
+                self::getConditionFactory()->from([
+                    'numberRequired' => 1,
+                    'conditions' => [
+                        [
+                            'type'      => 'self.info',
+                            'condition' => 'size!=huge',
+                            'is'        => true,
+                        ],
+                    ],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
+                true,
+            ],
+            'evaluate required conditions based on entity status but not found' => [
+                self::getConditionFactory()->from([
+                    'numberRequired' => 1,
+                    'conditions' => [
+                        [
+                            'type'      => 'self.status.skill',
+                            'condition' => 'name=unknown',
+                            'is'        => true,
+                        ],
+                    ],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
+                false,
             ],
             'evaluate required 1 condition with list of 1 conditions but evaluation failed' => [
                 self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'      => 'self.statuses.all',
-                            'condition' => 'type=skill;name=Sword (Mastery)',
+                            'type'      => 'self.status.skill',
+                            'condition' => 'name=Sword (Mastery)',
                             'is'        => false,
                         ],
                     ],
@@ -112,12 +139,12 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'self.abilities.strength',
+                            'type'     => 'self.ability.strength',
                             'condition' => 'value>10',
                             'is'        => true,
                         ],
                         [
-                            'type'      => 'self.abilities.agility',
+                            'type'      => 'self.ability.agility',
                             'condition' => 'value=15',
                             'is'        => true,
                         ],
@@ -132,12 +159,12 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 2,
                     'conditions' => [
                         [
-                            'type'      => 'self.abilities.strength',
+                            'type'      => 'self.ability.strength',
                             'condition' => 'value<=10',
                             'is'        => true,
                         ],
                         [
-                            'type'      => 'self.abilities.agility',
+                            'type'      => 'self.ability.agility',
                             'condition' => 'value>0',
                             'is'        => true,
                         ],
@@ -152,7 +179,7 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'      => 'self.inventory.items',
+                            'type'      => 'self.inventory.item',
                             'condition' => 'name=The Sword;subType=sword;equipped=true;flags&4',
                             'is'        => true,
                         ],
@@ -167,7 +194,7 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'      => 'self.inventory.items',
+                            'type'      => 'self.inventory.item',
                             'condition' => 'name=The Sword;subType=sword;equipped=false;flags&4',
                             'is'        => true,
                         ],
@@ -177,48 +204,33 @@ class ConditionsTest extends TestCase
                 self::getGoblin(),
                 false,
             ],
+            'evaluate required conditions based on enemy info but no enemy entity given ' => [
+                self::getConditionFactory()->from([
+                    'numberRequired' => 1,
+                    'conditions' => [
+                        [
+                            'type'      => 'enemy.info',
+                            'condition' => 'race=goblin',
+                            'is'        => true,
+                        ],
+                    ],
+                ]),
+                self::getPlayer(),
+                null,
+                false,
+            ],
         ];
     }
 
     /**
-     * @return array<string, array{0: Conditions|null, 1: EntityInterface, 2: EntityInterface, 3: int}>
+     * @return array<string, array{0: Conditions|null, 1: EntityInterface, 2: EntityInterface, 3: class-string<\Throwable>}>
      */
     public static function evaluateExceptionDataProvider(): array
     {
         self::setUpBeforeClass();
 
         return [
-            'evaluate with not objects in middle of type' => [
-                self::getConditionFactory()->from([
-                    'numberRequired' => 1,
-                    'conditions'     => [
-                        [
-                            'type'      => 'self.abilities.strength.value.deeper',
-                            'condition' => 'value >=  10 ',
-                            'is'        => true,
-                        ],
-                    ],
-                ]),
-                self::getPlayer(),
-                self::getGoblin(),
-                1100,
-            ],
-            //'evaluate with array but no key exists - no concret example' => [
-            //    self::$conditionFactory->from([
-            //        'numberRequired' => 1,
-            //        'conditions'     => [
-            //            [
-            //                'type'      => 'self.abilities.bases.strength.value',
-            //                'condition' => 'value >=  10 ',
-            //                'is'        => true,
-            //            ],
-            //        ],
-            //    ]),
-            //    self::getPlayer(),
-            //    self::getGoblin(),
-            //    1101,
-            //],
-            'evaluate with not found type property' => [
+            'evaluate with not supported type property' => [
                 self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions'     => [
@@ -231,37 +243,82 @@ class ConditionsTest extends TestCase
                 ]),
                 self::getPlayer(),
                 self::getGoblin(),
-                1102,
+                UnsupportedTypeElementResolverException::class,
             ],
-            'evaluate with not enough part in type' => [
+            'evaluate required conditions based on status but status type does not exist' => [
                 self::getConditionFactory()->from([
                     'numberRequired' => 1,
-                    'conditions'     => [
+                    'conditions' => [
                         [
-                            'type'      => 'self',
-                            'condition' => 'value >=  10 ',
+                            'type'      => 'self.status.unknown',
+                            'condition' => 'name=test',
                             'is'        => true,
                         ],
                     ],
                 ]),
                 self::getPlayer(),
                 self::getGoblin(),
-                1103,
+                StatusException::class,
             ],
-            'evaluate with not object as end part' => [
+            'evaluate required conditions based on element that is not supported' => [
                 self::getConditionFactory()->from([
                     'numberRequired' => 1,
-                    'conditions'     => [
+                    'conditions' => [
                         [
-                            'type'      => 'self.abilities.strength.value',
-                            'condition' => 'value >=  10 ',
+                            'type'      => 'self.damages.physical', // currently haven't damages condition validator
+                            'condition' => 'value>2',
                             'is'        => true,
                         ],
                     ],
                 ]),
                 self::getPlayer(),
                 self::getGoblin(),
-                1104,
+                UnsupportedConditionTypeException::class,
+            ],
+            'evaluate required conditions based on ability but property not supported' => [
+                self::getConditionFactory()->from([
+                    'numberRequired' => 1,
+                    'conditions' => [
+                        [
+                            'type'      => 'self.damages.physical', // currently haven't damages condition validator
+                            'condition' => 'value>2',
+                            'is'        => true,
+                        ],
+                    ],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
+                UnsupportedConditionTypeException::class,
+            ],
+            'evaluate required conditions based on ability but ability not found' => [
+                self::getConditionFactory()->from([
+                    'numberRequired' => 1,
+                    'conditions' => [
+                        [
+                            'type'      => 'self.ability.unknown',
+                            'condition' => 'value>2',
+                            'is'        => true,
+                        ],
+                    ],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
+                ResolverException::class,
+            ],
+            'evaluate required conditions based on damages type but type not found' => [
+                self::getConditionFactory()->from([
+                    'numberRequired' => 1,
+                    'conditions' => [
+                        [
+                            'type'      => 'self.damages.unknown',
+                            'condition' => 'value>2',
+                            'is'        => true,
+                        ],
+                    ],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
+                ResolverException::class,
             ],
         ];
     }

@@ -14,7 +14,7 @@ namespace Velkuns\GameTextEngine\Api;
 use Velkuns\GameTextEngine\Api\Exception\PlayerException;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
-use Velkuns\GameTextEngine\Element\Modifier\ModifierProcessor;
+use Velkuns\GameTextEngine\Element\Modifier\ModifierHandler;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface
@@ -39,7 +39,7 @@ class PlayerApi
         private readonly ItemsApi $items,
         private readonly AbilitiesApi $abilitiesApi,
         private readonly StatusesApi $statusesApi,
-        private readonly ModifierProcessor $modifierProcessor,
+        private readonly ModifierHandler $modifierHandler,
     ) {}
 
     /**
@@ -62,7 +62,7 @@ class PlayerApi
         }
 
         foreach ($item->getModifiers() as $modifier) {
-            $this->modifierProcessor->apply($modifier, $this->player, $enemy);
+            $this->modifierHandler->handle($modifier, $this->player, $enemy);
         }
 
         $this->player->getInventory()->consume($itemName);

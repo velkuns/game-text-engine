@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Graph;
@@ -29,7 +30,7 @@ class EdgeTest extends TestCase
             'numberRequired' => 1,
             'conditions'     => [
                 [
-                    'type'      => 'self.abilities.vitality',
+                    'type'      => 'self.ability.vitality',
                     'condition' => 'value<=0',
                     'is'        => true,
                 ],

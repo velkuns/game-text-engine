@@ -166,7 +166,7 @@ readonly class GameApi
             foreach ($node->trigger['combat']['enemies'] as $name) {
                 $enemies[] = $this->bestiary->get($name);
             }
-            $logs = $this->combat->start($this->player->player, $enemies);
+            $logs = $this->combat->auto($this->player->player, $enemies);
         }
 
         //~ Get choices

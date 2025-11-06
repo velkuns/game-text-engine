@@ -9,15 +9,19 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Element\Condition;
+namespace Velkuns\GameTextEngine\Element\Validator;
+
+use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 
 /**
  * @phpstan-import-type ConditionPartData from ConditionParser
  */
-interface ConditionValidatorInterface
+interface ValidatorInterface
 {
+    public function supports(string $type): bool;
+
     /**
      * @param list<ConditionPartData> $conditions
      */
-    public function validate(object $element, array $conditions): bool;
+    public function validate(string $type, object $element, array $conditions): bool;
 }

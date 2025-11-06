@@ -30,7 +30,7 @@ readonly class CombatApi
      * @param EntityInterface[] $enemies
      * @return array<int, TurnLogData>
      */
-    public function start(EntityInterface $player, array $enemies): array
+    public function auto(EntityInterface $player, array $enemies): array
     {
         $logs = [];
         $turn = 1;
@@ -38,7 +38,7 @@ readonly class CombatApi
             do {
                 $logs[$turn] = $this->turn($player, $enemy);
 
-                $this->timeResolver->processTurnOnAll([$player, ...$enemies]);
+                $this->timeResolver->turnEndForAll([$player, ...$enemies]);
                 $turn++;
             } while ($player->isAlive() && $enemy->isAlive());
 
@@ -47,6 +47,8 @@ readonly class CombatApi
                 break; // @codeCoverageIgnore
             }
         }
+
+        $this->timeResolver->combatEnd([$player, ...$enemies]);
 
         return $logs;
     }

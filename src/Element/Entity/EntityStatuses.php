@@ -53,6 +53,32 @@ class EntityStatuses implements \JsonSerializable
     }
 
     /**
+     * Remove statuses that have duration
+     */
+    public function clean(): void
+    {
+        foreach ($this->statuses as $type => $statuses) {
+            foreach ($statuses as $name => $status) {
+                if ($status->getDurationTurns() > 0) {
+                    unset($this->statuses[$type][$name]);
+                }
+            }
+        }
+    }
+
+    /**
+     * @return array<string, StatusInterface>
+     */
+    public function getAllFromType(string $type): array
+    {
+        if (!isset($this->statuses[$type])) {
+            throw new StatusException("Unknown status type '$type'", 1501);
+        }
+
+        return $this->statuses[$type];
+    }
+
+    /**
      * @return list<Modifier>
      */
     public function getAllModifiers(EntityInterface $player, EntityInterface $enemy): array
@@ -74,19 +100,18 @@ class EntityStatuses implements \JsonSerializable
         $modifiers = [];
 
         foreach ($statuses as $status) {
-            if (
-                $status->getModifiers() === []
-                || ($status->getRemainingTurns() === 0 && $status->getDurationTurns() > 0)
-            ) {
+            $statusModifiers = $status->getModifiers();
+            if ($statusModifiers === [] || !$status->isActive()) {
                 continue;
             }
 
-            $conditions = $status->getConditions();
-            if ($conditions !== null && !$conditions->evaluate($player, $enemy)) {
-                continue;
-            }
+            foreach ($statusModifiers as $modifier) {
+                if ($modifier->conditions !== null && !$modifier->conditions->evaluate($player, $enemy)) {
+                    continue; // modifier conditions is not met, skip it
+                }
 
-            $modifiers = \array_merge($modifiers, $status->getModifiers());
+                $modifiers[] = $modifier;
+            }
         }
 
         return $modifiers;
