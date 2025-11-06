@@ -16,19 +16,19 @@
                 "modifiers": [
                     {
                         "type": "self.damages.physical.value",
-                        "value": 2
-                    }
-                ],
-                "conditions": {
-                    "numberRequired": 1,
-                    "conditions": [
-                        {
-                            "type": "self.inventory.item",
-                            "condition": "subType=sword;equipped=true",
-                            "is": true
+                        "value": 2,
+                        "conditions": {
+                            "numberRequired": 1,
+                            "conditions": [
+                                {
+                                    "type": "self.inventory.item",
+                                    "condition": "subType=sword;equipped=true",
+                                    "is": true
+                                }
+                            ]
                         }
-                    ]
-                }
+                    }
+                ]
             },
             {
                 "type": "skill",
@@ -37,19 +37,19 @@
                 "modifiers": [
                     {
                         "type": "self.damages.physical.value",
-                        "value": 2
-                    }
-                ],
-                "conditions": {
-                    "numberRequired": 1,
-                    "conditions": [
-                        {
-                            "type": "self.inventory.items",
-                            "condition": "subType=dagger;equipped=true",
-                            "is": true
+                        "value": 2,
+                        "conditions": {
+                            "numberRequired": 1,
+                            "conditions": [
+                                {
+                                    "type": "self.inventory.item",
+                                    "condition": "subType=dagger;equipped=true",
+                                    "is": true
+                                }
+                            ]
                         }
-                    ]
-                }
+                    }
+                ]
             },
             {
                 "type": "skill",
@@ -58,19 +58,19 @@
                 "modifiers": [
                     {
                         "type": "self.damages.physical.value",
-                        "value": 2
-                    }
-                ],
-                "conditions": {
-                    "numberRequired": 1,
-                    "conditions": [
-                        {
-                            "type": "self.inventory.items",
-                            "condition": "subType=bow;equipped=true",
-                            "is": true
+                        "value": 2,
+                        "conditions": {
+                            "numberRequired": 1,
+                            "conditions": [
+                                {
+                                    "type": "self.inventory.item",
+                                    "condition": "subType=bow;equipped=true",
+                                    "is": true
+                                }
+                            ]
                         }
-                    ]
-                }
+                    }
+                ]
             },
             {
                 "type": "skill",
@@ -78,7 +78,7 @@
                 "description": "Mastering dodge techniques increases defense by 2 during combat.",
                 "modifiers": [
                     {
-                        "type": "self.abilities.defense.value",
+                        "type": "self.ability.defense.value",
                         "value": 2
                     }
                 ]
@@ -96,19 +96,19 @@
                 "modifiers": [
                     {
                         "type": "self.damages.physical.value",
-                        "value": 2
-                    }
-                ],
-                "conditions": {
-                    "numberRequired": 1,
-                    "conditions": [
-                        {
-                            "type": "enemy.info",
-                            "condition": "race=goblin",
-                            "is": true
+                        "value": 2,
+                        "conditions": {
+                            "numberRequired": 1,
+                            "conditions": [
+                                {
+                                    "type": "enemy.info",
+                                    "condition": "race=goblin",
+                                    "is": true
+                                }
+                            ]
                         }
-                    ]
-                }
+                    }
+                ]
             },
             {
                 "type": "skill",
@@ -117,19 +117,19 @@
                 "modifiers": [
                     {
                         "type": "self.damages.physical.value",
-                        "value": 2
-                    }
-                ],
-                "conditions": {
-                    "numberRequired": 1,
-                    "conditions": [
-                        {
-                            "type": "enemy.info",
-                            "condition": "race=goblin",
-                            "is": true
+                        "value": 2,
+                        "conditions": {
+                            "numberRequired": 1,
+                            "conditions": [
+                                {
+                                    "type": "enemy.info",
+                                    "condition": "race=goblin",
+                                    "is": true
+                                }
+                            ]
                         }
-                    ]
-                }
+                    }
+                ]
             },
             {
                 "type": "skill",
@@ -138,24 +138,24 @@
                 "modifiers": [
                     {
                         "type": "self.damages.physical.value",
-                        "value": 2
-                    }
-                ],
-                "conditions": {
-                    "numberRequired": 1,
-                    "conditions": [
-                        {
-                            "type": "enemy.info",
-                            "condition": "size=tiny",
-                            "is": true
-                        },
-                        {
-                            "type": "enemy.info",
-                            "condition": "size=small",
-                            "is": true
+                        "value": 2,
+                        "conditions": {
+                            "numberRequired": 1,
+                            "conditions": [
+                                {
+                                    "type": "enemy.info",
+                                    "condition": "size=tiny",
+                                    "is": true
+                                },
+                                {
+                                    "type": "enemy.info",
+                                    "condition": "size=small",
+                                    "is": true
+                                }
+                            ]
                         }
-                    ]
-                }
+                    }
+                ]
             }
         ],
         "state": [
@@ -165,7 +165,7 @@
                 "description": "The character is poisoned, losing 1 vitality point at the start of each turn.",
                 "modifiers": [
                     {
-                        "type": "self.abilities.vitality.value",
+                        "type": "self.ability.vitality.value",
                         "value": -1
                     }
                 ],
@@ -186,11 +186,11 @@
                 "description": "The character is blinded, reducing agility by 10, but increase intuition by 5.",
                 "modifiers": [
                     {
-                        "type": "self.abilities.agility.value",
+                        "type": "self.ability.agility.value",
                         "value": -10
                     },
                     {
-                        "type": "self.abilities.intuition.value",
+                        "type": "self.ability.intuition.value",
                         "value": 5
                     }
                 ],
@@ -203,11 +203,11 @@
                 "description": "The character is well rested, gaining 2 agility and 2 intuition points for 3 turn.",
                 "modifiers": [
                     {
-                        "type": "self.abilities.agility.value",
+                        "type": "self.ability.agility.value",
                         "value": 2
                     },
                     {
-                        "type": "self.abilities.intuition.value",
+                        "type": "self.ability.intuition.value",
                         "value": 2
                     }
                 ],

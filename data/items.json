@@ -57,7 +57,7 @@
         "description": "A rusty dagger",
         "modifiers": [
             {
-                "type": "self.abilities.agility.value",
+                "type": "self.ability.agility.value",
                 "value": 2
             }
         ],
@@ -79,7 +79,7 @@
         "description": "An iron dagger",
         "modifiers": [
             {
-                "type": "self.abilities.bases.agility",
+                "type": "self.ability.agility",
                 "value": 2
             }
         ],
@@ -101,7 +101,7 @@
         "description": "A sharp iron dagger",
         "modifiers": [
             {
-                "type": "self.abilities.bases.agility",
+                "type": "self.ability.agility",
                 "value": 2
             }
         ],
@@ -208,7 +208,7 @@
         "description": "Simple food. Can restore some health.",
         "modifiers": [
             {
-                "type": "self.abilities.vitality.value",
+                "type": "self.ability.vitality.value",
                 "value": 5
             }
         ],
@@ -225,7 +225,7 @@
         "description": "Rich food. Can restore more health.",
         "modifiers": [
             {
-                "type": "self.abilities.vitality.value",
+                "type": "self.ability.vitality.value",
                 "value": 10
             }
         ],
@@ -242,7 +242,7 @@
         "description": "Small health potion. Can restore some health.",
         "modifiers": [
             {
-                "type": "self.abilities.vitality.value",
+                "type": "self.ability.vitality.value",
                 "value": 5
             }
         ],
@@ -259,7 +259,7 @@
         "description": "Medium health potion. Can restore some health.",
         "modifiers": [
             {
-                "type": "self.abilities.vitality.value",
+                "type": "self.ability.vitality.value",
                 "value": 10
             }
         ],
@@ -276,7 +276,7 @@
         "description": "Great health potion. Can restore some health.",
         "modifiers": [
             {
-                "type": "self.abilities.vitality.value",
+                "type": "self.ability.vitality.value",
                 "value": 10
             }
         ],

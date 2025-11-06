@@ -22,6 +22,10 @@ interface DamageInterface extends \JsonSerializable
 
     public function getValue(): int;
 
+    public function decrease(int $value): self;
+
+    public function increase(int $value): self;
+
     /**
      * @param list<Modifier> $modifiers
      */

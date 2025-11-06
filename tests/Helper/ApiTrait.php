@@ -18,8 +18,9 @@ use Velkuns\GameTextEngine\Api\PlayerApi;
 use Velkuns\GameTextEngine\Api\StatusesApi;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
-use Velkuns\GameTextEngine\Element\Modifier\ModifierProcessor;
-use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
+use Velkuns\GameTextEngine\Element\Modifier\AbilityModifierProcessor;
+use Velkuns\GameTextEngine\Element\Modifier\DamagesModifierProcessor;
+use Velkuns\GameTextEngine\Element\Modifier\ModifierHandler;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
@@ -32,6 +33,7 @@ use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 trait ApiTrait
 {
     use FactoryTrait;
+    use ResolverTrait;
 
     private static ?BestiaryApi $bestiary = null;
     private static ?ItemsApi $items = null;
@@ -100,7 +102,7 @@ trait ApiTrait
                 self::getItemsApi(),
                 self::getAbilitiesApi(),
                 self::getStatusesApi(),
-                new ModifierProcessor(new TypeElementResolver()),
+                new ModifierHandler(self::getResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]),
             );
 
             /** @var EntityData $data */

@@ -17,7 +17,17 @@ Modifier format:
 ```json
 {
     "type": "string",
-    "value": "int"
+    "value": "int",
+    "conditions?": {
+        "numberRequired": "int",
+        "conditions": [
+            {
+                "type": "string",
+                "condition": "string",
+                "is": "bool"
+            }
+        ]
+    }
 }
 ```
 
@@ -25,7 +35,17 @@ Example:
 
 ```json
 {
-    "type": "self.abilities.strength.value",
-    "value": 2
+    "type": "self.ability.strength.value",
+    "value": 2,
+    "conditions": {
+        "numberRequired": 1,
+        "conditions": [
+            {
+                "type": "self.inventory.item",
+                "condition": "subType=sword;equipped=true",
+                "is": true
+            }
+        ]
+    }
 }
 ```

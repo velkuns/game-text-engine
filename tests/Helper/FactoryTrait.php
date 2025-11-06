@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
 use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
-use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
@@ -22,7 +21,6 @@ use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
-use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
 use Velkuns\GameTextEngine\Graph\Factory\GraphFactory;
 
 /**
@@ -30,6 +28,9 @@ use Velkuns\GameTextEngine\Graph\Factory\GraphFactory;
  */
 trait FactoryTrait
 {
+    use ResolverTrait;
+    use ValidatorTrait;
+
     private static ?EntityFactory $entityFactory = null;
 
     private static function getEntityFactory(): EntityFactory
@@ -67,8 +68,8 @@ trait FactoryTrait
     {
         return new ConditionsFactory(
             new ConditionParser(),
-            new TypeElementResolver(),
-            new ConditionValidator(),
+            self::getResolverHandler(),
+            self::getValidatorHandler(),
         );
     }
 
@@ -79,12 +80,12 @@ trait FactoryTrait
 
     private static function getModifierFactory(): ModifierFactory
     {
-        return new ModifierFactory();
+        return new ModifierFactory(self::getConditionFactory());
     }
 
     private static function getStatusFactory(): StatusFactory
     {
-        return new StatusFactory(self::getModifierFactory(), self::getConditionFactory());
+        return new StatusFactory(self::getModifierFactory());
     }
 
     private static function getDamageFactory(): DamageFactory

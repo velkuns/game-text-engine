@@ -6,28 +6,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
 
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
-use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
-use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
-use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
+use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
 class ConditionsFactoryTest extends TestCase
 {
-    private ConditionsFactory $factory;
-
-    public function setUp(): void
-    {
-        $this->factory = new ConditionsFactory(
-            new ConditionParser(),
-            new TypeElementResolver(),
-            new ConditionValidator(),
-        );
-    }
+    use FactoryTrait;
 
     public function testFrom(): void
     {
@@ -35,40 +24,40 @@ class ConditionsFactoryTest extends TestCase
             'numberRequired' => 1,
             'conditions' => [
                 [
-                    'type'      => 'self.abilities.bases.strength',
+                    'type'      => 'self.ability.strength',
                     'condition' => 'value>=10',
                     'is'        => true,
                 ],
                 [
-                    'type'      => 'self.statuses.skill',
+                    'type'      => 'self.status.skill',
                     'condition' => 'name=Sword (Mastery)',
                     'is'        => false,
                 ],
                 [
-                    'type'      => 'self.inventory.items',
+                    'type'      => 'self.inventory.item',
                     'condition' => 'subType=sword;equipped=true;flags&3',
                     'is'        => true,
                 ],
             ],
         ];
 
-        $conditions = $this->factory->from($data);
+        $conditions = self::getConditionFactory()->from($data);
 
         self::assertNotNull($conditions);
         self::assertSame(1, $conditions->getNumberRequired());
 
         $condition0 = $conditions->getConditions()[0];
-        self::assertSame('self.abilities.bases.strength', $condition0->getType());
+        self::assertSame('self.ability.strength', $condition0->getType());
         self::assertSame('value>=10', $condition0->getCondition());
         self::assertTrue($condition0->is());
 
         $condition1 = $conditions->getConditions()[1];
-        self::assertSame('self.statuses.skill', $condition1->getType());
+        self::assertSame('self.status.skill', $condition1->getType());
         self::assertSame('name=Sword (Mastery)', $condition1->getCondition());
         self::assertFalse($condition1->is());
 
         $condition2 = $conditions->getConditions()[2];
-        self::assertSame('self.inventory.items', $condition2->getType());
+        self::assertSame('self.inventory.item', $condition2->getType());
         self::assertSame('subType=sword;equipped=true;flags&3', $condition2->getCondition());
         self::assertTrue($condition2->is());
 
@@ -79,7 +68,7 @@ class ConditionsFactoryTest extends TestCase
     {
         $data = null;
 
-        $conditions = $this->factory->from($data);
+        $conditions = self::getConditionFactory()->from($data);
 
         self::assertNull($conditions);
     }

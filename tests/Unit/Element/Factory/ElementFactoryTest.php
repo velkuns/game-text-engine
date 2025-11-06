@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
@@ -13,19 +14,9 @@ namespace Velkuns\GameTextEngine\Tests\Unit\Element\Factory;
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
 use Velkuns\GameTextEngine\Element\Ability\ConstraintsAbility;
-use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
-use Velkuns\GameTextEngine\Element\Condition\ConditionValidator;
 use Velkuns\GameTextEngine\Element\Damage\Damage;
 use Velkuns\GameTextEngine\Element\Damage\Damages;
 use Velkuns\GameTextEngine\Element\Exception\ElementJsonParseException;
-use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
-use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
-use Velkuns\GameTextEngine\Element\Factory\ElementFactory;
-use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
-use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
-use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
-use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
-use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolver;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
 class ElementFactoryTest extends TestCase
@@ -40,37 +31,48 @@ class ElementFactoryTest extends TestCase
             "description": "Skill in using swords.",
             "modifiers": [
                 {
-                    "type": "self.abilities.agility.value",
-                    "value": 5
+                    "type": "self.ability.agility.value",
+                    "value": 5,
+                    "conditions": {
+                        "numberRequired": 1,
+                        "conditions": [
+                            {
+                                "type": "self.inventory.item",
+                                "condition": "subType=sword",
+                                "is": true
+                            }
+                        ]
+                    }
                 },
                 {
-                    "type": "self.abilities.attack.value",
-                    "value": 10
-                }
-            ],
-            "conditions": {
-                "numberRequired": 1,
-                "conditions": [
-                    {
-                        "type": "self.inventory.items",
-                        "condition": "subType=sword",
-                        "is": true
+                    "type": "self.ability.attack.value",
+                    "value": 10,
+                    "conditions": {
+                        "numberRequired": 1,
+                        "conditions": [
+                            {
+                                "type": "self.inventory.item",
+                                "condition": "subType=sword",
+                                "is": true
+                            }
+                        ]
                     }
-                ]
-            }
+                }
+            ]
         }';
 
-        $status = self::getElementFactory()->statusFromJson($json);
+        $status    = self::getElementFactory()->statusFromJson($json);
+        $modifiers = $status->getModifiers();
 
         self::assertSame('skill', $status->getType());
         self::assertSame('swordsmanship', $status->getName());
         self::assertSame('Skill in using swords.', $status->getDescription());
-        self::assertCount(2, $status->getModifiers());
+        self::assertCount(2, $modifiers);
         self::assertSame(0, $status->getDurationTurns());
         self::assertSame(0, $status->getRemainingTurns());
-        self::assertNotNull($status->getConditions());
-        self::assertSame(1, $status->getConditions()->getNumberRequired());
-        self::assertCount(1, $status->getConditions()->getConditions());
+        self::assertNotNull($modifiers[0]->conditions);
+        self::assertSame(1, $modifiers[0]->conditions->getNumberRequired());
+        self::assertCount(1, $modifiers[0]->conditions->getConditions());
     }
 
     public function testStatusFromJsonWithInvalidJson(): void
@@ -82,24 +84,34 @@ class ElementFactoryTest extends TestCase
             "description": "Skill in using swords.",
             "modifiers": [
                 {
-                    "type": "self.abilities.agility.value",
-                    "value": 5
+                    "type": "self.ability.agility.value",
+                    "value": 5,
+                    "conditions": {
+                        "numberRequired": 1,
+                        "conditions": [
+                            {
+                                "type": "self.inventory.item",
+                                "condition": "subType=sword",
+                                "is": true
+                            }
+                        ]
+                    }
                 },
                 {
-                    "type": "self.abilities.attack.value",
-                    "value": 10
-                }
-            ],
-            "conditions": {
-                "numberRequired": 1,
-                "conditions": [
-                    {
-                        "type": "self.inventory.items",
-                        "condition": "subType=sword",
-                        "is": true
+                    "type": "self.ability.attack.value",
+                    "value": 10,
+                    "conditions": {
+                        "numberRequired": 1,
+                        "conditions": [
+                            {
+                                "type": "self.inventory.item",
+                                "condition": "subType=sword",
+                                "is": true
+                            }
+                        ]
                     }
-                ]
-            },
+                },
+            ]
         }';
 
         self::expectExceptionCode(2013);
@@ -110,20 +122,20 @@ class ElementFactoryTest extends TestCase
     public function testModifierFromJson(): void
     {
         $json = '{
-            "type": "self.abilities.strength.value",
+            "type": "self.ability.strength.value",
             "value": 5
         }';
 
         $modifier = self::getElementFactory()->modifierFromJson($json);
 
-        self::assertSame('self.abilities.strength.value', $modifier->type);
+        self::assertSame('self.ability.strength.value', $modifier->type);
         self::assertSame(5, $modifier->value);
     }
 
     public function testModifierFromJsonWithInvalidJson(): void
     {
         $json = '{
-            "type": "self.abilities.strength.value",
+            "type": "self.ability.strength.value",
             "value": 5
         ';
 
@@ -138,7 +150,7 @@ class ElementFactoryTest extends TestCase
             "numberRequired": 1,
             "conditions": [
                 {
-                        "type": "self.inventory.items",
+                        "type": "self.inventory.item",
                         "condition": "subType=sword",
                         "is": true
                 }
@@ -150,7 +162,7 @@ class ElementFactoryTest extends TestCase
         self::assertCount(1, $conditions->getConditions());
 
         $condition = $conditions->getConditions()[0];
-        self::assertSame('self.inventory.items', $condition->getType());
+        self::assertSame('self.inventory.item', $condition->getType());
         self::assertSame('subType=sword', $condition->getCondition());
         self::assertTrue($condition->is());
     }
@@ -161,7 +173,7 @@ class ElementFactoryTest extends TestCase
             "numberRequired": 1,
             "conditions": [
                 {
-                        "type": "self.inventory.items",
+                        "type": "self.inventory.item",
                         "condition": "subType=sword",
                         "is": true
                 }
@@ -275,7 +287,7 @@ class ElementFactoryTest extends TestCase
             "description": "A sharp blade.",
             "modifiers": [
                 {
-                    "type": "self.abilities.attack.value",
+                    "type": "self.ability.attack.value",
                     "value": 10
                 }
             ],
@@ -312,7 +324,7 @@ class ElementFactoryTest extends TestCase
             "description": "A sharp blade.",
             "modifiers": [
                 {
-                    "type": "self.abilities.attack.value",
+                    "type": "self.ability.attack.value",
                     "value": 10
                 }
             ],
@@ -426,11 +438,11 @@ class ElementFactoryTest extends TestCase
                         "description": "Super skill",
                         "modifiers": [
                             {
-                                "type": "self.abilities.agility.value",
+                                "type": "self.ability.agility.value",
                                 "value": 5
                             },
                             {
-                                "type": "attack.value",
+                                "type": "self.attack.value",
                                 "value": 10
                             }
                         ],
@@ -438,7 +450,7 @@ class ElementFactoryTest extends TestCase
                             "numberRequired": 1,
                             "conditions": [
                                 {
-                                    "type": "self.inventory.items",
+                                    "type": "self.inventory.item",
                                     "condition": "subType=sword;equipped=true;flags&3",
                                     "is": true
                                 }

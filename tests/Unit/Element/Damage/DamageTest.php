@@ -49,6 +49,20 @@ class DamageTest extends TestCase
         self::assertSame($expected, (new Damage('physical', 2))->getValue());
     }
 
+    public function testIncrease(): void
+    {
+        $expected = 4;
+
+        self::assertSame($expected, (new Damage('physical', 2))->increase(2)->getValue());
+    }
+
+    public function testDecrease(): void
+    {
+        $expected = 2;
+
+        self::assertSame($expected, (new Damage('physical', 4))->decrease(2)->getValue());
+    }
+
     public function testGetValueWithModifiers(): void
     {
         $expected = 4;

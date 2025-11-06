@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Ability;
@@ -148,9 +149,9 @@ class BaseAbilityTest extends TestCase
         self::assertSame(10, $ability->getMax());
 
         $modifiers = [
-            new Modifier('self.abilities.vitality.value', 2),
-            new Modifier('self.abilities.vitality.value', -1),
-            new Modifier('self.abilities.strength.value', 5), // Should be ignored
+            new Modifier('self.ability.vitality.value', 2),
+            new Modifier('self.ability.vitality.value', -1),
+            new Modifier('self.ability.strength.value', 5), // Should be ignored
         ];
 
         self::assertSame(6, $ability->getValueWithModifiers($modifiers)); // 5 + 2 - 1 = 6

@@ -18,14 +18,14 @@ readonly class TimeProcessor
     /**
      * @param EntityInterface[] $entities
      */
-    public function processTurnOnAll(array $entities): void
+    public function turnEndForAll(array $entities): void
     {
         foreach ($entities as $entity) {
-            $this->processTurn($entity);
+            $this->turnEnd($entity);
         }
     }
 
-    public function processTurn(EntityInterface $entity): void
+    public function turnEnd(EntityInterface $entity): void
     {
         foreach ($entity->getStatuses()->getAll() as $status) {
             if ($status->getRemainingTurns() === 0) {
@@ -33,6 +33,16 @@ readonly class TimeProcessor
             }
 
             $status->decreaseRemainingTurns();
+        }
+    }
+
+    /**
+     * @param EntityInterface[] $entities
+     */
+    public function combatEnd(array $entities): void
+    {
+        foreach ($entities as $entity) {
+            $entity->getStatuses()->clean();
         }
     }
 }

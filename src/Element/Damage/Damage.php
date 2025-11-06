@@ -20,7 +20,7 @@ class Damage implements DamageInterface
 {
     public function __construct(
         private readonly string $type,
-        private readonly int $value,
+        private int $value,
     ) {}
 
     public function getType(): string
@@ -31,6 +31,20 @@ class Damage implements DamageInterface
     public function getValue(): int
     {
         return $this->value;
+    }
+
+    public function decrease(int $value): self
+    {
+        $this->value -= $value;
+
+        return $this;
+    }
+
+    public function increase(int $value): self
+    {
+        $this->value += $value;
+
+        return $this;
     }
 
     /**

@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Status;
 
-use Velkuns\GameTextEngine\Element\Condition\Conditions;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 
 /**
@@ -27,7 +26,6 @@ class Status implements StatusInterface
         private readonly string $name,
         private readonly string $description,
         private readonly array $modifiers,
-        private readonly ?Conditions $conditions = null,
         private readonly int $durationTurns = 0,
         private int $remainingTurns = 0,
     ) {}
@@ -47,17 +45,20 @@ class Status implements StatusInterface
         return $this->description;
     }
 
-    public function getConditions(): ?Conditions
-    {
-        return $this->conditions;
-    }
-
     /**
      * @return list<Modifier>
      */
     public function getModifiers(): array
     {
         return $this->modifiers;
+    }
+
+    public function isActive(): bool
+    {
+        return
+            $this->getDurationTurns() === 0    // No duration limitation, so still active
+            || $this->getRemainingTurns() > 0  // Still have remaining turns, so still active
+        ;
     }
 
     public function getDurationTurns(): int
@@ -89,10 +90,6 @@ class Status implements StatusInterface
             'modifiers'      => array_map(fn(Modifier $modifier) => $modifier->jsonSerialize(), $this->getModifiers()),
         ];
 
-        if ($this->getConditions() !== null) {
-            $data['conditions'] = $this->getConditions()->jsonSerialize();
-        }
-
         if ($this->getDurationTurns() > 0) {
             $data['durationTurns']  = $this->getDurationTurns();
             $data['remainingTurns'] = $this->getRemainingTurns();
@@ -111,7 +108,6 @@ class Status implements StatusInterface
                 fn(Modifier $modifier): Modifier => $modifier->clone(),
                 $this->modifiers,
             ),
-            conditions: $this->conditions?->clone() ?? null,
             durationTurns: $this->durationTurns,
             remainingTurns: $this->remainingTurns,
         );

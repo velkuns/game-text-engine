@@ -31,7 +31,6 @@ Status format:
     "name": "string",
     "description": "string",
     "modifiers": [],
-    "conditions?": {},
     "durationTurns": "int",
     "remainingTurns": "int"
 }
@@ -112,18 +111,18 @@ Skill status example:
     "modifiers": [
         {
             "combat" : "self.damages.physical.value",
-            "value": 2
-        }
-    ],
-    "conditions": {
-        "numberRequired": 1,
-        "list": [
-            {
-                "type": "self.inventory.item",
-                "condition": "subType=sword;equipped=true",
-                "is": true
+            "value": 2,
+            "conditions": {
+                "numberRequired": 1,
+                "conditions": [
+                    {
+                        "type": "self.inventory.item",
+                        "condition": "subType=sword;equipped=true",
+                        "is": true
+                    }
+                ]
             }
-        ]
-    }
-},
+        }
+    ]
+}
 ```
