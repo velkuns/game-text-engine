@@ -14,9 +14,9 @@ namespace Velkuns\GameTextEngine\Element\Validator;
 use Velkuns\GameTextEngine\Element\Condition\ConditionOperatorType;
 use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Element\Entity\EntityStatuses;
-use Velkuns\GameTextEngine\Element\Exception\UnsupportedConditionOperatorTypeException;
-use Velkuns\GameTextEngine\Element\Exception\UnsupportedConditionPropertyException;
 use Velkuns\GameTextEngine\Element\Status\StatusInterface;
+use Velkuns\GameTextEngine\Exception\Element\UnsupportedConditionOperatorTypeException;
+use Velkuns\GameTextEngine\Exception\Element\UnsupportedConditionPropertyException;
 
 /**
  * @phpstan-import-type ConditionPartData from ConditionParser

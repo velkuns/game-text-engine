@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Utils\Exporter;
 
+use Velkuns\GameTextEngine\Exception\Utils\ExporterException;
 use Velkuns\GameTextEngine\Graph\Graph;
-use Velkuns\GameTextEngine\Utils\Exception\ExporterException;
 
 readonly class DOTExporter
 {

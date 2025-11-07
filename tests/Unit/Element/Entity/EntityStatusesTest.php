@@ -13,8 +13,8 @@ namespace Velkuns\GameTextEngine\Tests\Unit\Element\Entity;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Entity\EntityStatuses;
-use Velkuns\GameTextEngine\Element\Exception\StatusException;
 use Velkuns\GameTextEngine\Element\Status\Status;
+use Velkuns\GameTextEngine\Exception\Element\StatusException;
 
 class EntityStatusesTest extends TestCase
 {

@@ -13,7 +13,7 @@ namespace Velkuns\GameTextEngine\Element\Resolver;
 
 use Velkuns\GameTextEngine\Element\Ability\AbilityInterface;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Exception\ResolverException;
+use Velkuns\GameTextEngine\Exception\Element\ResolverException;
 
 readonly class AbilityResolver implements ResolverInterface
 {

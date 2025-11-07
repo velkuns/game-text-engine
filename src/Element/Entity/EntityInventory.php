@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Entity;
 
-use Velkuns\GameTextEngine\Element\Exception\InventoryException;
 use Velkuns\GameTextEngine\Element\Item\Item;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Exception\Element\InventoryException;
 
 /**
  * @phpstan-import-type ItemData from Item

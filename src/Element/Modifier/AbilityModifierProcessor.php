@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Modifier;
 
 use Velkuns\GameTextEngine\Element\Ability\AbilityInterface;
-use Velkuns\GameTextEngine\Element\Exception\UnsupportedModifierProcessorPropertyException;
+use Velkuns\GameTextEngine\Exception\Element\UnsupportedModifierProcessorPropertyException;
 
 readonly class AbilityModifierProcessor implements ModifierProcessInterface
 {

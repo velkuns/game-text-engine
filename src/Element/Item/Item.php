@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Item;
 
 use Velkuns\GameTextEngine\Element\Damage\Damages;
-use Velkuns\GameTextEngine\Element\Exception\ItemException;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
+use Velkuns\GameTextEngine\Exception\Element\ItemException;
 
 /**
  * @phpstan-import-type ItemData from ItemInterface

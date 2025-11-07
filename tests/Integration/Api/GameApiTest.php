@@ -12,29 +12,15 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Api\AbilitiesApi;
-use Velkuns\GameTextEngine\Api\BestiaryApi;
-use Velkuns\GameTextEngine\Api\Exception\StoryException;
 use Velkuns\GameTextEngine\Api\GameApi;
-use Velkuns\GameTextEngine\Api\StatusesApi;
 use Velkuns\GameTextEngine\Api\StoryApi;
-use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Item\ItemInterface;
-use Velkuns\GameTextEngine\Graph\Graph;
+use Velkuns\GameTextEngine\Exception\Api\StoryApiException;
 use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 use Velkuns\GameTextEngine\Utils\Exporter\DOTExporter;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
-/**
- * @phpstan-import-type GraphData from Graph
- * @phpstan-import-type ItemData from ItemInterface
- * @phpstan-import-type BestiaryData from BestiaryApi
- * @phpstan-import-type EntityData from EntityInterface
- * @phpstan-import-type AbilitiesRulesData from AbilitiesApi
- * @phpstan-import-type StatusesRulesData from StatusesApi
- */
 class GameApiTest extends TestCase
 {
     use ApiTrait;
@@ -52,6 +38,8 @@ class GameApiTest extends TestCase
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_abilities.json',
             $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/rules/rules_combat.json',
+            $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
         );
 
@@ -60,30 +48,36 @@ class GameApiTest extends TestCase
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/stories/test.json')), $dump['story']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/items.json')), $dump['items']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/bestiary.json')), $dump['bestiary']);
-        self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_abilities.json')), $dump['abilities']);
-        self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_statuses.json')), $dump['statuses']);
-        self::assertSame(\trim((string) \file_get_contents($dataDir . '/templates/player.json')), $dump['player']);
+        self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_abilities.json')), $dump['abilitiesRules']);
+        self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_statuses.json')), $dump['statusesRules']);
+        self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_combat.json')), $dump['combatRules']);
+        self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_player.json')), $dump['playerRules']);
+        self::assertSame(\trim((string) \file_get_contents($dataDir . '/templates/player.json')), $dump['playerData']);
     }
 
     public function testLoadFromJson(): void
     {
         $dataDir = (string) realpath(__DIR__ . '/../../../data');
 
-        $storyJson     = (string) \file_get_contents($dataDir . '/stories/test.json');
-        $itemsJson     = (string) \file_get_contents($dataDir . '/items.json');
-        $bestiaryJson  = (string) \file_get_contents($dataDir . '/bestiary.json');
-        $abilitiesJson = (string) \file_get_contents($dataDir . '/rules/rules_abilities.json');
-        $statusesJson  = (string) \file_get_contents($dataDir . '/rules/rules_statuses.json');
-        $playerJson    = (string) \file_get_contents($dataDir . '/templates/player.json');
+        $storyJson          = (string) \file_get_contents($dataDir . '/stories/test.json');
+        $itemsJson          = (string) \file_get_contents($dataDir . '/items.json');
+        $bestiaryJson       = (string) \file_get_contents($dataDir . '/bestiary.json');
+        $abilitiesRulesJson = (string) \file_get_contents($dataDir . '/rules/rules_abilities.json');
+        $statusesRulesJson  = (string) \file_get_contents($dataDir . '/rules/rules_statuses.json');
+        $combatRulesJson    = (string) \file_get_contents($dataDir . '/rules/rules_combat.json');
+        $playerRulesJson    = (string) \file_get_contents($dataDir . '/rules/rules_player.json');
+        $playerDataJson     = (string) \file_get_contents($dataDir . '/templates/player.json');
 
         $gameApi = $this->getGameApi();
         $gameApi->loadFromJsons(
             $storyJson,
             $itemsJson,
             $bestiaryJson,
-            $abilitiesJson,
-            $statusesJson,
-            $playerJson,
+            $abilitiesRulesJson,
+            $statusesRulesJson,
+            $combatRulesJson,
+            $playerRulesJson,
+            $playerDataJson,
         );
 
         $dump = $gameApi->dump(true);
@@ -91,9 +85,11 @@ class GameApiTest extends TestCase
         self::assertSame(\trim($storyJson), $dump['story']);
         self::assertSame(\trim($itemsJson), $dump['items']);
         self::assertSame(\trim($bestiaryJson), $dump['bestiary']);
-        self::assertSame(\trim($abilitiesJson), $dump['abilities']);
-        self::assertSame(\trim($statusesJson), $dump['statuses']);
-        self::assertSame(\trim($playerJson), $dump['player']);
+        self::assertSame(\trim($abilitiesRulesJson), $dump['abilitiesRules']);
+        self::assertSame(\trim($statusesRulesJson), $dump['statusesRules']);
+        self::assertSame(\trim($combatRulesJson), $dump['combatRules']);
+        self::assertSame(\trim($playerRulesJson), $dump['playerRules']);
+        self::assertSame(\trim($playerDataJson), $dump['playerData']);
     }
 
     public function testRead(): void
@@ -107,6 +103,8 @@ class GameApiTest extends TestCase
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_abilities.json',
             $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/rules/rules_combat.json',
+            $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
         );
 
@@ -119,7 +117,7 @@ class GameApiTest extends TestCase
 
         self::assertSame($expectedNode, $node);
         self::assertSame($expectedEdges, $edges);
-        self::assertSame(['combat' => [], 'loot' => []], $logs);
+        self::assertSame(['combat' => [], 'loot' => [], 'xp' => []], $logs);
     }
 
     public function testReadOnSameNode(): void
@@ -133,6 +131,8 @@ class GameApiTest extends TestCase
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_abilities.json',
             $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/rules/rules_combat.json',
+            $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
         );
 
@@ -145,7 +145,7 @@ class GameApiTest extends TestCase
 
         self::assertSame($expectedNode, $node);
         self::assertSame($expectedEdges, $edges);
-        self::assertSame(['combat' => [], 'loot' => []], $logs);
+        self::assertSame(['combat' => [], 'loot' => [], 'xp' => []], $logs);
     }
 
     public function testReadWithTrigger(): void
@@ -159,6 +159,8 @@ class GameApiTest extends TestCase
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_abilities.json',
             $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/rules/rules_combat.json',
+            $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
         );
 
@@ -174,6 +176,7 @@ class GameApiTest extends TestCase
         self::assertSame(\array_values($expectedEdges), $edges);
         self::assertNotEmpty($logs['combat']);
         self::assertNotEmpty($logs['loot']);
+        self::assertNotEmpty($logs['xp']);
     }
 
     public function testReadButIsSameNode(): void
@@ -187,6 +190,8 @@ class GameApiTest extends TestCase
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_abilities.json',
             $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/rules/rules_combat.json',
+            $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
         );
 
@@ -199,7 +204,7 @@ class GameApiTest extends TestCase
 
         self::assertSame($expectedNode, $node);
         self::assertSame($expectedEdges, $edges);
-        self::assertSame(['combat' => [], 'loot' => []], $logs);
+        self::assertSame(['combat' => [], 'loot' => [], 'xp' => []], $logs);
     }
 
     public function testReadButTargetIsNotValid(): void
@@ -213,10 +218,12 @@ class GameApiTest extends TestCase
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_abilities.json',
             $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/rules/rules_combat.json',
+            $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
         );
 
-        self::expectException(StoryException::class);
+        self::expectException(StoryApiException::class);
         self::expectExceptionCode(1400);
         $gameApi->read('1', '3');
     }

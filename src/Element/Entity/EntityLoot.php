@@ -13,6 +13,7 @@ namespace Velkuns\GameTextEngine\Element\Entity;
 
 /**
  * @phpstan-type EntityLootData array{
+ *     xp?: int,
  *     coins?: array{min: int, max: int},
  *     items?: list<array{name: string, drop: float}>
  * }
@@ -24,6 +25,7 @@ readonly class EntityLoot implements \JsonSerializable
      * @param list<array{name: string, drop: float}>|null $itemsLoot
      */
     public function __construct(
+        public ?int $xp = null,
         public ?array $coinsLoot = null,
         public ?array $itemsLoot = null,
     ) {}
@@ -34,6 +36,11 @@ readonly class EntityLoot implements \JsonSerializable
     public function jsonSerialize(): array
     {
         $data = [];
+
+        if ($this->xp !== null) {
+            $data['xp'] = $this->xp;
+        }
+
         if ($this->coinsLoot !== null) {
             $data['coins'] = $this->coinsLoot;
         }
@@ -48,6 +55,7 @@ readonly class EntityLoot implements \JsonSerializable
     public function clone(): self
     {
         return new self(
+            $this->xp,
             $this->coinsLoot,
             $this->itemsLoot,
         );

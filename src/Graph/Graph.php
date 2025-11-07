@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Graph;
 
-use Velkuns\GameTextEngine\Graph\Exception\GraphException;
+use Velkuns\GameTextEngine\Exception\Graph\GraphException;
 
 /**
  * @phpstan-import-type NodeData from Node

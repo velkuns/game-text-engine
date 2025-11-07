@@ -16,7 +16,7 @@ use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
 use Velkuns\GameTextEngine\Element\Ability\ConstraintsAbility;
 use Velkuns\GameTextEngine\Element\Damage\Damage;
 use Velkuns\GameTextEngine\Element\Damage\Damages;
-use Velkuns\GameTextEngine\Element\Exception\ElementJsonParseException;
+use Velkuns\GameTextEngine\Exception\Element\ElementJsonParseException;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
 class ElementFactoryTest extends TestCase

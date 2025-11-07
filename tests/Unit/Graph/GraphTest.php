@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Unit\Graph;
 
 use PHPUnit\Framework\TestCase;
+use Velkuns\GameTextEngine\Exception\Graph\GraphException;
 use Velkuns\GameTextEngine\Graph\Edge;
-use Velkuns\GameTextEngine\Graph\Exception\GraphException;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Graph\Node;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;

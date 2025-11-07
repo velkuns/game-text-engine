@@ -13,8 +13,8 @@ namespace Velkuns\GameTextEngine\Element\Resolver;
 
 use Velkuns\GameTextEngine\Element\Damage\DamageInterface;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Exception\DamageException;
-use Velkuns\GameTextEngine\Element\Exception\ResolverException;
+use Velkuns\GameTextEngine\Exception\Element\DamageException;
+use Velkuns\GameTextEngine\Exception\Element\ResolverException;
 
 readonly class DamagesResolver implements ResolverInterface
 {

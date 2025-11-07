@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
-use Velkuns\GameTextEngine\Api\Exception\ItemException;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Exception\Api\ItemApiException;
 
 /**
  * @phpstan-import-type ItemData from ItemInterface
@@ -42,7 +42,7 @@ class ItemsApi
     {
         $lowerCaseName = \strtolower($name);
         if (!isset($this->items[$lowerCaseName])) {
-            throw new ItemException("Item '$name' not found in item list.", 1601);
+            throw new ItemApiException("Item '$name' not found in item list.", 1601);
         }
 
         return $asClone ? $this->items[$lowerCaseName]->clone() : $this->items[$lowerCaseName];
@@ -74,7 +74,7 @@ class ItemsApi
             );
             // @codeCoverageIgnoreStart
         } catch (\JsonException $exception) {
-            throw new ItemException("Unable to dump items data: " . $exception->getMessage(), 1600, $exception); // @codeCoverageIgnore
+            throw new ItemApiException("Unable to dump items data: " . $exception->getMessage(), 1600, $exception); // @codeCoverageIgnore
         }
         // @codeCoverageIgnoreEnd
     }

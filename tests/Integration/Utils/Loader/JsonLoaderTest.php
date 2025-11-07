@@ -13,7 +13,7 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Utils\Loader;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
-use Velkuns\GameTextEngine\Utils\Exception\LoaderException;
+use Velkuns\GameTextEngine\Exception\Utils\LoaderException;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**

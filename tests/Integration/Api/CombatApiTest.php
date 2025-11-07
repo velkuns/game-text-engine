@@ -91,17 +91,36 @@ class CombatApiTest extends TestCase
     {
         $combatApi = self::getCombatApi();
 
-        $player = self::getPlayer(); // Player already have rested with remaining turn = 1
-        $enemy  = self::getBestiaryApi()->get('Chief Goblin'); // get cloned rat
+        $player = self::getPlayer();
+        $enemy  = self::getBestiaryApi()->get('Chief Goblin');
 
         self::assertSame(100, $player->getInventory()->coins);
         self::assertNull($player->getInventory()->get('Small Health Potion'));
         self::assertNull($player->getInventory()->get('Iron Sword'));
-        $logs = $combatApi->loot($player, $enemy);
+        $log = $combatApi->loot($player, $enemy);
         self::assertSame(106, $player->getInventory()->coins);
         self::assertNotNull($player->getInventory()->get('Small Health Potion'));
         self::assertNotNull($player->getInventory()->get('Iron Sword'));
 
-        self::assertSame('You found 6 coins and Small Health Potion, Iron Sword items on Chief Goblin.', (string) $logs);
+        self::assertSame('You found 6 coins and Small Health Potion, Iron Sword items on Chief Goblin.', (string) $log);
+    }
+
+    public function testXp(): void
+    {
+        $combatApi = self::getCombatApi();
+
+        $player = self::getPlayer();
+        $enemy  = self::getBestiaryApi()->get('Rat');
+
+        self::assertSame(500, $player->getInfo()->xp);
+        $log = $combatApi->xp($player, $enemy);
+        self::assertSame(540, $player->getInfo()->xp); // xp: 10 (base) + 3 (lvl) * 10 (bonus / lvl)
+        self::assertSame('You gain 40 XP from Rat kill.', (string) $log);
+
+        $enemy  = self::getBestiaryApi()->get('Chief Goblin');
+        self::assertSame(540, $player->getInfo()->xp);
+        $log = $combatApi->xp($player, $enemy);
+        self::assertSame(570, $player->getInfo()->xp); // xp: 30, defined in bestiary
+        self::assertSame('You gain 30 XP from Chief Goblin kill.', (string) $log);
     }
 }

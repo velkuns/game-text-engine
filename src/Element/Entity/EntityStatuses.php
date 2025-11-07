@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Entity;
 
-use Velkuns\GameTextEngine\Element\Exception\StatusException;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 use Velkuns\GameTextEngine\Element\Status\StatusInterface;
+use Velkuns\GameTextEngine\Exception\Element\StatusException;
 
 /**
  * @phpstan-import-type StatusData from StatusInterface
