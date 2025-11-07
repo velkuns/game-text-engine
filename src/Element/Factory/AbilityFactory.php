@@ -81,17 +81,10 @@ readonly class AbilityFactory
      */
     public function fromCompoundAbility(array $data, array $baseAbilities): CompoundAbility
     {
-        $abilities = [];
-        foreach ($baseAbilities as $baseAbility) {
-            if (\str_contains($data['rule'], $baseAbility->name)) {
-                $abilities[$baseAbility->name] = $baseAbility;
-            }
-        }
-
         return new CompoundAbility(
             name: $data['name'],
             rule: $data['rule'],
-            abilities: $abilities,
+            abilities: $baseAbilities,
         );
     }
 }

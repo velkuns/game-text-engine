@@ -12,18 +12,10 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Api\BestiaryApi;
-use Velkuns\GameTextEngine\Api\Exception\BestiaryException;
-use Velkuns\GameTextEngine\Api\ItemsApi;
-use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Exception\Api\BestiaryApiException;
 use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
-use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
-/**
- * @phpstan-import-type ItemData from ItemInterface
- * @phpstan-import-type BestiaryData from BestiaryApi
- */
 class BestiaryApiTest extends TestCase
 {
     use ApiTrait;
@@ -63,19 +55,72 @@ class BestiaryApiTest extends TestCase
         self::assertSame($goblinWarrior, $goblinWarriorFromBestiary); // get as no clone
         self::assertSame(20, $goblinWarriorFromBestiary->getAbilities()->get('strength')?->getValue());
 
-        //~ Now remove original Goblin entity and check it is removed
-        $bestiary->remove($entity->getName());
-        self::expectException(BestiaryException::class);
+        //~ Now remove Goblin Warrior entity and check it is removed
+        $bestiary->remove($goblinWarriorFromBestiary->getName());
+        self::expectException(BestiaryApiException::class);
         self::expectExceptionCode(1701);
-        $bestiary->get('Goblin');
+        $bestiary->get('Goblin Warrior');
     }
 
     public function testLoadWhenThrowException(): void
     {
         $bestiary = self::getBestiaryApi();
 
-        self::expectException(BestiaryException::class);
+        self::expectException(BestiaryApiException::class);
         self::expectExceptionMessage("Entity 'King Goblin' not found in bestiary.");
         $bestiary->get('King Goblin');
+    }
+
+    public function testGetWithPositiveAutoLevel(): void
+    {
+        $bestiary = self::getBestiaryApi();
+
+        $goblin = $bestiary->get('Goblin');
+        $betterGoblin = $bestiary->get('Goblin', autoLevel: 2);
+        $lesserGoblin = $bestiary->get('Goblin', autoLevel: -2);
+
+        $betterExpected = [
+            'strength'  => ($goblin->getAbilities()->get('strength')?->getValue() ?? 0) + 2,
+            'endurance' => ($goblin->getAbilities()->get('endurance')?->getValue() ?? 0) + 2,
+            'agility'   => ($goblin->getAbilities()->get('agility')?->getValue() ?? 0) + 2,
+            'intuition' => ($goblin->getAbilities()->get('intuition')?->getValue() ?? 0) + 2,
+            'vitality'  => ($goblin->getAbilities()->get('vitality')?->getValue() ?? 0) + 6,
+            'attack'    => ($goblin->getAbilities()->get('attack')?->getValue() ?? 0) + 4,
+            'defense'   => ($goblin->getAbilities()->get('defense')?->getValue() ?? 0) + 4,
+        ];
+
+        $betterAutoLeveling = [
+            'strength'  => ($betterGoblin->getAbilities()->get('strength')?->getValue() ?? 0),
+            'endurance' => ($betterGoblin->getAbilities()->get('endurance')?->getValue() ?? 0),
+            'agility'   => ($betterGoblin->getAbilities()->get('agility')?->getValue() ?? 0),
+            'intuition' => ($betterGoblin->getAbilities()->get('intuition')?->getValue() ?? 0),
+            'vitality'  => ($betterGoblin->getAbilities()->get('vitality')?->getValue() ?? 0),
+            'attack'    => ($betterGoblin->getAbilities()->get('attack')?->getValue() ?? 0),
+            'defense'   => ($betterGoblin->getAbilities()->get('defense')?->getValue() ?? 0),
+        ];
+
+        $lesserExpected = [
+            'strength'  => ($goblin->getAbilities()->get('strength')?->getValue() ?? 0) - 2,
+            'endurance' => ($goblin->getAbilities()->get('endurance')?->getValue() ?? 0) - 2,
+            'agility'   => ($goblin->getAbilities()->get('agility')?->getValue() ?? 0) - 2,
+            'intuition' => ($goblin->getAbilities()->get('intuition')?->getValue() ?? 0) - 2,
+            'vitality'  => ($goblin->getAbilities()->get('vitality')?->getValue() ?? 0) - 6,
+            'attack'    => ($goblin->getAbilities()->get('attack')?->getValue() ?? 0) - 4,
+            'defense'   => ($goblin->getAbilities()->get('defense')?->getValue() ?? 0) - 4,
+        ];
+
+        $lesserAutoLeveling = [
+            'strength'  => ($lesserGoblin->getAbilities()->get('strength')?->getValue() ?? 0),
+            'endurance' => ($lesserGoblin->getAbilities()->get('endurance')?->getValue() ?? 0),
+            'agility'   => ($lesserGoblin->getAbilities()->get('agility')?->getValue() ?? 0),
+            'intuition' => ($lesserGoblin->getAbilities()->get('intuition')?->getValue() ?? 0),
+            'vitality'  => ($lesserGoblin->getAbilities()->get('vitality')?->getValue() ?? 0),
+            'attack'    => ($lesserGoblin->getAbilities()->get('attack')?->getValue() ?? 0),
+            'defense'   => ($lesserGoblin->getAbilities()->get('defense')?->getValue() ?? 0),
+        ];
+
+
+        self::assertSame($betterExpected, $betterAutoLeveling);
+        self::assertSame($lesserExpected, $lesserAutoLeveling);
     }
 }

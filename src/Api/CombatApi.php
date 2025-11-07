@@ -14,27 +14,54 @@ namespace Velkuns\GameTextEngine\Api;
 use Random\Randomizer;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Processor\TimeProcessor;
+use Velkuns\GameTextEngine\Exception\Api\CombatApiException;
+use Velkuns\GameTextEngine\Rules\Combat\CombatRules;
+use Velkuns\GameTextEngine\Rules\Combat\CombatRulesHit;
+use Velkuns\GameTextEngine\Rules\Combat\CombatRulesHitDetail;
+use Velkuns\GameTextEngine\Rules\Combat\CombatRulesLeveling;
 use Velkuns\GameTextEngine\Utils\Log\CombatLog;
 use Velkuns\GameTextEngine\Utils\Log\LootLog;
+use Velkuns\GameTextEngine\Utils\Log\XpLog;
 
 /**
+ * @phpstan-import-type CombatRulesData from CombatRules
  * @phpstan-type TurnLogData array{player: CombatLog, enemy?: CombatLog}
  */
-readonly class CombatApi
+class CombatApi
 {
+    private CombatRules $rules;
+
     public function __construct(
-        private Randomizer $randomizer,
-        private TimeProcessor $timeResolver,
-        private ItemsApi $items,
+        private readonly Randomizer $randomizer,
+        private readonly TimeProcessor $timeResolver,
+        private readonly ItemsApi $items,
     ) {}
 
     /**
+     * @phpstan-param CombatRulesData $data
+     */
+    public function load(array $data): void
+    {
+        $description = $data['description'];
+
+        $hits = new CombatRulesHit(
+            new CombatRulesHitDetail(...$data['hit']['chance']),
+            new CombatRulesHitDetail(...$data['hit']['roll']),
+            new CombatRulesHitDetail(...$data['hit']['damages']),
+        );
+
+        $leveling = new CombatRulesLeveling(...$data['leveling']);
+
+        $this->rules = new CombatRules($description, $hits, $leveling);
+    }
+
+    /**
      * @param EntityInterface[] $enemies
-     * @return array{combat: array<int, TurnLogData>, loot: list<LootLog>}
+     * @return array{combat: array<int, TurnLogData>, loot: list<LootLog>, xp: list<XpLog>}
      */
     public function auto(EntityInterface $player, array $enemies): array
     {
-        $logs = ['combat' => [], 'loot' => []];
+        $logs = ['combat' => [], 'loot' => [], 'xp' => []];
         $turn = 1;
         foreach ($enemies as $enemy) {
             do {
@@ -57,6 +84,7 @@ readonly class CombatApi
         if ($player->isAlive()) {
             foreach ($enemies as $enemy) {
                 $logs['loot'][] = $this->loot($player, $enemy);
+                $logs['xp'][]   = $this->xp($player, $enemy);
             }
         }
 
@@ -162,6 +190,18 @@ readonly class CombatApi
         return new LootLog($player, $enemy, $coins, $items);
     }
 
+    public function xp(EntityInterface $player, EntityInterface $enemy): XpLog
+    {
+        $xpGain = $enemy->getLoot()->xp ?? null;
+        if ($xpGain === null) {
+            $xpGain = $this->rules->leveling->xpGainDefault + $enemy->getInfo()->level * $this->rules->leveling->xpGainBonusPerLevel;
+        }
+
+        $player->getInfo()->xp += $xpGain;
+
+        return new XpLog($player, $enemy, $xpGain);
+    }
+
     private function inflictDamagesTo(EntityInterface $defender, int $damages): void
     {
         $vitality = $defender->getAbilities()->get('vitality');
@@ -171,5 +211,16 @@ readonly class CombatApi
         }
 
         $vitality->decrease($damages);
+    }
+
+    public function dump(bool $prettyPrint = false): string
+    {
+        try {
+            return \json_encode($this->rules, flags: \JSON_THROW_ON_ERROR | ($prettyPrint ? \JSON_PRETTY_PRINT : 0));
+            // @codeCoverageIgnoreStart
+        } catch (\JsonException $exception) {
+            throw new CombatApiException('Unable to dump combat rules data: ' . $exception->getMessage(), 1453, $exception);
+        }
+        // @codeCoverageIgnoreEnd
     }
 }

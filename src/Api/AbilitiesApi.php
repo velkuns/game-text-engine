@@ -11,36 +11,26 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
-use Velkuns\GameTextEngine\Api\Exception\AbilitiesApiException;
 use Velkuns\GameTextEngine\Element\Ability\AbilityInterface;
+use Velkuns\GameTextEngine\Element\Ability\AbilityType;
 use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
 use Velkuns\GameTextEngine\Element\Ability\CompoundAbility;
 use Velkuns\GameTextEngine\Element\Entity\EntityAbilities;
 use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
+use Velkuns\GameTextEngine\Exception\Api\AbilitiesApiException;
+use Velkuns\GameTextEngine\Rules\Abilities\AbilitiesRules;
+use Velkuns\GameTextEngine\Rules\Abilities\AbilitiesRulesLeveling;
+use Velkuns\GameTextEngine\Rules\Abilities\AbilitiesRulesStarting;
 
 /**
  * @phpstan-import-type BaseAbilityData from BaseAbility
  * @phpstan-import-type CompoundAbilityData from CompoundAbility
  * @phpstan-import-type AbilitiesData from EntityAbilities
- * @phpstan-type AbilitiesRulesData array{
- *    description: string,
- *    attributionPoints: int,
- *    attributionPointsMaxPerAbility: 5,
- *    bases: array<string, BaseAbilityData>,
- *    compounds: array<string, CompoundAbilityData>,
- * }
+ * @phpstan-import-type AbilitiesRulesData from AbilitiesRules
  */
 class AbilitiesApi
 {
-    public string $description = '';
-    public int $attributionPoints = 0;
-    public int $attributionPointsMaxPerAbility = 0;
-
-    /** @var array<string, BaseAbility> $baseAbilities */
-    public array $baseAbilities = [];
-
-    /** @var array<string, CompoundAbility> */
-    public array $compoundAbilities = [];
+    public AbilitiesRules $rules;
 
     public function __construct(
         private readonly AbilityFactory $abilityFactory,
@@ -51,12 +41,21 @@ class AbilitiesApi
      */
     public function load(array $data): void
     {
-        $this->description                    = $data['description'];
-        $this->attributionPoints              = $data['attributionPoints'];
-        $this->attributionPointsMaxPerAbility = $data['attributionPointsMaxPerAbility'];
+        $description       = $data['description'];
 
-        $this->baseAbilities     = $this->abilityFactory->fromBases($data['bases']);
-        $this->compoundAbilities = $this->abilityFactory->fromCompounds($data['compounds'], $this->baseAbilities);
+        $starting          = new AbilitiesRulesStarting(...$data['starting']);
+        $leveling          = new AbilitiesRulesLeveling(...$data['leveling']);
+
+        $basesAbilities    = $this->abilityFactory->fromBases($data['bases']);
+        $compoundAbilities = $this->abilityFactory->fromCompounds($data['compounds'], $basesAbilities);
+
+        $this->rules = new AbilitiesRules(
+            $description,
+            $starting,
+            $leveling,
+            $basesAbilities,
+            $compoundAbilities,
+        );
     }
 
     /**
@@ -64,15 +63,15 @@ class AbilitiesApi
      */
     public function getAll(): array
     {
-        return (['bases' => $this->baseAbilities, 'compounds' => $this->compoundAbilities]);
+        return (['bases' => $this->rules->baseAbilities, 'compounds' => $this->rules->compoundAbilities]);
     }
 
     public function get(string $name, bool $asClone = true): ?AbilityInterface
     {
-        $ability = $this->baseAbilities[$name] ?? $this->compoundAbilities[$name] ?? null;
+        $ability = $this->rules->baseAbilities[$name] ?? $this->rules->compoundAbilities[$name] ?? null;
 
         if ($ability !== null && $asClone) {
-            return $ability->clone();
+            return $ability->getType() === AbilityType::Base ? $ability->clone() : $ability->clone($this->rules->baseAbilities);
         }
 
         return $ability;
@@ -81,9 +80,9 @@ class AbilitiesApi
     public function set(AbilityInterface $ability): self
     {
         if ($ability instanceof BaseAbility) {
-            $this->baseAbilities[$ability->getName()] = $ability;
+            $this->rules->baseAbilities[$ability->getName()] = $ability;
         } elseif ($ability instanceof CompoundAbility) {
-            $this->compoundAbilities[$ability->getName()] = $ability;
+            $this->rules->compoundAbilities[$ability->getName()] = $ability;
         }
 
         return $this;
@@ -91,10 +90,10 @@ class AbilitiesApi
 
     public function remove(string $name): self
     {
-        if (isset($this->baseAbilities[$name])) {
-            unset($this->baseAbilities[$name]);
-        } elseif (isset($this->compoundAbilities[$name])) {
-            unset($this->compoundAbilities[$name]);
+        if (isset($this->rules->baseAbilities[$name])) {
+            unset($this->rules->baseAbilities[$name]);
+        } elseif (isset($this->rules->compoundAbilities[$name])) {
+            unset($this->rules->compoundAbilities[$name]);
         } else {
             throw new AbilitiesApiException("The ability '$name' does not exist.", 1450);
         }
@@ -116,7 +115,7 @@ class AbilitiesApi
         $bases = [];
 
         //~ Transform abilities into data and separate bases with ou without init rule.
-        foreach ($this->baseAbilities as $name => $ability) {
+        foreach ($this->rules->baseAbilities as $name => $ability) {
             if ($ability->getRule() !== null) {
                 //~ Reset values before store ability with init rule
                 $basesWithInitRule[$name] = ['initial' => 0, 'max' => 0, 'value' => 0] + $ability->jsonSerialize();
@@ -133,8 +132,8 @@ class AbilitiesApi
                 throw new AbilitiesApiException("The ability '$name' does not exist.", 1451);
             }
 
-            if ($value - $ability['value'] > $this->attributionPointsMaxPerAbility) {
-                throw new AbilitiesApiException("You cannot attribute more than $this->attributionPointsMaxPerAbility per ability.", 1452);
+            if ($value - $ability['value'] > $this->rules->starting->attributionPointsMaxPerAbility) {
+                throw new AbilitiesApiException("You cannot attribute more than {$this->rules->starting->attributionPointsMaxPerAbility} per ability.", 1452);
             }
 
             if ($value < $ability['value']) {
@@ -152,9 +151,9 @@ class AbilitiesApi
             $abilities['bases'][$name] = $ability;
         }
 
-        $remainingPoints = $this->attributionPoints - $totalAttributedPoints;
+        $remainingPoints = $this->rules->starting->attributionPoints - $totalAttributedPoints;
         if ($remainingPoints < 0) {
-            throw new AbilitiesApiException("You cannot attribute more than $this->attributionPoints in total.", 1454);
+            throw new AbilitiesApiException("You cannot attribute more than {$this->rules->starting->attributionPoints} in total.", 1454);
         }
 
         if ($remainingPoints > 0) {
@@ -167,7 +166,7 @@ class AbilitiesApi
         }
 
         //~ Then add compound abilities
-        foreach ($this->compoundAbilities as $name => $ability) {
+        foreach ($this->rules->compoundAbilities as $name => $ability) {
             $abilities['compounds'][$name] = $ability->jsonSerialize();
         }
 
@@ -176,28 +175,8 @@ class AbilitiesApi
 
     public function dump(bool $prettyPrint = false): string
     {
-        //~ Before dump, we need to reset initial/max/value for ability with init rule.
-        $baseAbilities = $this->baseAbilities;
-        foreach ($baseAbilities as $ability) {
-            if ($ability->getRule() === null) {
-                continue;
-            }
-
-            $ability->value   = 0;
-            $ability->initial = 0;
-            $ability->max     = 0;
-        }
-
         try {
-            $data = [
-                'description'                    => $this->description,
-                'attributionPoints'              => $this->attributionPoints,
-                'attributionPointsMaxPerAbility' => $this->attributionPointsMaxPerAbility,
-                'bases'                          => $baseAbilities,
-                'compounds'                      => $this->compoundAbilities,
-            ];
-
-            return \json_encode($data, flags: \JSON_THROW_ON_ERROR | ($prettyPrint ? \JSON_PRETTY_PRINT : 0));
+            return \json_encode($this->rules, flags: \JSON_THROW_ON_ERROR | ($prettyPrint ? \JSON_PRETTY_PRINT : 0));
             // @codeCoverageIgnoreStart
         } catch (\JsonException $exception) {
             throw new AbilitiesApiException('Unable to dump abilities rules data: ' . $exception->getMessage(), 1451, $exception);

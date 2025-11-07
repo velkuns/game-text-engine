@@ -19,6 +19,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ----
 
+## [0.4.0] - 2025-11
+[0.4.0]: https://github.com/velkuns/game-text-engine/compare/0.3.0...0.4.0
+### Added
+- Add Rules part, as representation of rules files (Abilities, Statuses, Player & Combat)
+- Add Leveling system
+- Add auto leveling for bestiary to allow auto leveling of creatures when get them from bestiary
+### Changed
+- Move all exception to the src/ root dir
+- Update rules files to add leveling data and some other improvements
+- Update PlayerApi to add player rules info
+- Update CombatApi to add combat rules info
+- Update AbilitiesApi & StatusesApi to add Rules part
+
+
+----
+
 ## [0.3.0] - 2025-11
 [0.3.0]: https://github.com/velkuns/game-text-engine/compare/0.2.1...0.3.0
 ### Changed

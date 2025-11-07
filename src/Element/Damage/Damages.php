@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Element\Damage;
 
-use Velkuns\GameTextEngine\Element\Exception\DamageException;
+use Velkuns\GameTextEngine\Exception\Element\DamageException;
 
 /**
  * @phpstan-import-type DamageData from DamageInterface

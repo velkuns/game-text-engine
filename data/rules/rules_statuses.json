@@ -1,11 +1,23 @@
 {
     "description": "This section defines all kind of statuses types available for the story, and the number of each when create a new character.",
-    "attributions": {
-        "skill": 2,
-        "state": 0,
-        "blessing": 0,
-        "curse": 0,
-        "title": 0
+    "starting": {
+        "attributions": {
+            "skill": 2,
+            "state": 0,
+            "blessing": 0,
+            "curse": 0,
+            "title": 0
+        }
+    },
+    "leveling": {
+        "everyNumberLevel": 2,
+        "attributions": {
+            "skill": 1,
+            "state": 0,
+            "blessing": 0,
+            "curse": 0,
+            "title": 0
+        }
     },
     "statuses": {
         "skill": [

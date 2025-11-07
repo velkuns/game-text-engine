@@ -25,14 +25,20 @@ use Velkuns\GameTextEngine\Element\Modifier\AbilityModifierProcessor;
 use Velkuns\GameTextEngine\Element\Modifier\DamagesModifierProcessor;
 use Velkuns\GameTextEngine\Element\Modifier\ModifierHandler;
 use Velkuns\GameTextEngine\Element\Processor\TimeProcessor;
+use Velkuns\GameTextEngine\Rules\Abilities\AbilitiesRules;
+use Velkuns\GameTextEngine\Rules\Combat\CombatRules;
+use Velkuns\GameTextEngine\Rules\Player\PlayerRules;
+use Velkuns\GameTextEngine\Rules\Statuses\StatusesRules;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
- * @phpstan-import-type BestiaryData from BestiaryApi
+ * @phpstan-import-type BestiaryFileData from BestiaryApi
  * @phpstan-import-type ItemData from ItemInterface
  * @phpstan-import-type EntityData from EntityInterface
- * @phpstan-import-type AbilitiesRulesData from AbilitiesApi
- * @phpstan-import-type StatusesRulesData from StatusesApi
+ * @phpstan-import-type AbilitiesRulesData from AbilitiesRules
+ * @phpstan-import-type StatusesRulesData from StatusesRules
+ * @phpstan-import-type CombatRulesData from CombatRules
+ * @phpstan-import-type PlayerRulesData from PlayerRules
  */
 trait ApiTrait
 {
@@ -55,7 +61,7 @@ trait ApiTrait
                 self::getItemsApi(),
             );
 
-            /** @var list<BestiaryData> $data */
+            /** @var BestiaryFileData $data */
             $data = (new JsonLoader())->fromFile(__DIR__ . '/../../data/bestiary.json');
             self::$bestiary->load($data);
         }
@@ -84,6 +90,10 @@ trait ApiTrait
                 new TimeProcessor(),
                 self::getItemsApi(),
             );
+
+            /** @var CombatRulesData $data */
+            $data = (new JsonLoader())->fromFile(__DIR__ . '/../../data/rules/rules_combat.json');
+            self::$combatApi->load($data);
         }
 
         return self::$combatApi;
@@ -126,9 +136,12 @@ trait ApiTrait
                 new ModifierHandler(self::getResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]),
             );
 
-            /** @var EntityData $data */
-            $data = (new JsonLoader())->fromFile(__DIR__ . '/../../data/templates/player.json');
-            self::$playerApi->load($data);
+            /** @var PlayerRulesData $playerRulesData */
+            $playerRulesData = (new JsonLoader())->fromFile(__DIR__ . '/../../data/rules/rules_player.json');
+
+            /** @var EntityData $playerData */
+            $playerData = (new JsonLoader())->fromFile(__DIR__ . '/../../data/templates/player.json');
+            self::$playerApi->load($playerRulesData, $playerData);
         }
 
         return self::$playerApi;

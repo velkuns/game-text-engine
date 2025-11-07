@@ -22,14 +22,22 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  */
 readonly class CompoundAbility implements AbilityInterface
 {
+    /** @var array<string, BaseAbility> $abilities */
+    private array $abilities;
+
     /**
      * @param array<string, BaseAbility> $abilities
      */
     public function __construct(
         public string $name,
         public string $rule,
-        private array $abilities,
-    ) {}
+        array $abilities,
+    ) {
+        $this->abilities = \array_filter(
+            $abilities,
+            fn(BaseAbility $ability) => \str_contains($this->rule, $ability->name),
+        );
+    }
 
     public function getName(): string
     {
@@ -135,12 +143,15 @@ readonly class CompoundAbility implements AbilityInterface
         ];
     }
 
-    public function clone(): self
+    /**
+     * @param array<string, BaseAbility> $abilities
+     */
+    public function clone(array $abilities = []): self
     {
         return new self(
             name: $this->name,
             rule: $this->rule,
-            abilities: $this->abilities,
+            abilities: $abilities,
         );
     }
 }

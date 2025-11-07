@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Api\Exception\StatusesApiException;
 use Velkuns\GameTextEngine\Api\StatusesApi;
 use Velkuns\GameTextEngine\Element\Status\Status;
+use Velkuns\GameTextEngine\Exception\Api\StatusesApiException;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
@@ -28,10 +28,13 @@ class StatusesApiTest extends TestCase
     public function testLoad(): void
     {
         $api = $this->getApi();
-        $expectedAttributions = ['skill' => 2, 'state' => 0, 'blessing' => 0, 'curse' => 0, 'title' => 0];
+        $expectedStartingAttributions = ['skill' => 2, 'state' => 0, 'blessing' => 0, 'curse' => 0, 'title' => 0];
+        $expectedLevelingAttributions = ['skill' => 1, 'state' => 0, 'blessing' => 0, 'curse' => 0, 'title' => 0];
 
-        self::assertSame("This section defines all kind of statuses types available for the story, and the number of each when create a new character.", $api->description);
-        self::assertSame($expectedAttributions, $api->attributions);
+        self::assertSame("This section defines all kind of statuses types available for the story, and the number of each when create a new character.", $api->rules->description);
+        self::assertSame($expectedStartingAttributions, $api->rules->starting->attributions);
+        self::assertSame($expectedLevelingAttributions, $api->rules->leveling->attributions);
+        self::assertSame(2, $api->rules->leveling->everyNumberLevel);
     }
 
     public function testDump(): void

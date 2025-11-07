@@ -11,30 +11,23 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
-use Velkuns\GameTextEngine\Api\Exception\AbilitiesApiException;
-use Velkuns\GameTextEngine\Api\Exception\StatusesApiException;
 use Velkuns\GameTextEngine\Element\Entity\EntityStatuses;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
 use Velkuns\GameTextEngine\Element\Status\StatusInterface;
+use Velkuns\GameTextEngine\Exception\Api\AbilitiesApiException;
+use Velkuns\GameTextEngine\Exception\Api\StatusesApiException;
+use Velkuns\GameTextEngine\Rules\Statuses\StatusesRules;
+use Velkuns\GameTextEngine\Rules\Statuses\StatusesRulesLeveling;
+use Velkuns\GameTextEngine\Rules\Statuses\StatusesRulesStarting;
 
 /**
  * @phpstan-import-type StatusesData from EntityStatuses
  * @phpstan-import-type StatusData from StatusInterface
- * @phpstan-type StatusesRulesData array{
- *     description: string,
- *     attributions: array<string, int>,
- *     statuses: array<string, list<StatusData>>,
- * }
+ * @phpstan-import-type StatusesRulesData from StatusesRules
  */
 class StatusesApi
 {
-    public string $description = '';
-
-    /** @var array<string, int> $attributions */
-    public array $attributions = [];
-
-    /** @var array<string, array<string, StatusInterface>> $statuses */
-    public array $statuses = [];
+    public StatusesRules $rules;
 
     public function __construct(
         private readonly StatusFactory $statusFactory,
@@ -45,16 +38,20 @@ class StatusesApi
      */
     public function load(array $data): void
     {
-        $this->description  = $data['description'];
-        $this->attributions = $data['attributions'];
+        $description = $data['description'];
+        $starting    = new StatusesRulesStarting(...$data['starting']);
+        $leveling    = new StatusesRulesLeveling(...$data['leveling']);
 
+        $statuses = [];
         foreach ($data['statuses'] as $type => $list) {
-            $this->statuses[$type] = [];
+            $statuses[$type] = [];
             foreach ($list as $statusData) {
                 $status = $this->statusFactory->from($statusData);
-                $this->statuses[$type][$status->getName()] = $status;
+                $statuses[$type][$status->getName()] = $status;
             }
         }
+
+        $this->rules = new StatusesRules($description, $starting, $leveling, $statuses);
     }
 
     /**
@@ -62,34 +59,34 @@ class StatusesApi
      */
     public function getAll(): array
     {
-        return $this->statuses;
+        return $this->rules->statuses;
     }
 
     public function get(string $type, string $name, bool $asClone = true): ?StatusInterface
     {
-        $status = $this->statuses[$type][$name] ?? null;
+        $status = $this->rules->statuses[$type][$name] ?? null;
 
         return $asClone ? $status?->clone() : $status;
     }
 
     public function set(StatusInterface $status): self
     {
-        if (!isset($this->statuses[$status->getType()])) {
+        if (!isset($this->rules->statuses[$status->getType()])) {
             throw new StatusesApiException("Unknown status type '{$status->getType()}'", 1550);
         }
 
-        $this->statuses[$status->getType()][$status->getName()] = $status;
+        $this->rules->statuses[$status->getType()][$status->getName()] = $status;
 
         return $this;
     }
 
     public function remove(string $type, string $name): self
     {
-        if (!isset($this->statuses[$type][$name])) {
+        if (!isset($this->rules->statuses[$type][$name])) {
             throw new StatusesApiException("The status '$name' with type '$type' does not exist.", 1551);
         }
 
-        unset($this->statuses[$type][$name]);
+        unset($this->rules->statuses[$type][$name]);
 
         return $this;
     }
@@ -103,7 +100,7 @@ class StatusesApi
         $statuses = [];
 
         //~ Pre-build $statuses
-        foreach ($this->attributions as $type => $value) {
+        foreach ($this->rules->starting->attributions as $type => $value) {
             $statuses[$type] = [];
         }
 
@@ -122,7 +119,7 @@ class StatusesApi
                 $statuses[$type][$name] = $status->jsonSerialize();
             }
 
-            $remainingStatus = $this->attributions[$type] - \count($statuses[$type]);
+            $remainingStatus = $this->rules->starting->attributions[$type] - \count($statuses[$type]);
             if ($remainingStatus < 0) {
                 throw new StatusesApiException("Too much status for type '$type'", 1554);
             }
@@ -138,13 +135,7 @@ class StatusesApi
     public function dump(bool $prettyPrint = false): string
     {
         try {
-            $data = [
-                'description'  => $this->description,
-                'attributions' => $this->attributions,
-                'statuses'     => \array_map(fn(array $list) => \array_values($list), $this->statuses),
-            ];
-
-            return \json_encode($data, flags: \JSON_THROW_ON_ERROR | ($prettyPrint ? \JSON_PRETTY_PRINT : 0));
+            return \json_encode($this->rules, flags: \JSON_THROW_ON_ERROR | ($prettyPrint ? \JSON_PRETTY_PRINT : 0));
             // @codeCoverageIgnoreStart
         } catch (\JsonException $exception) {
             throw new AbilitiesApiException('Unable to dump statuses rules data: ' . $exception->getMessage(), 1451, $exception);

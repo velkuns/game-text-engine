@@ -12,31 +12,18 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Api\BestiaryApi;
-use Velkuns\GameTextEngine\Api\Exception\ItemException;
-use Velkuns\GameTextEngine\Api\ItemsApi;
-use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Exception\Api\ItemApiException;
+use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
-use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
-/**
- * @phpstan-import-type ItemData from ItemInterface
- * @phpstan-import-type BestiaryData from BestiaryApi
- */
 class ItemsApiTest extends TestCase
 {
+    use ApiTrait;
     use FactoryTrait;
 
     public function testLoad(): void
     {
-        $dataDir = (string) realpath(__DIR__ . '/../../../data');
-        $loader  = new JsonLoader();
-        $items   = new ItemsApi(self::getItemFactory());
-
-        /** @var list<ItemData> $itemsData */
-        $itemsData = $loader->fromFile($dataDir . '/items.json');
-        $items->load($itemsData);
-
+        $items = self::getItemsApi();
 
         $item = $items->get('Sharp Iron Sword');
 
@@ -46,13 +33,7 @@ class ItemsApiTest extends TestCase
 
     public function testAndAndRemoveItem(): void
     {
-        $dataDir = (string) realpath(__DIR__ . '/../../../data');
-        $loader  = new JsonLoader();
-        $items   = new ItemsApi(self::getItemFactory());
-
-        /** @var list<ItemData> $itemsData */
-        $itemsData = $loader->fromFile($dataDir . '/items.json');
-        $items->load($itemsData);
+        $items = self::getItemsApi();
 
         $staff = self::getItemFactory()->from([
             'name'        => 'Staff',
@@ -72,7 +53,7 @@ class ItemsApiTest extends TestCase
         //~ Remove item
         $items->remove($staff->getName());
 
-        self::expectException(ItemException::class);
+        self::expectException(ItemApiException::class);
         self::expectExceptionCode(1601);
 
         $items->get($staff->getName());
@@ -80,15 +61,9 @@ class ItemsApiTest extends TestCase
 
     public function testLoadWhenThrowException(): void
     {
-        $dataDir = (string) realpath(__DIR__ . '/../../../data');
-        $loader  = new JsonLoader();
-        $items   = new ItemsApi(self::getItemFactory());
+        $items = self::getItemsApi();
 
-        /** @var list<ItemData> $itemsData */
-        $itemsData = $loader->fromFile($dataDir . '/items.json');
-        $items->load($itemsData);
-
-        self::expectException(ItemException::class);
+        self::expectException(ItemApiException::class);
         self::expectExceptionMessage("Item 'Diamond Sword' not found in item list.");
         $items->get('Diamond Sword');
     }

@@ -1,17 +1,24 @@
 {
-    "hit_chance": {
-        "name": "combat.hit_chance",
-        "rule": "(attacker.ability.attack / (defender.ability.defense * 2) * 100)",
-        "description": "Calculates the chance to hit based on attacker's attack ability and defender's defense ability."
+    "description": "This file describe combats rules, with hits rules and some leveling info.",
+    "hit": {
+        "chance": {
+            "name": "combat.hit_chance",
+            "rule": "(attacker.ability.attack \/ (defender.ability.defense * 2) * 100)",
+            "description": "Calculates the chance to hit based on attacker's attack ability and defender's defense ability."
+        },
+        "roll": {
+            "name": "combat.hit_roll",
+            "rule": "random(0, 100) < result.hit_chance",
+            "description": "Determines if an attack hits based on a random roll against the hit chance."
+        },
+        "damages": {
+            "name": "combat.hit_damages",
+            "rule": "(attacker.ability.strength * 2) - defender.ability.endurance + attacker.inventory.item",
+            "description": "Calculates the damage dealt on a successful hit based on attacker's strength, defender's endurance, and any item bonuses."
+        }
     },
-    "hit_roll": {
-        "name": "combat.hit_roll",
-        "rule": "random(0, 100) < result.hit_chance",
-        "description": "Determines if an attack hits based on a random roll against the hit chance."
-    },
-    "hit_damages": {
-        "name": "combat.hit_damages",
-        "rule": "(attacker.ability.strength * 2) - defender.ability.endurance + attacker.inventory.item",
-        "description": "Calculates the damage dealt on a successful hit based on attacker's strength, defender's endurance, and any item bonuses."
+    "leveling": {
+        "xpGainDefault": 10,
+        "xpGainBonusPerLevel": 10
     }
 }

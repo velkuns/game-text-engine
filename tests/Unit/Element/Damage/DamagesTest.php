@@ -13,9 +13,9 @@ namespace Element\Damage;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Damage\Damage;
-use Velkuns\GameTextEngine\Element\Damage\Damages;
 use Velkuns\GameTextEngine\Element\Damage\DamageInterface;
-use Velkuns\GameTextEngine\Element\Exception\DamageException;
+use Velkuns\GameTextEngine\Element\Damage\Damages;
+use Velkuns\GameTextEngine\Exception\Element\DamageException;
 
 class DamagesTest extends TestCase
 {

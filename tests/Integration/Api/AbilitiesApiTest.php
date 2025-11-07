@@ -13,9 +13,9 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Api\AbilitiesApi;
-use Velkuns\GameTextEngine\Api\Exception\AbilitiesApiException;
 use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
 use Velkuns\GameTextEngine\Element\Ability\CompoundAbility;
+use Velkuns\GameTextEngine\Exception\Api\AbilitiesApiException;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
@@ -38,9 +38,11 @@ Compound abilities are derived from base abilities. For example, the 'attack' co
 
 Abilities values are constrained within defined limits to ensure balanced gameplay.
 
-Medium values are 10, and are between 0 and 20.", $api->description);
-        self::assertSame(10, $api->attributionPoints);
-        self::assertSame(5, $api->attributionPointsMaxPerAbility);
+Medium values are 10, and are between 0 and 20.", $api->rules->description);
+        self::assertSame(10, $api->rules->starting->attributionPoints);
+        self::assertSame(5, $api->rules->starting->attributionPointsMaxPerAbility);
+        self::assertSame(5, $api->rules->leveling->attributionPoints);
+        self::assertSame(2, $api->rules->leveling->attributionPointsMaxPerAbility);
     }
 
     public function testDump(): void
@@ -66,7 +68,7 @@ Medium values are 10, and are between 0 and 20.", $api->description);
 
         $baseAbility     = new BaseAbility('test', value: 12, initial: 12);
         $api->set($baseAbility);
-        $compoundAbility = new CompoundAbility('test_compound', 'test + strength', $api->baseAbilities);
+        $compoundAbility = new CompoundAbility('test_compound', 'test + strength', $api->rules->baseAbilities);
         $api->set($compoundAbility);
 
         self::assertSame($baseAbility, $api->get('test', false));

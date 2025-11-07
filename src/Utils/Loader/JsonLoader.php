@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Utils\Loader;
 
-use Velkuns\GameTextEngine\Utils\Exception\LoaderException;
+use Velkuns\GameTextEngine\Exception\Utils\LoaderException;
 
 readonly class JsonLoader
 {

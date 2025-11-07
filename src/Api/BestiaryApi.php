@@ -12,12 +12,12 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Api;
 
 use Random\Randomizer;
-use Velkuns\GameTextEngine\Api\Exception\BestiaryException;
 use Velkuns\GameTextEngine\Element\Damage\Damages;
 use Velkuns\GameTextEngine\Element\Entity\EntityEquipment;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Entity\EntityLoot;
 use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
+use Velkuns\GameTextEngine\Exception\Api\BestiaryApiException;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface
@@ -28,17 +28,27 @@ use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
  *    name: string,
  *    type: string,
  *    race: string,
- *    gender?: string,
  *    size: string,
+ *    level?: int,
+ *    gender?: string,
  *    abilities: array<string, int>,
  *    inventory?: array{coins?: int, items?: list<string>},
  *    loot?: EntityLootData,
  *    equipment?: EquipmentData,
  *    damages?: DamagesData|null,
  * }
+ * @phpstan-type BestiaryFileData array{
+ *    autoLeveling: array{
+ *        abilities: array<string, int>,
+ *    },
+ *    list: list<BestiaryData>,
+ * }
  */
 class BestiaryApi
 {
+    /** @var array{abilities: array<string, int>} $autoLeveling */
+    private array $autoLeveling = ['abilities' => []];
+
     /** @var array<string, EntityInterface> $bestiary */
     private array $bestiary = [];
 
@@ -49,26 +59,38 @@ class BestiaryApi
     ) {}
 
     /**
-     * @phpstan-param list<BestiaryData> $list
+     * @phpstan-param BestiaryFileData $data
      */
-    public function load(array $list): void
+    public function load(array $data): void
     {
+        $this->autoLeveling = $data['autoLeveling'];
+
         $this->bestiary = [];
-        foreach ($list as $data) {
-            $fullData = $this->fromBestiary($data);
+        foreach ($data['list'] as $partialData) {
+            $fullData = $this->fromBestiary($partialData);
             $entity   = $this->entityFactory->from($fullData);
             $this->bestiary[\strtolower($entity->getName())] = $entity;
         }
     }
 
-    public function get(string $name, bool $asClone = true): EntityInterface
+    public function get(string $name, bool $asClone = true, int $autoLevel = 0): EntityInterface
     {
         $lowerCaseName = \strtolower($name);
         if (!isset($this->bestiary[$lowerCaseName])) {
-            throw new BestiaryException("Entity '$name' not found in bestiary.", 1701);
+            throw new BestiaryApiException("Entity '$name' not found in bestiary.", 1701);
         }
 
-        return $asClone ? $this->bestiary[$lowerCaseName]->clone() : $this->bestiary[$lowerCaseName];
+        $entity = $asClone ? $this->bestiary[$lowerCaseName]->clone() : $this->bestiary[$lowerCaseName];
+
+        if ($autoLevel !== 0) {
+            foreach ($this->autoLeveling['abilities'] as $abilityName => $value) {
+                $value   = $autoLevel * $value;
+                $entity->getAbilities()->get($abilityName)?->increase($value);
+            }
+
+        }
+
+        return $entity;
     }
 
     public function set(EntityInterface $entity): self
@@ -90,8 +112,11 @@ class BestiaryApi
 
     public function dump(bool $prettyPrint = false): string
     {
-        /** @var list<BestiaryData> $data */
-        $data = [];
+        /** @var BestiaryFileData $data */
+        $data = [
+            'autoLeveling' => $this->autoLeveling,
+            'list'         => [],
+        ];
 
         try {
             foreach ($this->bestiary as $entity) {
@@ -99,8 +124,9 @@ class BestiaryApi
                     'name'      => $entity->getName(),
                     'type'      => $entity->getType(),
                     'race'      => $entity->getInfo()->race,
-                    'gender'    => $entity->getInfo()->gender,
                     'size'      => $entity->getInfo()->size,
+                    'level'     => $entity->getInfo()->level,
+                    'gender'    => $entity->getInfo()->gender,
                     'damages'   => $entity->getDamages()->jsonSerialize(),
                     'abilities' => [
                         'strength'  => $entity->getAbilities()->get('strength')?->getValue() ?? 0,
@@ -115,21 +141,25 @@ class BestiaryApi
                 }
 
                 if ($entity->getLoot() !== null) {
-                    $loot = [
-                        'coins' => $entity->getLoot()->coinsLoot,
-                        'items' => $entity->getLoot()->itemsLoot,
-                    ];
-
-                    $bestiaryData['loot'] = \array_filter($loot, fn($data) => $data !== null);
+                    $bestiaryData['loot'] = $entity->getLoot()->jsonSerialize();
                 }
 
-                $data[] = $bestiaryData;
+                //~ Remove unnecessary data
+                if ($bestiaryData['level'] === 1) {
+                    unset($bestiaryData['level']);
+                }
+
+                if ($bestiaryData['gender'] === 'unknown') {
+                    unset($bestiaryData['gender']);
+                }
+
+                $data['list'][] = $bestiaryData;
             }
 
             return \json_encode($data, flags: \JSON_THROW_ON_ERROR | \JSON_PRESERVE_ZERO_FRACTION | ($prettyPrint ? \JSON_PRETTY_PRINT : 0));
             // @codeCoverageIgnoreStart
         } catch (\JsonException $exception) {
-            throw new BestiaryException('Unable to dump bestiary data: ' . $exception->getMessage(), 1700, $exception);
+            throw new BestiaryApiException('Unable to dump bestiary data: ' . $exception->getMessage(), 1700, $exception);
         }
         // @codeCoverageIgnoreEnd
     }
@@ -141,7 +171,7 @@ class BestiaryApi
     private function fromBestiary(array $data): array
     {
         $info = [
-            'level'       => 1,
+            'level'       => $data['level'] ?? 1,
             'xp'          => 0,
             'age'         => 0,
             'race'        => $data['race'],

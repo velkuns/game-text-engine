@@ -1,0 +1,14 @@
+{
+    "description": "This section defines rules for players, about leveling, inventory size...",
+    "starting": {
+        "level": 1,
+        "xp": 0
+    },
+    "leveling": {
+        "rule": "level * 100",
+        "maxLevel": 10
+    },
+    "inventory": {
+        "limit": 0
+    }
+}

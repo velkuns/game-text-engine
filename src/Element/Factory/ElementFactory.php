@@ -14,14 +14,12 @@ namespace Velkuns\GameTextEngine\Element\Factory;
 use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
 use Velkuns\GameTextEngine\Element\Ability\CompoundAbility;
 use Velkuns\GameTextEngine\Element\Condition\Conditions;
-use Velkuns\GameTextEngine\Element\Entity\Entity;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Exception\ElementJsonParseException;
-use Velkuns\GameTextEngine\Element\Item\Item;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 use Velkuns\GameTextEngine\Element\Status\Status;
 use Velkuns\GameTextEngine\Element\Status\StatusInterface;
+use Velkuns\GameTextEngine\Exception\Element\ElementJsonParseException;
 
 /**
  * @phpstan-import-type BaseAbilityData from BaseAbility

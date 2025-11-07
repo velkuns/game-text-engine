@@ -23,9 +23,10 @@ readonly class LootFactory
      */
     public function from(?array $data): EntityLoot
     {
+        $xp        = $data['xp'] ?? null;
         $coinsLoot = $data['coins'] ?? null;
         $itemsLoot = $data['items'] ?? null;
 
-        return new EntityLoot($coinsLoot, $itemsLoot);
+        return new EntityLoot($xp, $coinsLoot, $itemsLoot);
     }
 }

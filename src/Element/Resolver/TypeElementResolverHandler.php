@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Resolver;
 
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Exception\UnsupportedTypeElementResolverException;
+use Velkuns\GameTextEngine\Exception\Element\UnsupportedTypeElementResolverException;
 
 readonly class TypeElementResolverHandler
 {

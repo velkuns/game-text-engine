@@ -11,23 +11,30 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
-use Velkuns\GameTextEngine\Api\Exception\GameException;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Exception\Api\GameApiException;
 use Velkuns\GameTextEngine\Graph\Edge;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Graph\Node;
+use Velkuns\GameTextEngine\Rules\Abilities\AbilitiesRules;
+use Velkuns\GameTextEngine\Rules\Combat\CombatRules;
+use Velkuns\GameTextEngine\Rules\Player\PlayerRules;
+use Velkuns\GameTextEngine\Rules\Statuses\StatusesRules;
 use Velkuns\GameTextEngine\Utils\Exporter\DOTExporter;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Utils\Log\LootLog;
+use Velkuns\GameTextEngine\Utils\Log\XpLog;
 
 /**
  * @phpstan-import-type GraphData from Graph
  * @phpstan-import-type ItemData from ItemInterface
- * @phpstan-import-type BestiaryData from BestiaryApi
+ * @phpstan-import-type BestiaryFileData from BestiaryApi
  * @phpstan-import-type EntityData from EntityInterface
- * @phpstan-import-type AbilitiesRulesData from AbilitiesApi
- * @phpstan-import-type StatusesRulesData from StatusesApi
+ * @phpstan-import-type AbilitiesRulesData from AbilitiesRules
+ * @phpstan-import-type StatusesRulesData from StatusesRules
+ * @phpstan-import-type CombatRulesData from CombatRules
+ * @phpstan-import-type PlayerRulesData from PlayerRules
  * @phpstan-import-type TurnLogData from CombatApi
  */
 readonly class GameApi
@@ -47,9 +54,11 @@ readonly class GameApi
     /**
      * @phpstan-param GraphData $storyData
      * @phpstan-param list<ItemData> $itemsData
-     * @phpstan-param list<BestiaryData> $bestiaryData
+     * @phpstan-param BestiaryFileData $bestiaryData
      * @phpstan-param AbilitiesRulesData $abilitiesRulesData
      * @phpstan-param StatusesRulesData $statusesRulesData
+     * @phpstan-param CombatRulesData $combatRulesData
+     * @phpstan-param PlayerRulesData $playerRulesData
      * @phpstan-param EntityData|null $playerData
      */
     public function load(
@@ -58,6 +67,8 @@ readonly class GameApi
         array $bestiaryData,
         array $abilitiesRulesData,
         array $statusesRulesData,
+        array $combatRulesData,
+        array $playerRulesData,
         ?array $playerData = null,
     ): self {
         $this->story->load($storyData);
@@ -65,10 +76,8 @@ readonly class GameApi
         $this->bestiary->load($bestiaryData);
         $this->abilities->load($abilitiesRulesData);
         $this->statuses->load($statusesRulesData);
-
-        if ($playerData !== null) {
-            $this->player->load($playerData);
-        }
+        $this->combat->load($combatRulesData);
+        $this->player->load($playerRulesData, $playerData);
 
         return $this;
     }
@@ -79,6 +88,8 @@ readonly class GameApi
         string $bestiaryFile,
         string $abilitiesRulesFile,
         string $statusesRulesFile,
+        string $combatRulesFile,
+        string $playerRulesFile,
         ?string $playerFile = null,
     ): self {
 
@@ -88,7 +99,7 @@ readonly class GameApi
         /** @var list<ItemData> $itemsData */
         $itemsData = $this->loader->fromFile($itemsFile);
 
-        /** @var list<BestiaryData> $bestiaryData */
+        /** @var BestiaryFileData $bestiaryData */
         $bestiaryData = $this->loader->fromFile($bestiaryFile);
 
         /** @var AbilitiesRulesData $abilitiesRulesData */
@@ -96,6 +107,12 @@ readonly class GameApi
 
         /** @var StatusesRulesData $statusesRulesData */
         $statusesRulesData = $this->loader->fromFile($statusesRulesFile);
+
+        /** @var CombatRulesData $combatRulesData */
+        $combatRulesData = $this->loader->fromFile($combatRulesFile);
+
+        /** @var PlayerRulesData $playerRulesData */
+        $playerRulesData = $this->loader->fromFile($playerRulesFile);
 
         /** @var EntityData $playerData */
         $playerData = $playerFile !== null ? $this->loader->fromFile($playerFile) : null;
@@ -106,6 +123,8 @@ readonly class GameApi
             $bestiaryData,
             $abilitiesRulesData,
             $statusesRulesData,
+            $combatRulesData,
+            $playerRulesData,
             $playerData,
         );
 
@@ -118,6 +137,8 @@ readonly class GameApi
         string $bestiaryJson,
         string $abilitiesRulesJson,
         string $statusesRulesJson,
+        string $combatRulesJson,
+        string $playerRulesJson,
         ?string $playerJson = null,
     ): self {
 
@@ -127,7 +148,7 @@ readonly class GameApi
         /** @var list<ItemData> $itemsData */
         $itemsData = $this->loader->fromString($itemsJson);
 
-        /** @var list<BestiaryData> $bestiaryData */
+        /** @var BestiaryFileData $bestiaryData */
         $bestiaryData = $this->loader->fromString($bestiaryJson);
 
         /** @var AbilitiesRulesData $abilitiesRulesData */
@@ -135,6 +156,12 @@ readonly class GameApi
 
         /** @var StatusesRulesData $statusesRulesData */
         $statusesRulesData = $this->loader->fromString($statusesRulesJson);
+
+        /** @var CombatRulesData $combatRulesData */
+        $combatRulesData = $this->loader->fromString($combatRulesJson);
+
+        /** @var PlayerRulesData $playerRulesData */
+        $playerRulesData = $this->loader->fromString($playerRulesJson);
 
         /** @var EntityData $playerData */
         $playerData = $playerJson !== null ? $this->loader->fromString($playerJson) : null;
@@ -145,6 +172,8 @@ readonly class GameApi
             $bestiaryData,
             $abilitiesRulesData,
             $statusesRulesData,
+            $combatRulesData,
+            $playerRulesData,
             $playerData,
         );
 
@@ -155,12 +184,12 @@ readonly class GameApi
      * @return array{
      *     0: Node,
      *     1: Edge[],
-     *     2: array{combat: array<int, TurnLogData>, loot: list<LootLog>},
+     *     2: array{combat: array<int, TurnLogData>, loot: list<LootLog>, xp: list<XpLog>},
      * }
      */
     public function read(string $source, string $target): array
     {
-        $logs = ['combat' => [], 'loot' => []];
+        $logs = ['combat' => [], 'loot' => [], 'xp' => []];
 
         //~ Validate the path
         $node = $this->story->goto($source, $target, $this->player->player);
@@ -185,25 +214,29 @@ readonly class GameApi
      *     story: string,
      *     items: string,
      *     bestiary: string,
-     *     abilities: string,
-     *     statuses: string,
-     *     player: string,
+     *     abilitiesRules: string,
+     *     statusesRules: string,
+     *     combatRules: string,
+     *     playerRules: string,
+     *     playerData: string,
      * }
      */
     public function dump(bool $prettyPrint = false): array
     {
         try {
             return [
-                'story'     => $this->story->dump($prettyPrint),
-                'items'     => $this->items->dump($prettyPrint),
-                'bestiary'  => $this->bestiary->dump($prettyPrint),
-                'abilities' => $this->abilities->dump($prettyPrint),
-                'statuses'  => $this->statuses->dump($prettyPrint),
-                'player'    => $this->player->dump($prettyPrint),
+                'story'          => $this->story->dump($prettyPrint),
+                'items'          => $this->items->dump($prettyPrint),
+                'bestiary'       => $this->bestiary->dump($prettyPrint),
+                'abilitiesRules' => $this->abilities->dump($prettyPrint),
+                'statusesRules'  => $this->statuses->dump($prettyPrint),
+                'combatRules'    => $this->combat->dump($prettyPrint),
+                'playerRules'    => $this->player->dump($prettyPrint),
+                'playerData'     => $this->player->dumpPlayer($prettyPrint),
             ];
             // @codeCoverageIgnoreStart
         } catch (\Throwable $exception) {
-            throw new GameException('Cannot dump game data: ' . $exception->getMessage(), 1500, $exception); // @codeCoverageIgnore
+            throw new GameApiException('Cannot dump game data: ' . $exception->getMessage(), 1500, $exception); // @codeCoverageIgnore
         }
         // @codeCoverageIgnoreEnd
     }

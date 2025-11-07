@@ -15,10 +15,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Element\Condition\Conditions;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Exception\ResolverException;
-use Velkuns\GameTextEngine\Element\Exception\StatusException;
-use Velkuns\GameTextEngine\Element\Exception\UnsupportedConditionTypeException;
-use Velkuns\GameTextEngine\Element\Exception\UnsupportedTypeElementResolverException;
+use Velkuns\GameTextEngine\Exception\Element\ResolverException;
+use Velkuns\GameTextEngine\Exception\Element\StatusException;
+use Velkuns\GameTextEngine\Exception\Element\UnsupportedConditionTypeException;
+use Velkuns\GameTextEngine\Exception\Element\UnsupportedTypeElementResolverException;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 

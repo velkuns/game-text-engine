@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Api\Exception\StoryException;
 use Velkuns\GameTextEngine\Api\StoryApi;
+use Velkuns\GameTextEngine\Exception\Api\StoryApiException;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
@@ -62,7 +62,7 @@ class StoryApiTest extends TestCase
         $node = $story->goto('4', '998', $player, $goblin);
         self::assertSame('998', $node->id);
 
-        self::expectException(StoryException::class);
+        self::expectException(StoryApiException::class);
         self::expectExceptionCode(1400);
 
         //~ Trying to go to 997 (player win)

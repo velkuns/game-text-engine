@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Modifier;
 
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Exception\ModifierException;
 use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolverHandler;
+use Velkuns\GameTextEngine\Exception\Element\ModifierException;
 
 readonly class ModifierHandler
 {

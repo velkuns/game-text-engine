@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
-use Velkuns\GameTextEngine\Api\Exception\StoryException;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
+use Velkuns\GameTextEngine\Exception\Api\StoryApiException;
 use Velkuns\GameTextEngine\Graph\Edge;
 use Velkuns\GameTextEngine\Graph\Factory\GraphFactory;
 use Velkuns\GameTextEngine\Graph\Graph;
@@ -48,7 +48,7 @@ class StoryApi
         ?EntityInterface $enemy = null,
     ): Node {
         if (!$this->validate($source, $target, $player, $enemy)) {
-            throw new StoryException("Cannot go from node '$source' to node '$target'.", 1400);
+            throw new StoryApiException("Cannot go from node '$source' to node '$target'.", 1400);
         }
 
         return $this->getText($target);
@@ -99,7 +99,7 @@ class StoryApi
             );
             // @codeCoverageIgnoreStart
         } catch (\JsonException) {
-            throw new StoryException('Unable to dump story graph to JSON.', 1401); // @codeCoverageIgnore
+            throw new StoryApiException('Unable to dump story graph to JSON.', 1401); // @codeCoverageIgnore
         }
         // @codeCoverageIgnoreEnd
     }

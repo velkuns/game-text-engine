@@ -1,451 +1,450 @@
-[
-    {
-        "name": "Rat",
-        "type": "creature",
-        "race": "rat",
-        "gender": "unknown",
-        "size": "tiny",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 0
-            }
-        },
+{
+    "autoLeveling": {
         "abilities": {
-            "strength": 4,
-            "endurance": 4,
-            "agility": 15,
-            "intuition": 15
+            "strength": 1,
+            "endurance": 1,
+            "agility": 1,
+            "intuition": 1,
+            "vitality": 3
         }
     },
-    {
-        "name": "Gray Wolf",
-        "type": "creature",
-        "race": "wolf",
-        "gender": "unknown",
-        "size": "medium",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 0
-            }
-        },
-        "abilities": {
-            "strength": 9,
-            "endurance": 11,
-            "agility": 9,
-            "intuition": 12
-        }
-    },
-    {
-        "name": "Brown Bear",
-        "type": "creature",
-        "race": "bear",
-        "gender": "unknown",
-        "size": "large",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 5
-            }
-        },
-        "abilities": {
-            "strength": 15,
-            "endurance": 10,
-            "agility": 10,
-            "intuition": 12
-        }
-    },
-    {
-        "name": "Goblin",
-        "type": "creature",
-        "race": "goblin",
-        "gender": "unknown",
-        "size": "small",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 0
-            }
-        },
-        "abilities": {
-            "strength": 8,
-            "endurance": 8,
-            "agility": 12,
-            "intuition": 12
-        },
-        "equipment": {
-            "weapon": [
-                {
-                    "name": "Rusty Dagger",
-                    "probability": 0.8
+    "list": [
+        {
+            "name": "Rat",
+            "type": "creature",
+            "race": "rat",
+            "size": "tiny",
+            "level": 3,
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 0
                 }
-            ]
-        },
-        "loot": {
-            "coins": {
-                "min": 1,
-                "max": 5
             },
-            "items": [
-                {
-                    "name": "Rusty Dagger",
-                    "drop": 1.0
-                }
-            ]
-        }
-    },
-    {
-        "name": "Brute Goblin",
-        "type": "creature",
-        "race": "goblin",
-        "gender": "unknown",
-        "size": "small",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 1
+            "abilities": {
+                "strength": 4,
+                "endurance": 4,
+                "agility": 15,
+                "intuition": 15
             }
         },
-        "abilities": {
-            "strength": 12,
-            "endurance": 10,
-            "agility": 10,
-            "intuition": 8
-        },
-        "equipment": {
-            "weapon": [
-                {
-                    "name": "Wood Mass",
-                    "probability": 1.0
+        {
+            "name": "Gray Wolf",
+            "type": "creature",
+            "race": "wolf",
+            "size": "medium",
+            "gender": "female",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 0
                 }
-            ]
-        },
-        "loot": {
-            "coins": {
-                "min": 1,
-                "max": 8
-            }
-        }
-    },
-    {
-        "name": "Chief Goblin",
-        "type": "creature",
-        "race": "goblin",
-        "gender": "unknown",
-        "size": "medium",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 1
-            }
-        },
-        "abilities": {
-            "strength": 12,
-            "endurance": 10,
-            "agility": 12,
-            "intuition": 14
-        },
-        "equipment": {
-            "weapon": [
-                {
-                    "name": "Sharp Iron Sword",
-                    "probability": 0.1
-                },
-                {
-                    "name": "Iron Sword",
-                    "probability": 1.0
-                }
-            ]
-        },
-        "loot": {
-            "coins": {
-                "min": 1,
-                "max": 8
             },
-            "items": [
-                {
-                    "name": "Small Health Potion",
-                    "drop": 1.0
-                },
-                {
-                    "name": "Medium Health Potion",
-                    "drop": 0.05
+            "abilities": {
+                "strength": 9,
+                "endurance": 11,
+                "agility": 9,
+                "intuition": 12
+            }
+        },
+        {
+            "name": "Brown Bear",
+            "type": "creature",
+            "race": "bear",
+            "size": "large",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 5
                 }
-            ]
-        }
-    },
-    {
-        "name": "Imp",
-        "type": "creature",
-        "race": "demon",
-        "gender": "unknown",
-        "size": "small",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 2
-            }
-        },
-        "abilities": {
-            "strength": 8,
-            "endurance": 8,
-            "agility": 14,
-            "intuition": 12
-        }
-    },
-    {
-        "name": "Minor Demon",
-        "type": "creature",
-        "race": "demon",
-        "gender": "unknown",
-        "size": "medium",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 3
-            }
-        },
-        "abilities": {
-            "strength": 12,
-            "endurance": 10,
-            "agility": 12,
-            "intuition": 12
-        }
-    },
-    {
-        "name": "Major Demon",
-        "type": "creature",
-        "race": "demon",
-        "gender": "unknown",
-        "size": "medium",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 4
-            }
-        },
-        "abilities": {
-            "strength": 14,
-            "endurance": 12,
-            "agility": 12,
-            "intuition": 14
-        }
-    },
-    {
-        "name": "Skeleton",
-        "type": "creature",
-        "race": "demon",
-        "gender": "unknown",
-        "size": "medium",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 2
-            }
-        },
-        "abilities": {
-            "strength": 10,
-            "endurance": 10,
-            "agility": 8,
-            "intuition": 6
-        },
-        "equipment": {
-            "weapon": [
-                {
-                    "name": "Iron Sword",
-                    "probability": 0.1
-                },
-                {
-                    "name": "Rusty Sword",
-                    "probability": 0.9
-                }
-            ]
-        },
-        "loot": {
-            "coins": {
-                "min": 5,
-                "max": 15
-            }
-        }
-    },
-    {
-        "name": "Zombie",
-        "type": "creature",
-        "race": "demon",
-        "gender": "unknown",
-        "size": "medium",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 4
-            }
-        },
-        "abilities": {
-            "strength": 12,
-            "endurance": 10,
-            "agility": 6,
-            "intuition": 6
-        }
-    },
-    {
-        "name": "Thief",
-        "type": "npc",
-        "race": "human",
-        "gender": "unknown",
-        "size": "medium",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 0
-            }
-        },
-        "abilities": {
-            "strength": 10,
-            "endurance": 12,
-            "agility": 14,
-            "intuition": 12
-        },
-        "equipment": {
-            "weapon": [
-                {
-                    "name": "Iron Dagger",
-                    "probability": 1.0
-                }
-            ]
-        },
-        "loot": {
-            "coins": {
-                "min": 5,
-                "max": 15
             },
-            "items": [
-                {
-                    "name": "Simple Lockpick",
-                    "drop": 0.5
-                }
-            ]
-        }
-    },
-    {
-        "name": "Brigand",
-        "type": "npc",
-        "race": "human",
-        "gender": "unknown",
-        "size": "medium",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 0
+            "abilities": {
+                "strength": 15,
+                "endurance": 10,
+                "agility": 10,
+                "intuition": 12
             }
         },
-        "abilities": {
-            "strength": 12,
-            "endurance": 12,
-            "agility": 10,
-            "intuition": 12
-        },
-        "equipment": {
-            "weapon": [
-                {
-                    "name": "Iron Sword",
-                    "probability": 0.5
-                },
-                {
-                    "name": "Rusty Sword",
-                    "probability": 1.0
+        {
+            "name": "Goblin",
+            "type": "creature",
+            "race": "goblin",
+            "size": "small",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 0
                 }
-            ]
-        },
-        "loot": {
-            "coins": {
-                "min": 5,
-                "max": 10
             },
-            "items": [
-                {
-                    "name": "Simple Lockpick",
-                    "drop": 0.1
-                }
-            ]
-        }
-    },
-    {
-        "name": "Mercenary",
-        "type": "npc",
-        "race": "human",
-        "gender": "unknown",
-        "size": "medium",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 0
-            }
-        },
-        "abilities": {
-            "strength": 13,
-            "endurance": 12,
-            "agility": 11,
-            "intuition": 12
-        },
-        "equipment": {
-            "weapon": [
-                {
-                    "name": "Iron Sword",
-                    "probability": 0.8
+            "abilities": {
+                "strength": 8,
+                "endurance": 8,
+                "agility": 12,
+                "intuition": 12
+            },
+            "equipment": {
+                "weapon": [
+                    {
+                        "name": "Rusty Dagger",
+                        "probability": 0.8
+                    }
+                ]
+            },
+            "loot": {
+                "coins": {
+                    "min": 1,
+                    "max": 5
                 },
-                {
-                    "name": "Rusty Sword",
-                    "probability": 1.0
-                }
-            ]
+                "items": [
+                    {
+                        "name": "Rusty Dagger",
+                        "drop": 1.0
+                    }
+                ]
+            }
         },
-        "loot": {
-            "coins": {
-                "min": 3,
-                "max": 8
+        {
+            "name": "Brute Goblin",
+            "type": "creature",
+            "race": "goblin",
+            "size": "small",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 1
+                }
+            },
+            "abilities": {
+                "strength": 12,
+                "endurance": 10,
+                "agility": 10,
+                "intuition": 8
+            },
+            "equipment": {
+                "weapon": [
+                    {
+                        "name": "Wood Mass",
+                        "probability": 1.0
+                    }
+                ]
+            },
+            "loot": {
+                "coins": {
+                    "min": 1,
+                    "max": 8
+                }
+            }
+        },
+        {
+            "name": "Chief Goblin",
+            "type": "creature",
+            "race": "goblin",
+            "size": "medium",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 1
+                }
+            },
+            "abilities": {
+                "strength": 12,
+                "endurance": 10,
+                "agility": 12,
+                "intuition": 14
+            },
+            "equipment": {
+                "weapon": [
+                    {
+                        "name": "Sharp Iron Sword",
+                        "probability": 0.1
+                    },
+                    {
+                        "name": "Iron Sword",
+                        "probability": 1.0
+                    }
+                ]
+            },
+            "loot": {
+                "xp": 30,
+                "coins": {
+                    "min": 1,
+                    "max": 8
+                },
+                "items": [
+                    {
+                        "name": "Small Health Potion",
+                        "drop": 1.0
+                    },
+                    {
+                        "name": "Medium Health Potion",
+                        "drop": 0.05
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Imp",
+            "type": "creature",
+            "race": "demon",
+            "size": "small",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 2
+                }
+            },
+            "abilities": {
+                "strength": 8,
+                "endurance": 8,
+                "agility": 14,
+                "intuition": 12
+            }
+        },
+        {
+            "name": "Minor Demon",
+            "type": "creature",
+            "race": "demon",
+            "size": "medium",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 3
+                }
+            },
+            "abilities": {
+                "strength": 12,
+                "endurance": 10,
+                "agility": 12,
+                "intuition": 12
+            }
+        },
+        {
+            "name": "Major Demon",
+            "type": "creature",
+            "race": "demon",
+            "size": "medium",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 4
+                }
+            },
+            "abilities": {
+                "strength": 14,
+                "endurance": 12,
+                "agility": 12,
+                "intuition": 14
+            }
+        },
+        {
+            "name": "Skeleton",
+            "type": "creature",
+            "race": "demon",
+            "size": "medium",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 2
+                }
+            },
+            "abilities": {
+                "strength": 10,
+                "endurance": 10,
+                "agility": 8,
+                "intuition": 6
+            },
+            "equipment": {
+                "weapon": [
+                    {
+                        "name": "Iron Sword",
+                        "probability": 0.1
+                    },
+                    {
+                        "name": "Rusty Sword",
+                        "probability": 0.9
+                    }
+                ]
+            },
+            "loot": {
+                "coins": {
+                    "min": 5,
+                    "max": 15
+                }
+            }
+        },
+        {
+            "name": "Zombie",
+            "type": "creature",
+            "race": "demon",
+            "size": "medium",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 4
+                }
+            },
+            "abilities": {
+                "strength": 12,
+                "endurance": 10,
+                "agility": 6,
+                "intuition": 6
+            }
+        },
+        {
+            "name": "Thief",
+            "type": "npc",
+            "race": "human",
+            "size": "medium",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 0
+                }
+            },
+            "abilities": {
+                "strength": 10,
+                "endurance": 12,
+                "agility": 14,
+                "intuition": 12
+            },
+            "equipment": {
+                "weapon": [
+                    {
+                        "name": "Iron Dagger",
+                        "probability": 1.0
+                    }
+                ]
+            },
+            "loot": {
+                "coins": {
+                    "min": 5,
+                    "max": 15
+                },
+                "items": [
+                    {
+                        "name": "Simple Lockpick",
+                        "drop": 0.5
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Brigand",
+            "type": "npc",
+            "race": "human",
+            "size": "medium",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 0
+                }
+            },
+            "abilities": {
+                "strength": 12,
+                "endurance": 12,
+                "agility": 10,
+                "intuition": 12
+            },
+            "equipment": {
+                "weapon": [
+                    {
+                        "name": "Iron Sword",
+                        "probability": 0.5
+                    },
+                    {
+                        "name": "Rusty Sword",
+                        "probability": 1.0
+                    }
+                ]
+            },
+            "loot": {
+                "coins": {
+                    "min": 5,
+                    "max": 10
+                },
+                "items": [
+                    {
+                        "name": "Simple Lockpick",
+                        "drop": 0.1
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Mercenary",
+            "type": "npc",
+            "race": "human",
+            "size": "medium",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 0
+                }
+            },
+            "abilities": {
+                "strength": 13,
+                "endurance": 12,
+                "agility": 11,
+                "intuition": 12
+            },
+            "equipment": {
+                "weapon": [
+                    {
+                        "name": "Iron Sword",
+                        "probability": 0.8
+                    },
+                    {
+                        "name": "Rusty Sword",
+                        "probability": 1.0
+                    }
+                ]
+            },
+            "loot": {
+                "coins": {
+                    "min": 3,
+                    "max": 8
+                }
+            }
+        },
+        {
+            "name": "Human",
+            "type": "npc",
+            "race": "human",
+            "size": "medium",
+            "damages": {
+                "physical": {
+                    "type": "physical",
+                    "value": 0
+                }
+            },
+            "abilities": {
+                "strength": 10,
+                "endurance": 10,
+                "agility": 10,
+                "intuition": 10
+            },
+            "equipment": {
+                "weapon": [
+                    {
+                        "name": "Iron Sword",
+                        "probability": 0.1
+                    },
+                    {
+                        "name": "Rusty Sword",
+                        "probability": 0.2
+                    },
+                    {
+                        "name": "Rusty Dagger",
+                        "probability": 0.3
+                    }
+                ]
+            },
+            "loot": {
+                "coins": {
+                    "min": 1,
+                    "max": 10
+                }
             }
         }
-    },
-    {
-        "name": "Human",
-        "type": "npc",
-        "race": "human",
-        "gender": "unknown",
-        "size": "medium",
-        "damages": {
-            "physical": {
-                "type": "physical",
-                "value": 0
-            }
-        },
-        "abilities": {
-            "strength": 10,
-            "endurance": 10,
-            "agility": 10,
-            "intuition": 10
-        },
-        "equipment": {
-            "weapon": [
-                {
-                    "name": "Iron Sword",
-                    "probability": 0.1
-                },
-                {
-                    "name": "Rusty Sword",
-                    "probability": 0.2
-                },
-                {
-                    "name": "Rusty Dagger",
-                    "probability": 0.3
-                }
-            ]
-        },
-        "loot": {
-            "coins": {
-                "min": 1,
-                "max": 10
-            }
-        }
-    }
-]
+    ]
+}

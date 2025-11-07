@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Unit\Element\Modifier;
 
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Element\Exception\ModifierException;
-use Velkuns\GameTextEngine\Element\Exception\UnsupportedModifierProcessorPropertyException;
 use Velkuns\GameTextEngine\Element\Modifier\AbilityModifierProcessor;
 use Velkuns\GameTextEngine\Element\Modifier\DamagesModifierProcessor;
 use Velkuns\GameTextEngine\Element\Modifier\Modifier;
 use Velkuns\GameTextEngine\Element\Modifier\ModifierHandler;
+use Velkuns\GameTextEngine\Exception\Element\ModifierException;
+use Velkuns\GameTextEngine\Exception\Element\UnsupportedModifierProcessorPropertyException;
 use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\ResolverTrait;

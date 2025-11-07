@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Element\Validator;
 
 use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
-use Velkuns\GameTextEngine\Element\Exception\UnsupportedConditionTypeException;
+use Velkuns\GameTextEngine\Exception\Element\UnsupportedConditionTypeException;
 
 /**
  * @phpstan-import-type ConditionPartData from ConditionParser
