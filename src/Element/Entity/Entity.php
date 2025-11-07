@@ -27,6 +27,8 @@ readonly class Entity implements EntityInterface
         public EntityAbilities $abilities,
         public EntityStatuses $statuses,
         public EntityInventory $inventory,
+        public ?EntityLoot $loot,
+        public ?EntityEquipment $equipment,
     ) {}
 
     public function getName(): string
@@ -64,6 +66,16 @@ readonly class Entity implements EntityInterface
         return $this->inventory;
     }
 
+    public function getLoot(): ?EntityLoot
+    {
+        return $this->loot;
+    }
+
+    public function getEquipment(): ?EntityEquipment
+    {
+        return $this->equipment;
+    }
+
     public function hasStatus(string $type, string $name): bool
     {
         return $this->getStatuses()->getByType($type, $name) !== null;
@@ -87,7 +99,7 @@ readonly class Entity implements EntityInterface
      */
     public function jsonSerialize(): array
     {
-        return [
+        $data = [
             'name'      => $this->getName(),
             'type'      => $this->getType(),
             'info'      => $this->getInfo()->jsonSerialize(),
@@ -96,6 +108,16 @@ readonly class Entity implements EntityInterface
             'statuses'  => $this->getStatuses()->jsonSerialize(),
             'inventory' => $this->getInventory()->jsonSerialize(),
         ];
+
+        if ($this->getLoot() !== null) {
+            $data['loot'] = $this->getLoot()->jsonSerialize();
+        }
+
+        if ($this->getEquipment() !== null) {
+            $data['equipment'] = $this->getEquipment()->jsonSerialize();
+        }
+
+        return $data;
     }
 
     public function clone(): self
@@ -108,6 +130,8 @@ readonly class Entity implements EntityInterface
             abilities: $this->getAbilities()->clone(),
             statuses: $this->getStatuses()->clone(),
             inventory: $this->getInventory()->clone(),
+            loot: $this->getLoot()?->clone(),
+            equipment: $this->getEquipment()?->clone(),
         );
     }
 }

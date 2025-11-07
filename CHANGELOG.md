@@ -33,9 +33,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Add modifier process by supported element type
 - Update all tests
 - Update all data / rules according to the changes
+- Rework inventory from bestiary
+  - Now have equipment par with item probability
+  - Now have loot part for looting other items that is not equipment.
 ### Added
 - Add TimeResolver::combatEnd() to clean statuses with duration at the end of combats
 - Add some methods in elements classes according to the changes
+- Add looting system
 
 ----
 

@@ -22,6 +22,8 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  * @phpstan-import-type StatusesData from EntityStatuses
  * @phpstan-import-type InventoryData from EntityInventory
  * @phpstan-import-type ItemData from ItemInterface
+ * @phpstan-import-type EntityLootData from EntityLoot
+ * @phpstan-import-type EquipmentData from EntityEquipment
  * @phpstan-type EntityData array{
  *     name: string,
  *     type: string,
@@ -30,6 +32,8 @@ use Velkuns\GameTextEngine\Element\Modifier\Modifier;
  *     abilities: AbilitiesData,
  *     statuses: StatusesData,
  *     inventory: InventoryData,
+ *     loot?: EntityLootData,
+ *     equipment?: EquipmentData
  * }
  */
 interface EntityInterface extends \JsonSerializable
@@ -47,6 +51,10 @@ interface EntityInterface extends \JsonSerializable
     public function getStatuses(): EntityStatuses;
 
     public function getInventory(): EntityInventory;
+
+    public function getLoot(): ?EntityLoot;
+
+    public function getEquipment(): ?EntityEquipment;
 
     public function hasStatus(string $type, string $name): bool;
 

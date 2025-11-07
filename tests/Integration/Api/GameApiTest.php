@@ -12,18 +12,14 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
-use Random\Engine\Mt19937;
-use Random\Randomizer;
 use Velkuns\GameTextEngine\Api\AbilitiesApi;
 use Velkuns\GameTextEngine\Api\BestiaryApi;
-use Velkuns\GameTextEngine\Api\CombatApi;
 use Velkuns\GameTextEngine\Api\Exception\StoryException;
 use Velkuns\GameTextEngine\Api\GameApi;
 use Velkuns\GameTextEngine\Api\StatusesApi;
 use Velkuns\GameTextEngine\Api\StoryApi;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
-use Velkuns\GameTextEngine\Element\Processor\TimeProcessor;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
@@ -123,7 +119,7 @@ class GameApiTest extends TestCase
 
         self::assertSame($expectedNode, $node);
         self::assertSame($expectedEdges, $edges);
-        self::assertSame([], $logs);
+        self::assertSame(['combat' => [], 'loot' => []], $logs);
     }
 
     public function testReadOnSameNode(): void
@@ -149,7 +145,7 @@ class GameApiTest extends TestCase
 
         self::assertSame($expectedNode, $node);
         self::assertSame($expectedEdges, $edges);
-        self::assertSame([], $logs);
+        self::assertSame(['combat' => [], 'loot' => []], $logs);
     }
 
     public function testReadWithTrigger(): void
@@ -172,11 +168,12 @@ class GameApiTest extends TestCase
         $graph = $gameApi->story->graph;
         $expectedNode  = $graph->getNode('4');
         $expectedEdges = $graph->getEdgesFromSource('4');
-        unset($expectedEdges['997']);
+        unset($expectedEdges['998']);
 
         self::assertSame($expectedNode, $node);
         self::assertSame(\array_values($expectedEdges), $edges);
-        self::assertNotEmpty($logs);
+        self::assertNotEmpty($logs['combat']);
+        self::assertNotEmpty($logs['loot']);
     }
 
     public function testReadButIsSameNode(): void
@@ -202,7 +199,7 @@ class GameApiTest extends TestCase
 
         self::assertSame($expectedNode, $node);
         self::assertSame($expectedEdges, $edges);
-        self::assertSame([], $logs);
+        self::assertSame(['combat' => [], 'loot' => []], $logs);
     }
 
     public function testReadButTargetIsNotValid(): void
@@ -235,7 +232,7 @@ class GameApiTest extends TestCase
             self::getAbilitiesApi(),
             self::getStatusesApi(),
             self::getPlayerApi(),
-            new CombatApi(new Randomizer(new Mt19937(42)), new TimeProcessor()),
+            self::getCombatApi(),
         );
     }
 }

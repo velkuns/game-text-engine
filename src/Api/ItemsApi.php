@@ -45,7 +45,7 @@ class ItemsApi
             throw new ItemException("Item '$name' not found in item list.", 1601);
         }
 
-        return $asClone ? clone $this->items[$lowerCaseName] : $this->items[$lowerCaseName];
+        return $asClone ? $this->items[$lowerCaseName]->clone() : $this->items[$lowerCaseName];
     }
 
     public function set(ItemInterface $item): self
