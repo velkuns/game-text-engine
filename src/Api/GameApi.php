@@ -19,7 +19,7 @@ use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Graph\Node;
 use Velkuns\GameTextEngine\Utils\Exporter\DOTExporter;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
-use Velkuns\GameTextEngine\Utils\Log\CombatLog;
+use Velkuns\GameTextEngine\Utils\Log\LootLog;
 
 /**
  * @phpstan-import-type GraphData from Graph
@@ -28,6 +28,7 @@ use Velkuns\GameTextEngine\Utils\Log\CombatLog;
  * @phpstan-import-type EntityData from EntityInterface
  * @phpstan-import-type AbilitiesRulesData from AbilitiesApi
  * @phpstan-import-type StatusesRulesData from StatusesApi
+ * @phpstan-import-type TurnLogData from CombatApi
  */
 readonly class GameApi
 {
@@ -151,11 +152,15 @@ readonly class GameApi
     }
 
     /**
-     * @return array{0: Node, 1: Edge[], 2: array<int, array{player: CombatLog, enemy?: CombatLog}>}
+     * @return array{
+     *     0: Node,
+     *     1: Edge[],
+     *     2: array{combat: array<int, TurnLogData>, loot: list<LootLog>},
+     * }
      */
     public function read(string $source, string $target): array
     {
-        $logs = [];
+        $logs = ['combat' => [], 'loot' => []];
 
         //~ Validate the path
         $node = $this->story->goto($source, $target, $this->player->player);

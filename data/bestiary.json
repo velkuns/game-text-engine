@@ -31,10 +31,10 @@
             }
         },
         "abilities": {
-            "strength": 12,
-            "endurance": 14,
-            "agility": 12,
-            "intuition": 14
+            "strength": 9,
+            "endurance": 11,
+            "agility": 9,
+            "intuition": 12
         }
     },
     {
@@ -74,10 +74,24 @@
             "agility": 12,
             "intuition": 12
         },
-        "inventory": {
-            "coins": 0,
+        "equipment": {
+            "weapon": [
+                {
+                    "name": "Rusty Dagger",
+                    "probability": 0.8
+                }
+            ]
+        },
+        "loot": {
+            "coins": {
+                "min": 1,
+                "max": 5
+            },
             "items": [
-                "Rusty Dagger"
+                {
+                    "name": "Rusty Dagger",
+                    "drop": 1.0
+                }
             ]
         }
     },
@@ -99,11 +113,19 @@
             "agility": 10,
             "intuition": 8
         },
-        "inventory": {
-            "coins": 0,
-            "items": [
-                "Wood Mass"
+        "equipment": {
+            "weapon": [
+                {
+                    "name": "Wood Mass",
+                    "probability": 1.0
+                }
             ]
+        },
+        "loot": {
+            "coins": {
+                "min": 1,
+                "max": 8
+            }
         }
     },
     {
@@ -124,10 +146,32 @@
             "agility": 12,
             "intuition": 14
         },
-        "inventory": {
-            "coins": 0,
+        "equipment": {
+            "weapon": [
+                {
+                    "name": "Sharp Iron Sword",
+                    "probability": 0.1
+                },
+                {
+                    "name": "Iron Sword",
+                    "probability": 1.0
+                }
+            ]
+        },
+        "loot": {
+            "coins": {
+                "min": 1,
+                "max": 8
+            },
             "items": [
-                "Iron Sword"
+                {
+                    "name": "Small Health Potion",
+                    "drop": 1.0
+                },
+                {
+                    "name": "Medium Health Potion",
+                    "drop": 0.05
+                }
             ]
         }
     },
@@ -197,7 +241,7 @@
         "damages": {
             "physical": {
                 "type": "physical",
-                "value": 0
+                "value": 2
             }
         },
         "abilities": {
@@ -206,11 +250,23 @@
             "agility": 8,
             "intuition": 6
         },
-        "inventory": {
-            "coins": 0,
-            "items": [
-                "Rusty Sword"
+        "equipment": {
+            "weapon": [
+                {
+                    "name": "Iron Sword",
+                    "probability": 0.1
+                },
+                {
+                    "name": "Rusty Sword",
+                    "probability": 0.9
+                }
             ]
+        },
+        "loot": {
+            "coins": {
+                "min": 5,
+                "max": 15
+            }
         }
     },
     {
@@ -250,10 +306,24 @@
             "agility": 14,
             "intuition": 12
         },
-        "inventory": {
-            "coins": 0,
+        "equipment": {
+            "weapon": [
+                {
+                    "name": "Iron Dagger",
+                    "probability": 1.0
+                }
+            ]
+        },
+        "loot": {
+            "coins": {
+                "min": 5,
+                "max": 15
+            },
             "items": [
-                "Iron Dagger"
+                {
+                    "name": "Simple Lockpick",
+                    "drop": 0.5
+                }
             ]
         }
     },
@@ -275,10 +345,28 @@
             "agility": 10,
             "intuition": 12
         },
-        "inventory": {
-            "coins": 0,
+        "equipment": {
+            "weapon": [
+                {
+                    "name": "Iron Sword",
+                    "probability": 0.5
+                },
+                {
+                    "name": "Rusty Sword",
+                    "probability": 1.0
+                }
+            ]
+        },
+        "loot": {
+            "coins": {
+                "min": 5,
+                "max": 10
+            },
             "items": [
-                "Iron Sword"
+                {
+                    "name": "Simple Lockpick",
+                    "drop": 0.1
+                }
             ]
         }
     },
@@ -300,11 +388,23 @@
             "agility": 11,
             "intuition": 12
         },
-        "inventory": {
-            "coins": 0,
-            "items": [
-                "Iron Sword"
+        "equipment": {
+            "weapon": [
+                {
+                    "name": "Iron Sword",
+                    "probability": 0.8
+                },
+                {
+                    "name": "Rusty Sword",
+                    "probability": 1.0
+                }
             ]
+        },
+        "loot": {
+            "coins": {
+                "min": 3,
+                "max": 8
+            }
         }
     },
     {
@@ -324,6 +424,28 @@
             "endurance": 10,
             "agility": 10,
             "intuition": 10
+        },
+        "equipment": {
+            "weapon": [
+                {
+                    "name": "Iron Sword",
+                    "probability": 0.1
+                },
+                {
+                    "name": "Rusty Sword",
+                    "probability": 0.2
+                },
+                {
+                    "name": "Rusty Dagger",
+                    "probability": 0.3
+                }
+            ]
+        },
+        "loot": {
+            "coins": {
+                "min": 1,
+                "max": 10
+            }
         }
     }
 ]

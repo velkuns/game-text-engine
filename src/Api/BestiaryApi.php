@@ -11,14 +11,19 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
+use Random\Randomizer;
 use Velkuns\GameTextEngine\Api\Exception\BestiaryException;
 use Velkuns\GameTextEngine\Element\Damage\Damages;
+use Velkuns\GameTextEngine\Element\Entity\EntityEquipment;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
+use Velkuns\GameTextEngine\Element\Entity\EntityLoot;
 use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface
  * @phpstan-import-type DamagesData from Damages
+ * @phpstan-import-type EntityLootData from EntityLoot
+ * @phpstan-import-type EquipmentData from EntityEquipment
  * @phpstan-type BestiaryData array{
  *    name: string,
  *    type: string,
@@ -27,6 +32,8 @@ use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
  *    size: string,
  *    abilities: array<string, int>,
  *    inventory?: array{coins?: int, items?: list<string>},
+ *    loot?: EntityLootData,
+ *    equipment?: EquipmentData,
  *    damages?: DamagesData|null,
  * }
  */
@@ -36,6 +43,7 @@ class BestiaryApi
     private array $bestiary = [];
 
     public function __construct(
+        private readonly Randomizer $randomizer,
         private readonly EntityFactory $entityFactory,
         private readonly ItemsApi $items,
     ) {}
@@ -60,7 +68,7 @@ class BestiaryApi
             throw new BestiaryException("Entity '$name' not found in bestiary.", 1701);
         }
 
-        return $asClone ? clone $this->bestiary[$lowerCaseName] : $this->bestiary[$lowerCaseName];
+        return $asClone ? $this->bestiary[$lowerCaseName]->clone() : $this->bestiary[$lowerCaseName];
     }
 
     public function set(EntityInterface $entity): self
@@ -102,22 +110,23 @@ class BestiaryApi
                     ],
                 ];
 
-                $inventory = [];
-                foreach ($entity->getInventory()->items as $item) {
-                    $inventory[] = $item->getName();
+                if ($entity->getEquipment() !== null) {
+                    $bestiaryData['equipment'] = $entity->getEquipment()->jsonSerialize();
                 }
 
-                if ($inventory !== [] || $entity->getInventory()->coins > 0) {
-                    $bestiaryData['inventory'] = [
-                        'coins' => $entity->getInventory()->coins,
-                        'items' => $inventory,
+                if ($entity->getLoot() !== null) {
+                    $loot = [
+                        'coins' => $entity->getLoot()->coinsLoot,
+                        'items' => $entity->getLoot()->itemsLoot,
                     ];
+
+                    $bestiaryData['loot'] = \array_filter($loot, fn($data) => $data !== null);
                 }
 
                 $data[] = $bestiaryData;
             }
 
-            return \json_encode($data, flags: \JSON_THROW_ON_ERROR | ($prettyPrint ? \JSON_PRETTY_PRINT : 0));
+            return \json_encode($data, flags: \JSON_THROW_ON_ERROR | \JSON_PRESERVE_ZERO_FRACTION | ($prettyPrint ? \JSON_PRETTY_PRINT : 0));
             // @codeCoverageIgnoreStart
         } catch (\JsonException $exception) {
             throw new BestiaryException('Unable to dump bestiary data: ' . $exception->getMessage(), 1700, $exception);
@@ -173,17 +182,25 @@ class BestiaryApi
         //~ Initialize empty statuses
         $statuses  = ['skills' => [], 'states' => [], 'blessings' => [], 'curses' => [], 'titles' => []];
 
+        $loot      = $data['loot'] ?? null;
+        $equipment = $data['equipment'] ?? null;
+
         //~ Build inventory
         $inventory = [
             'coins' => $data['inventory']['coins'] ?? 0,
             'items' => [],
         ];
-        foreach ($data['inventory']['items'] ?? [] as $itemName) {
-            $inventory['items'][] = $this->items->get($itemName)->jsonSerialize();
+
+        foreach ($equipment['weapon'] ?? [] as $equipmentItem) {
+            $hitProbability = $this->randomizer->nextFloat();
+            if ($hitProbability < $equipmentItem['probability']) {
+                $inventory['items'][] = $this->items->get($equipmentItem['name'])->jsonSerialize();
+                break;
+            }
         }
 
         //~ Return full data for factory
-        return [
+        $entityData = [
             'name'      => $data['name'],
             'type'      => $data['type'],
             'info'      => $info,
@@ -192,5 +209,15 @@ class BestiaryApi
             'statuses'  => $statuses,
             'inventory' => $inventory,
         ];
+
+        if ($loot !== null) {
+            $entityData['loot'] = $loot;
+        }
+
+        if ($equipment !== null) {
+            $entityData['equipment'] = $equipment;
+        }
+
+        return $entityData;
     }
 }

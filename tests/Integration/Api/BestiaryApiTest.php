@@ -16,6 +16,7 @@ use Velkuns\GameTextEngine\Api\BestiaryApi;
 use Velkuns\GameTextEngine\Api\Exception\BestiaryException;
 use Velkuns\GameTextEngine\Api\ItemsApi;
 use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
@@ -25,23 +26,13 @@ use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
  */
 class BestiaryApiTest extends TestCase
 {
+    use ApiTrait;
     use FactoryTrait;
 
     public function testLoad(): void
     {
-        $dataDir = (string) realpath(__DIR__ . '/../../../data');
-        $loader  = new JsonLoader();
-        $items   = new ItemsApi(self::getItemFactory());
-
-        /** @var list<ItemData> $itemsData */
-        $itemsData = $loader->fromFile($dataDir . '/items.json');
-        $items->load($itemsData);
-
-        $bestiary = new BestiaryApi(self::getEntityFactory(), $items);
-
-        /** @var list<BestiaryData> $bestiaryData */
-        $bestiaryData = $loader->fromFile($dataDir . '/bestiary.json');
-        $bestiary->load($bestiaryData);
+        $items    = self::getItemsApi();
+        $bestiary = self::getBestiaryApi();
 
         $entity = $bestiary->get('Goblin');
 
@@ -51,19 +42,7 @@ class BestiaryApiTest extends TestCase
     }
     public function testAddAndRemoveEntity(): void
     {
-        $dataDir = (string) realpath(__DIR__ . '/../../../data');
-        $loader  = new JsonLoader();
-        $items   = new ItemsApi(self::getItemFactory());
-
-        /** @var list<ItemData> $itemsData */
-        $itemsData = $loader->fromFile($dataDir . '/items.json');
-        $items->load($itemsData);
-
-        $bestiary = new BestiaryApi(self::getEntityFactory(), $items);
-
-        /** @var list<BestiaryData> $bestiaryData */
-        $bestiaryData = $loader->fromFile($dataDir . '/bestiary.json');
-        $bestiary->load($bestiaryData);
+        $bestiary = self::getBestiaryApi();
 
         //~ Get existing entity, transform to data, modify name & strength, create new entity and add it to bestiary
         $entity = $bestiary->get('Goblin');
@@ -93,19 +72,7 @@ class BestiaryApiTest extends TestCase
 
     public function testLoadWhenThrowException(): void
     {
-        $dataDir = (string) realpath(__DIR__ . '/../../../data');
-        $loader  = new JsonLoader();
-        $items   = new ItemsApi(self::getItemFactory());
-
-        /** @var list<ItemData> $itemsData */
-        $itemsData = $loader->fromFile($dataDir . '/items.json');
-        $items->load($itemsData);
-
-        $bestiary = new BestiaryApi(self::getEntityFactory(), $items);
-
-        /** @var list<BestiaryData> $bestiaryData */
-        $bestiaryData = $loader->fromFile($dataDir . '/bestiary.json');
-        $bestiary->load($bestiaryData);
+        $bestiary = self::getBestiaryApi();
 
         self::expectException(BestiaryException::class);
         self::expectExceptionMessage("Entity 'King Goblin' not found in bestiary.");

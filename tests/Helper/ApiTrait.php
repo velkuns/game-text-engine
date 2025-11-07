@@ -11,8 +11,11 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
+use Random\Engine\Mt19937;
+use Random\Randomizer;
 use Velkuns\GameTextEngine\Api\AbilitiesApi;
 use Velkuns\GameTextEngine\Api\BestiaryApi;
+use Velkuns\GameTextEngine\Api\CombatApi;
 use Velkuns\GameTextEngine\Api\ItemsApi;
 use Velkuns\GameTextEngine\Api\PlayerApi;
 use Velkuns\GameTextEngine\Api\StatusesApi;
@@ -21,6 +24,7 @@ use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Element\Modifier\AbilityModifierProcessor;
 use Velkuns\GameTextEngine\Element\Modifier\DamagesModifierProcessor;
 use Velkuns\GameTextEngine\Element\Modifier\ModifierHandler;
+use Velkuns\GameTextEngine\Element\Processor\TimeProcessor;
 use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
@@ -40,11 +44,16 @@ trait ApiTrait
     private static ?AbilitiesApi $abilitiesApi = null;
     private static ?StatusesApi $statusesApi = null;
     private static ?PlayerApi $playerApi = null;
+    private static ?CombatApi $combatApi = null;
 
-    private static function getBestiaryApi(): BestiaryApi
+    private static function getBestiaryApi(int $seed = 42): BestiaryApi
     {
         if (self::$bestiary === null) {
-            self::$bestiary = new BestiaryApi(self::getEntityFactory(), self::getItemsApi());
+            self::$bestiary = new BestiaryApi(
+                new Randomizer(new Mt19937($seed)),
+                self::getEntityFactory(),
+                self::getItemsApi(),
+            );
 
             /** @var list<BestiaryData> $data */
             $data = (new JsonLoader())->fromFile(__DIR__ . '/../../data/bestiary.json');
@@ -53,7 +62,6 @@ trait ApiTrait
 
         return self::$bestiary;
     }
-
 
     private static function getItemsApi(): ItemsApi
     {
@@ -66,6 +74,19 @@ trait ApiTrait
         }
 
         return self::$items;
+    }
+
+    private static function getCombatApi(int $seed = 42): CombatApi
+    {
+        if (self::$combatApi === null) {
+            self::$combatApi = new CombatApi(
+                new Randomizer(new Mt19937($seed)),
+                new TimeProcessor(),
+                self::getItemsApi(),
+            );
+        }
+
+        return self::$combatApi;
     }
 
     private static function getAbilitiesApi(): AbilitiesApi

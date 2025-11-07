@@ -15,6 +15,7 @@ use Random\Randomizer;
 use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Element\Processor\TimeProcessor;
 use Velkuns\GameTextEngine\Utils\Log\CombatLog;
+use Velkuns\GameTextEngine\Utils\Log\LootLog;
 
 /**
  * @phpstan-type TurnLogData array{player: CombatLog, enemy?: CombatLog}
@@ -24,19 +25,20 @@ readonly class CombatApi
     public function __construct(
         private Randomizer $randomizer,
         private TimeProcessor $timeResolver,
+        private ItemsApi $items,
     ) {}
 
     /**
      * @param EntityInterface[] $enemies
-     * @return array<int, TurnLogData>
+     * @return array{combat: array<int, TurnLogData>, loot: list<LootLog>}
      */
     public function auto(EntityInterface $player, array $enemies): array
     {
-        $logs = [];
+        $logs = ['combat' => [], 'loot' => []];
         $turn = 1;
         foreach ($enemies as $enemy) {
             do {
-                $logs[$turn] = $this->turn($player, $enemy);
+                $logs['combat'][$turn] = $this->turn($player, $enemy);
 
                 $this->timeResolver->turnEndForAll([$player, ...$enemies]);
                 $turn++;
@@ -48,7 +50,15 @@ readonly class CombatApi
             }
         }
 
+        //~ Time Resolver to clean status with duration
         $this->timeResolver->combatEnd([$player, ...$enemies]);
+
+        //~ If player still alive, loots enemies
+        if ($player->isAlive()) {
+            foreach ($enemies as $enemy) {
+                $logs['loot'][] = $this->loot($player, $enemy);
+            }
+        }
 
         return $logs;
     }
@@ -118,6 +128,38 @@ readonly class CombatApi
         }
 
         return $log;
+    }
+
+    public function loot(EntityInterface $player, EntityInterface $enemy): LootLog
+    {
+        //~ Loot coins
+        $coins = 0;
+        if ($enemy->getLoot()?->coinsLoot !== null) {
+            $coins = $this->randomizer->getInt($enemy->getLoot()->coinsLoot['min'], $enemy->getLoot()->coinsLoot['max']);
+            $player->getInventory()->coins += $coins;
+        }
+
+        $items = [];
+
+        //~ Loot items
+        foreach ($enemy->getLoot()->itemsLoot ?? [] as $itemLoot) {
+            $hitDrop = $this->randomizer->nextFloat();
+
+            //~ Lucky day !
+            if ($hitDrop <= $itemLoot['drop']) {
+                $item    = $this->items->get($itemLoot['name']);
+                $items[] = $item;
+                $player->getInventory()->add($item);
+            }
+        }
+
+        //~ Get inventory items from enemy
+        foreach ($enemy->getInventory()->items as $item) {
+            $items[] = $item;
+            $player->getInventory()->add($item);
+        }
+
+        return new LootLog($player, $enemy, $coins, $items);
     }
 
     private function inflictDamagesTo(EntityInterface $defender, int $damages): void

@@ -19,6 +19,7 @@ use Velkuns\GameTextEngine\Element\Factory\DamageFactory;
 use Velkuns\GameTextEngine\Element\Factory\ElementFactory;
 use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
+use Velkuns\GameTextEngine\Element\Factory\LootFactory;
 use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
 use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
 use Velkuns\GameTextEngine\Graph\Factory\GraphFactory;
@@ -41,6 +42,7 @@ trait FactoryTrait
                 self::getStatusFactory(),
                 self::getItemFactory(),
                 self::getDamageFactory(),
+                self::getLootFactory(),
             );
         }
 
@@ -62,6 +64,11 @@ trait FactoryTrait
     private static function getAbilityFactory(): AbilityFactory
     {
         return new AbilityFactory();
+    }
+
+    private static function getLootFactory(): LootFactory
+    {
+        return new LootFactory();
     }
 
     private static function getConditionFactory(): ConditionsFactory

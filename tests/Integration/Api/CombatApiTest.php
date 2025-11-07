@@ -12,10 +12,6 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
-use Random\Engine\Mt19937;
-use Random\Randomizer;
-use Velkuns\GameTextEngine\Api\CombatApi;
-use Velkuns\GameTextEngine\Element\Processor\TimeProcessor;
 use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 
@@ -24,17 +20,10 @@ class CombatApiTest extends TestCase
     use ApiTrait;
     use EntityTrait;
 
-    private CombatApi $combat;
-
-    private const int SEED = 42; // For reproducible tests
-
-    public function setUp(): void
-    {
-        $this->combat = new CombatApi(new Randomizer(new Mt19937(self::SEED)), new TimeProcessor());
-    }
-
     public function testCombat1(): void
     {
+        $combatApi = self::getCombatApi();
+
         $player = self::getPlayer();
         $goblin = self::getGoblin();
 
@@ -42,7 +31,7 @@ class CombatApiTest extends TestCase
         self::assertSame(16, $goblin->getAbilities()->get('vitality')?->getValue());
 
         //~ Turn #1 - Player attacks Goblin
-        $log = $this->combat->tick($player, $goblin);
+        $log = $combatApi->tick($player, $goblin);
 
         self::assertFalse($log->isHit(), $log->debug['hitChance'] ?? '');
         self::assertSame(6, $log->damages, $log->debug['damages'] ?? '');
@@ -52,7 +41,7 @@ class CombatApiTest extends TestCase
         self::assertSame('damages = ((10 * 2 ) / 8) + 3 = 2.5 + 3 = 6', $log->debug['damages'] ?? '');
 
         //~ Turn #2 - Goblin attacks Player
-        $log = $this->combat->tick($goblin, $player);
+        $log = $combatApi->tick($goblin, $player);
 
         self::assertTrue($log->isHit(), $log->debug['hitChance'] ?? '');
         self::assertSame(2, $log->damages, $log->debug['damages'] ?? '');
@@ -62,7 +51,7 @@ class CombatApiTest extends TestCase
         self::assertSame('damages = ((8 * 2 ) / 14) + 1 = 1.1428571428571 + 1 = 2', $log->debug['damages'] ?? '');
 
         //~ Turn #3 - Player attacks Goblin
-        $log = $this->combat->tick($player, $goblin);
+        $log = $combatApi->tick($player, $goblin);
 
         self::assertFalse($log->isHit(), $log->debug['hitChance'] ?? '');
         self::assertSame(6, $log->damages, $log->debug['damages'] ?? '');
@@ -70,7 +59,7 @@ class CombatApiTest extends TestCase
         self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
 
         //~ Turn #4 - Goblin attacks Player
-        $log = $this->combat->tick($goblin, $player);
+        $log = $combatApi->tick($goblin, $player);
 
         self::assertFalse($log->isHit(), $log->debug['hitChance'] ?? '');
         self::assertSame(2, $log->damages, $log->debug['damages'] ?? '');
@@ -83,16 +72,36 @@ class CombatApiTest extends TestCase
 
     public function testCombat2(): void
     {
+        $combatApi = self::getCombatApi();
+
         $player  = self::getPlayer()->clone(); // Player already have rested with remaining turn = 1
         $rat1    = self::getBestiaryApi()->get('rat'); // get cloned rat
         $rat2    = self::getBestiaryApi()->get('rat'); // get cloned rat
 
         self::assertSame(1, $player->getStatuses()->getByType('state', 'Rested')?->getRemainingTurns());
-        $this->combat->auto($player, [$rat1, $rat2]);
+        $combatApi->auto($player, [$rat1, $rat2]);
         self::assertNull($player->getStatuses()->getByType('state', 'Rested')); // Has been removed
 
         self::assertTrue($player->isAlive());
         self::assertFalse($rat1->isAlive());
         self::assertFalse($rat2->isAlive());
+    }
+
+    public function testLoot(): void
+    {
+        $combatApi = self::getCombatApi();
+
+        $player = self::getPlayer(); // Player already have rested with remaining turn = 1
+        $enemy  = self::getBestiaryApi()->get('Chief Goblin'); // get cloned rat
+
+        self::assertSame(100, $player->getInventory()->coins);
+        self::assertNull($player->getInventory()->get('Small Health Potion'));
+        self::assertNull($player->getInventory()->get('Iron Sword'));
+        $logs = $combatApi->loot($player, $enemy);
+        self::assertSame(106, $player->getInventory()->coins);
+        self::assertNotNull($player->getInventory()->get('Small Health Potion'));
+        self::assertNotNull($player->getInventory()->get('Iron Sword'));
+
+        self::assertSame('You found 6 coins and Small Health Potion, Iron Sword items on Chief Goblin.', (string) $logs);
     }
 }
