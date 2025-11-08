@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Integration\Utils\Exporter;
 
 use PHPUnit\Framework\TestCase;
+use Velkuns\GameTextEngine\Core\Exporter\DOTExporter;
 use Velkuns\GameTextEngine\Tests\Helper\GraphTrait;
-use Velkuns\GameTextEngine\Utils\Exporter\DOTExporter;
 
 class DOTExporterTest extends TestCase
 {

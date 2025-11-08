@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
-use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
-use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Core\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Exception\Api\ItemApiException;
+use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
 
 /**
  * @phpstan-import-type ItemData from ItemInterface

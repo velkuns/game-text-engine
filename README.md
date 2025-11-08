@@ -31,7 +31,7 @@ declare(strict_types=1);
 
 namespace Application;
 
-use Velkuns\GameTextEngine\Api\ItemsApi;use Velkuns\GameTextEngine\Api\PlayerApi;use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;use Velkuns\GameTextEngine\Util\Loader\JsonLoader;use Velunns\GameTextEngine\Api\GameApi;
+use Velkuns\GameTextEngine\Api\ItemsApi;use Velkuns\GameTextEngine\Api\PlayerApi;use Velkuns\GameTextEngine\Core\Factory\AbilityFactory;use Velkuns\GameTextEngine\Util\Loader\JsonLoader;use Velunns\GameTextEngine\Api\GameApi;
 
 //~ Factories
 $modifierFactory  = new ModifierFactory();
@@ -336,6 +336,7 @@ services:
 ```
 
 ### Example of brige service between app & Game Text Engine
+
 ```php
 <?php
 
@@ -350,14 +351,7 @@ declare(strict_types=1);
 
 namespace Application\Domain\Book\Service;
 
-use Application\Domain\Book\Entity\BookInteractiveGame;
-use Application\Domain\Book\Repository\BookInteractiveGameRepositoryInterface;
-use Application\Domain\Book\Repository\BookInteractiveRepositoryInterface;
-use Velkuns\GameTextEngine\Api\GameApi;
-use Velkuns\GameTextEngine\Api\PlayerApi;
-use Velkuns\GameTextEngine\Graph\Edge;
-use Velkuns\GameTextEngine\Graph\Node;
-use Velkuns\GameTextEngine\Utils\Log\CombatLog;
+use Application\Domain\Book\Entity\BookInteractiveGame;use Application\Domain\Book\Repository\BookInteractiveGameRepositoryInterface;use Application\Domain\Book\Repository\BookInteractiveRepositoryInterface;use Velkuns\GameTextEngine\Api\GameApi;use Velkuns\GameTextEngine\Api\PlayerApi;use Velkuns\GameTextEngine\Core\Log\CombatLog;use Velkuns\GameTextEngine\Graph\Edge;use Velkuns\GameTextEngine\Graph\Node;
 
 /**
  * @phpstan-import-type NewPlayerData from PlayerApi

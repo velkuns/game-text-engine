@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Graph;
 
-use Velkuns\GameTextEngine\Element\Condition\Conditions;
-use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
+use Velkuns\GameTextEngine\Core\Condition\Conditions;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 
 /**
  * @phpstan-import-type ConditionsData from Conditions

@@ -11,13 +11,13 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
-use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Resolver\AbilityResolver;
-use Velkuns\GameTextEngine\Element\Resolver\DamagesResolver;
-use Velkuns\GameTextEngine\Element\Resolver\EntityInfoResolver;
-use Velkuns\GameTextEngine\Element\Resolver\EntityInventoryItemsResolver;
-use Velkuns\GameTextEngine\Element\Resolver\StatusResolver;
-use Velkuns\GameTextEngine\Element\Resolver\TypeElementResolverHandler;
+use Velkuns\GameTextEngine\Core\Resolver\AbilityResolver;
+use Velkuns\GameTextEngine\Core\Resolver\DamagesResolver;
+use Velkuns\GameTextEngine\Core\Resolver\EntityInfoResolver;
+use Velkuns\GameTextEngine\Core\Resolver\EntityInventoryItemsResolver;
+use Velkuns\GameTextEngine\Core\Resolver\StatusResolver;
+use Velkuns\GameTextEngine\Core\Resolver\TypeElementResolverHandler;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface

@@ -19,17 +19,17 @@ use Velkuns\GameTextEngine\Api\CombatApi;
 use Velkuns\GameTextEngine\Api\ItemsApi;
 use Velkuns\GameTextEngine\Api\PlayerApi;
 use Velkuns\GameTextEngine\Api\StatusesApi;
-use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Item\ItemInterface;
-use Velkuns\GameTextEngine\Element\Modifier\AbilityModifierProcessor;
-use Velkuns\GameTextEngine\Element\Modifier\DamagesModifierProcessor;
-use Velkuns\GameTextEngine\Element\Modifier\ModifierHandler;
-use Velkuns\GameTextEngine\Element\Processor\TimeProcessor;
+use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
+use Velkuns\GameTextEngine\Core\Processor\TimeProcessor;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
+use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
+use Velkuns\GameTextEngine\Rpg\Modifier\AbilityModifierProcessor;
+use Velkuns\GameTextEngine\Rpg\Modifier\DamagesModifierProcessor;
+use Velkuns\GameTextEngine\Rpg\Modifier\ModifierHandler;
 use Velkuns\GameTextEngine\Rules\Abilities\AbilitiesRules;
 use Velkuns\GameTextEngine\Rules\Combat\CombatRules;
 use Velkuns\GameTextEngine\Rules\Player\PlayerRules;
 use Velkuns\GameTextEngine\Rules\Statuses\StatusesRules;
-use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type BestiaryFileData from BestiaryApi

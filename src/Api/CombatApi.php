@@ -12,16 +12,16 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Api;
 
 use Random\Randomizer;
-use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Processor\TimeProcessor;
+use Velkuns\GameTextEngine\Core\Log\CombatLog;
+use Velkuns\GameTextEngine\Core\Log\LootLog;
+use Velkuns\GameTextEngine\Core\Log\XpLog;
+use Velkuns\GameTextEngine\Core\Processor\TimeProcessor;
 use Velkuns\GameTextEngine\Exception\Api\CombatApiException;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rules\Combat\CombatRules;
 use Velkuns\GameTextEngine\Rules\Combat\CombatRulesHit;
 use Velkuns\GameTextEngine\Rules\Combat\CombatRulesHitDetail;
 use Velkuns\GameTextEngine\Rules\Combat\CombatRulesLeveling;
-use Velkuns\GameTextEngine\Utils\Log\CombatLog;
-use Velkuns\GameTextEngine\Utils\Log\LootLog;
-use Velkuns\GameTextEngine\Utils\Log\XpLog;
 
 /**
  * @phpstan-import-type CombatRulesData from CombatRules

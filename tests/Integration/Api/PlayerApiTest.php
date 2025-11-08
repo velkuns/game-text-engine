@@ -13,11 +13,11 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Element\Item\ItemInterface;
 use Velkuns\GameTextEngine\Exception\Api\PlayerApiException;
 use Velkuns\GameTextEngine\Exception\Rules\AbilitiesRulesException;
 use Velkuns\GameTextEngine\Exception\Rules\PlayerRulesException;
 use Velkuns\GameTextEngine\Exception\Rules\StatusesRulesException;
+use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
 use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;

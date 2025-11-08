@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Rules\Abilities;
 
-use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
-use Velkuns\GameTextEngine\Element\Ability\CompoundAbility;
+use Velkuns\GameTextEngine\Rpg\Ability\BaseAbility;
+use Velkuns\GameTextEngine\Rpg\Ability\CompoundAbility;
 
 /**
  * @phpstan-import-type BaseAbilityData from BaseAbility

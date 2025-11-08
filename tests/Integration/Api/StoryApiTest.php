@@ -13,11 +13,11 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Api\StoryApi;
+use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Exception\Api\StoryApiException;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
-use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type GraphData from Graph
