@@ -12,12 +12,12 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Api;
 
 use Random\Randomizer;
-use Velkuns\GameTextEngine\Element\Damage\Damages;
-use Velkuns\GameTextEngine\Element\Entity\EntityEquipment;
-use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Entity\EntityLoot;
-use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
+use Velkuns\GameTextEngine\Core\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Exception\Api\BestiaryApiException;
+use Velkuns\GameTextEngine\Rpg\Damages\Damages;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityEquipment;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityLoot;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface

@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
-use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Exception\Api\StoryApiException;
 use Velkuns\GameTextEngine\Graph\Edge;
 use Velkuns\GameTextEngine\Graph\Factory\GraphFactory;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Graph\Node;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 
 /**
  * @phpstan-import-type GraphData from Graph

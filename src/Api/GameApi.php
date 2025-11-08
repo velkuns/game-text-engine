@@ -11,20 +11,20 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
-use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Item\ItemInterface;
+use Velkuns\GameTextEngine\Core\Exporter\DOTExporter;
+use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
+use Velkuns\GameTextEngine\Core\Log\LootLog;
+use Velkuns\GameTextEngine\Core\Log\XpLog;
 use Velkuns\GameTextEngine\Exception\Api\GameApiException;
 use Velkuns\GameTextEngine\Graph\Edge;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Graph\Node;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
+use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
 use Velkuns\GameTextEngine\Rules\Abilities\AbilitiesRules;
 use Velkuns\GameTextEngine\Rules\Combat\CombatRules;
 use Velkuns\GameTextEngine\Rules\Player\PlayerRules;
 use Velkuns\GameTextEngine\Rules\Statuses\StatusesRules;
-use Velkuns\GameTextEngine\Utils\Exporter\DOTExporter;
-use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
-use Velkuns\GameTextEngine\Utils\Log\LootLog;
-use Velkuns\GameTextEngine\Utils\Log\XpLog;
 
 /**
  * @phpstan-import-type GraphData from Graph

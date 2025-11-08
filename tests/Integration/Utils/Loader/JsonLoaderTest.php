@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Integration\Utils\Loader;
 
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Element\Item\ItemInterface;
-use Velkuns\GameTextEngine\Exception\Utils\LoaderException;
-use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
+use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
+use Velkuns\GameTextEngine\Exception\Core\LoaderException;
+use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
 
 /**
  * @phpstan-import-type ItemData from ItemInterface

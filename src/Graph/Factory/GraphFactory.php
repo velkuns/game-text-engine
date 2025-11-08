@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Graph\Factory;
 
-use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
+use Velkuns\GameTextEngine\Core\Factory\ConditionsFactory;
 use Velkuns\GameTextEngine\Graph\Edge;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Graph\Node;

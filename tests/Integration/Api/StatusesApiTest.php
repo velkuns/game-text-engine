@@ -13,10 +13,10 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Api\StatusesApi;
-use Velkuns\GameTextEngine\Element\Status\Status;
+use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Exception\Api\StatusesApiException;
+use Velkuns\GameTextEngine\Rpg\Status\Status;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
-use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type StatusesRulesData from StatusesApi

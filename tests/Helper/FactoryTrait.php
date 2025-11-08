@@ -11,18 +11,18 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
-use Velkuns\GameTextEngine\Element\Condition\ConditionParser;
-use Velkuns\GameTextEngine\Element\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
-use Velkuns\GameTextEngine\Element\Factory\ConditionsFactory;
-use Velkuns\GameTextEngine\Element\Factory\DamageFactory;
-use Velkuns\GameTextEngine\Element\Factory\ElementFactory;
-use Velkuns\GameTextEngine\Element\Factory\EntityFactory;
-use Velkuns\GameTextEngine\Element\Factory\ItemFactory;
-use Velkuns\GameTextEngine\Element\Factory\LootFactory;
-use Velkuns\GameTextEngine\Element\Factory\ModifierFactory;
-use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
+use Velkuns\GameTextEngine\Core\Condition\ConditionParser;
+use Velkuns\GameTextEngine\Core\Factory\AbilityFactory;
+use Velkuns\GameTextEngine\Core\Factory\ConditionsFactory;
+use Velkuns\GameTextEngine\Core\Factory\DamageFactory;
+use Velkuns\GameTextEngine\Core\Factory\ElementFactory;
+use Velkuns\GameTextEngine\Core\Factory\EntityFactory;
+use Velkuns\GameTextEngine\Core\Factory\ItemFactory;
+use Velkuns\GameTextEngine\Core\Factory\LootFactory;
+use Velkuns\GameTextEngine\Core\Factory\ModifierFactory;
+use Velkuns\GameTextEngine\Core\Factory\StatusFactory;
 use Velkuns\GameTextEngine\Graph\Factory\GraphFactory;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 
 /**
  * @phpstan-import-type EntityData from EntityInterface

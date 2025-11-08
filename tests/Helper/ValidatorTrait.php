@@ -11,11 +11,11 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
-use Velkuns\GameTextEngine\Element\Validator\AbilityConditionValidator;
-use Velkuns\GameTextEngine\Element\Validator\EntityInfoConditionValidator;
-use Velkuns\GameTextEngine\Element\Validator\EntityInventoryItemsConditionValidator;
-use Velkuns\GameTextEngine\Element\Validator\StatusConditionValidator;
-use Velkuns\GameTextEngine\Element\Validator\ValidatorHandler;
+use Velkuns\GameTextEngine\Core\Validator\AbilityConditionValidator;
+use Velkuns\GameTextEngine\Core\Validator\EntityInfoConditionValidator;
+use Velkuns\GameTextEngine\Core\Validator\EntityInventoryItemsConditionValidator;
+use Velkuns\GameTextEngine\Core\Validator\StatusConditionValidator;
+use Velkuns\GameTextEngine\Core\Validator\ValidatorHandler;
 
 trait ValidatorTrait
 {

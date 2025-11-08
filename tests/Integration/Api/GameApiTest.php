@@ -14,12 +14,12 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Api\GameApi;
 use Velkuns\GameTextEngine\Api\StoryApi;
+use Velkuns\GameTextEngine\Core\Exporter\DOTExporter;
+use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Exception\Api\StoryApiException;
 use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
-use Velkuns\GameTextEngine\Utils\Exporter\DOTExporter;
-use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 class GameApiTest extends TestCase
 {

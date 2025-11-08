@@ -11,11 +11,11 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
-use Velkuns\GameTextEngine\Element\Entity\EntityStatuses;
-use Velkuns\GameTextEngine\Element\Factory\StatusFactory;
-use Velkuns\GameTextEngine\Element\Status\StatusInterface;
+use Velkuns\GameTextEngine\Core\Factory\StatusFactory;
 use Velkuns\GameTextEngine\Exception\Api\AbilitiesApiException;
 use Velkuns\GameTextEngine\Exception\Api\StatusesApiException;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityStatuses;
+use Velkuns\GameTextEngine\Rpg\Status\StatusInterface;
 use Velkuns\GameTextEngine\Rules\Statuses\StatusesRules;
 use Velkuns\GameTextEngine\Rules\Statuses\StatusesRulesLeveling;
 use Velkuns\GameTextEngine\Rules\Statuses\StatusesRulesStarting;

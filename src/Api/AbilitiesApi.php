@@ -11,13 +11,13 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
-use Velkuns\GameTextEngine\Element\Ability\AbilityInterface;
-use Velkuns\GameTextEngine\Element\Ability\AbilityType;
-use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
-use Velkuns\GameTextEngine\Element\Ability\CompoundAbility;
-use Velkuns\GameTextEngine\Element\Entity\EntityAbilities;
-use Velkuns\GameTextEngine\Element\Factory\AbilityFactory;
+use Velkuns\GameTextEngine\Core\Factory\AbilityFactory;
 use Velkuns\GameTextEngine\Exception\Api\AbilitiesApiException;
+use Velkuns\GameTextEngine\Rpg\Ability\AbilityInterface;
+use Velkuns\GameTextEngine\Rpg\Ability\AbilityType;
+use Velkuns\GameTextEngine\Rpg\Ability\BaseAbility;
+use Velkuns\GameTextEngine\Rpg\Ability\CompoundAbility;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityAbilities;
 use Velkuns\GameTextEngine\Rules\Abilities\AbilitiesRules;
 use Velkuns\GameTextEngine\Rules\Abilities\AbilitiesRulesLeveling;
 use Velkuns\GameTextEngine\Rules\Abilities\AbilitiesRulesStarting;

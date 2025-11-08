@@ -13,11 +13,11 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Api\AbilitiesApi;
-use Velkuns\GameTextEngine\Element\Ability\BaseAbility;
-use Velkuns\GameTextEngine\Element\Ability\CompoundAbility;
+use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Exception\Api\AbilitiesApiException;
+use Velkuns\GameTextEngine\Rpg\Ability\BaseAbility;
+use Velkuns\GameTextEngine\Rpg\Ability\CompoundAbility;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
-use Velkuns\GameTextEngine\Utils\Loader\JsonLoader;
 
 /**
  * @phpstan-import-type AbilitiesRulesData from AbilitiesApi
