@@ -11,7 +11,9 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Rules\Player;
 
+use Velkuns\GameTextEngine\Core\Evaluator\Evaluator;
 use Velkuns\GameTextEngine\Exception\Rules\PlayerRulesException;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 
 /**
  * @phpstan-type PlayerRulesLevelingData array{
@@ -26,18 +28,9 @@ class PlayerRulesLeveling implements \JsonSerializable
         public int $maxLevel,
     ) {}
 
-    public function getXpStep(int $level): int
+    public function getXpStep(Evaluator $evaluator, EntityInterface $entity): int
     {
-        try {
-            $formula = \str_replace('level', (string) $level, $this->rule);
-            $step    = 0;
-
-            eval("\$step = $formula;");
-        } catch (\Throwable) { // @codeCoverageIgnore
-            $step = 0;         // @codeCoverageIgnore
-        }
-
-        return $step;
+        return (int) $evaluator->evaluate($this->rule, $entity);
     }
 
     public function assertMaxLevelNotReached(int $level): void
@@ -47,10 +40,10 @@ class PlayerRulesLeveling implements \JsonSerializable
         }
     }
 
-    public function assertHasEnoughXp(int $level, int $xp): void
+    public function assertHasEnoughXp(Evaluator $evaluator, EntityInterface $entity): void
     {
-        $step = $this->getXpStep($level);
-        $diff = $step - $xp;
+        $step = $this->getXpStep($evaluator, $entity);
+        $diff = $step - $entity->getInfo()->xp;
         if ($diff > 0) {
             throw new PlayerRulesException("You need $diff XP to reach the next level.", 2301);
         }

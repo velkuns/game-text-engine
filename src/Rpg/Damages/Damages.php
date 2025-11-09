@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Rpg\Damages;
 
 use Velkuns\GameTextEngine\Exception\Rpg\DamageException;
+use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
 /**
  * @phpstan-import-type DamageData from DamagesDetailInterface
@@ -41,6 +42,19 @@ readonly class Damages
     public function getAll(): array
     {
         return $this->damages;
+    }
+
+    public function getTotal(): int
+    {
+        return \array_sum(\array_map(fn(DamagesDetailInterface $detail) => $detail->getValue(), $this->damages));
+    }
+
+    /**
+     * @param list<Modifier> $modifiers
+     */
+    public function getTotalWithModifiers(array $modifiers = []): int
+    {
+        return \array_sum(\array_map(fn(DamagesDetailInterface $detail) => $detail->getValueWithModifiers($modifiers), $this->damages));
     }
 
     /**

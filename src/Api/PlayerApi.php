@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Api;
 
+use Velkuns\GameTextEngine\Core\Evaluator\Evaluator;
 use Velkuns\GameTextEngine\Core\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Exception\Api\PlayerApiException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
@@ -47,6 +48,7 @@ class PlayerApi
         private readonly AbilitiesApi $abilities,
         private readonly StatusesApi $statuses,
         private readonly ModifierHandler $modifierHandler,
+        private readonly Evaluator $evaluator,
     ) {}
 
     /**
@@ -95,7 +97,7 @@ class PlayerApi
     {
         //~ Check player info
         $this->rules->leveling->assertMaxLevelNotReached($this->player->getInfo()->level);
-        $this->rules->leveling->assertHasEnoughXp($this->player->getInfo()->level, $this->player->getInfo()->xp);
+        $this->rules->leveling->assertHasEnoughXp($this->evaluator, $this->player);
 
         //~ Check abilities
         $this->abilities->rules->leveling->assertHasCorrectAttribution($abilities);
@@ -120,7 +122,7 @@ class PlayerApi
         }
 
         //~ Decrease xp
-        $this->player->getInfo()->xp -= $this->rules->leveling->getXpStep($this->player->getInfo()->level);
+        $this->player->getInfo()->xp -= $this->rules->leveling->getXpStep($this->evaluator, $this->player);
 
         //~ Increase level
         $this->player->getInfo()->level += 1;

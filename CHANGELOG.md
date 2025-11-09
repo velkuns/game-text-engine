@@ -25,12 +25,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add Rules part, as representation of rules files (Abilities, Statuses, Player & Combat)
 - Add Leveling system
 - Add auto leveling for bestiary to allow auto leveling of creatures when get them from bestiary
+- Add Evaluator to evaluate rules
+- Add RollResolver + EquippedWeaponItemResolver
+- Add ValueResolverHandler to resolve specific value directly rather than get objet
 ### Changed
 - Move all exception to the src/ root dir
 - Update rules files to add leveling data and some other improvements
 - Update PlayerApi to add player rules info
 - Update CombatApi to add combat rules info
 - Update AbilitiesApi & StatusesApi to add Rules part
+- Re-organize code
 
 
 ----

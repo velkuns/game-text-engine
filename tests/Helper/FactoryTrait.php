@@ -75,7 +75,7 @@ trait FactoryTrait
     {
         return new ConditionsFactory(
             new ConditionParser(),
-            self::getResolverHandler(),
+            self::getTypeResolverHandler(),
             self::getValidatorHandler(),
         );
     }

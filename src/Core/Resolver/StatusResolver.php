@@ -13,6 +13,7 @@ namespace Velkuns\GameTextEngine\Core\Resolver;
 
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityStatuses;
+use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
 readonly class StatusResolver implements ResolverInterface
 {
@@ -26,5 +27,14 @@ readonly class StatusResolver implements ResolverInterface
     public function resolve(string $type, EntityInterface $entity): EntityStatuses
     {
         return $entity->getStatuses();
+    }
+
+    /**
+     * @param list<Modifier> $modifiers
+     * @codeCoverageIgnore
+     */
+    public function resolveValue(string $type, EntityInterface $entity, array $modifiers = []): int
+    {
+        return 0;
     }
 }

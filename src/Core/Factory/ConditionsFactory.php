@@ -15,7 +15,7 @@ use Velkuns\GameTextEngine\Core\Condition\Condition;
 use Velkuns\GameTextEngine\Core\Condition\ConditionInterface;
 use Velkuns\GameTextEngine\Core\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Core\Condition\Conditions;
-use Velkuns\GameTextEngine\Core\Resolver\TypeElementResolverHandler;
+use Velkuns\GameTextEngine\Core\Resolver\TypeResolverHandler;
 use Velkuns\GameTextEngine\Core\Validator\ValidatorHandler;
 
 /**
@@ -26,7 +26,7 @@ readonly class ConditionsFactory
 {
     public function __construct(
         private ConditionParser $parser,
-        private TypeElementResolverHandler $resolverHandler,
+        private TypeResolverHandler $resolverHandler,
         private ValidatorHandler $validatorHandler,
     ) {}
 

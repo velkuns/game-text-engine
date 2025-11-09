@@ -12,10 +12,16 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Core\Resolver;
 
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
+use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
 interface ResolverInterface
 {
     public function supports(string $type): bool;
 
     public function resolve(string $type, EntityInterface $entity): object;
+
+    /**
+     * @param list<Modifier> $modifiers
+     */
+    public function resolveValue(string $type, EntityInterface $entity, array $modifiers = []): int|float|bool;
 }
