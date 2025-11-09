@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Api;
 
 use Random\Randomizer;
+use Velkuns\GameTextEngine\Core\Evaluator\Evaluator;
 use Velkuns\GameTextEngine\Core\Log\CombatLog;
 use Velkuns\GameTextEngine\Core\Log\LootLog;
 use Velkuns\GameTextEngine\Core\Log\XpLog;
@@ -32,6 +33,7 @@ class CombatApi
     private CombatRules $rules;
 
     public function __construct(
+        private readonly Evaluator $evaluator,
         private readonly Randomizer $randomizer,
         private readonly TimeProcessor $timeResolver,
         private readonly ItemsApi $items,
@@ -114,38 +116,20 @@ class CombatApi
         $attackerModifiers = $attacker->getModifiers($defender);
         $defenderModifiers = $defender->getModifiers($attacker);
 
-        $attack   = $attacker->getAbilities()->get('attack')?->getValueWithModifiers($attackerModifiers);
-        $strength = $attacker->getAbilities()->get('strength')?->getValueWithModifiers($attackerModifiers);
-
-        $defense   = $defender->getAbilities()->get('defense')?->getValueWithModifiers($defenderModifiers);
-        $endurance = $defender->getAbilities()->get('endurance')?->getValueWithModifiers($defenderModifiers);
-
-        if ($attack === null || $defense === null || $strength === null || $endurance === null) {
-            throw new \UnexpectedValueException('Both attacker and defender must have attack and defense abilities'); // @codeCoverageIgnore
-        }
-
-        //~ hit chance = attack / (defense * 2)
-        $hitChance = $attack / ($defense * 2);
-
-        $equippedWeapon = $attacker->getInventory()->getEquippedWeapon();
-
-        //~ Damages formula: ((attacker strength * 1.5) - defender endurance) + item damages
-        $itemDamages = $equippedWeapon?->getDamages()?->get('physical')?->getValueWithModifiers($attackerModifiers) ?? 0;
-        $damages     = (int) round((($strength * 2) / $endurance) + $itemDamages);
-
-        //~ Roll between 0 and 1 (equidistributed)
-        $hitRoll = $this->randomizer->nextFloat();
+        $hitChance = (int) $this->evaluator->evaluate($this->rules->hit->chance->rule, $attacker, $defender, $attackerModifiers, $defenderModifiers);
+        $hitRoll   = (int) $this->evaluator->evaluate($this->rules->hit->roll->rule, $attacker);
+        $damages   = (int) $this->evaluator->evaluate($this->rules->hit->damages->rule, $attacker, $defender, $attackerModifiers, $defenderModifiers);
 
         $log = new CombatLog(
             $attacker,
             $defender,
-            $equippedWeapon,
+            $attacker->getInventory()->getEquippedWeapon() ?? null,
             $damages,
             $hitChance,
             $hitRoll,
             [
-                'hitChance' => "hit chance = $attack / ($defense * 2) = $attack / " . ($defense * 2) . " = $hitChance",
-                'damages'   => "damages = (($strength * 2 ) / $endurance) + $itemDamages = " . (($strength * 2) / $endurance) . " + $itemDamages = $damages",
+                'hitChance' => $this->evaluator->render($this->rules->hit->chance->rule, $attacker, $defender, $attackerModifiers, $defenderModifiers),
+                'damages'   => $this->evaluator->render($this->rules->hit->damages->rule, $attacker, $defender, $attackerModifiers, $defenderModifiers),
             ],
         );
 

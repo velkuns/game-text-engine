@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Rpg\Modifier;
 
-use Velkuns\GameTextEngine\Core\Resolver\TypeElementResolverHandler;
+use Velkuns\GameTextEngine\Core\Resolver\TypeResolverHandler;
 use Velkuns\GameTextEngine\Exception\Rpg\ModifierException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 
@@ -21,7 +21,7 @@ readonly class ModifierHandler
      * @param list<ModifierProcessInterface> $processors
      */
     public function __construct(
-        private TypeElementResolverHandler $typeElementResolverHandler,
+        private TypeResolverHandler $typeElementResolverHandler,
         private array $processors = [],
     ) {}
 

@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Core\Condition;
 
-use Velkuns\GameTextEngine\Core\Resolver\TypeElementResolverHandler;
+use Velkuns\GameTextEngine\Core\Resolver\TypeResolverHandler;
 use Velkuns\GameTextEngine\Core\Validator\ValidatorHandler;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 
@@ -22,7 +22,7 @@ readonly class Condition implements ConditionInterface
 {
     public function __construct(
         public ConditionParser $parser,
-        public TypeElementResolverHandler $resolverHandler,
+        public TypeResolverHandler $resolverHandler,
         public ValidatorHandler $validatorHandler,
         public string $type,
         public string $condition,

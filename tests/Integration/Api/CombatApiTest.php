@@ -33,12 +33,12 @@ class CombatApiTest extends TestCase
         //~ Turn #1 - Player attacks Goblin
         $log = $combatApi->tick($player, $goblin);
 
-        self::assertFalse($log->isHit(), $log->debug['hitChance'] ?? '');
-        self::assertSame(6, $log->damages, $log->debug['damages'] ?? '');
+        self::assertTrue($log->isHit(), $log->debug['hitChance'] ?? '');
+        self::assertSame(5, $log->damages, $log->debug['damages'] ?? '');
         self::assertSame(24, $player->getAbilities()->get('vitality')->getValue());
-        self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
-        self::assertSame("Brave Test Hero #1 'miss' Goblin #1 with The Sword.", (string) $log);
-        self::assertSame('damages = ((10 * 2 ) / 8) + 3 = 2.5 + 3 = 6', $log->debug['damages'] ?? '');
+        self::assertSame(11, $goblin->getAbilities()->get('vitality')->getValue());
+        self::assertSame("Brave Test Hero #1 'hit' Goblin #1 with The Sword and make 5 damage(s).", (string) $log);
+        self::assertSame('((10 * 2) / 8 ) + 3', $log->debug['damages'] ?? '');
 
         //~ Turn #2 - Goblin attacks Player
         $log = $combatApi->tick($goblin, $player);
@@ -46,17 +46,18 @@ class CombatApiTest extends TestCase
         self::assertTrue($log->isHit(), $log->debug['hitChance'] ?? '');
         self::assertSame(2, $log->damages, $log->debug['damages'] ?? '');
         self::assertSame(22, $player->getAbilities()->get('vitality')->getValue());
-        self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
+        self::assertSame(11, $goblin->getAbilities()->get('vitality')->getValue());
         self::assertSame("Goblin #1 'hit' Brave Test Hero #1 with The Dagger and make 2 damage(s).", (string) $log);
-        self::assertSame('damages = ((8 * 2 ) / 14) + 1 = 1.1428571428571 + 1 = 2', $log->debug['damages'] ?? '');
+        self::assertSame('((8 * 2) / 14 ) + 1', $log->debug['damages'] ?? '');
 
         //~ Turn #3 - Player attacks Goblin
         $log = $combatApi->tick($player, $goblin);
 
         self::assertFalse($log->isHit(), $log->debug['hitChance'] ?? '');
-        self::assertSame(6, $log->damages, $log->debug['damages'] ?? '');
+        self::assertSame(5, $log->damages, $log->debug['damages'] ?? '');
         self::assertSame(22, $player->getAbilities()->get('vitality')->getValue());
-        self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
+        self::assertSame(11, $goblin->getAbilities()->get('vitality')->getValue());
+        self::assertSame("Brave Test Hero #1 'miss' Goblin #1 with The Sword.", (string) $log);
 
         //~ Turn #4 - Goblin attacks Player
         $log = $combatApi->tick($goblin, $player);
@@ -64,7 +65,7 @@ class CombatApiTest extends TestCase
         self::assertFalse($log->isHit(), $log->debug['hitChance'] ?? '');
         self::assertSame(2, $log->damages, $log->debug['damages'] ?? '');
         self::assertSame(22, $player->getAbilities()->get('vitality')->getValue());
-        self::assertSame(16, $goblin->getAbilities()->get('vitality')->getValue());
+        self::assertSame(11, $goblin->getAbilities()->get('vitality')->getValue());
 
         self::assertTrue($player->isAlive());
         self::assertTrue($goblin->isAlive());
@@ -98,11 +99,11 @@ class CombatApiTest extends TestCase
         self::assertNull($player->getInventory()->get('Small Health Potion'));
         self::assertNull($player->getInventory()->get('Iron Sword'));
         $log = $combatApi->loot($player, $enemy);
-        self::assertSame(106, $player->getInventory()->coins);
+        self::assertSame(107, $player->getInventory()->coins);
         self::assertNotNull($player->getInventory()->get('Small Health Potion'));
         self::assertNotNull($player->getInventory()->get('Iron Sword'));
 
-        self::assertSame('You found 6 coins and Small Health Potion, Iron Sword items on Chief Goblin.', (string) $log);
+        self::assertSame('You found 7 coins and Small Health Potion, Iron Sword items on Chief Goblin.', (string) $log);
     }
 
     public function testXp(): void

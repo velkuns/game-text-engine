@@ -3,17 +3,17 @@
     "hit": {
         "chance": {
             "name": "combat.hit_chance",
-            "rule": "(attacker.ability.attack \/ (defender.ability.defense * 2) * 100)",
+            "rule": "(attacker.ability.attack.value_with_modifiers \/ (defender.ability.defense.value_with_modifiers * 2)) * 100",
             "description": "Calculates the chance to hit based on attacker's attack ability and defender's defense ability."
         },
         "roll": {
             "name": "combat.hit_roll",
-            "rule": "random(0, 100) < result.hit_chance",
+            "rule": "attacker.roll(100)",
             "description": "Determines if an attack hits based on a random roll against the hit chance."
         },
         "damages": {
             "name": "combat.hit_damages",
-            "rule": "(attacker.ability.strength * 2) - defender.ability.endurance + attacker.inventory.item",
+            "rule": "((attacker.ability.strength.value_with_modifiers * 2) \/ defender.ability.endurance.value_with_modifiers ) + attacker.weapon.equipped.damages_with_modifiers",
             "description": "Calculates the damage dealt on a successful hit based on attacker's strength, defender's endurance, and any item bonuses."
         }
     },

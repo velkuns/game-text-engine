@@ -19,6 +19,7 @@ use Velkuns\GameTextEngine\Api\CombatApi;
 use Velkuns\GameTextEngine\Api\ItemsApi;
 use Velkuns\GameTextEngine\Api\PlayerApi;
 use Velkuns\GameTextEngine\Api\StatusesApi;
+use Velkuns\GameTextEngine\Core\Evaluator\Evaluator;
 use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Core\Processor\TimeProcessor;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
@@ -86,6 +87,7 @@ trait ApiTrait
     {
         if (self::$combatApi === null) {
             self::$combatApi = new CombatApi(
+                new Evaluator(self::getValueResolverHandler($seed)),
                 new Randomizer(new Mt19937($seed)),
                 new TimeProcessor(),
                 self::getItemsApi(),
@@ -133,7 +135,8 @@ trait ApiTrait
                 self::getItemsApi(),
                 self::getAbilitiesApi(),
                 self::getStatusesApi(),
-                new ModifierHandler(self::getResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]),
+                new ModifierHandler(self::getTypeResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]),
+                new Evaluator(self::getValueResolverHandler()),
             );
 
             /** @var PlayerRulesData $playerRulesData */

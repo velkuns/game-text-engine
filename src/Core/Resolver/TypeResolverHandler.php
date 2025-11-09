@@ -14,19 +14,19 @@ namespace Velkuns\GameTextEngine\Core\Resolver;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedTypeElementResolverException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 
-readonly class TypeElementResolverHandler
+readonly class TypeResolverHandler
 {
     /**
-     * @param list<ResolverInterface> $resolvers
+     * @param list<ResolverInterface> $typeResolvers
      */
     public function __construct(
-        private array $resolvers = [],
+        private array $typeResolvers = [],
     ) {}
 
     public function handle(string $type, EntityInterface $entity): object
     {
         $type = \substr($type, (int) \strpos($type, '.') + 1); // Remove self.|enemy. prefix
-        foreach ($this->resolvers as $resolver) {
+        foreach ($this->typeResolvers as $resolver) {
             if ($resolver->supports($type)) {
                 return $resolver->resolve($type, $entity);
             }

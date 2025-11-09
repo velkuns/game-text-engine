@@ -31,7 +31,11 @@ declare(strict_types=1);
 
 namespace Application;
 
-use Velkuns\GameTextEngine\Api\ItemsApi;use Velkuns\GameTextEngine\Api\PlayerApi;use Velkuns\GameTextEngine\Core\Factory\AbilityFactory;use Velkuns\GameTextEngine\Util\Loader\JsonLoader;use Velunns\GameTextEngine\Api\GameApi;
+use Velkuns\GameTextEngine\Api\ItemsApi;
+use Velkuns\GameTextEngine\Api\PlayerApi;
+use Velunns\GameTextEngine\Api\GameApi;
+use Velkuns\GameTextEngine\Core\Factory\AbilityFactory;
+use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
 
 //~ Factories
 $modifierFactory  = new ModifierFactory();
@@ -62,10 +66,20 @@ $itemsData          = $game->loader->fromFile($dataDir . '/items.json');
 $bestiaryData       = $game->loader->fromFile($dataDir . '/bestiary.json');
 $abilitiesRulesData = $game->loader->fromFile($dataDir . '/rules/rules_abilities.json');
 $statusesRulesData  = $game->loader->fromFile($dataDir . '/rules/rules_statuses.json');
+$combatsRulesData   = $game->loader->fromFile($dataDir . '/rules/rules_combat.json');
+$playerRulesData    = $game->loader->fromFile($dataDir . '/rules/rules_player.json');
 $playerData         = $game->loader->fromFile($dataDir . '/templates/player.json');
 
 //~ Load data into the game api
-$gameApi->load($storyData, $itemsData, $bestiaryData, $playerData);
+$gameApi->load(
+    $storyData, 
+    $itemsData, 
+    $bestiaryData, 
+    $statusesRulesData, 
+    $combatsRulesData, 
+    $playerRulesData, 
+    $playerData
+);
 
 //~ Access to the other apis
 $gameApi->storyApi->[...];
@@ -76,14 +90,17 @@ $gameApi->statusesApi->[...];
 $gameApi->playerApi->[...];
 
 //~ Dumping apis into json data
+
 /**
- * @param array{
-*     story: string, 
-*     items: string, 
-*     bestiary: string, 
-*     abilities: string,
-*     statuses: string,
-*     player: string
+ * @phpstan-return array{
+ *     story: string,
+ *     items: string,
+ *     bestiary: string,
+ *     abilitiesRules: string,
+ *     statusesRules: string,
+ *     combatRules: string,
+ *     playerRules: string,
+ *     playerData: string,
  * } $data Array of json data, to save in files or database
  */
 $data = $gameApi->dump(/* true */); // true to pretty json output
@@ -271,7 +288,7 @@ $enemies = [
     $gameApi->bestiary->get('Rat'), // get clone
 ];
 
-$logs = $gameApi->combat->start($gameApi->player->player, $enemies);
+$logs = $gameApi->combat->auto($gameApi->player->player, $enemies);
 
 //~ Display combat results
 // ... your code to display combat turns ...
@@ -324,6 +341,20 @@ parameters:
 services:
   _defaults:
     autowire: true
+    bind:
+      $typeResolvers:
+        - '@Velkuns\GameTextEngine\Core\Resolver\AbilityResolver'
+        - '@Velkuns\GameTextEngine\Core\Resolver\EntityDamagesResolver'
+        - '@Velkuns\GameTextEngine\Core\Resolver\EntityInfoResolver'
+        - '@Velkuns\GameTextEngine\Core\Resolver\EntityInventoryItemsResolver'
+        - '@Velkuns\GameTextEngine\Core\Resolver\StatusResolver'
+
+      $valueResolvers:
+        - '@Velkuns\GameTextEngine\Core\Resolver\AbilityResolver'
+        - '@Velkuns\GameTextEngine\Core\Resolver\EntityDamagesResolver'
+        - '@Velkuns\GameTextEngine\Core\Resolver\EntityInfoResolver'
+        - '@Velkuns\GameTextEngine\Core\Resolver\EquippedWeaponItemResolver'
+        - '@Velkuns\GameTextEngine\Core\Resolver\RollResolver'
 
   #~ Game text engine source
   Velkuns\GameTextEngine\:

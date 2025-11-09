@@ -13,31 +13,27 @@ namespace Velkuns\GameTextEngine\Core\Resolver;
 
 use Velkuns\GameTextEngine\Exception\Core\ResolverException;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedValueResolverPropertyException;
-use Velkuns\GameTextEngine\Rpg\Ability\AbilityInterface;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
+use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
-readonly class AbilityResolver implements ResolverInterface
+readonly class EquippedWeaponItemResolver implements ResolverInterface
 {
-    private const string PATTERN = '#ability\.(?P<name>[a-z]+)#';
+    private const string PATTERN = '#weapon\.equipped#';
 
     public function supports(string $type): bool
     {
         return \preg_match(self::PATTERN, $type) === 1;
     }
 
-    public function resolve(string $type, EntityInterface $entity): AbilityInterface
+    public function resolve(string $type, EntityInterface $entity): ItemInterface
     {
-        \preg_match(self::PATTERN, $type, $matches);
-
-        $name    = $matches['name'] ?? '';
-        $ability = $entity->getAbilities()->get($name);
-
-        if ($ability === null) {
-            throw new ResolverException("Ability '$name' not found.");
+        $item = $entity->getInventory()->getEquippedWeapon();
+        if ($item === null) {
+            throw new ResolverException('No weapon equipped.');
         }
 
-        return $ability;
+        return $item;
     }
 
     /**
@@ -45,13 +41,18 @@ readonly class AbilityResolver implements ResolverInterface
      */
     public function resolveValue(string $type, EntityInterface $entity, array $modifiers = []): int
     {
-        $ability  = $this->resolve($type, $entity);
+        try {
+            $item = $this->resolve($type, $entity);
+        } catch (ResolverException) {
+            return 0;
+        }
+
         $property = \substr($type, (int) \strrpos($type, '.') + 1);
 
         return match ($property) {
-            'value'                => $ability->getValue(),
-            'value_with_modifiers' => $ability->getValueWithModifiers($modifiers),
-            default => throw new UnsupportedValueResolverPropertyException("Ability '$property' does not exist."),
+            'damages'                => $item->getDamages()->getTotal(),
+            'damages_with_modifiers' => $item->getDamages()->getTotalWithModifiers($modifiers),
+            default   => throw new UnsupportedValueResolverPropertyException("Item '$property' does not exist."),
         };
     }
 }

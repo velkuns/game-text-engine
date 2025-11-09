@@ -24,7 +24,7 @@ class ModifierHandlerTest extends TestCase
     public function testApplyOnAbility(): void
     {
         $player   = self::getPlayer();
-        $handler  = new ModifierHandler(self::getResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
+        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
         $modifier = new Modifier('self.ability.strength.value', 5);
 
         //~ Check initial value
@@ -38,7 +38,7 @@ class ModifierHandlerTest extends TestCase
     public function testApplyOnAbilityButPropertyDoesNotExists(): void
     {
         $player   = self::getPlayer();
-        $handler  = new ModifierHandler(self::getResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
+        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
         $modifier = new Modifier('self.ability.strength.values', 5);
 
         self::expectException(UnsupportedModifierProcessorPropertyException::class);
@@ -48,7 +48,7 @@ class ModifierHandlerTest extends TestCase
     public function testApplyOnDamages(): void
     {
         $player   = self::getPlayer();
-        $handler  = new ModifierHandler(self::getResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
+        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
         $modifier = new Modifier('self.damages.physical.value', 2);
 
         //~ Check initial value
@@ -62,7 +62,7 @@ class ModifierHandlerTest extends TestCase
     public function testApplyOnDamagesButPropertyDoesNotExists(): void
     {
         $player   = self::getPlayer();
-        $handler  = new ModifierHandler(self::getResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
+        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
         $modifier = new Modifier('self.damages.physical.values', 5);
 
         self::expectException(UnsupportedModifierProcessorPropertyException::class);
@@ -72,7 +72,7 @@ class ModifierHandlerTest extends TestCase
     public function testApplyOnEnemyButEnemyIsNull(): void
     {
         $player   = self::getPlayer();
-        $handler  = new ModifierHandler(self::getResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
+        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
         $modifier = new Modifier('enemy.ability.strength.values', -5);
 
         self::expectException(ModifierException::class);
