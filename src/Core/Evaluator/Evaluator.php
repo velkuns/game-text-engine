@@ -55,6 +55,11 @@ readonly class Evaluator
         ?array $context = null,
     ): string {
 
+        //~ Start by replacing context strings
+        foreach ($context ?? [] as $name => $value) {
+            $rule = \str_replace($name, (string) $value, $rule);
+        }
+
         $found = \preg_match_all(self::PATTERN_TARGET_TYPE, $rule, $matches);
 
         if ($found === false) {
@@ -85,10 +90,6 @@ readonly class Evaluator
 
             //~ Replace value in rule
             $rule = \str_replace($type, (string) $value, $rule);
-        }
-
-        foreach ($context ?? [] as $name => $value) {
-            $rule = \str_replace($name, (string) $value, $rule);
         }
 
         return $rule;

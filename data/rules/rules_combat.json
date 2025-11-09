@@ -9,6 +9,11 @@
         "roll": {
             "name": "combat.hit_roll",
             "rule": "attacker.roll(100)",
+            "description": "Roll a dice."
+        },
+        "hit": {
+            "name": "combat.is_hit",
+            "rule": "combat.hit_roll < combat.hit_chance",
             "description": "Determines if an attack hits based on a random roll against the hit chance."
         },
         "damages": {
