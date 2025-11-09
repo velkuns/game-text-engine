@@ -16,6 +16,7 @@ namespace Velkuns\GameTextEngine\Rules\Combat;
  * @phpstan-type CombatRulesHitData array{
  *     chance: CombatRulesHitDetailData,
  *     roll: CombatRulesHitDetailData,
+ *     hit: CombatRulesHitDetailData,
  *     damages: CombatRulesHitDetailData,
  * }
  */
@@ -24,6 +25,7 @@ class CombatRulesHit implements \JsonSerializable
     public function __construct(
         public CombatRulesHitDetail $chance,
         public CombatRulesHitDetail $roll,
+        public CombatRulesHitDetail $hit,
         public CombatRulesHitDetail $damages,
     ) {}
 
@@ -35,6 +37,7 @@ class CombatRulesHit implements \JsonSerializable
         return [
             'chance'  => $this->chance->jsonSerialize(),
             'roll'    => $this->roll->jsonSerialize(),
+            'hit'     => $this->hit->jsonSerialize(),
             'damages' => $this->damages->jsonSerialize(),
         ];
     }

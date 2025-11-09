@@ -49,6 +49,7 @@ class CombatApi
         $hits = new CombatRulesHit(
             new CombatRulesHitDetail(...$data['hit']['chance']),
             new CombatRulesHitDetail(...$data['hit']['roll']),
+            new CombatRulesHitDetail(...$data['hit']['hit']),
             new CombatRulesHitDetail(...$data['hit']['damages']),
         );
 
@@ -119,6 +120,13 @@ class CombatApi
         $hitChance = (int) $this->evaluator->evaluate($this->rules->hit->chance->rule, $attacker, $defender, $attackerModifiers, $defenderModifiers);
         $hitRoll   = (int) $this->evaluator->evaluate($this->rules->hit->roll->rule, $attacker);
         $damages   = (int) $this->evaluator->evaluate($this->rules->hit->damages->rule, $attacker, $defender, $attackerModifiers, $defenderModifiers);
+        $isHit     = (bool) $this->evaluator->evaluate($this->rules->hit->hit->rule, $attacker, context: ['combat.hit_roll' => $hitRoll, 'combat.hit_chance' => $hitChance]);
+
+        //~ Miss or $hit
+        if ($isHit) {
+            //~ Hit
+            $this->inflictDamagesTo($defender, $damages);
+        }
 
         $log = new CombatLog(
             $attacker,
@@ -132,12 +140,6 @@ class CombatApi
                 'damages'   => $this->evaluator->render($this->rules->hit->damages->rule, $attacker, $defender, $attackerModifiers, $defenderModifiers),
             ],
         );
-
-        //~ Miss
-        if ($hitRoll <= $hitChance) {
-            //~ Hit
-            $this->inflictDamagesTo($defender, $damages);
-        }
 
         return $log;
     }
