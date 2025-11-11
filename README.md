@@ -337,6 +337,7 @@ parameters:
   game.data.rules.abilities: '%game.data.dir%/rules/rules_abilities.json'
   game.data.rules.statuses:  '%game.data.dir%/rules/rules_statuses.json'
   game.data.rules.combat:    '%game.data.dir%/rules/rules_combat.json'
+  game.data.rules.player:    '%game.data.dir%/rules/rules_player.json'
 
 services:
   _defaults:
@@ -355,6 +356,13 @@ services:
         - '@Velkuns\GameTextEngine\Core\Resolver\EntityInfoResolver'
         - '@Velkuns\GameTextEngine\Core\Resolver\EquippedWeaponItemResolver'
         - '@Velkuns\GameTextEngine\Core\Resolver\RollResolver'
+
+      $validators:
+        - '@Velkuns\GameTextEngine\Core\Validator\AbilityConditionValidator'
+        - '@Velkuns\GameTextEngine\Core\Validator\EntityInfoConditionValidator'
+        - '@Velkuns\GameTextEngine\Core\Validator\EntityInventoryItemsConditionValidator'
+        - '@Velkuns\GameTextEngine\Core\Validator\StatusConditionValidator'
+
 
   #~ Game text engine source
   Velkuns\GameTextEngine\:
@@ -382,7 +390,16 @@ declare(strict_types=1);
 
 namespace Application\Domain\Book\Service;
 
-use Application\Domain\Book\Entity\BookInteractiveGame;use Application\Domain\Book\Repository\BookInteractiveGameRepositoryInterface;use Application\Domain\Book\Repository\BookInteractiveRepositoryInterface;use Velkuns\GameTextEngine\Api\GameApi;use Velkuns\GameTextEngine\Api\PlayerApi;use Velkuns\GameTextEngine\Core\Log\CombatLog;use Velkuns\GameTextEngine\Graph\Edge;use Velkuns\GameTextEngine\Graph\Node;
+use Application\Domain\Book\Entity\BookInteractiveGame;
+use Application\Domain\Book\Repository\BookInteractiveGameRepositoryInterface;
+use Application\Domain\Book\Repository\BookInteractiveRepositoryInterface;
+use Velkuns\GameTextEngine\Api\GameApi;
+use Velkuns\GameTextEngine\Api\PlayerApi;
+use Velkuns\GameTextEngine\Core\Log\LootLog;
+use Velkuns\GameTextEngine\Core\Log\XpLog;
+use Velkuns\GameTextEngine\Graph\Edge;
+use Velkuns\GameTextEngine\Graph\Node;
+use Velkuns\GameTextEngine\Core\Log\CombatLog;
 
 /**
  * @phpstan-import-type NewPlayerData from PlayerApi
@@ -410,7 +427,9 @@ readonly class StoryPlay
             $bookInteractive->getBestiary(),       // json string
             $bookInteractive->getRulesAbilities(), // json string
             $bookInteractive->getRulesStatuses(),  // json string
-            $bookGame->getCharacter(),             // json string
+            $bookInteractive->getRulesCombat(),    // json string
+            $bookInteractive->getRulesPlayer(),    // json string
+            $bookGame->getCharacter(),
         );
 
         return $bookGame;
@@ -430,6 +449,8 @@ readonly class StoryPlay
             $bookInteractive->getBestiary(),       // json string
             $bookInteractive->getRulesAbilities(), // json string
             $bookInteractive->getRulesStatuses(),  // json string
+            $bookInteractive->getRulesCombat(),    // json string
+            $bookInteractive->getRulesPlayer(),    // json string
         );
     }
 
@@ -455,7 +476,11 @@ readonly class StoryPlay
 
     /**
      * Read target node, and if not a page refresh, save new state
-     * @return array{0: Node, 1: Edge[], 2: array<int, array{player: CombatLog, enemy?: CombatLog}>}
+     * @return array{
+     *     0: Node,
+     *     1: Edge[],
+     *     2: array{combat: array<int, array{player: CombatLog, enemy?: CombatLog}>, loot: list<LootLog>, xp: list<XpLog>}
+     * }
      */
     public function read(BookInteractiveGame $bookGame, int $targetId): array
     {
@@ -487,7 +512,7 @@ readonly class StoryPlay
     public function save(BookInteractiveGame $game, int $textTargetId, ?int $textSourceId = null): BookInteractiveGame
     {
         //~ Set data into entity
-        $character = $this->api->player->dump();
+        $character = $this->api->player->dumpPlayer();
 
         $game->setCharacter($character);
         $game->setTextSourceId($textSourceId ?? $game->getTextTargetId());
@@ -517,6 +542,7 @@ classDiagram
         string book_interactive_rules_abilities
         string book_interactive_rules_statuses
         string book_interactive_rules_combat
+        string book_interactive_rules_player
     }
     
     class book_interactive_game {
