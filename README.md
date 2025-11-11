@@ -222,19 +222,13 @@ declare(strict_types=1);
 
 namespace Application;
 
-// [... game api init code here ... ]
+// [... game api init code here, including player ... ]
 
 //~ Start the story - retrieve the first node of the story
-$text = $gameApi->story->start();
+$sourceNodeId = '0';
+$targetNodeId = '1';
+[$text, $choices, $logs] = $gameApi->story->read($sourceNodeId, $targetNodeId);
 
-// define $player before
-  
-//~ Get possible choices
-$choices = $gameApi->story->getPossibleChoices($node->id, $player);
-
-//~ Then display choices to the player, get his choice and advance the story
-$playerChoice = $choices[0];
-$nextText = $gameApi->story->goto($playerChoice->source, $playerChoice->target, $player/*[, $enemy]*/); // A validation is made to be sure the choice is valid
 ```
 
 ### Player API
