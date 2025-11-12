@@ -17,7 +17,7 @@ use Velkuns\GameTextEngine\Core\Condition\Conditions;
 use Velkuns\GameTextEngine\Exception\Core\ResolverException;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedConditionTypeException;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedTypeElementResolverException;
-use Velkuns\GameTextEngine\Exception\Rpg\StatusException;
+use Velkuns\GameTextEngine\Exception\Rpg\TraitException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
@@ -104,12 +104,12 @@ class ConditionsTest extends TestCase
                 self::getGoblin(),
                 true,
             ],
-            'evaluate required conditions based on entity status but not found' => [
+            'evaluate required conditions based on entity trait but not found' => [
                 self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'      => 'self.status.skill',
+                            'type'      => 'self.trait.skill',
                             'condition' => 'name=unknown',
                             'is'        => true,
                         ],
@@ -124,7 +124,7 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'      => 'self.status.skill',
+                            'type'      => 'self.trait.skill',
                             'condition' => 'name=Sword (Mastery)',
                             'is'        => false,
                         ],
@@ -245,12 +245,12 @@ class ConditionsTest extends TestCase
                 self::getGoblin(),
                 UnsupportedTypeElementResolverException::class,
             ],
-            'evaluate required conditions based on status but status type does not exist' => [
+            'evaluate required conditions based on trait but trait type does not exist' => [
                 self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'      => 'self.status.unknown',
+                            'type'      => 'self.trait.unknown',
                             'condition' => 'name=test',
                             'is'        => true,
                         ],
@@ -258,7 +258,7 @@ class ConditionsTest extends TestCase
                 ]),
                 self::getPlayer(),
                 self::getGoblin(),
-                StatusException::class,
+                TraitException::class,
             ],
             'evaluate required conditions based on element that is not supported' => [
                 self::getConditionFactory()->from([

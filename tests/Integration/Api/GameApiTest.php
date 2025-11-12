@@ -37,7 +37,7 @@ class GameApiTest extends TestCase
             $dataDir . '/items.json',
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_attributes.json',
-            $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/rules/rules_traits.json',
             $dataDir . '/rules/rules_combat.json',
             $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
@@ -49,7 +49,7 @@ class GameApiTest extends TestCase
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/items.json')), $dump['items']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/bestiary.json')), $dump['bestiary']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_attributes.json')), $dump['attributesRules']);
-        self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_statuses.json')), $dump['statusesRules']);
+        self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_traits.json')), $dump['traitsRules']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_combat.json')), $dump['combatRules']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_player.json')), $dump['playerRules']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/templates/player.json')), $dump['playerData']);
@@ -63,7 +63,7 @@ class GameApiTest extends TestCase
         $itemsJson          = (string) \file_get_contents($dataDir . '/items.json');
         $bestiaryJson       = (string) \file_get_contents($dataDir . '/bestiary.json');
         $attributesRulesJson = (string) \file_get_contents($dataDir . '/rules/rules_attributes.json');
-        $statusesRulesJson  = (string) \file_get_contents($dataDir . '/rules/rules_statuses.json');
+        $traitsRulesJson  = (string) \file_get_contents($dataDir . '/rules/rules_traits.json');
         $combatRulesJson    = (string) \file_get_contents($dataDir . '/rules/rules_combat.json');
         $playerRulesJson    = (string) \file_get_contents($dataDir . '/rules/rules_player.json');
         $playerDataJson     = (string) \file_get_contents($dataDir . '/templates/player.json');
@@ -74,7 +74,7 @@ class GameApiTest extends TestCase
             $itemsJson,
             $bestiaryJson,
             $attributesRulesJson,
-            $statusesRulesJson,
+            $traitsRulesJson,
             $combatRulesJson,
             $playerRulesJson,
             $playerDataJson,
@@ -86,7 +86,7 @@ class GameApiTest extends TestCase
         self::assertSame(\trim($itemsJson), $dump['items']);
         self::assertSame(\trim($bestiaryJson), $dump['bestiary']);
         self::assertSame(\trim($attributesRulesJson), $dump['attributesRules']);
-        self::assertSame(\trim($statusesRulesJson), $dump['statusesRules']);
+        self::assertSame(\trim($traitsRulesJson), $dump['traitsRules']);
         self::assertSame(\trim($combatRulesJson), $dump['combatRules']);
         self::assertSame(\trim($playerRulesJson), $dump['playerRules']);
         self::assertSame(\trim($playerDataJson), $dump['playerData']);
@@ -102,7 +102,7 @@ class GameApiTest extends TestCase
             $dataDir . '/items.json',
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_attributes.json',
-            $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/rules/rules_traits.json',
             $dataDir . '/rules/rules_combat.json',
             $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
@@ -130,7 +130,7 @@ class GameApiTest extends TestCase
             $dataDir . '/items.json',
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_attributes.json',
-            $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/rules/rules_traits.json',
             $dataDir . '/rules/rules_combat.json',
             $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
@@ -158,7 +158,7 @@ class GameApiTest extends TestCase
             $dataDir . '/items.json',
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_attributes.json',
-            $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/rules/rules_traits.json',
             $dataDir . '/rules/rules_combat.json',
             $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
@@ -189,7 +189,7 @@ class GameApiTest extends TestCase
             $dataDir . '/items.json',
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_attributes.json',
-            $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/rules/rules_traits.json',
             $dataDir . '/rules/rules_combat.json',
             $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
@@ -217,7 +217,7 @@ class GameApiTest extends TestCase
             $dataDir . '/items.json',
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_attributes.json',
-            $dataDir . '/rules/rules_statuses.json',
+            $dataDir . '/rules/rules_traits.json',
             $dataDir . '/rules/rules_combat.json',
             $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
@@ -237,7 +237,7 @@ class GameApiTest extends TestCase
             self::getItemsApi(),
             self::getBestiaryApi(),
             self::getAttributesApi(),
-            self::getStatusesApi(),
+            self::getTraitsApi(),
             self::getPlayerApi(),
             self::getCombatApi(),
         );

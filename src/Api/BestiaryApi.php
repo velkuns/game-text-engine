@@ -209,8 +209,8 @@ class BestiaryApi
         $attributes['compounds']['attack']  = ['type' => 'compound', 'name' => 'attack', 'rule' => 'strength + agility'];
         $attributes['compounds']['defense'] = ['type' => 'compound', 'name' => 'defense','rule' => 'endurance + intuition'];
 
-        //~ Initialize empty statuses
-        $statuses  = ['skills' => [], 'states' => [], 'blessings' => [], 'curses' => [], 'titles' => []];
+        //~ Initialize empty traits
+        $traits  = ['skills' => [], 'states' => [], 'blessings' => [], 'curses' => [], 'titles' => []];
 
         $loot      = $data['loot'] ?? null;
         $equipment = $data['equipment'] ?? null;
@@ -236,7 +236,7 @@ class BestiaryApi
             'info'      => $info,
             'damages'   => $damages,
             'attributes' => $attributes,
-            'statuses'  => $statuses,
+            'traits'  => $traits,
             'inventory' => $inventory,
         ];
 

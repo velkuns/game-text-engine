@@ -23,7 +23,7 @@ class ElementFactoryTest extends TestCase
 {
     use FactoryTrait;
 
-    public function testStatusFromJson(): void
+    public function testTraitFromJson(): void
     {
         $json = '{
             "type": "skill",
@@ -61,21 +61,21 @@ class ElementFactoryTest extends TestCase
             ]
         }';
 
-        $status    = self::getElementFactory()->statusFromJson($json);
-        $modifiers = $status->getModifiers();
+        $trait    = self::getElementFactory()->traitFromJson($json);
+        $modifiers = $trait->getModifiers();
 
-        self::assertSame('skill', $status->getType());
-        self::assertSame('swordsmanship', $status->getName());
-        self::assertSame('Skill in using swords.', $status->getDescription());
+        self::assertSame('skill', $trait->getType());
+        self::assertSame('swordsmanship', $trait->getName());
+        self::assertSame('Skill in using swords.', $trait->getDescription());
         self::assertCount(2, $modifiers);
-        self::assertSame(0, $status->getDurationTurns());
-        self::assertSame(0, $status->getRemainingTurns());
+        self::assertSame(0, $trait->getDurationTurns());
+        self::assertSame(0, $trait->getRemainingTurns());
         self::assertNotNull($modifiers[0]->conditions);
         self::assertSame(1, $modifiers[0]->conditions->getNumberRequired());
         self::assertCount(1, $modifiers[0]->conditions->getConditions());
     }
 
-    public function testStatusFromJsonWithInvalidJson(): void
+    public function testTraitFromJsonWithInvalidJson(): void
     {
 
         $json = '{
@@ -116,7 +116,7 @@ class ElementFactoryTest extends TestCase
 
         self::expectExceptionCode(2013);
         self::expectException(ElementJsonParseException::class);
-        self::getElementFactory()->statusFromJson($json);
+        self::getElementFactory()->traitFromJson($json);
     }
 
     public function testModifierFromJson(): void
@@ -430,7 +430,7 @@ class ElementFactoryTest extends TestCase
                     }
                 }
             },
-            "statuses": {
+            "traits": {
                 "skill": {
                     "swordsmanship": {
                         "type": "skill",
@@ -511,18 +511,18 @@ class ElementFactoryTest extends TestCase
         self::assertNull($attribute->getRule());
         self::assertSame('strength', $attribute->getName());
 
-        $statuses = $hero->getStatuses();
-        self::assertCount(1, $statuses->statuses['skill']);
-        self::assertCount(0, $statuses->statuses['state']);
-        self::assertCount(0, $statuses->statuses['blessing']);
-        self::assertCount(0, $statuses->statuses['curse']);
-        self::assertCount(0, $statuses->statuses['title']);
+        $traits = $hero->getTraits();
+        self::assertCount(1, $traits->traits['skill']);
+        self::assertCount(0, $traits->traits['state']);
+        self::assertCount(0, $traits->traits['blessing']);
+        self::assertCount(0, $traits->traits['curse']);
+        self::assertCount(0, $traits->traits['title']);
 
-        self::assertFalse($hero->hasStatus('skill', 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus('state', 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus('blessing', 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus('curse', 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus('title', 'non-existing-skill'));
+        self::assertFalse($hero->hasTrait('skill', 'non-existing-skill'));
+        self::assertFalse($hero->hasTrait('state', 'non-existing-skill'));
+        self::assertFalse($hero->hasTrait('blessing', 'non-existing-skill'));
+        self::assertFalse($hero->hasTrait('curse', 'non-existing-skill'));
+        self::assertFalse($hero->hasTrait('title', 'non-existing-skill'));
 
 
         $item = $hero->getInventory()->get('The Sword');

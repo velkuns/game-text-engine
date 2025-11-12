@@ -12,16 +12,16 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Api\StatusesApi;
+use Velkuns\GameTextEngine\Api\TraitsApi;
 use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
-use Velkuns\GameTextEngine\Exception\Api\StatusesApiException;
-use Velkuns\GameTextEngine\Rpg\Status\Status;
+use Velkuns\GameTextEngine\Exception\Api\TraitsApiException;
+use Velkuns\GameTextEngine\Rpg\Traits\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
 /**
- * @phpstan-import-type StatusesRulesData from StatusesApi
+ * @phpstan-import-type TraitsRulesData from TraitsApi
  */
-class StatusesApiTest extends TestCase
+class TraitsApiTest extends TestCase
 {
     use FactoryTrait;
 
@@ -31,7 +31,7 @@ class StatusesApiTest extends TestCase
         $expectedStartingAttributions = ['skill' => 2, 'state' => 0, 'blessing' => 0, 'curse' => 0, 'title' => 0];
         $expectedLevelingAttributions = ['skill' => 1, 'state' => 0, 'blessing' => 0, 'curse' => 0, 'title' => 0];
 
-        self::assertSame("This section defines all kind of statuses types available for the story, and the number of each when create a new character.", $api->rules->description);
+        self::assertSame("This section defines all kind of traits types available for the story, and the number of each when create a new character.", $api->rules->description);
         self::assertSame($expectedStartingAttributions, $api->rules->starting->attributions);
         self::assertSame($expectedLevelingAttributions, $api->rules->leveling->attributions);
         self::assertSame(2, $api->rules->leveling->everyNumberLevel);
@@ -40,7 +40,7 @@ class StatusesApiTest extends TestCase
     public function testDump(): void
     {
         $api = $this->getApi();
-        $content = (string) \file_get_contents($this->getDataDir() . '/rules/rules_statuses.json');
+        $content = (string) \file_get_contents($this->getDataDir() . '/rules/rules_traits.json');
 
         self::assertSame(\trim($content), $api->dump(true));
     }
@@ -49,12 +49,12 @@ class StatusesApiTest extends TestCase
     {
         $api = $this->getApi();
 
-        $statuses = $api->getAll();
-        self::assertCount(8, $statuses['skill']);
-        self::assertCount(4, $statuses['state']);
-        self::assertCount(0, $statuses['blessing']);
-        self::assertCount(0, $statuses['curse']);
-        self::assertCount(3, $statuses['title']);
+        $traits = $api->getAll();
+        self::assertCount(8, $traits['skill']);
+        self::assertCount(4, $traits['state']);
+        self::assertCount(0, $traits['blessing']);
+        self::assertCount(0, $traits['curse']);
+        self::assertCount(3, $traits['title']);
     }
 
     public function testGetAndSetAndRemove(): void
@@ -63,7 +63,7 @@ class StatusesApiTest extends TestCase
 
         self::assertNull($api->get('skill', 'New Skill'));
 
-        $newSkill = new Status('skill', 'New Skill', 'description of new skill', []);
+        $newSkill = new EntityTrait('skill', 'New Skill', 'description of new skill', []);
         $api->set($newSkill);
 
         self::assertSame($newSkill, $api->get('skill', 'New Skill', false));
@@ -74,22 +74,22 @@ class StatusesApiTest extends TestCase
         self::assertNull($api->get('skill', 'New Skill'));
     }
 
-    public function testSetStatusButTypeDoesNotExist(): void
+    public function testSetTraitButTypeDoesNotExist(): void
     {
         $api = $this->getApi();
 
-        $newSkill = new Status('unknown', 'New Skill', 'description of new skill', []);
+        $newSkill = new EntityTrait('unknown', 'New Skill', 'description of new skill', []);
 
-        self::expectException(StatusesApiException::class);
+        self::expectException(TraitsApiException::class);
         self::expectExceptionCode(1550);
         $api->set($newSkill);
     }
 
-    public function testRemoveStatusButItDoesNotExist(): void
+    public function testRemoveTraitButItDoesNotExist(): void
     {
         $api = $this->getApi();
 
-        self::expectException(StatusesApiException::class);
+        self::expectException(TraitsApiException::class);
         self::expectExceptionCode(1551);
         $api->remove('skill', 'New Skill');
     }
@@ -98,9 +98,9 @@ class StatusesApiTest extends TestCase
     {
         $api = $this->getApi();
 
-        $statuses = ['skill' => ['Goblin Hunter', 'Wolf Hunter']];
+        $traits = ['skill' => ['Goblin Hunter', 'Wolf Hunter']];
 
-        $data = $api->fromNewPlayer($statuses);
+        $data = $api->fromNewPlayer($traits);
 
         self::assertCount(2, $data['skill']);
         self::assertCount(0, $data['state']);
@@ -115,57 +115,57 @@ class StatusesApiTest extends TestCase
     {
         $api = $this->getApi();
 
-        $statuses = ['unknown' => ['Goblin Hunter', 'Wolf Hunter']];
+        $traits = ['unknown' => ['Goblin Hunter', 'Wolf Hunter']];
 
-        self::expectException(StatusesApiException::class);
+        self::expectException(TraitsApiException::class);
         self::expectExceptionCode(1552);
 
-        $api->fromNewPlayer($statuses);
+        $api->fromNewPlayer($traits);
     }
 
-    public function testFromNewPlayerButStatusDoesNotExistForGivenType(): void
+    public function testFromNewPlayerButTraitDoesNotExistForGivenType(): void
     {
         $api = $this->getApi();
 
-        $statuses = ['skill' => ['Dragon Hunter']];
+        $traits = ['skill' => ['Dragon Hunter']];
 
-        self::expectException(StatusesApiException::class);
+        self::expectException(TraitsApiException::class);
         self::expectExceptionCode(1553);
 
-        $api->fromNewPlayer($statuses);
+        $api->fromNewPlayer($traits);
     }
 
-    public function testFromNewPlayerButThereIsTooManyStatusForGivenType(): void
+    public function testFromNewPlayerButThereIsTooManyTraitForGivenType(): void
     {
         $api = $this->getApi();
 
-        $statuses = ['skill' => ['Goblin Hunter', 'Wolf Hunter', 'Lockpicking']];
+        $traits = ['skill' => ['Goblin Hunter', 'Wolf Hunter', 'Lockpicking']];
 
-        self::expectException(StatusesApiException::class);
+        self::expectException(TraitsApiException::class);
         self::expectExceptionCode(1554);
 
-        $api->fromNewPlayer($statuses);
+        $api->fromNewPlayer($traits);
     }
 
-    public function testFromNewPlayerButThereIsTooFewStatusForGivenType(): void
+    public function testFromNewPlayerButThereIsTooFewTraitForGivenType(): void
     {
         $api = $this->getApi();
 
-        $statuses = ['skill' => ['Goblin Hunter']];
+        $traits = ['skill' => ['Goblin Hunter']];
 
-        self::expectException(StatusesApiException::class);
+        self::expectException(TraitsApiException::class);
         self::expectExceptionCode(1555);
 
-        $api->fromNewPlayer($statuses);
+        $api->fromNewPlayer($traits);
     }
 
-    private function getApi(): StatusesApi
+    private function getApi(): TraitsApi
     {
         $loader  = new JsonLoader();
-        $api     = new StatusesApi(self::getStatusFactory());
+        $api     = new TraitsApi(self::getTraitFactory());
 
-        /** @var StatusesRulesData $data */
-        $data = $loader->fromFile($this->getDataDir() . '/rules/rules_statuses.json');
+        /** @var TraitsRulesData $data */
+        $data = $loader->fromFile($this->getDataDir() . '/rules/rules_traits.json');
         $api->load($data);
 
         return $api;

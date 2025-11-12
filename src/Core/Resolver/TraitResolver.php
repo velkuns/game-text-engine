@@ -12,21 +12,21 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Core\Resolver;
 
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
-use Velkuns\GameTextEngine\Rpg\Entity\EntityStatuses;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityTraits;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
-readonly class StatusResolver implements ResolverInterface
+readonly class TraitResolver implements ResolverInterface
 {
-    private const string PATTERN = '#status\.(?P<type>[a-z]+)#';
+    private const string PATTERN = '#trait\.(?P<type>[a-z]+)#';
 
     public function supports(string $type): bool
     {
         return \preg_match(self::PATTERN, $type) === 1;
     }
 
-    public function resolve(string $type, EntityInterface $entity): EntityStatuses
+    public function resolve(string $type, EntityInterface $entity): EntityTraits
     {
-        return $entity->getStatuses();
+        return $entity->getTraits();
     }
 
     /**

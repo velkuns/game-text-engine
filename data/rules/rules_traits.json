@@ -1,5 +1,5 @@
 {
-    "description": "This section defines all kind of statuses types available for the story, and the number of each when create a new character.",
+    "description": "This section defines all kind of traits types available for the story, and the number of each when create a new character.",
     "starting": {
         "attributions": {
             "skill": 2,
@@ -19,7 +19,7 @@
             "title": 0
         }
     },
-    "statuses": {
+    "traits": {
         "skill": [
             {
                 "type": "skill",

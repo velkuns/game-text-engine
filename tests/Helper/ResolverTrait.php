@@ -19,7 +19,7 @@ use Velkuns\GameTextEngine\Core\Resolver\EntityInfoResolver;
 use Velkuns\GameTextEngine\Core\Resolver\EntityInventoryItemsResolver;
 use Velkuns\GameTextEngine\Core\Resolver\EquippedWeaponItemResolver;
 use Velkuns\GameTextEngine\Core\Resolver\RollResolver;
-use Velkuns\GameTextEngine\Core\Resolver\StatusResolver;
+use Velkuns\GameTextEngine\Core\Resolver\TraitResolver;
 use Velkuns\GameTextEngine\Core\Resolver\TypeResolverHandler;
 use Velkuns\GameTextEngine\Core\Resolver\ValueResolverHandler;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
@@ -36,7 +36,7 @@ trait ResolverTrait
             new EntityDamagesResolver(),
             new EntityInfoResolver(),
             new EntityInventoryItemsResolver(),
-            new StatusResolver(),
+            new TraitResolver(),
         ];
 
         return new TypeResolverHandler($resolvers);

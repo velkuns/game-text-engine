@@ -11,4 +11,4 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Exception\Rpg;
 
-class StatusException extends \RuntimeException {}
+class TraitException extends \RuntimeException {}

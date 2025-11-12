@@ -16,7 +16,7 @@ use Velkuns\GameTextEngine\Core\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Exception\Api\PlayerApiException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rpg\Modifier\ModifierHandler;
-use Velkuns\GameTextEngine\Rpg\Status\StatusInterface;
+use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
 use Velkuns\GameTextEngine\Rules\Player\PlayerRules;
 use Velkuns\GameTextEngine\Rules\Player\PlayerRulesInventory;
 use Velkuns\GameTextEngine\Rules\Player\PlayerRulesLeveling;
@@ -33,7 +33,7 @@ use Velkuns\GameTextEngine\Rules\Player\PlayerRulesStarting;
  *    description?: string,
  *    background?: string,
  *    attributes: array<string, int>,
- *    statuses?: array<string, list<string>>,
+ *    traits?: array<string, list<string>>,
  *    inventory?: list<string>,
  * }
  */
@@ -46,7 +46,7 @@ class PlayerApi
         private readonly EntityFactory $entityFactory,
         private readonly ItemsApi $items,
         private readonly AttributesApi $attributes,
-        private readonly StatusesApi $statuses,
+        private readonly TraitsApi $traits,
         private readonly ModifierHandler $modifierHandler,
         private readonly Evaluator $evaluator,
     ) {}
@@ -91,9 +91,9 @@ class PlayerApi
 
     /**
      * @param array<string, int> $attributes
-     * @param array<string, list<string>> $statuses
+     * @param array<string, list<string>> $traits
      */
-    public function levelUp(array $attributes, array $statuses = []): self
+    public function levelUp(array $attributes, array $traits = []): self
     {
         //~ Check player info
         $this->rules->leveling->assertMaxLevelNotReached($this->player->getInfo()->level);
@@ -102,22 +102,22 @@ class PlayerApi
         //~ Check attributes
         $this->attributes->rules->leveling->assertHasCorrectAttribution($attributes);
 
-        //~ Check statuses
-        $this->statuses->rules->leveling->assertCanAttributeOnNextLevel($this->player->getInfo()->level, $statuses);
-        $this->statuses->rules->leveling->assertHasCorrectAttribution($statuses);
-        $this->statuses->rules->assertAllStatusesExist($statuses);
+        //~ Check traits
+        $this->traits->rules->leveling->assertCanAttributeOnNextLevel($this->player->getInfo()->level, $traits);
+        $this->traits->rules->leveling->assertHasCorrectAttribution($traits);
+        $this->traits->rules->assertAllTraitsExist($traits);
 
         //~ All is ok, then update attributes
         foreach ($attributes as $name => $value) {
             $this->player->getAttributes()->get($name)?->increase($value);
         }
 
-        //~ Add statuses
-        foreach ($statuses as $type => $list) {
+        //~ Add traits
+        foreach ($traits as $type => $list) {
             foreach ($list as $name) {
-                /** @var StatusInterface $status */
-                $status = $this->statuses->get($type, $name);
-                $this->player->getStatuses()->set($status);
+                /** @var TraitInterface $trait */
+                $trait = $this->traits->get($type, $name);
+                $this->player->getTraits()->set($trait);
             }
         }
 
@@ -184,8 +184,8 @@ class PlayerApi
         //~ Build attributes
         $attributes = $this->attributes->fromNewPlayer($data['attributes']);
 
-        //~ Initialize empty statuses
-        $statuses = $this->statuses->fromNewPlayer($data['statuses'] ?? []);
+        //~ Initialize empty traits
+        $traits = $this->traits->fromNewPlayer($data['traits'] ?? []);
 
         //~ Build inventory
         $inventory = ['coins' => 10, 'items' => []];
@@ -200,7 +200,7 @@ class PlayerApi
             'info'      => $info,
             'damages'   => ['physical' => ['type' => 'physical', 'value' => 0]],
             'attributes' => $attributes,
-            'statuses'  => $statuses,
+            'traits'  => $traits,
             'inventory' => $inventory,
         ];
     }

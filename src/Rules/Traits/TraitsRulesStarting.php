@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Rules\Statuses;
+namespace Velkuns\GameTextEngine\Rules\Traits;
 
 /**
- * @phpstan-type StatusesRulesStartingData array{
+ * @phpstan-type TraitsRulesStartingData array{
  *    attributions: array<string, int>,
  * }
  */
-class StatusesRulesStarting implements \JsonSerializable
+class TraitsRulesStarting implements \JsonSerializable
 {
     /**
      * @param array<string, int> $attributions
@@ -26,7 +26,7 @@ class StatusesRulesStarting implements \JsonSerializable
     ) {}
 
     /**
-     * @phpstan-return StatusesRulesStartingData
+     * @phpstan-return TraitsRulesStartingData
      */
     public function jsonSerialize(): array
     {

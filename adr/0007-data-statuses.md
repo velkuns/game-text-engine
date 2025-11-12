@@ -1,4 +1,4 @@
-# Data - Statuses
+# Data - Traits
 
 ## Status
 
@@ -15,7 +15,7 @@ For example:
 - a curse that decrease the strength
 - ...
 
-List of possible status types:
+List of possible trait types:
 - skill
 - state
 - blessing
@@ -24,7 +24,7 @@ List of possible status types:
 
 ## Decision
 
-Status format:
+Trait format:
 ```json
 {
     "type": "skill|state|blessing|curse|title",
@@ -36,7 +36,7 @@ Status format:
 }
 ```
 
-Blessing status example:
+Blessing trait example:
 ```json
 {
     "type": "blessing",
@@ -53,7 +53,7 @@ Blessing status example:
 }
 ```
 
-Curse status example:
+Curse trait example:
 ```json
 {
     "type": "curse",
@@ -70,7 +70,7 @@ Curse status example:
 }
 ```
 
-State status examples:
+State trait examples:
 ```json
 {
     "type": "state",
@@ -91,7 +91,7 @@ State status examples:
 }
 ```
 
-Title status example:
+Title trait example:
 ```json
 {
     "type": "title",
@@ -101,7 +101,7 @@ Title status example:
 }
 ```
 
-Skill status example:
+Skill trait example:
 ```json
 
 {

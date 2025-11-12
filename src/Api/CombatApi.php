@@ -80,7 +80,7 @@ class CombatApi
             }
         }
 
-        //~ Time Resolver to clean status with duration
+        //~ Time Resolver to clean trait with duration
         $this->timeResolver->combatEnd([$player, ...$enemies]);
 
         //~ If player still alive, loots enemies

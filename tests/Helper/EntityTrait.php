@@ -137,7 +137,7 @@ trait EntityTrait
                     ],
                 ],
             ],
-            'statuses'  => [
+            'traits'  => [
                 'skill'    => [
                     'Sword (Mastery)' => [
                         'type'           => 'skill',
@@ -385,7 +385,7 @@ trait EntityTrait
                     ],
                 ],
             ],
-            'statuses'  => [
+            'traits'  => [
                 'skill'    => [],
                 'state'    => [],
                 'blessing' => [],
@@ -508,7 +508,7 @@ trait EntityTrait
                     ],
                 ],
             ],
-            'statuses'  => [
+            'traits'  => [
                 'skill'    => [],
                 'state'    => [],
                 'blessing' => [],

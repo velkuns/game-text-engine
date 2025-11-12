@@ -18,14 +18,14 @@ use Velkuns\GameTextEngine\Rpg\Attribute\CompoundAttribute;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
-use Velkuns\GameTextEngine\Rpg\Status\Status;
-use Velkuns\GameTextEngine\Rpg\Status\StatusInterface;
+use Velkuns\GameTextEngine\Rpg\Traits\EntityTrait;
+use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
 
 /**
  * @phpstan-import-type BaseAttributeData from BaseAttribute
  * @phpstan-import-type CompoundAttributeData from CompoundAttribute
  * @phpstan-import-type EntityData from EntityInterface
- * @phpstan-import-type StatusData from StatusInterface
+ * @phpstan-import-type TraitData from TraitInterface
  * @phpstan-import-type ConditionsData from Conditions
  * @phpstan-import-type ModifierData from Modifier
  * @phpstan-import-type ItemData from ItemInterface
@@ -35,7 +35,7 @@ readonly class ElementFactory
     public function __construct(
         private EntityFactory $entityFactory,
         private AttributeFactory $attributeFactory,
-        private StatusFactory $statusFactory,
+        private TraitFactory $traitFactory,
         private ItemFactory $itemFactory,
         private ConditionsFactory $conditionsFactory,
         private ModifierFactory $modifierFactory,
@@ -90,16 +90,16 @@ readonly class ElementFactory
     /**
      * @throws ElementJsonParseException
      */
-    public function statusFromJson(string $json): Status
+    public function traitFromJson(string $json): EntityTrait
     {
         try {
-            /** @var StatusData $data */
+            /** @var TraitData $data */
             $data = \json_decode($json, true, flags: \JSON_THROW_ON_ERROR);
         } catch (\JsonException $exception) {
-            throw new ElementJsonParseException('Cannot parse json data from status data', 2013, $exception);
+            throw new ElementJsonParseException('Cannot parse json data from trait data', 2013, $exception);
         }
 
-        return $this->statusFactory->from($data);
+        return $this->traitFactory->from($data);
     }
 
     /**

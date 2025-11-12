@@ -11,22 +11,22 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Core\Factory;
 
-use Velkuns\GameTextEngine\Rpg\Status\Status;
-use Velkuns\GameTextEngine\Rpg\Status\StatusInterface;
+use Velkuns\GameTextEngine\Rpg\Traits\EntityTrait;
+use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
 
 /**
- * @phpstan-import-type StatusData from StatusInterface
+ * @phpstan-import-type TraitData from TraitInterface
  */
-readonly class StatusFactory
+readonly class TraitFactory
 {
     public function __construct(
         private ModifierFactory $modifierFactory,
     ) {}
 
     /**
-     * @param StatusData $data
+     * @param TraitData $data
      */
-    public function from(array $data): Status
+    public function from(array $data): EntityTrait
     {
         $type           = $data['type'];
         $name           = $data['name'];
@@ -35,6 +35,6 @@ readonly class StatusFactory
         $durationTurns  = $data['durationTurns'] ?? 0;
         $remainingTurns = $data['remainingTurns'] ?? 0;
 
-        return new Status($type, $name, $description, $modifiers, $durationTurns, $remainingTurns);
+        return new EntityTrait($type, $name, $description, $modifiers, $durationTurns, $remainingTurns);
     }
 }

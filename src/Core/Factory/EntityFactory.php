@@ -21,9 +21,9 @@ use Velkuns\GameTextEngine\Rpg\Entity\EntityInfo;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInventory;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityLoot;
-use Velkuns\GameTextEngine\Rpg\Entity\EntityStatuses;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityTraits;
 use Velkuns\GameTextEngine\Rpg\Item\Item;
-use Velkuns\GameTextEngine\Rpg\Status\StatusInterface;
+use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
 
 /**
  * @phpstan-import-type BaseAttributeData from BaseAttribute
@@ -31,8 +31,8 @@ use Velkuns\GameTextEngine\Rpg\Status\StatusInterface;
  * @phpstan-import-type EntityData from EntityInterface
  * @phpstan-import-type EntityInfoData from EntityInfo
  * @phpstan-import-type AttributesData from EntityAttributes
- * @phpstan-import-type StatusesData from EntityStatuses
- * @phpstan-import-type StatusData from StatusInterface
+ * @phpstan-import-type TraitsData from EntityTraits
+ * @phpstan-import-type TraitData from TraitInterface
  * @phpstan-import-type DamagesData from Damages
  * @phpstan-import-type InventoryData from EntityInventory
  * @phpstan-import-type ItemData from Item
@@ -43,7 +43,7 @@ readonly class EntityFactory
 {
     public function __construct(
         private AttributeFactory $attributeFactory,
-        private StatusFactory $statusFactory,
+        private TraitFactory $traitFactory,
         private ItemFactory $itemFactory,
         private DamageFactory $damageFactory,
         private LootFactory $lootFactory,
@@ -59,12 +59,12 @@ readonly class EntityFactory
         $info      = $this->fromEntityInfo($data['info']);
         $damages   = $this->fromEntityDamages($data['damages'] ?? []);
         $attributes = $this->fromEntityAttributes($data['attributes']);
-        $statuses  = $this->fromEntityStatuses($data['statuses']);
+        $traits  = $this->fromEntityTraits($data['traits']);
         $inventory = $this->fromEntityInventory($data['inventory']);
         $loot      = $this->fromEntityLoot($data['loot'] ?? null);
         $equipment = $this->fromEntityEquipment($data['equipment'] ?? null);
 
-        return new Entity($name, $type, $info, $damages, $attributes, $statuses, $inventory, $loot, $equipment);
+        return new Entity($name, $type, $info, $damages, $attributes, $traits, $inventory, $loot, $equipment);
     }
 
     /**
@@ -105,16 +105,16 @@ readonly class EntityFactory
     }
 
     /**
-     * @phpstan-param StatusesData $data
+     * @phpstan-param TraitsData $data
      */
-    private function fromEntityStatuses(array $data): EntityStatuses
+    private function fromEntityTraits(array $data): EntityTraits
     {
-        $statuses = [];
+        $traits = [];
         foreach ($data as $type => $list) {
-            $statuses[$type] = \array_map(fn(array $statusData) => $this->statusFactory->from($statusData), $list);
+            $traits[$type] = \array_map(fn(array $traitData) => $this->traitFactory->from($traitData), $list);
         }
 
-        return new EntityStatuses($statuses);
+        return new EntityTraits($traits);
     }
 
     /**

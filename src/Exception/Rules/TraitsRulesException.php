@@ -9,6 +9,6 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Exception\Api;
+namespace Velkuns\GameTextEngine\Exception\Rules;
 
-class StatusesApiException extends \RuntimeException {}
+class TraitsRulesException extends \RuntimeException {}

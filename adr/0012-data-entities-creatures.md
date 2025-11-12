@@ -34,11 +34,11 @@ Format:
         "base": "list<BaseAttribute>",
         "compound": "list<CompoundAttribute>"
     },
-    "statuses": {
-    "skills": "list<Status>",
-    "states": "list<Status>",
-    "blessings": "list<Status>",
-    "curses": "list<Status>"
+    "traits": {
+    "skills": "list<TraitInterface>",
+    "states": "list<TraitInterface>",
+    "blessings": "list<TraitInterface>",
+    "curses": "list<TraitInterface>"
     },
     "inventory": "list<Item>"
 }
@@ -63,11 +63,11 @@ Example:
         "base": "list<BaseAttribute>",
         "compound": "list<CompoundAttribute>"
     },
-    "statuses": {
-        "skills": "list<Status>",
-        "states": "list<Status>",
-        "blessings": "list<Status>",
-        "curses": "list<Status>"
+    "traits": {
+        "skills": "list<TraitInterface>",
+        "states": "list<TraitInterface>",
+        "blessings": "list<TraitInterface>",
+        "curses": "list<TraitInterface>"
     },
     "inventory": "list<Item>"
 }

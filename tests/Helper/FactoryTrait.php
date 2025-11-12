@@ -20,7 +20,7 @@ use Velkuns\GameTextEngine\Core\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Core\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Core\Factory\LootFactory;
 use Velkuns\GameTextEngine\Core\Factory\ModifierFactory;
-use Velkuns\GameTextEngine\Core\Factory\StatusFactory;
+use Velkuns\GameTextEngine\Core\Factory\TraitFactory;
 use Velkuns\GameTextEngine\Graph\Factory\GraphFactory;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 
@@ -39,7 +39,7 @@ trait FactoryTrait
         if (self::$entityFactory === null) {
             self::$entityFactory = new EntityFactory(
                 self::getAttributeFactory(),
-                self::getStatusFactory(),
+                self::getTraitFactory(),
                 self::getItemFactory(),
                 self::getDamageFactory(),
                 self::getLootFactory(),
@@ -54,7 +54,7 @@ trait FactoryTrait
         return new ElementFactory(
             self::getEntityFactory(),
             self::getAttributeFactory(),
-            self::getStatusFactory(),
+            self::getTraitFactory(),
             self::getItemFactory(),
             self::getConditionFactory(),
             self::getModifierFactory(),
@@ -90,9 +90,9 @@ trait FactoryTrait
         return new ModifierFactory(self::getConditionFactory());
     }
 
-    private static function getStatusFactory(): StatusFactory
+    private static function getTraitFactory(): TraitFactory
     {
-        return new StatusFactory(self::getModifierFactory());
+        return new TraitFactory(self::getModifierFactory());
     }
 
     private static function getDamageFactory(): DamageFactory

@@ -9,7 +9,7 @@ In each ADR file, write these sections:
 
 ## Status
 
-What is the status, such as proposed, `draft`, `accepted`, `rejected`, `deprecated`, `superseded`, etc.?
+What is the trait, such as proposed, `draft`, `accepted`, `rejected`, `deprecated`, `superseded`, etc.?
 
 ## Context
 

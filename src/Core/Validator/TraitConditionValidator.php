@@ -15,17 +15,17 @@ use Velkuns\GameTextEngine\Core\Condition\ConditionOperatorType;
 use Velkuns\GameTextEngine\Core\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedConditionOperatorTypeException;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedConditionPropertyException;
-use Velkuns\GameTextEngine\Rpg\Entity\EntityStatuses;
-use Velkuns\GameTextEngine\Rpg\Status\StatusInterface;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityTraits;
+use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
 
 /**
  * @phpstan-import-type ConditionPartData from ConditionParser
  */
-readonly class StatusConditionValidator implements ValidatorInterface
+readonly class TraitConditionValidator implements ValidatorInterface
 {
     public function supports(string $type): bool
     {
-        return \str_starts_with($type, 'status.');
+        return \str_starts_with($type, 'trait.');
     }
 
     /**
@@ -33,14 +33,14 @@ readonly class StatusConditionValidator implements ValidatorInterface
      */
     public function validate(string $type, object $element, array $conditions): bool
     {
-        if (!$element instanceof EntityStatuses) {
+        if (!$element instanceof EntityTraits) {
             return false; // @codeCoverageIgnore
         }
 
-        $statusType = \explode('.', $type)[1] ?? '';
+        $traitType = \explode('.', $type)[1] ?? '';
 
-        foreach ($element->getAllFromType($statusType) as $status) {
-            if ($this->validateItem($status, $conditions)) {
+        foreach ($element->getAllFromType($traitType) as $trait) {
+            if ($this->validateItem($trait, $conditions)) {
                 return true;
             }
         }
@@ -51,12 +51,12 @@ readonly class StatusConditionValidator implements ValidatorInterface
     /**
      * @param list<ConditionPartData> $conditions
      */
-    private function validateItem(StatusInterface $status, array $conditions): bool
+    private function validateItem(TraitInterface $trait, array $conditions): bool
     {
         $evaluation = true;
 
         foreach ($conditions as ['property' => $property, 'operator' => $operator, 'value' => $value]) {
-            $elementValue = $this->resolveValue($status, $property);
+            $elementValue = $this->resolveValue($trait, $property);
             $evaluation   = $evaluation && $this->isValid($elementValue, $operator, (string) $value);
         }
 
@@ -72,14 +72,14 @@ readonly class StatusConditionValidator implements ValidatorInterface
 
         return match ($operatorType) {
             ConditionOperatorType::Equal              => ($elementValue === $conditionValue),
-            default => throw new UnsupportedConditionOperatorTypeException("Status condition does not support $operatorType->name type"),
+            default => throw new UnsupportedConditionOperatorTypeException("Trait condition does not support $operatorType->name type"),
         };
     }
 
-    private function resolveValue(StatusInterface $status, string $property): string
+    private function resolveValue(TraitInterface $trait, string $property): string
     {
         return match (\strtolower($property)) {
-            'name'     => $status->getName(),
+            'name'     => $trait->getName(),
             default    => throw new UnsupportedConditionPropertyException("Condition property '$property' is not supported."),
         };
     }

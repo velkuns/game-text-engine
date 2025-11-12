@@ -9,13 +9,13 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Rpg\Status;
+namespace Velkuns\GameTextEngine\Rpg\Traits;
 
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
 /**
  * @phpstan-import-type ModifierData from Modifier
- * @phpstan-type StatusData array{
+ * @phpstan-type TraitData array{
  *    type: string,
  *    name: string,
  *    description: string,
@@ -24,7 +24,7 @@ use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
  *    remainingTurns?: int,
  * }
  */
-interface StatusInterface extends \JsonSerializable
+interface TraitInterface extends \JsonSerializable
 {
     public function getType(): string;
 
@@ -48,7 +48,7 @@ interface StatusInterface extends \JsonSerializable
     public function clone(): self;
 
     /**
-     * @return StatusData
+     * @return TraitData
      */
     public function jsonSerialize(): array;
 }

@@ -34,7 +34,7 @@ Format:
         "notes": "string"
     },
     "attributes": "Attributes",
-    "statuses": "Statuses",
+    "traits": "Traits",
     "inventory": "Inventory"
 }
 ```
@@ -56,12 +56,12 @@ Example:
         "base": "list<BaseAttribute>",
         "compound": "list<CompoundAttribute>"
     },
-    "statuses": {
-        "skills": "list<Status>",
-        "states": "list<Status>",
-        "blessings": "list<Status>",
-        "curses": "list<Status>",
-        "titles": "list<Status>"
+    "traits": {
+        "skills": "list<StatusInterface>",
+        "states": "list<TraitInterface>",
+        "blessings": "list<TraitInterface>",
+        "curses": "list<TraitInterface>",
+        "titles": "list<TraitInterface>"
     },
     "inventory": "list<Item>"
 }

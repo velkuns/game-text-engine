@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Exception\Api\PlayerApiException;
 use Velkuns\GameTextEngine\Exception\Rules\AttributesRulesException;
 use Velkuns\GameTextEngine\Exception\Rules\PlayerRulesException;
-use Velkuns\GameTextEngine\Exception\Rules\StatusesRulesException;
+use Velkuns\GameTextEngine\Exception\Rules\TraitsRulesException;
 use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
 use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
@@ -164,19 +164,19 @@ class PlayerApiTest extends TestCase
         self::assertSame(2, $playerApi->player->getInfo()->level);
         self::assertSame(220, $playerApi->player->getInfo()->xp);
         self::assertSame(23, $playerApi->player->getAttributes()->get('vitality')?->getValue());
-        self::assertNull($playerApi->player->getStatuses()->getByType('skill', 'Archery (Mastery)')?->getName());
+        self::assertNull($playerApi->player->getTraits()->getByType('skill', 'Archery (Mastery)')?->getName());
 
         $playerApi->levelUp($attributes, ['skill' => ['Archery (Mastery)']]);
 
         self::assertSame(3, $playerApi->player->getInfo()->level);
         self::assertSame(20, $playerApi->player->getInfo()->xp);
-        self::assertSame('Archery (Mastery)', $playerApi->player->getStatuses()->getByType('skill', 'Archery (Mastery)')?->getName());
+        self::assertSame('Archery (Mastery)', $playerApi->player->getTraits()->getByType('skill', 'Archery (Mastery)')?->getName());
         self::assertSame(24, $playerApi->player->getAttributes()->get('vitality')->getValue());
     }
 
     /**
      * @param array<string, int> $attributes
-     * @param array<string, list<string>> $statuses
+     * @param array<string, list<string>> $traits
      * @param class-string<\Throwable> $exception
      */
     #[DataProvider('getLevelUpDataProvider')]
@@ -184,7 +184,7 @@ class PlayerApiTest extends TestCase
         int $level,
         int $xp,
         array $attributes,
-        array $statuses,
+        array $traits,
         string $exception,
         string $message,
         int $code,
@@ -196,14 +196,14 @@ class PlayerApiTest extends TestCase
         self::expectException($exception);
         self::expectExceptionMessage($message);
         self::expectExceptionCode($code);
-        $playerApi->levelUp($attributes, $statuses);
+        $playerApi->levelUp($attributes, $traits);
     }
 
     /**
      * @return array<string, array{
      *     level: int,
      *     attributes: array<string, int>,
-     *     statuses: array<string, list<string>>,
+     *     traits: array<string, list<string>>,
      *     exception: class-string<\Throwable>,
      *     message: string,
      *     code: int,
@@ -216,7 +216,7 @@ class PlayerApiTest extends TestCase
                 'level'     => 10,
                 'xp'        => 1000,
                 'attributes' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
-                'statuses'  => ['skill' => ['Archery (Mastery)']],
+                'traits'  => ['skill' => ['Archery (Mastery)']],
                 'exception' => PlayerRulesException::class,
                 'message'   => 'You already reached the max level (10)',
                 'code'      => 2300,
@@ -225,7 +225,7 @@ class PlayerApiTest extends TestCase
                 'level'     => 1,
                 'xp'        => 95,
                 'attributes' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
-                'statuses'  => ['skill' => ['Archery (Mastery)']],
+                'traits'  => ['skill' => ['Archery (Mastery)']],
                 'exception' => PlayerRulesException::class,
                 'message'   => "You need 5 XP to reach the next level.",
                 'code'      => 2301,
@@ -234,7 +234,7 @@ class PlayerApiTest extends TestCase
                 'level'     => 1,
                 'xp'        => 100,
                 'attributes' => ['strength' => 3, 'endurance' => 0, 'agility' => 0, 'intuition' => 1, 'vitality' => 1],
-                'statuses'  => ['skill' => ['Archery (Mastery)']],
+                'traits'  => ['skill' => ['Archery (Mastery)']],
                 'exception' => AttributesRulesException::class,
                 'message'   => "Only 2 point(s) per attribute is allowed for level up.",
                 'code'      => 2100,
@@ -243,7 +243,7 @@ class PlayerApiTest extends TestCase
                 'level'     => 1,
                 'xp'        => 100,
                 'attributes' => ['strength' => 2, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
-                'statuses'  => ['skill' => ['Archery (Mastery)']],
+                'traits'  => ['skill' => ['Archery (Mastery)']],
                 'exception' => AttributesRulesException::class,
                 'message'   => "Only 5 point(s) is allowed for level up.",
                 'code'      => 2101,
@@ -252,45 +252,45 @@ class PlayerApiTest extends TestCase
                 'level'     => 1,
                 'xp'        => 100,
                 'attributes' => ['strength' => 1, 'endurance' => 0, 'agility' => 0, 'intuition' => 1, 'vitality' => 1],
-                'statuses'  => ['skill' => ['Archery (Mastery)']],
+                'traits'  => ['skill' => ['Archery (Mastery)']],
                 'exception' => AttributesRulesException::class,
                 'message'   => "Remaining 2 point(s) to attribute to attributes",
                 'code'      => 2102,
             ],
-            'new status not allowed on this level' => [
+            'new trait not allowed on this level' => [
                 'level'     => 1,
                 'xp'        => 100,
                 'attributes' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
-                'statuses'  => ['skill' => ['Archery (Mastery)']],
-                'exception' => StatusesRulesException::class,
-                'message'   => "New statuses only allowed every 2 level(s).",
+                'traits'  => ['skill' => ['Archery (Mastery)']],
+                'exception' => TraitsRulesException::class,
+                'message'   => "New traits only allowed every 2 level(s).",
                 'code'      => 2200,
             ],
-            'no attribution allowed of this kind of status' => [
+            'no attribution allowed of this kind of trait' => [
                 'level'     => 2,
                 'xp'        => 200,
                 'attributes' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
-                'statuses'  => ['skill' => ['Archery (Mastery)'], 'state' => ['poisoned']],
-                'exception' => StatusesRulesException::class,
+                'traits'  => ['skill' => ['Archery (Mastery)'], 'state' => ['poisoned']],
+                'exception' => TraitsRulesException::class,
                 'message'   => "Only 0 'state' allowed, 1 given.",
                 'code'      => 2201,
             ],
-            'remaining status of this kind to attribute' => [
+            'remaining trait of this kind to attribute' => [
                 'level'     => 2,
                 'xp'        => 200,
                 'attributes' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
-                'statuses'  => [],
-                'exception' => StatusesRulesException::class,
-                'message'   => "Remaining 1 status(es) of 'skill' to attribute.",
+                'traits'  => [],
+                'exception' => TraitsRulesException::class,
+                'message'   => "Remaining 1 trait(s) of 'skill' to attribute.",
                 'code'      => 2202,
             ],
-            'status not found' => [
+            'trait not found' => [
                 'level'     => 2,
                 'xp'        => 200,
                 'attributes' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
-                'statuses'  => ['skill' => ['Archery (Not Exists)']],
-                'exception' => StatusesRulesException::class,
-                'message'   => "Status 'Archery (Not Exists)' of type 'skill' not found.",
+                'traits'  => ['skill' => ['Archery (Not Exists)']],
+                'exception' => TraitsRulesException::class,
+                'message'   => "Trait 'Archery (Not Exists)' of type 'skill' not found.",
                 'code'      => 2000,
             ],
         ];

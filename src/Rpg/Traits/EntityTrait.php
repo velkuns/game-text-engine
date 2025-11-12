@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Rpg\Status;
+namespace Velkuns\GameTextEngine\Rpg\Traits;
 
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
 /**
- * @phpstan-import-type StatusData from StatusInterface
+ * @phpstan-import-type TraitData from TraitInterface
  */
-class Status implements StatusInterface
+class EntityTrait implements TraitInterface
 {
     /**
      * @param list<Modifier> $modifiers
@@ -79,7 +79,7 @@ class Status implements StatusInterface
     }
 
     /**
-     * @return StatusData
+     * @return TraitData
      */
     public function jsonSerialize(): array
     {

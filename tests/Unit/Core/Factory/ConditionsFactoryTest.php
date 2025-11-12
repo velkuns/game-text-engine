@@ -29,7 +29,7 @@ class ConditionsFactoryTest extends TestCase
                     'is'        => true,
                 ],
                 [
-                    'type'      => 'self.status.skill',
+                    'type'      => 'self.trait.skill',
                     'condition' => 'name=Sword (Mastery)',
                     'is'        => false,
                 ],
@@ -52,7 +52,7 @@ class ConditionsFactoryTest extends TestCase
         self::assertTrue($condition0->is());
 
         $condition1 = $conditions->getConditions()[1];
-        self::assertSame('self.status.skill', $condition1->getType());
+        self::assertSame('self.trait.skill', $condition1->getType());
         self::assertSame('name=Sword (Mastery)', $condition1->getCondition());
         self::assertFalse($condition1->is());
 

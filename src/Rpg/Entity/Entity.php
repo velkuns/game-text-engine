@@ -25,7 +25,7 @@ readonly class Entity implements EntityInterface
         public EntityInfo $info,
         public Damages $damages,
         public EntityAttributes $attributes,
-        public EntityStatuses $statuses,
+        public EntityTraits $traits,
         public EntityInventory $inventory,
         public ?EntityLoot $loot,
         public ?EntityEquipment $equipment,
@@ -56,9 +56,9 @@ readonly class Entity implements EntityInterface
         return $this->attributes;
     }
 
-    public function getStatuses(): EntityStatuses
+    public function getTraits(): EntityTraits
     {
-        return $this->statuses;
+        return $this->traits;
     }
 
     public function getInventory(): EntityInventory
@@ -76,9 +76,9 @@ readonly class Entity implements EntityInterface
         return $this->equipment;
     }
 
-    public function hasStatus(string $type, string $name): bool
+    public function hasTrait(string $type, string $name): bool
     {
-        return $this->getStatuses()->getByType($type, $name) !== null;
+        return $this->getTraits()->getByType($type, $name) !== null;
     }
 
     public function isAlive(): bool
@@ -91,7 +91,7 @@ readonly class Entity implements EntityInterface
      */
     public function getModifiers(EntityInterface $enemy): array
     {
-        return $this->statuses->getAllModifiers($this, $enemy);
+        return $this->traits->getAllModifiers($this, $enemy);
     }
 
     /**
@@ -105,7 +105,7 @@ readonly class Entity implements EntityInterface
             'info'       => $this->getInfo()->jsonSerialize(),
             'damages'    => $this->getDamages()->jsonSerialize(),
             'attributes' => $this->getAttributes()->jsonSerialize(),
-            'statuses'   => $this->getStatuses()->jsonSerialize(),
+            'traits'   => $this->getTraits()->jsonSerialize(),
             'inventory'  => $this->getInventory()->jsonSerialize(),
         ];
 
@@ -128,7 +128,7 @@ readonly class Entity implements EntityInterface
             info: $this->getInfo()->clone(),
             damages: $this->getDamages()->clone(),
             attributes: $this->getAttributes()->clone(),
-            statuses: $this->getStatuses()->clone(),
+            traits: $this->getTraits()->clone(),
             inventory: $this->getInventory()->clone(),
             loot: $this->getLoot()?->clone(),
             equipment: $this->getEquipment()?->clone(),

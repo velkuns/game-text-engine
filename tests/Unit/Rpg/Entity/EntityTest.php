@@ -31,7 +31,7 @@ class EntityTest extends TestCase
         self::assertSame(24, $player->getAttributes()->get('vitality')?->getValue());
     }
 
-    public function testEntityStatuses(): void
+    public function testEntityTraits(): void
     {
         $player  = self::getPlayer();
         $gobelin = self::getGoblin();
