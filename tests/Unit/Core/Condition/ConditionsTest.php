@@ -29,12 +29,12 @@ class ConditionsTest extends TestCase
 
     #[DataProvider('evaluateDataProvider')]
     public function testEvaluate(
-        Conditions $conditions,
+        ?Conditions $conditions,
         EntityInterface $player,
         ?EntityInterface $enemy,
         bool $evaluation,
     ): void {
-        self::assertSame($evaluation, $conditions->evaluate($player, $enemy));
+        self::assertSame($evaluation, $conditions?->evaluate($player, $enemy));
     }
 
     /**
@@ -42,13 +42,13 @@ class ConditionsTest extends TestCase
      */
     #[DataProvider('evaluateExceptionDataProvider')]
     public function testEvaluateThatThrowException(
-        Conditions $conditions,
+        ?Conditions $conditions,
         EntityInterface $player,
         EntityInterface $enemy,
         string $exceptionClass,
     ): void {
         self::expectException($exceptionClass);
-        $conditions->evaluate($player, $enemy);
+        $conditions?->evaluate($player, $enemy);
     }
 
     /**
