@@ -18,7 +18,7 @@ use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 /**
  * @phpstan-import-type EntityInfoData from EntityInfo
  * @phpstan-import-type DamagesData from Damages
- * @phpstan-import-type AbilitiesData from EntityAbilities
+ * @phpstan-import-type AttributesData from EntityAttributes
  * @phpstan-import-type StatusesData from EntityStatuses
  * @phpstan-import-type InventoryData from EntityInventory
  * @phpstan-import-type ItemData from ItemInterface
@@ -29,7 +29,7 @@ use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
  *     type: string,
  *     info: EntityInfoData,
  *     damages: DamagesData|null,
- *     abilities: AbilitiesData,
+ *     attributes: AttributesData,
  *     statuses: StatusesData,
  *     inventory: InventoryData,
  *     loot?: EntityLootData,
@@ -46,7 +46,7 @@ interface EntityInterface extends \JsonSerializable
 
     public function getDamages(): Damages;
 
-    public function getAbilities(): EntityAbilities;
+    public function getAttributes(): EntityAttributes;
 
     public function getStatuses(): EntityStatuses;
 

@@ -64,7 +64,7 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'      => 'self.ability.strength',
+                            'type'      => 'self.attribute.strength',
                             'condition' => 'value >=  10 ',
                             'is'        => true,
                         ],
@@ -139,12 +139,12 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'     => 'self.ability.strength',
+                            'type'     => 'self.attribute.strength',
                             'condition' => 'value>10',
                             'is'        => true,
                         ],
                         [
-                            'type'      => 'self.ability.agility',
+                            'type'      => 'self.attribute.agility',
                             'condition' => 'value=15',
                             'is'        => true,
                         ],
@@ -159,12 +159,12 @@ class ConditionsTest extends TestCase
                     'numberRequired' => 2,
                     'conditions' => [
                         [
-                            'type'      => 'self.ability.strength',
+                            'type'      => 'self.attribute.strength',
                             'condition' => 'value<=10',
                             'is'        => true,
                         ],
                         [
-                            'type'      => 'self.ability.agility',
+                            'type'      => 'self.attribute.agility',
                             'condition' => 'value>0',
                             'is'        => true,
                         ],
@@ -275,7 +275,7 @@ class ConditionsTest extends TestCase
                 self::getGoblin(),
                 UnsupportedConditionTypeException::class,
             ],
-            'evaluate required conditions based on ability but property not supported' => [
+            'evaluate required conditions based on attribute but property not supported' => [
                 self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions' => [
@@ -290,12 +290,12 @@ class ConditionsTest extends TestCase
                 self::getGoblin(),
                 UnsupportedConditionTypeException::class,
             ],
-            'evaluate required conditions based on ability but ability not found' => [
+            'evaluate required conditions based on attribute but attribute not found' => [
                 self::getConditionFactory()->from([
                     'numberRequired' => 1,
                     'conditions' => [
                         [
-                            'type'      => 'self.ability.unknown',
+                            'type'      => 'self.attribute.unknown',
                             'condition' => 'value>2',
                             'is'        => true,
                         ],

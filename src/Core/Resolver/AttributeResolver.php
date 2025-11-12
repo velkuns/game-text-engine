@@ -13,31 +13,31 @@ namespace Velkuns\GameTextEngine\Core\Resolver;
 
 use Velkuns\GameTextEngine\Exception\Core\ResolverException;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedValueResolverPropertyException;
-use Velkuns\GameTextEngine\Rpg\Ability\AbilityInterface;
+use Velkuns\GameTextEngine\Rpg\Attribute\AttributeInterface;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
-readonly class AbilityResolver implements ResolverInterface
+readonly class AttributeResolver implements ResolverInterface
 {
-    private const string PATTERN = '#ability\.(?P<name>[a-z]+)#';
+    private const string PATTERN = '#attribute\.(?P<name>[a-z]+)#';
 
     public function supports(string $type): bool
     {
         return \preg_match(self::PATTERN, $type) === 1;
     }
 
-    public function resolve(string $type, EntityInterface $entity): AbilityInterface
+    public function resolve(string $type, EntityInterface $entity): AttributeInterface
     {
         \preg_match(self::PATTERN, $type, $matches);
 
         $name    = $matches['name'] ?? '';
-        $ability = $entity->getAbilities()->get($name);
+        $attribute = $entity->getAttributes()->get($name);
 
-        if ($ability === null) {
-            throw new ResolverException("Ability '$name' not found.");
+        if ($attribute === null) {
+            throw new ResolverException("Attribute '$name' not found.");
         }
 
-        return $ability;
+        return $attribute;
     }
 
     /**
@@ -45,13 +45,13 @@ readonly class AbilityResolver implements ResolverInterface
      */
     public function resolveValue(string $type, EntityInterface $entity, array $modifiers = []): int
     {
-        $ability  = $this->resolve($type, $entity);
-        $property = \substr($type, (int) \strrpos($type, '.') + 1);
+        $attribute  = $this->resolve($type, $entity);
+        $property   = \substr($type, (int) \strrpos($type, '.') + 1);
 
         return match ($property) {
-            'value'                => $ability->getValue(),
-            'value_with_modifiers' => $ability->getValueWithModifiers($modifiers),
-            default => throw new UnsupportedValueResolverPropertyException("Ability '$property' does not exist."),
+            'value'                => $attribute->getValue(),
+            'value_with_modifiers' => $attribute->getValueWithModifiers($modifiers),
+            default => throw new UnsupportedValueResolverPropertyException("Attribute '$property' does not exist."),
         };
     }
 }

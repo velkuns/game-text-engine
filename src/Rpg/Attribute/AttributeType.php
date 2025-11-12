@@ -9,6 +9,10 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Exception\Api;
+namespace Velkuns\GameTextEngine\Rpg\Attribute;
 
-class AbilitiesApiException extends \RuntimeException {}
+enum AttributeType: string
+{
+    case Base = 'base';
+    case Compound = 'compound';
+}

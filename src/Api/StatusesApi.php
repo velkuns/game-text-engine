@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Api;
 
 use Velkuns\GameTextEngine\Core\Factory\StatusFactory;
-use Velkuns\GameTextEngine\Exception\Api\AbilitiesApiException;
+use Velkuns\GameTextEngine\Exception\Api\AttributesApiException;
 use Velkuns\GameTextEngine\Exception\Api\StatusesApiException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityStatuses;
 use Velkuns\GameTextEngine\Rpg\Status\StatusInterface;
@@ -104,7 +104,7 @@ class StatusesApi
             $statuses[$type] = [];
         }
 
-        //~ Transform abilities into data and separate bases with ou without init rule.
+        //~ Transform attributes into data and separate bases with ou without init rule.
         foreach ($data as $type => $list) {
             if (!isset($statuses[$type])) {
                 throw new StatusesApiException("Unknown status '$type'", 1552);
@@ -138,7 +138,7 @@ class StatusesApi
             return \json_encode($this->rules, flags: \JSON_THROW_ON_ERROR | ($prettyPrint ? \JSON_PRETTY_PRINT : 0));
             // @codeCoverageIgnoreStart
         } catch (\JsonException $exception) {
-            throw new AbilitiesApiException('Unable to dump statuses rules data: ' . $exception->getMessage(), 1451, $exception);
+            throw new AttributesApiException('Unable to dump statuses rules data: ' . $exception->getMessage(), 1451, $exception);
         }
         // @codeCoverageIgnoreEnd
     }

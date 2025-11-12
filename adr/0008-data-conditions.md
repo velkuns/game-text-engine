@@ -14,7 +14,7 @@ So we need to define number of conditions required from a list to be considered 
 - list: list of conditions
 
 Condition types:
-- self.ability: check an ability value
+- self.attribute: check an attribute value
 - self.statuses.skill: check if a skill is present or not
 - self.statuses.state: check if a state is present or not
 - self.statuses.blessing: check if a blessing is present or not
@@ -64,7 +64,7 @@ List of supported operators are:
 #### Size of the entity (player or enemy)
 ```json
 {
-    "type": "self.ability.strength",
+    "type": "self.attribute.strength",
     "condition": "value>5",
     "is": true
 }
@@ -101,7 +101,7 @@ List of supported operators are:
 
 
 ### Examples
-Ability condition example:
+Attribute condition example:
  - At least 1 of the following conditions must be met:
    - strength > 6
    - endurance >= 5
@@ -112,12 +112,12 @@ Ability condition example:
         "numberRequired": 1,
         "conditions": [
             {
-               "type": "self.ability.strength",
+               "type": "self.attribute.strength",
                "condition": "value>6",
                "is": true
             },
             {
-               "type": "self.ability.endurance",
+               "type": "self.attribute.endurance",
                "condition": "value>=5",
                "is": true
             }
@@ -144,7 +144,7 @@ State condition example:
             "is": false
          },
          {
-            "type": "self.ability.agility",
+            "type": "self.attribute.agility",
             "condition": "value>=6",
             "is": true
          }

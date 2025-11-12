@@ -28,7 +28,7 @@ class EntityTest extends TestCase
         $player->getInventory()->get('The Sword')?->equip();
 
         self::assertSame('Brave Test Hero #1', $player->getName());
-        self::assertSame(24, $player->getAbilities()->get('vitality')?->getValue());
+        self::assertSame(24, $player->getAttributes()->get('vitality')?->getValue());
     }
 
     public function testEntityStatuses(): void
@@ -54,7 +54,7 @@ class EntityTest extends TestCase
 
         $expected  = [
             new Modifier('self.damages.physical.value', 1, $conditions),
-            new Modifier('self.ability.vitality.value', 2),
+            new Modifier('self.attribute.vitality.value', 2),
         ];
         $modifiers = $player->getModifiers($gobelin);
 

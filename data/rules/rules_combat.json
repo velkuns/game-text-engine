@@ -3,8 +3,8 @@
     "hit": {
         "chance": {
             "name": "combat.hit_chance",
-            "rule": "(attacker.ability.attack.value_with_modifiers \/ (defender.ability.defense.value_with_modifiers * 2)) * 100",
-            "description": "Calculates the chance to hit based on attacker's attack ability and defender's defense ability."
+            "rule": "(attacker.attribute.attack.value_with_modifiers \/ (defender.attribute.defense.value_with_modifiers * 2)) * 100",
+            "description": "Calculates the chance to hit based on attacker's attack attribute and defender's defense attribute."
         },
         "roll": {
             "name": "combat.hit_roll",
@@ -18,7 +18,7 @@
         },
         "damages": {
             "name": "combat.hit_damages",
-            "rule": "((attacker.ability.strength.value_with_modifiers * 2) \/ defender.ability.endurance.value_with_modifiers ) + attacker.weapon.equipped.damages_with_modifiers",
+            "rule": "((attacker.attribute.strength.value_with_modifiers * 2) \/ defender.attribute.endurance.value_with_modifiers ) + attacker.weapon.equipped.damages_with_modifiers",
             "description": "Calculates the damage dealt on a successful hit based on attacker's strength, defender's endurance, and any item bonuses."
         }
     },

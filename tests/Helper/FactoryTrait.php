@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
 use Velkuns\GameTextEngine\Core\Condition\ConditionParser;
-use Velkuns\GameTextEngine\Core\Factory\AbilityFactory;
+use Velkuns\GameTextEngine\Core\Factory\AttributeFactory;
 use Velkuns\GameTextEngine\Core\Factory\ConditionsFactory;
 use Velkuns\GameTextEngine\Core\Factory\DamageFactory;
 use Velkuns\GameTextEngine\Core\Factory\ElementFactory;
@@ -38,7 +38,7 @@ trait FactoryTrait
     {
         if (self::$entityFactory === null) {
             self::$entityFactory = new EntityFactory(
-                self::getAbilityFactory(),
+                self::getAttributeFactory(),
                 self::getStatusFactory(),
                 self::getItemFactory(),
                 self::getDamageFactory(),
@@ -53,7 +53,7 @@ trait FactoryTrait
     {
         return new ElementFactory(
             self::getEntityFactory(),
-            self::getAbilityFactory(),
+            self::getAttributeFactory(),
             self::getStatusFactory(),
             self::getItemFactory(),
             self::getConditionFactory(),
@@ -61,9 +61,9 @@ trait FactoryTrait
         );
     }
 
-    private static function getAbilityFactory(): AbilityFactory
+    private static function getAttributeFactory(): AttributeFactory
     {
-        return new AbilityFactory();
+        return new AttributeFactory();
     }
 
     private static function getLootFactory(): LootFactory

@@ -9,52 +9,52 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Rpg\Ability;
+namespace Velkuns\GameTextEngine\Rpg\Attribute;
 
-use Velkuns\GameTextEngine\Exception\Rpg\AbilityException;
+use Velkuns\GameTextEngine\Exception\Rpg\AttributeException;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
 /**
- * @phpstan-import-type ConstraintsAbilityData from ConstraintsAbility
- * @phpstan-type BaseAbilityData array{
+ * @phpstan-import-type ConstraintsAttributeData from ConstraintsAttribute
+ * @phpstan-type BaseAttributeData array{
  *     type: 'base',
  *     name: string,
  *     initial: int,
  *     value: int,
  *     max: int,
- *     constraints: ConstraintsAbilityData,
+ *     constraints: ConstraintsAttributeData,
  *     rule: string|null,
  * }
  */
-class BaseAbility implements AbilityInterface
+class BaseAttribute implements AttributeInterface
 {
     /**
-     * @param array<string, BaseAbility> $abilities
+     * @param array<string, BaseAttribute> $attributes
      */
     public function __construct(
         public readonly string $name,
         public int $value = 0,
         public int $max = 0,
-        public readonly ConstraintsAbility $constraints = new ConstraintsAbility(0, 12),
+        public readonly ConstraintsAttribute $constraints = new ConstraintsAttribute(0, 12),
         public int $initial = 0,
         public readonly ?string $rule = null,
-        public readonly array $abilities = [], // List of related abilities
+        public readonly array $attributes = [], // List of related attributes
     ) {
         if ($initial === 0) {
-            //~ Initialize ability values when not set
-            if ($rule === null || $this->abilities === []) {
-                throw new AbilityException('Ability rule nor related abilities cannot be empty for init.');
+            //~ Initialize attribute values when not set
+            if ($rule === null || $this->attributes === []) {
+                throw new AttributeException('Attribute rule nor related attributes cannot be empty for init.');
             }
-            $result = \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getInitial(), $this->abilities));
+            $result = \array_sum(\array_map(fn(BaseAttribute $attribute) => $attribute->getInitial(), $this->attributes));
             $this->initial = $result;
-            $this->value = $result;
+            $this->value   = $result;
             $this->max     = $result;
         }
     }
 
-    public function getType(): AbilityType
+    public function getType(): AttributeType
     {
-        return AbilityType::Base;
+        return AttributeType::Base;
     }
 
     public function getName(): string
@@ -77,7 +77,7 @@ class BaseAbility implements AbilityInterface
         return $this->initial;
     }
 
-    public function getConstraints(): ConstraintsAbility
+    public function getConstraints(): ConstraintsAttribute
     {
         return $this->constraints;
     }
@@ -116,7 +116,7 @@ class BaseAbility implements AbilityInterface
     }
 
     /**
-     * Apply modifiers to value ability value and return a new instance with modified value.
+     * Apply modifiers to value attribute value and return a new instance with modified value.
      *
      * @param list<Modifier> $modifiers
      */
@@ -124,7 +124,7 @@ class BaseAbility implements AbilityInterface
     {
         $value = $this->getValue();
         foreach ($modifiers as $modifier) {
-            if (!\str_contains($modifier->type, '.ability.' . $this->name)) {
+            if (!\str_contains($modifier->type, '.attribute.' . $this->name)) {
                 continue;
             }
 
@@ -135,12 +135,12 @@ class BaseAbility implements AbilityInterface
     }
 
     /**
-     * @return BaseAbilityData
+     * @return BaseAttributeData
      */
     public function jsonSerialize(): array
     {
         return [
-            'type'        => AbilityType::Base->value,
+            'type'        => AttributeType::Base->value,
             'name'        => $this->name,
             'initial'     => $this->initial,
             'max'         => $this->max,
@@ -156,10 +156,10 @@ class BaseAbility implements AbilityInterface
             name: $this->name,
             value: $this->value,
             max: $this->max,
-            constraints: new ConstraintsAbility($this->constraints->min, $this->constraints->max),
+            constraints: new ConstraintsAttribute($this->constraints->min, $this->constraints->max),
             initial: $this->initial,
             rule: $this->rule,
-            abilities: $this->abilities,
+            attributes: $this->attributes,
         );
     }
 }

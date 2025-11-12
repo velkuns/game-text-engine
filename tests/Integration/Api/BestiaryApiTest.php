@@ -42,9 +42,9 @@ class BestiaryApiTest extends TestCase
         $entityData = $entity->jsonSerialize();
         $entityData['name'] = 'Goblin Warrior';
 
-        self::assertArrayHasKey('strength', $entityData['abilities']['bases']);
+        self::assertArrayHasKey('strength', $entityData['attributes']['bases']);
 
-        $entityData['abilities']['bases']['strength']['value'] = 20;
+        $entityData['attributes']['bases']['strength']['value'] = 20;
 
         $goblinWarrior = self::getEntityFactory()->from($entityData);
 
@@ -53,7 +53,7 @@ class BestiaryApiTest extends TestCase
         $goblinWarriorFromBestiary = $bestiary->get('Goblin Warrior', false);
 
         self::assertSame($goblinWarrior, $goblinWarriorFromBestiary); // get as no clone
-        self::assertSame(20, $goblinWarriorFromBestiary->getAbilities()->get('strength')?->getValue());
+        self::assertSame(20, $goblinWarriorFromBestiary->getAttributes()->get('strength')?->getValue());
 
         //~ Now remove Goblin Warrior entity and check it is removed
         $bestiary->remove($goblinWarriorFromBestiary->getName());
@@ -80,43 +80,43 @@ class BestiaryApiTest extends TestCase
         $lesserGoblin = $bestiary->get('Goblin', autoLevel: -2);
 
         $betterExpected = [
-            'strength'  => ($goblin->getAbilities()->get('strength')?->getValue() ?? 0) + 2,
-            'endurance' => ($goblin->getAbilities()->get('endurance')?->getValue() ?? 0) + 2,
-            'agility'   => ($goblin->getAbilities()->get('agility')?->getValue() ?? 0) + 2,
-            'intuition' => ($goblin->getAbilities()->get('intuition')?->getValue() ?? 0) + 2,
-            'vitality'  => ($goblin->getAbilities()->get('vitality')?->getValue() ?? 0) + 6,
-            'attack'    => ($goblin->getAbilities()->get('attack')?->getValue() ?? 0) + 4,
-            'defense'   => ($goblin->getAbilities()->get('defense')?->getValue() ?? 0) + 4,
+            'strength'  => ($goblin->getAttributes()->get('strength')?->getValue() ?? 0) + 2,
+            'endurance' => ($goblin->getAttributes()->get('endurance')?->getValue() ?? 0) + 2,
+            'agility'   => ($goblin->getAttributes()->get('agility')?->getValue() ?? 0) + 2,
+            'intuition' => ($goblin->getAttributes()->get('intuition')?->getValue() ?? 0) + 2,
+            'vitality'  => ($goblin->getAttributes()->get('vitality')?->getValue() ?? 0) + 6,
+            'attack'    => ($goblin->getAttributes()->get('attack')?->getValue() ?? 0) + 4,
+            'defense'   => ($goblin->getAttributes()->get('defense')?->getValue() ?? 0) + 4,
         ];
 
         $betterAutoLeveling = [
-            'strength'  => ($betterGoblin->getAbilities()->get('strength')?->getValue() ?? 0),
-            'endurance' => ($betterGoblin->getAbilities()->get('endurance')?->getValue() ?? 0),
-            'agility'   => ($betterGoblin->getAbilities()->get('agility')?->getValue() ?? 0),
-            'intuition' => ($betterGoblin->getAbilities()->get('intuition')?->getValue() ?? 0),
-            'vitality'  => ($betterGoblin->getAbilities()->get('vitality')?->getValue() ?? 0),
-            'attack'    => ($betterGoblin->getAbilities()->get('attack')?->getValue() ?? 0),
-            'defense'   => ($betterGoblin->getAbilities()->get('defense')?->getValue() ?? 0),
+            'strength'  => ($betterGoblin->getAttributes()->get('strength')?->getValue() ?? 0),
+            'endurance' => ($betterGoblin->getAttributes()->get('endurance')?->getValue() ?? 0),
+            'agility'   => ($betterGoblin->getAttributes()->get('agility')?->getValue() ?? 0),
+            'intuition' => ($betterGoblin->getAttributes()->get('intuition')?->getValue() ?? 0),
+            'vitality'  => ($betterGoblin->getAttributes()->get('vitality')?->getValue() ?? 0),
+            'attack'    => ($betterGoblin->getAttributes()->get('attack')?->getValue() ?? 0),
+            'defense'   => ($betterGoblin->getAttributes()->get('defense')?->getValue() ?? 0),
         ];
 
         $lesserExpected = [
-            'strength'  => ($goblin->getAbilities()->get('strength')?->getValue() ?? 0) - 2,
-            'endurance' => ($goblin->getAbilities()->get('endurance')?->getValue() ?? 0) - 2,
-            'agility'   => ($goblin->getAbilities()->get('agility')?->getValue() ?? 0) - 2,
-            'intuition' => ($goblin->getAbilities()->get('intuition')?->getValue() ?? 0) - 2,
-            'vitality'  => ($goblin->getAbilities()->get('vitality')?->getValue() ?? 0) - 6,
-            'attack'    => ($goblin->getAbilities()->get('attack')?->getValue() ?? 0) - 4,
-            'defense'   => ($goblin->getAbilities()->get('defense')?->getValue() ?? 0) - 4,
+            'strength'  => ($goblin->getAttributes()->get('strength')?->getValue() ?? 0) - 2,
+            'endurance' => ($goblin->getAttributes()->get('endurance')?->getValue() ?? 0) - 2,
+            'agility'   => ($goblin->getAttributes()->get('agility')?->getValue() ?? 0) - 2,
+            'intuition' => ($goblin->getAttributes()->get('intuition')?->getValue() ?? 0) - 2,
+            'vitality'  => ($goblin->getAttributes()->get('vitality')?->getValue() ?? 0) - 6,
+            'attack'    => ($goblin->getAttributes()->get('attack')?->getValue() ?? 0) - 4,
+            'defense'   => ($goblin->getAttributes()->get('defense')?->getValue() ?? 0) - 4,
         ];
 
         $lesserAutoLeveling = [
-            'strength'  => ($lesserGoblin->getAbilities()->get('strength')?->getValue() ?? 0),
-            'endurance' => ($lesserGoblin->getAbilities()->get('endurance')?->getValue() ?? 0),
-            'agility'   => ($lesserGoblin->getAbilities()->get('agility')?->getValue() ?? 0),
-            'intuition' => ($lesserGoblin->getAbilities()->get('intuition')?->getValue() ?? 0),
-            'vitality'  => ($lesserGoblin->getAbilities()->get('vitality')?->getValue() ?? 0),
-            'attack'    => ($lesserGoblin->getAbilities()->get('attack')?->getValue() ?? 0),
-            'defense'   => ($lesserGoblin->getAbilities()->get('defense')?->getValue() ?? 0),
+            'strength'  => ($lesserGoblin->getAttributes()->get('strength')?->getValue() ?? 0),
+            'endurance' => ($lesserGoblin->getAttributes()->get('endurance')?->getValue() ?? 0),
+            'agility'   => ($lesserGoblin->getAttributes()->get('agility')?->getValue() ?? 0),
+            'intuition' => ($lesserGoblin->getAttributes()->get('intuition')?->getValue() ?? 0),
+            'vitality'  => ($lesserGoblin->getAttributes()->get('vitality')?->getValue() ?? 0),
+            'attack'    => ($lesserGoblin->getAttributes()->get('attack')?->getValue() ?? 0),
+            'defense'   => ($lesserGoblin->getAttributes()->get('defense')?->getValue() ?? 0),
         ];
 
 

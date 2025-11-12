@@ -9,6 +9,6 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Exception\Rpg;
+namespace Velkuns\GameTextEngine\Exception\Api;
 
-class AbilityException extends \RuntimeException {}
+class AttributesApiException extends \RuntimeException {}

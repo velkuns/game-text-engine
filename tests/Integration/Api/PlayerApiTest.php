@@ -14,7 +14,7 @@ namespace Velkuns\GameTextEngine\Tests\Integration\Api;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Exception\Api\PlayerApiException;
-use Velkuns\GameTextEngine\Exception\Rules\AbilitiesRulesException;
+use Velkuns\GameTextEngine\Exception\Rules\AttributesRulesException;
 use Velkuns\GameTextEngine\Exception\Rules\PlayerRulesException;
 use Velkuns\GameTextEngine\Exception\Rules\StatusesRulesException;
 use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
@@ -42,7 +42,7 @@ class PlayerApiTest extends TestCase
             'gender'      => 'non-binary',
             'description' => 'A brave hero',
             'background'  => 'Born in a small village',
-            'abilities' => [
+            'attributes' => [
                 'strength'  => 11,
                 'endurance' => 12,
                 'agility'   => 13,
@@ -69,7 +69,7 @@ class PlayerApiTest extends TestCase
             'gender'      => 'non-binary',
             'description' => 'A brave hero',
             'background'  => 'Born in a small village',
-            'abilities' => [
+            'attributes' => [
                 'strength'  => 11,
                 'endurance' => 12,
                 'agility'   => 13,
@@ -79,17 +79,17 @@ class PlayerApiTest extends TestCase
         ];
 
         $playerApi->new($newPlayerData);
-        self::assertSame(23, $playerApi->player->getAbilities()->get('vitality')?->getValue());
+        self::assertSame(23, $playerApi->player->getAttributes()->get('vitality')?->getValue());
 
         $playerApi->player->getInventory()->get('Small Health Potion')?->setQuantity(2);
         $playerApi->consume('Small Health Potion'); // (11 + 12) +5 vitality => should be 28
 
-        self::assertSame(28, $playerApi->player->getAbilities()->get('vitality')->getValue());
+        self::assertSame(28, $playerApi->player->getAttributes()->get('vitality')->getValue());
         self::assertSame(1, $playerApi->player->getInventory()->get('Small Health Potion')?->getQuantity());
 
         $playerApi->consume('Small Health Potion');
 
-        self::assertSame(33, $playerApi->player->getAbilities()->get('vitality')->getValue());
+        self::assertSame(33, $playerApi->player->getAttributes()->get('vitality')->getValue());
         self::assertNull($playerApi->player->getInventory()->get('Small Health Potion'));
     }
 
@@ -104,7 +104,7 @@ class PlayerApiTest extends TestCase
             'gender'      => 'non-binary',
             'description' => 'A brave hero',
             'background'  => 'Born in a small village',
-            'abilities' => [
+            'attributes' => [
                 'strength'  => 11,
                 'endurance' => 12,
                 'agility'   => 13,
@@ -131,7 +131,7 @@ class PlayerApiTest extends TestCase
             'gender'      => 'non-binary',
             'description' => 'A brave hero',
             'background'  => 'Born in a small village',
-            'abilities' => [
+            'attributes' => [
                 'strength'  => 11,
                 'endurance' => 12,
                 'agility'   => 13,
@@ -153,7 +153,7 @@ class PlayerApiTest extends TestCase
         $playerApi->player->getInfo()->level = 2;
         $playerApi->player->getInfo()->xp    = 220;
 
-        $abilities = [
+        $attributes = [
             'strength'  => 1,
             'endurance' => 1,
             'agility'   => 1,
@@ -163,19 +163,19 @@ class PlayerApiTest extends TestCase
 
         self::assertSame(2, $playerApi->player->getInfo()->level);
         self::assertSame(220, $playerApi->player->getInfo()->xp);
-        self::assertSame(23, $playerApi->player->getAbilities()->get('vitality')?->getValue());
+        self::assertSame(23, $playerApi->player->getAttributes()->get('vitality')?->getValue());
         self::assertNull($playerApi->player->getStatuses()->getByType('skill', 'Archery (Mastery)')?->getName());
 
-        $playerApi->levelUp($abilities, ['skill' => ['Archery (Mastery)']]);
+        $playerApi->levelUp($attributes, ['skill' => ['Archery (Mastery)']]);
 
         self::assertSame(3, $playerApi->player->getInfo()->level);
         self::assertSame(20, $playerApi->player->getInfo()->xp);
         self::assertSame('Archery (Mastery)', $playerApi->player->getStatuses()->getByType('skill', 'Archery (Mastery)')?->getName());
-        self::assertSame(24, $playerApi->player->getAbilities()->get('vitality')->getValue());
+        self::assertSame(24, $playerApi->player->getAttributes()->get('vitality')->getValue());
     }
 
     /**
-     * @param array<string, int> $abilities
+     * @param array<string, int> $attributes
      * @param array<string, list<string>> $statuses
      * @param class-string<\Throwable> $exception
      */
@@ -183,7 +183,7 @@ class PlayerApiTest extends TestCase
     public function testLevelUpButHaveError(
         int $level,
         int $xp,
-        array $abilities,
+        array $attributes,
         array $statuses,
         string $exception,
         string $message,
@@ -196,13 +196,13 @@ class PlayerApiTest extends TestCase
         self::expectException($exception);
         self::expectExceptionMessage($message);
         self::expectExceptionCode($code);
-        $playerApi->levelUp($abilities, $statuses);
+        $playerApi->levelUp($attributes, $statuses);
     }
 
     /**
      * @return array<string, array{
      *     level: int,
-     *     abilities: array<string, int>,
+     *     attributes: array<string, int>,
      *     statuses: array<string, list<string>>,
      *     exception: class-string<\Throwable>,
      *     message: string,
@@ -215,7 +215,7 @@ class PlayerApiTest extends TestCase
             'max level already reached' => [
                 'level'     => 10,
                 'xp'        => 1000,
-                'abilities' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
+                'attributes' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
                 'statuses'  => ['skill' => ['Archery (Mastery)']],
                 'exception' => PlayerRulesException::class,
                 'message'   => 'You already reached the max level (10)',
@@ -224,43 +224,43 @@ class PlayerApiTest extends TestCase
             'Not enough xp to level up' => [
                 'level'     => 1,
                 'xp'        => 95,
-                'abilities' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
+                'attributes' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
                 'statuses'  => ['skill' => ['Archery (Mastery)']],
                 'exception' => PlayerRulesException::class,
                 'message'   => "You need 5 XP to reach the next level.",
                 'code'      => 2301,
             ],
-            'to much abilities points for one ability' => [
+            'to much attributes points for one attribute' => [
                 'level'     => 1,
                 'xp'        => 100,
-                'abilities' => ['strength' => 3, 'endurance' => 0, 'agility' => 0, 'intuition' => 1, 'vitality' => 1],
+                'attributes' => ['strength' => 3, 'endurance' => 0, 'agility' => 0, 'intuition' => 1, 'vitality' => 1],
                 'statuses'  => ['skill' => ['Archery (Mastery)']],
-                'exception' => AbilitiesRulesException::class,
-                'message'   => "Only 2 point(s) per ability is allowed for level up.",
+                'exception' => AttributesRulesException::class,
+                'message'   => "Only 2 point(s) per attribute is allowed for level up.",
                 'code'      => 2100,
             ],
-            'to much abilities points in total' => [
+            'to much attributes points in total' => [
                 'level'     => 1,
                 'xp'        => 100,
-                'abilities' => ['strength' => 2, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
+                'attributes' => ['strength' => 2, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
                 'statuses'  => ['skill' => ['Archery (Mastery)']],
-                'exception' => AbilitiesRulesException::class,
+                'exception' => AttributesRulesException::class,
                 'message'   => "Only 5 point(s) is allowed for level up.",
                 'code'      => 2101,
             ],
             'remaining points to attribute' => [
                 'level'     => 1,
                 'xp'        => 100,
-                'abilities' => ['strength' => 1, 'endurance' => 0, 'agility' => 0, 'intuition' => 1, 'vitality' => 1],
+                'attributes' => ['strength' => 1, 'endurance' => 0, 'agility' => 0, 'intuition' => 1, 'vitality' => 1],
                 'statuses'  => ['skill' => ['Archery (Mastery)']],
-                'exception' => AbilitiesRulesException::class,
-                'message'   => "Remaining 2 point(s) to attribute to abilities",
+                'exception' => AttributesRulesException::class,
+                'message'   => "Remaining 2 point(s) to attribute to attributes",
                 'code'      => 2102,
             ],
             'new status not allowed on this level' => [
                 'level'     => 1,
                 'xp'        => 100,
-                'abilities' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
+                'attributes' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
                 'statuses'  => ['skill' => ['Archery (Mastery)']],
                 'exception' => StatusesRulesException::class,
                 'message'   => "New statuses only allowed every 2 level(s).",
@@ -269,7 +269,7 @@ class PlayerApiTest extends TestCase
             'no attribution allowed of this kind of status' => [
                 'level'     => 2,
                 'xp'        => 200,
-                'abilities' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
+                'attributes' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
                 'statuses'  => ['skill' => ['Archery (Mastery)'], 'state' => ['poisoned']],
                 'exception' => StatusesRulesException::class,
                 'message'   => "Only 0 'state' allowed, 1 given.",
@@ -278,7 +278,7 @@ class PlayerApiTest extends TestCase
             'remaining status of this kind to attribute' => [
                 'level'     => 2,
                 'xp'        => 200,
-                'abilities' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
+                'attributes' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
                 'statuses'  => [],
                 'exception' => StatusesRulesException::class,
                 'message'   => "Remaining 1 status(es) of 'skill' to attribute.",
@@ -287,7 +287,7 @@ class PlayerApiTest extends TestCase
             'status not found' => [
                 'level'     => 2,
                 'xp'        => 200,
-                'abilities' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
+                'attributes' => ['strength' => 1, 'endurance' => 1, 'agility' => 1, 'intuition' => 1, 'vitality' => 1],
                 'statuses'  => ['skill' => ['Archery (Not Exists)']],
                 'exception' => StatusesRulesException::class,
                 'message'   => "Status 'Archery (Not Exists)' of type 'skill' not found.",

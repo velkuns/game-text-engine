@@ -27,16 +27,16 @@ class CombatApiTest extends TestCase
         $player = self::getPlayer();
         $goblin = self::getGoblin();
 
-        self::assertSame(24, $player->getAbilities()->get('vitality')?->getValue());
-        self::assertSame(16, $goblin->getAbilities()->get('vitality')?->getValue());
+        self::assertSame(24, $player->getAttributes()->get('vitality')?->getValue());
+        self::assertSame(16, $goblin->getAttributes()->get('vitality')?->getValue());
 
         //~ Turn #1 - Player attacks Goblin
         $log = $combatApi->tick($player, $goblin);
 
         self::assertTrue($log->isHit(), $log->debug['hitChance'] ?? '');
         self::assertSame(5, $log->damages, $log->debug['damages'] ?? '');
-        self::assertSame(24, $player->getAbilities()->get('vitality')->getValue());
-        self::assertSame(11, $goblin->getAbilities()->get('vitality')->getValue());
+        self::assertSame(24, $player->getAttributes()->get('vitality')->getValue());
+        self::assertSame(11, $goblin->getAttributes()->get('vitality')->getValue());
         self::assertSame("Brave Test Hero #1 'hit' Goblin #1 with The Sword and make 5 damage(s).", (string) $log);
         self::assertSame('((10 * 2) / 8 ) + 3', $log->debug['damages'] ?? '');
 
@@ -45,8 +45,8 @@ class CombatApiTest extends TestCase
 
         self::assertTrue($log->isHit(), $log->debug['hitChance'] ?? '');
         self::assertSame(2, $log->damages, $log->debug['damages'] ?? '');
-        self::assertSame(22, $player->getAbilities()->get('vitality')->getValue());
-        self::assertSame(11, $goblin->getAbilities()->get('vitality')->getValue());
+        self::assertSame(22, $player->getAttributes()->get('vitality')->getValue());
+        self::assertSame(11, $goblin->getAttributes()->get('vitality')->getValue());
         self::assertSame("Goblin #1 'hit' Brave Test Hero #1 with The Dagger and make 2 damage(s).", (string) $log);
         self::assertSame('((8 * 2) / 14 ) + 1', $log->debug['damages'] ?? '');
 
@@ -55,8 +55,8 @@ class CombatApiTest extends TestCase
 
         self::assertFalse($log->isHit(), $log->debug['hitChance'] ?? '');
         self::assertSame(5, $log->damages, $log->debug['damages'] ?? '');
-        self::assertSame(22, $player->getAbilities()->get('vitality')->getValue());
-        self::assertSame(11, $goblin->getAbilities()->get('vitality')->getValue());
+        self::assertSame(22, $player->getAttributes()->get('vitality')->getValue());
+        self::assertSame(11, $goblin->getAttributes()->get('vitality')->getValue());
         self::assertSame("Brave Test Hero #1 'miss' Goblin #1 with The Sword.", (string) $log);
 
         //~ Turn #4 - Goblin attacks Player
@@ -64,8 +64,8 @@ class CombatApiTest extends TestCase
 
         self::assertFalse($log->isHit(), $log->debug['hitChance'] ?? '');
         self::assertSame(2, $log->damages, $log->debug['damages'] ?? '');
-        self::assertSame(22, $player->getAbilities()->get('vitality')->getValue());
-        self::assertSame(11, $goblin->getAbilities()->get('vitality')->getValue());
+        self::assertSame(22, $player->getAttributes()->get('vitality')->getValue());
+        self::assertSame(11, $goblin->getAttributes()->get('vitality')->getValue());
 
         self::assertTrue($player->isAlive());
         self::assertTrue($goblin->isAlive());

@@ -31,7 +31,7 @@ use Velkuns\GameTextEngine\Rpg\Entity\EntityLoot;
  *    size: string,
  *    level?: int,
  *    gender?: string,
- *    abilities: array<string, int>,
+ *    attributes: array<string, int>,
  *    inventory?: array{coins?: int, items?: list<string>},
  *    loot?: EntityLootData,
  *    equipment?: EquipmentData,
@@ -39,15 +39,15 @@ use Velkuns\GameTextEngine\Rpg\Entity\EntityLoot;
  * }
  * @phpstan-type BestiaryFileData array{
  *    autoLeveling: array{
- *        abilities: array<string, int>,
+ *        attributes: array<string, int>,
  *    },
  *    list: list<BestiaryData>,
  * }
  */
 class BestiaryApi
 {
-    /** @var array{abilities: array<string, int>} $autoLeveling */
-    private array $autoLeveling = ['abilities' => []];
+    /** @var array{attributes: array<string, int>} $autoLeveling */
+    private array $autoLeveling = ['attributes' => []];
 
     /** @var array<string, EntityInterface> $bestiary */
     private array $bestiary = [];
@@ -83,9 +83,9 @@ class BestiaryApi
         $entity = $asClone ? $this->bestiary[$lowerCaseName]->clone() : $this->bestiary[$lowerCaseName];
 
         if ($autoLevel !== 0) {
-            foreach ($this->autoLeveling['abilities'] as $abilityName => $value) {
+            foreach ($this->autoLeveling['attributes'] as $attributeName => $value) {
                 $value   = $autoLevel * $value;
-                $entity->getAbilities()->get($abilityName)?->increase($value);
+                $entity->getAttributes()->get($attributeName)?->increase($value);
             }
 
         }
@@ -128,11 +128,11 @@ class BestiaryApi
                     'level'     => $entity->getInfo()->level,
                     'gender'    => $entity->getInfo()->gender,
                     'damages'   => $entity->getDamages()->jsonSerialize(),
-                    'abilities' => [
-                        'strength'  => $entity->getAbilities()->get('strength')?->getValue() ?? 0,
-                        'endurance' => $entity->getAbilities()->get('endurance')?->getValue() ?? 0,
-                        'agility'   => $entity->getAbilities()->get('agility')?->getValue() ?? 0,
-                        'intuition' => $entity->getAbilities()->get('intuition')?->getValue() ?? 0,
+                    'attributes' => [
+                        'strength'  => $entity->getAttributes()->get('strength')?->getValue() ?? 0,
+                        'endurance' => $entity->getAttributes()->get('endurance')?->getValue() ?? 0,
+                        'agility'   => $entity->getAttributes()->get('agility')?->getValue() ?? 0,
+                        'intuition' => $entity->getAttributes()->get('intuition')?->getValue() ?? 0,
                     ],
                 ];
 
@@ -184,10 +184,10 @@ class BestiaryApi
 
         $damages = $data['damages'] ?? [];
 
-        //~ Build abilities
-        $abilities = ['bases' => [], 'compounds' => []];
-        foreach ($data['abilities'] as $name => $value) {
-            $abilities['bases'][$name] = [
+        //~ Build attributes
+        $attributes = ['bases' => [], 'compounds' => []];
+        foreach ($data['attributes'] as $name => $value) {
+            $attributes['bases'][$name] = [
                 'type'        => 'base',
                 'name'        => $name,
                 'initial'     => $value,
@@ -197,7 +197,7 @@ class BestiaryApi
                 'rule'        => null,
             ];
         }
-        $abilities['bases']['vitality'] = [
+        $attributes['bases']['vitality'] = [
             'type'        => 'base',
             'name'        => 'vitality',
             'initial'     => 0,
@@ -206,8 +206,8 @@ class BestiaryApi
             'constraints' => ['min' => 0, 'max' => 40],
             'rule'        => 'strength + endurance',
         ];
-        $abilities['compounds']['attack']  = ['type' => 'compound', 'name' => 'attack', 'rule' => 'strength + agility'];
-        $abilities['compounds']['defense'] = ['type' => 'compound', 'name' => 'defense','rule' => 'endurance + intuition'];
+        $attributes['compounds']['attack']  = ['type' => 'compound', 'name' => 'attack', 'rule' => 'strength + agility'];
+        $attributes['compounds']['defense'] = ['type' => 'compound', 'name' => 'defense','rule' => 'endurance + intuition'];
 
         //~ Initialize empty statuses
         $statuses  = ['skills' => [], 'states' => [], 'blessings' => [], 'curses' => [], 'titles' => []];
@@ -235,7 +235,7 @@ class BestiaryApi
             'type'      => $data['type'],
             'info'      => $info,
             'damages'   => $damages,
-            'abilities' => $abilities,
+            'attributes' => $attributes,
             'statuses'  => $statuses,
             'inventory' => $inventory,
         ];

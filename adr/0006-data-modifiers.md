@@ -6,7 +6,7 @@
 
 ## Context
 
-When we have some magical items or effects that can modify the value of an ability (like a `+2 sword` that increase
+When we have some magical items or effects that can modify the value of an attribute (like a `+2 sword` that increase
 `strength` by `2`),
 we need to have a clear definition of how the modifier is stored.
 
@@ -35,7 +35,7 @@ Example:
 
 ```json
 {
-    "type": "self.ability.strength.value",
+    "type": "self.attribute.strength.value",
     "value": 2,
     "conditions": {
         "numberRequired": 1,

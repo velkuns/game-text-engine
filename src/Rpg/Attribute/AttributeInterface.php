@@ -9,13 +9,13 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Rpg\Ability;
+namespace Velkuns\GameTextEngine\Rpg\Attribute;
 
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
-interface AbilityInterface extends \JsonSerializable
+interface AttributeInterface extends \JsonSerializable
 {
-    public function getType(): AbilityType;
+    public function getType(): AttributeType;
 
     public function getName(): string;
 
@@ -25,7 +25,7 @@ interface AbilityInterface extends \JsonSerializable
 
     public function getInitial(): int;
 
-    public function getConstraints(): ConstraintsAbility;
+    public function getConstraints(): ConstraintsAttribute;
 
     public function getRule(): ?string;
 
@@ -38,7 +38,7 @@ interface AbilityInterface extends \JsonSerializable
     public function increaseMax(int $value): self;
 
     /**
-     * Apply modifiers to value ability value and return a new instance with modified value.
+     * Apply modifiers to value attribute value and return a new instance with modified value.
      *
      * @param list<Modifier> $modifiers
      */

@@ -73,14 +73,14 @@ class EvaluatorTest extends TestCase
                 'context'      => null,
                 'expected'     => 2,
             ],
-            'rule with ability' => [
-                'rule'         => '(attacker.ability.attack.value / (defender.ability.defense.value * 2)) * 100',
+            'rule with attribute' => [
+                'rule'         => '(attacker.attribute.attack.value / (defender.attribute.defense.value * 2)) * 100',
                 'renderedRule' => '(25 / (18 * 2)) * 100',
                 'context'      => null,
                 'expected'     => 69.44,
             ],
-            'rule with abilities and equipped weapon' => [
-                'rule'         => '(attacker.ability.strength.value * 2) - defender.ability.endurance.value + attacker.weapon.equipped.damages',
+            'rule with attributes and equipped weapon' => [
+                'rule'         => '(attacker.attribute.strength.value * 2) - defender.attribute.endurance.value + attacker.weapon.equipped.damages',
                 'renderedRule' => '(10 * 2) - 8 + 2',
                 'context'      => ['combat.hit_chance' => 10],
                 'expected'     => 14,
@@ -127,7 +127,7 @@ class EvaluatorTest extends TestCase
                 'code'         => 3001,
             ],
             'defender in rule, but no enemy provided' => [
-                'rule'         => '(attacker.ability.attack.value / (defender.ability.defense.value * 2)) * 100',
+                'rule'         => '(attacker.attribute.attack.value / (defender.attribute.defense.value * 2)) * 100',
                 'exception'    => EvaluatorException::class,
                 'code'         => 3003,
             ],

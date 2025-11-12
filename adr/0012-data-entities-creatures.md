@@ -30,9 +30,9 @@ Format:
         "background": "",
         "notes": ""
     },
-    "abilities": {
-        "base": "list<BaseAbility>",
-        "compound": "list<CompoundAbility>"
+    "attributes": {
+        "base": "list<BaseAttribute>",
+        "compound": "list<CompoundAttribute>"
     },
     "statuses": {
     "skills": "list<Status>",
@@ -59,9 +59,9 @@ Example:
         "background": "",
         "notes": ""
     },
-    "abilities": {
-        "base": "list<BaseAbility>",
-        "compound": "list<CompoundAbility>"
+    "attributes": {
+        "base": "list<BaseAttribute>",
+        "compound": "list<CompoundAttribute>"
     },
     "statuses": {
         "skills": "list<Status>",

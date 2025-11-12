@@ -1,6 +1,6 @@
 {
     "autoLeveling": {
-        "abilities": {
+        "attributes": {
             "strength": 1,
             "endurance": 1,
             "agility": 1,
@@ -21,7 +21,7 @@
                     "value": 0
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 4,
                 "endurance": 4,
                 "agility": 15,
@@ -40,7 +40,7 @@
                     "value": 0
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 9,
                 "endurance": 11,
                 "agility": 9,
@@ -58,7 +58,7 @@
                     "value": 5
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 15,
                 "endurance": 10,
                 "agility": 10,
@@ -76,7 +76,7 @@
                     "value": 0
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 8,
                 "endurance": 8,
                 "agility": 12,
@@ -114,7 +114,7 @@
                     "value": 1
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 12,
                 "endurance": 10,
                 "agility": 10,
@@ -146,7 +146,7 @@
                     "value": 1
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 12,
                 "endurance": 10,
                 "agility": 12,
@@ -193,7 +193,7 @@
                     "value": 2
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 8,
                 "endurance": 8,
                 "agility": 14,
@@ -211,7 +211,7 @@
                     "value": 3
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 12,
                 "endurance": 10,
                 "agility": 12,
@@ -229,7 +229,7 @@
                     "value": 4
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 14,
                 "endurance": 12,
                 "agility": 12,
@@ -247,7 +247,7 @@
                     "value": 2
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 10,
                 "endurance": 10,
                 "agility": 8,
@@ -283,7 +283,7 @@
                     "value": 4
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 12,
                 "endurance": 10,
                 "agility": 6,
@@ -301,7 +301,7 @@
                     "value": 0
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 10,
                 "endurance": 12,
                 "agility": 14,
@@ -339,7 +339,7 @@
                     "value": 0
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 12,
                 "endurance": 12,
                 "agility": 10,
@@ -381,7 +381,7 @@
                     "value": 0
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 13,
                 "endurance": 12,
                 "agility": 11,
@@ -417,7 +417,7 @@
                     "value": 0
                 }
             },
-            "abilities": {
+            "attributes": {
                 "strength": 10,
                 "endurance": 10,
                 "agility": 10,

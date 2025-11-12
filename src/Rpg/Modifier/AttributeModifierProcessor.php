@@ -12,18 +12,18 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Rpg\Modifier;
 
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedModifierProcessorPropertyException;
-use Velkuns\GameTextEngine\Rpg\Ability\AbilityInterface;
+use Velkuns\GameTextEngine\Rpg\Attribute\AttributeInterface;
 
-readonly class AbilityModifierProcessor implements ModifierProcessInterface
+readonly class AttributeModifierProcessor implements ModifierProcessInterface
 {
     public function supports(string $type): bool
     {
-        return \str_starts_with($type, 'ability.');
+        return \str_starts_with($type, 'attribute.');
     }
 
     public function apply(string $type, object $element, int $value): void
     {
-        if (!$element instanceof AbilityInterface) {
+        if (!$element instanceof AttributeInterface) {
             return; // @codeCoverageIgnore
         }
 
@@ -31,7 +31,7 @@ readonly class AbilityModifierProcessor implements ModifierProcessInterface
 
         match ($property) {
             'value' => $value > 0 ? $element->increase($value) : $element->decrease($value),
-            default => throw new UnsupportedModifierProcessorPropertyException("Ability property '$property' does not exist."),
+            default => throw new UnsupportedModifierProcessorPropertyException("Attribute property '$property' does not exist."),
         };
     }
 }

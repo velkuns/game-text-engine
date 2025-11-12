@@ -21,7 +21,7 @@ use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Graph\Node;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
-use Velkuns\GameTextEngine\Rules\Abilities\AbilitiesRules;
+use Velkuns\GameTextEngine\Rules\Attributes\AttributesRules;
 use Velkuns\GameTextEngine\Rules\Combat\CombatRules;
 use Velkuns\GameTextEngine\Rules\Player\PlayerRules;
 use Velkuns\GameTextEngine\Rules\Statuses\StatusesRules;
@@ -31,7 +31,7 @@ use Velkuns\GameTextEngine\Rules\Statuses\StatusesRules;
  * @phpstan-import-type ItemData from ItemInterface
  * @phpstan-import-type BestiaryFileData from BestiaryApi
  * @phpstan-import-type EntityData from EntityInterface
- * @phpstan-import-type AbilitiesRulesData from AbilitiesRules
+ * @phpstan-import-type AttributesRulesData from AttributesRules
  * @phpstan-import-type StatusesRulesData from StatusesRules
  * @phpstan-import-type CombatRulesData from CombatRules
  * @phpstan-import-type PlayerRulesData from PlayerRules
@@ -45,7 +45,7 @@ readonly class GameApi
         public StoryApi $story,
         public ItemsApi $items,
         public BestiaryApi $bestiary,
-        public AbilitiesApi $abilities,
+        public AttributesApi $attributes,
         public StatusesApi $statuses,
         public PlayerApi $player,
         public CombatApi $combat,
@@ -55,7 +55,7 @@ readonly class GameApi
      * @phpstan-param GraphData $storyData
      * @phpstan-param list<ItemData> $itemsData
      * @phpstan-param BestiaryFileData $bestiaryData
-     * @phpstan-param AbilitiesRulesData $abilitiesRulesData
+     * @phpstan-param AttributesRulesData $attributesRulesData
      * @phpstan-param StatusesRulesData $statusesRulesData
      * @phpstan-param CombatRulesData $combatRulesData
      * @phpstan-param PlayerRulesData $playerRulesData
@@ -65,7 +65,7 @@ readonly class GameApi
         array $storyData,
         array $itemsData,
         array $bestiaryData,
-        array $abilitiesRulesData,
+        array $attributesRulesData,
         array $statusesRulesData,
         array $combatRulesData,
         array $playerRulesData,
@@ -74,7 +74,7 @@ readonly class GameApi
         $this->story->load($storyData);
         $this->items->load($itemsData);
         $this->bestiary->load($bestiaryData);
-        $this->abilities->load($abilitiesRulesData);
+        $this->attributes->load($attributesRulesData);
         $this->statuses->load($statusesRulesData);
         $this->combat->load($combatRulesData);
         $this->player->load($playerRulesData, $playerData);
@@ -86,7 +86,7 @@ readonly class GameApi
         string $storyFile,
         string $itemsFile,
         string $bestiaryFile,
-        string $abilitiesRulesFile,
+        string $attributesRulesFile,
         string $statusesRulesFile,
         string $combatRulesFile,
         string $playerRulesFile,
@@ -102,8 +102,8 @@ readonly class GameApi
         /** @var BestiaryFileData $bestiaryData */
         $bestiaryData = $this->loader->fromFile($bestiaryFile);
 
-        /** @var AbilitiesRulesData $abilitiesRulesData */
-        $abilitiesRulesData = $this->loader->fromFile($abilitiesRulesFile);
+        /** @var AttributesRulesData $attributesRulesData */
+        $attributesRulesData = $this->loader->fromFile($attributesRulesFile);
 
         /** @var StatusesRulesData $statusesRulesData */
         $statusesRulesData = $this->loader->fromFile($statusesRulesFile);
@@ -121,7 +121,7 @@ readonly class GameApi
             $storyData,
             $itemsData,
             $bestiaryData,
-            $abilitiesRulesData,
+            $attributesRulesData,
             $statusesRulesData,
             $combatRulesData,
             $playerRulesData,
@@ -135,7 +135,7 @@ readonly class GameApi
         string $storyJson,
         string $itemsJson,
         string $bestiaryJson,
-        string $abilitiesRulesJson,
+        string $attributesRulesJson,
         string $statusesRulesJson,
         string $combatRulesJson,
         string $playerRulesJson,
@@ -151,8 +151,8 @@ readonly class GameApi
         /** @var BestiaryFileData $bestiaryData */
         $bestiaryData = $this->loader->fromString($bestiaryJson);
 
-        /** @var AbilitiesRulesData $abilitiesRulesData */
-        $abilitiesRulesData = $this->loader->fromString($abilitiesRulesJson);
+        /** @var AttributesRulesData $attributesRulesData */
+        $attributesRulesData = $this->loader->fromString($attributesRulesJson);
 
         /** @var StatusesRulesData $statusesRulesData */
         $statusesRulesData = $this->loader->fromString($statusesRulesJson);
@@ -170,7 +170,7 @@ readonly class GameApi
             $storyData,
             $itemsData,
             $bestiaryData,
-            $abilitiesRulesData,
+            $attributesRulesData,
             $statusesRulesData,
             $combatRulesData,
             $playerRulesData,
@@ -214,7 +214,7 @@ readonly class GameApi
      *     story: string,
      *     items: string,
      *     bestiary: string,
-     *     abilitiesRules: string,
+     *     attributesRules: string,
      *     statusesRules: string,
      *     combatRules: string,
      *     playerRules: string,
@@ -228,7 +228,7 @@ readonly class GameApi
                 'story'          => $this->story->dump($prettyPrint),
                 'items'          => $this->items->dump($prettyPrint),
                 'bestiary'       => $this->bestiary->dump($prettyPrint),
-                'abilitiesRules' => $this->abilities->dump($prettyPrint),
+                'attributesRules' => $this->attributes->dump($prettyPrint),
                 'statusesRules'  => $this->statuses->dump($prettyPrint),
                 'combatRules'    => $this->combat->dump($prettyPrint),
                 'playerRules'    => $this->player->dump($prettyPrint),

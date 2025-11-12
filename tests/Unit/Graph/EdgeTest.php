@@ -30,7 +30,7 @@ class EdgeTest extends TestCase
             'numberRequired' => 1,
             'conditions'     => [
                 [
-                    'type'      => 'self.ability.vitality',
+                    'type'      => 'self.attribute.vitality',
                     'condition' => 'value<=0',
                     'is'        => true,
                 ],
@@ -44,10 +44,10 @@ class EdgeTest extends TestCase
         self::assertFalse($edge->available($player, $goblin));
 
         //~ Remove 100 vitality to player
-        $player->getAbilities()->get('vitality')?->decrease(100);
+        $player->getAttributes()->get('vitality')?->decrease(100);
 
         //~ Player is dead
-        self::assertSame(0, $player->getAbilities()->get('vitality')?->getValue());
+        self::assertSame(0, $player->getAttributes()->get('vitality')?->getValue());
         self::assertTrue($edge->available($player, $goblin));
     }
 }

@@ -90,7 +90,7 @@
                 "description": "Mastering dodge techniques increases defense by 2 during combat.",
                 "modifiers": [
                     {
-                        "type": "self.ability.defense.value",
+                        "type": "self.attribute.defense.value",
                         "value": 2
                     }
                 ]
@@ -177,7 +177,7 @@
                 "description": "The character is poisoned, losing 1 vitality point at the start of each turn.",
                 "modifiers": [
                     {
-                        "type": "self.ability.vitality.value",
+                        "type": "self.attribute.vitality.value",
                         "value": -1
                     }
                 ],
@@ -198,11 +198,11 @@
                 "description": "The character is blinded, reducing agility by 10, but increase intuition by 5.",
                 "modifiers": [
                     {
-                        "type": "self.ability.agility.value",
+                        "type": "self.attribute.agility.value",
                         "value": -10
                     },
                     {
-                        "type": "self.ability.intuition.value",
+                        "type": "self.attribute.intuition.value",
                         "value": 5
                     }
                 ],
@@ -215,11 +215,11 @@
                 "description": "The character is well rested, gaining 2 agility and 2 intuition points for 3 turn.",
                 "modifiers": [
                     {
-                        "type": "self.ability.agility.value",
+                        "type": "self.attribute.agility.value",
                         "value": 2
                     },
                     {
-                        "type": "self.ability.intuition.value",
+                        "type": "self.attribute.intuition.value",
                         "value": 2
                     }
                 ],

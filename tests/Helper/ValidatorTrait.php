@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
-use Velkuns\GameTextEngine\Core\Validator\AbilityConditionValidator;
+use Velkuns\GameTextEngine\Core\Validator\AttributeConditionValidator;
 use Velkuns\GameTextEngine\Core\Validator\EntityInfoConditionValidator;
 use Velkuns\GameTextEngine\Core\Validator\EntityInventoryItemsConditionValidator;
 use Velkuns\GameTextEngine\Core\Validator\StatusConditionValidator;
@@ -22,7 +22,7 @@ trait ValidatorTrait
     private static function getValidatorHandler(): ValidatorHandler
     {
         $validators = [
-            new AbilityConditionValidator(),
+            new AttributeConditionValidator(),
             new EntityInfoConditionValidator(),
             new EntityInventoryItemsConditionValidator(),
             new StatusConditionValidator(),

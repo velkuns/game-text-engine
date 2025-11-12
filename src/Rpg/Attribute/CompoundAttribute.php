@@ -9,33 +9,33 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Rpg\Ability;
+namespace Velkuns\GameTextEngine\Rpg\Attribute;
 
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
 /**
- * @phpstan-type CompoundAbilityData array{
+ * @phpstan-type CompoundAttributeData array{
  *     type: "compound",
  *     name: string,
  *     rule: string,
  * }
  */
-readonly class CompoundAbility implements AbilityInterface
+readonly class CompoundAttribute implements AttributeInterface
 {
-    /** @var array<string, BaseAbility> $abilities */
-    private array $abilities;
+    /** @var array<string, BaseAttribute> $attributes */
+    private array $attributes;
 
     /**
-     * @param array<string, BaseAbility> $abilities
+     * @param array<string, BaseAttribute> $attributes
      */
     public function __construct(
         public string $name,
         public string $rule,
-        array $abilities,
+        array $attributes,
     ) {
-        $this->abilities = \array_filter(
-            $abilities,
-            fn(BaseAbility $ability) => \str_contains($this->rule, $ability->name),
+        $this->attributes = \array_filter(
+            $attributes,
+            fn(BaseAttribute $attribute) => \str_contains($this->rule, $attribute->name),
         );
     }
 
@@ -44,9 +44,9 @@ readonly class CompoundAbility implements AbilityInterface
         return $this->name;
     }
 
-    public function getType(): AbilityType
+    public function getType(): AttributeType
     {
-        return AbilityType::Compound;
+        return AttributeType::Compound;
     }
 
     /**
@@ -54,25 +54,25 @@ readonly class CompoundAbility implements AbilityInterface
      */
     public function getValue(): int
     {
-        return \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getValue(), $this->abilities));
+        return \array_sum(\array_map(fn(BaseAttribute $attribute) => $attribute->getValue(), $this->attributes));
     }
 
     public function getMax(): int
     {
-        return \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getMax(), $this->abilities));
+        return \array_sum(\array_map(fn(BaseAttribute $attribute) => $attribute->getMax(), $this->attributes));
     }
 
     public function getInitial(): int
     {
-        return \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getInitial(), $this->abilities));
+        return \array_sum(\array_map(fn(BaseAttribute $attribute) => $attribute->getInitial(), $this->attributes));
     }
 
-    public function getConstraints(): ConstraintsAbility
+    public function getConstraints(): ConstraintsAttribute
     {
-        $min = \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getConstraints()->min, $this->abilities));
-        $max = \array_sum(\array_map(fn(BaseAbility $ability) => $ability->getConstraints()->max, $this->abilities));
+        $min = \array_sum(\array_map(fn(BaseAttribute $attribute) => $attribute->getConstraints()->min, $this->attributes));
+        $max = \array_sum(\array_map(fn(BaseAttribute $attribute) => $attribute->getConstraints()->max, $this->attributes));
 
-        return new ConstraintsAbility($min, $max);
+        return new ConstraintsAttribute($min, $max);
     }
 
     public function getRule(): string
@@ -113,7 +113,7 @@ readonly class CompoundAbility implements AbilityInterface
     }
 
     /**
-     * Apply modifiers to value ability value and return a new instance with modified value.
+     * Apply modifiers to value attribute value and return a new instance with modified value.
      *
      * @param list<Modifier> $modifiers
      */
@@ -121,7 +121,7 @@ readonly class CompoundAbility implements AbilityInterface
     {
         $value = $this->getValue();
         foreach ($modifiers as $modifier) {
-            if (!\str_contains($modifier->type, '.ability.' . $this->name)) {
+            if (!\str_contains($modifier->type, '.attribute.' . $this->name)) {
                 continue;
             }
 
@@ -132,26 +132,26 @@ readonly class CompoundAbility implements AbilityInterface
     }
 
     /**
-     * @return CompoundAbilityData
+     * @return CompoundAttributeData
      */
     public function jsonSerialize(): array
     {
         return [
-            'type' => AbilityType::Compound->value,
+            'type' => AttributeType::Compound->value,
             'name' => $this->name,
             'rule' => $this->rule,
         ];
     }
 
     /**
-     * @param array<string, BaseAbility> $abilities
+     * @param array<string, BaseAttribute> $attributes
      */
-    public function clone(array $abilities = []): self
+    public function clone(array $attributes = []): self
     {
         return new self(
             name: $this->name,
             rule: $this->rule,
-            abilities: $abilities,
+            attributes: $attributes,
         );
     }
 }

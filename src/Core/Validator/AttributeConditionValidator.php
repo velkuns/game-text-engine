@@ -15,16 +15,16 @@ use Velkuns\GameTextEngine\Core\Condition\ConditionOperatorType;
 use Velkuns\GameTextEngine\Core\Condition\ConditionParser;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedConditionOperatorTypeException;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedConditionPropertyException;
-use Velkuns\GameTextEngine\Rpg\Ability\AbilityInterface;
+use Velkuns\GameTextEngine\Rpg\Attribute\AttributeInterface;
 
 /**
  * @phpstan-import-type ConditionPartData from ConditionParser
  */
-readonly class AbilityConditionValidator implements ValidatorInterface
+readonly class AttributeConditionValidator implements ValidatorInterface
 {
     public function supports(string $type): bool
     {
-        return \str_starts_with($type, 'ability.');
+        return \str_starts_with($type, 'attribute.');
     }
 
     /**
@@ -32,7 +32,7 @@ readonly class AbilityConditionValidator implements ValidatorInterface
      */
     public function validate(string $type, object $element, array $conditions): bool
     {
-        if (!$element instanceof AbilityInterface) {
+        if (!$element instanceof AttributeInterface) {
             return false; // @codeCoverageIgnore
         }
 
@@ -60,14 +60,14 @@ readonly class AbilityConditionValidator implements ValidatorInterface
             ConditionOperatorType::LessOrEqualThan    => ($elementValue <= $conditionValue),
             ConditionOperatorType::GreaterThan        => ($elementValue > $conditionValue),
             ConditionOperatorType::GreaterOrEqualThan => ($elementValue >= $conditionValue),
-            default => throw new UnsupportedConditionOperatorTypeException("Ability condition does not support $operatorType->name type"),
+            default => throw new UnsupportedConditionOperatorTypeException("Attribute condition does not support $operatorType->name type"),
         };
     }
 
-    private function getElementValue(AbilityInterface $ability, string $property): int
+    private function getElementValue(AttributeInterface $attribute, string $property): int
     {
         return match ($property) {
-            'value' => $ability->getValue(),
+            'value' => $attribute->getValue(),
             default => throw new UnsupportedConditionPropertyException(),
         };
     }

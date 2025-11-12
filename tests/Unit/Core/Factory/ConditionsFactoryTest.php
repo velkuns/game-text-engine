@@ -24,7 +24,7 @@ class ConditionsFactoryTest extends TestCase
             'numberRequired' => 1,
             'conditions' => [
                 [
-                    'type'      => 'self.ability.strength',
+                    'type'      => 'self.attribute.strength',
                     'condition' => 'value>=10',
                     'is'        => true,
                 ],
@@ -47,7 +47,7 @@ class ConditionsFactoryTest extends TestCase
         self::assertSame(1, $conditions->getNumberRequired());
 
         $condition0 = $conditions->getConditions()[0];
-        self::assertSame('self.ability.strength', $condition0->getType());
+        self::assertSame('self.attribute.strength', $condition0->getType());
         self::assertSame('value>=10', $condition0->getCondition());
         self::assertTrue($condition0->is());
 

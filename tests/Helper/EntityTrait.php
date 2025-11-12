@@ -61,7 +61,7 @@ trait EntityTrait
                     'value' => 0,
                 ],
             ],
-            'abilities' => [
+            'attributes' => [
                 'bases'     => [
                     'strength'  => [
                         'type'        => 'base',
@@ -145,7 +145,7 @@ trait EntityTrait
                         'description'    => 'Super skill',
                         'modifiers'      => [
                             [
-                                'type'  => 'self.ability.agility.value',
+                                'type'  => 'self.attribute.agility.value',
                                 'value' => 1,
                                 'conditions'     => [
                                     'numberRequired' => 1,
@@ -159,7 +159,7 @@ trait EntityTrait
                                 ],
                             ],
                             [
-                                'type'  => 'self.ability.attack.value',
+                                'type'  => 'self.attribute.attack.value',
                                 'value' => 2,
                                 'conditions'     => [
                                     'numberRequired' => 1,
@@ -180,7 +180,7 @@ trait EntityTrait
                         'description'    => 'To help to chase dragon.',
                         'modifiers'      => [
                             [
-                                'type'  => 'self.ability.agility.value',
+                                'type'  => 'self.attribute.agility.value',
                                 'value' => 1,
                                 'conditions'     => [
                                     'numberRequired' => 1,
@@ -194,7 +194,7 @@ trait EntityTrait
                                 ],
                             ],
                             [
-                                'type'  => 'self.ability.attack.value',
+                                'type'  => 'self.attribute.attack.value',
                                 'value' => 2,
                                 'conditions'     => [
                                     'numberRequired' => 1,
@@ -238,7 +238,7 @@ trait EntityTrait
                         'description'    => 'You are well rested',
                         'modifiers'      => [
                             [
-                                'type'  => 'self.ability.vitality.value',
+                                'type'  => 'self.attribute.vitality.value',
                                 'value' => 2,
                             ],
                         ],
@@ -309,7 +309,7 @@ trait EntityTrait
                 'notes'       => '',
             ],
             'damages'   => ['physical' => ['type' => 'physical', 'value' => 0]],
-            'abilities' => [
+            'attributes' => [
                 'bases'     => [
                     'strength'  => [
                         'type'        => 'base',
@@ -432,7 +432,7 @@ trait EntityTrait
                 'notes'       => 'No special notes',
             ],
             'damages'   => ['physical' => ['type' => 'physical', 'value' => 2]],
-            'abilities' => [
+            'attributes' => [
                 'bases'     => [
                     'strength'  => [
                         'type'        => 'base',

@@ -30,7 +30,7 @@ Format:
         "background": "string",
         "notes": "string"
     },
-    "abilities": "Abilities",
+    "attributes": "Attributes",
     "statuses": "Statuses",
     "inventory": "Inventory"
 }
@@ -50,9 +50,9 @@ Example:
         "background": "",
         "notes": ""
     },
-    "abilities": {
-        "base": "list<BaseAbility>",
-        "compound": "list<CompoundAbility>"
+    "attributes": {
+        "base": "list<BaseAttribute>",
+        "compound": "list<CompoundAttribute>"
     },
     "statuses": {
         "skills": "array<string, Status>",

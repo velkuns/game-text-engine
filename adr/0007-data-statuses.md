@@ -7,10 +7,10 @@
 ## Context
 
 To have more complex game mechanics, we can have skills, blessings, curses, physical or magical states that can have
-an impact on player (abilities or not).
+an impact on player (attributes or not).
 For example:
-- blindness (state) that decrease some abilities related to perception
-- a skill that increase the combat abilities
+- blindness (state) that decrease some attributes related to perception
+- a skill that increase the combat attributes
 - a benediction that increase the vitality
 - a curse that decrease the strength
 - ...
@@ -44,7 +44,7 @@ Blessing status example:
     "description": "You have been blessed by the god of strength. Your strength is increased by 3.",
     "modifiers": [
         {
-            "ability": "strength",
+            "attribute": "strength",
             "value": 3
         }
     ],
@@ -61,7 +61,7 @@ Curse status example:
     "description": "You have been cursed by the rat king. Your endurance is decreased by 2.",
     "modifier": [
         {
-            "ability": "endurance",
+            "attribute": "endurance",
             "value": -2
         }
     ],
@@ -78,11 +78,11 @@ State status examples:
     "description": "You are blind. Your intuition is increased by 4, but your agility is decreased by 10.",
     "modifier": [
         {
-            "ability": "intuition",
+            "attribute": "intuition",
             "value": 4
         },
         {
-            "ability": "agility",
+            "attribute": "agility",
             "value": -10
         }
     ],

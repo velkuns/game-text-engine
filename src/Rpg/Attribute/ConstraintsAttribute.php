@@ -9,15 +9,15 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Rpg\Ability;
+namespace Velkuns\GameTextEngine\Rpg\Attribute;
 
 /**
- * @phpstan-type ConstraintsAbilityData array{
+ * @phpstan-type ConstraintsAttributeData array{
  *     min: int,
  *     max: int
  * }
  */
-readonly class ConstraintsAbility implements \JsonSerializable
+readonly class ConstraintsAttribute implements \JsonSerializable
 {
     public function __construct(public int $min, public int $max) {}
 
@@ -35,7 +35,7 @@ readonly class ConstraintsAbility implements \JsonSerializable
     }
 
     /**
-     * @return ConstraintsAbilityData
+     * @return ConstraintsAttributeData
      */
     public function jsonSerialize(): array
     {

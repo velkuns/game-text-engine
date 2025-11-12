@@ -13,7 +13,7 @@ namespace Velkuns\GameTextEngine\Tests\Helper;
 
 use Random\Engine\Mt19937;
 use Random\Randomizer;
-use Velkuns\GameTextEngine\Core\Resolver\AbilityResolver;
+use Velkuns\GameTextEngine\Core\Resolver\AttributeResolver;
 use Velkuns\GameTextEngine\Core\Resolver\EntityDamagesResolver;
 use Velkuns\GameTextEngine\Core\Resolver\EntityInfoResolver;
 use Velkuns\GameTextEngine\Core\Resolver\EntityInventoryItemsResolver;
@@ -32,7 +32,7 @@ trait ResolverTrait
     private static function getTypeResolverHandler(): TypeResolverHandler
     {
         $resolvers = [
-            new AbilityResolver(),
+            new AttributeResolver(),
             new EntityDamagesResolver(),
             new EntityInfoResolver(),
             new EntityInventoryItemsResolver(),
@@ -45,7 +45,7 @@ trait ResolverTrait
     private static function getValueResolverHandler(int $seed = 42): ValueResolverHandler
     {
         $resolvers = [
-            new AbilityResolver(),
+            new AttributeResolver(),
             new EntityDamagesResolver(),
             new EntityInfoResolver(),
             new EquippedWeaponItemResolver(),

@@ -44,13 +44,13 @@ class EntityFactoryTest extends TestCase
         self::assertSame('Born in a small village', $info->background);
         self::assertSame('No special notes', $info->notes);
 
-        $ability = $hero->getAbilities()->get('strength');
-        self::assertNotNull($ability);
-        self::assertSame(10, $ability->getValue());
-        self::assertSame(10, $ability->getMax());
-        self::assertSame(10, $ability->getInitial());
-        self::assertNull($ability->getRule());
-        self::assertSame('strength', $ability->getName());
+        $attribute = $hero->getAttributes()->get('strength');
+        self::assertNotNull($attribute);
+        self::assertSame(10, $attribute->getValue());
+        self::assertSame(10, $attribute->getMax());
+        self::assertSame(10, $attribute->getInitial());
+        self::assertNull($attribute->getRule());
+        self::assertSame('strength', $attribute->getName());
 
         $statuses = $hero->getStatuses();
         self::assertCount(3, $statuses->statuses['skill']);

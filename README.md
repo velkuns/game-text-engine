@@ -34,7 +34,7 @@ namespace Application;
 use Velkuns\GameTextEngine\Api\ItemsApi;
 use Velkuns\GameTextEngine\Api\PlayerApi;
 use Velunns\GameTextEngine\Api\GameApi;
-use Velkuns\GameTextEngine\Core\Factory\AbilityFactory;
+use Velkuns\GameTextEngine\Core\Factory\AttributeFactory;
 use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
 
 //~ Factories
@@ -42,9 +42,9 @@ $modifierFactory  = new ModifierFactory();
 $itemFactory      = new ItemFactory($modifierFactory);
 $conditionFactory = new ConditionsFactory(new ConditionParser(), new ConditionElementResolver(), new ConditionValidator());
 $graphFactory     = new GraphFactory($conditionFactory);
-$abilityFactory   = new AbilityFactory();
+$attributeFactory = new AttributeFactory();
 $entityFactory    = new EntityFactory(
-    $abilityFactory, 
+    $attributeFactory, 
     new StatusFactory($modifierFactory, $conditionFactory), 
     $itemFactory
 );
@@ -55,7 +55,7 @@ $gameApi = new GameApi(
     new StoryApi($graphFactory),
     $items,
     new BestiaryApi($entityFactory, $items),
-    new AbilitiesApi($abilityFactory),
+    new AttributesApi($attributeFactory),
     new PlayerApi($entityFactory, $items),
     new CombatApi(new Randomizer(new Mt19937())),
 );
@@ -64,7 +64,7 @@ $gameApi = new GameApi(
 $storyData          = $game->loader->fromFile($dataDir . '/stories/test.json');
 $itemsData          = $game->loader->fromFile($dataDir . '/items.json');
 $bestiaryData       = $game->loader->fromFile($dataDir . '/bestiary.json');
-$abilitiesRulesData = $game->loader->fromFile($dataDir . '/rules/rules_abilities.json');
+$attributesRulesData = $game->loader->fromFile($dataDir . '/rules/rules_attributes.json');
 $statusesRulesData  = $game->loader->fromFile($dataDir . '/rules/rules_statuses.json');
 $combatsRulesData   = $game->loader->fromFile($dataDir . '/rules/rules_combat.json');
 $playerRulesData    = $game->loader->fromFile($dataDir . '/rules/rules_player.json');
@@ -85,7 +85,7 @@ $gameApi->load(
 $gameApi->storyApi->[...];
 $gameApi->bestiaryApi->[...];
 $gameApi->itemsApi->[...];
-$gameApi->abilitiesApi->[...];
+$gameApi->attributesApi->[...];
 $gameApi->statusesApi->[...];
 $gameApi->playerApi->[...];
 
@@ -96,7 +96,7 @@ $gameApi->playerApi->[...];
  *     story: string,
  *     items: string,
  *     bestiary: string,
- *     abilitiesRules: string,
+ *     attributesRules: string,
  *     statusesRules: string,
  *     combatRules: string,
  *     playerRules: string,
@@ -175,7 +175,7 @@ $gameApi->bestiary->set($goblinWarrior); // Adds or replaces the creature in the
 $gameApi->bestiary->remove('Goblin'); // Removes the creature from the bestiary
 ```
 
-### Abilities API
+### Attributes API
 
 ```php
 <?php
@@ -186,12 +186,12 @@ namespace Application;
 
 // [... game api init code here ... ]
 
-//~ Return all abilities: array{bases: array<string, AbilityInterface>, compounds: array<string, AbilityInterface>}
-$abilities = $gameApi->abilities->getAll();
+//~ Return all attributes: array{bases: array<string, AttributeInterface>, compounds: array<string, AttributeInterface>}
+$attributes = $gameApi->attributes->getAll();
 
-$ability = $gameApi->abilities->get('strength'); // Get one ability (cloned)
-$gameApi->abilities->set($ability); // Set an ability
-$gameApi->abilities->remove('strength');
+$attribute = $gameApi->attributes->get('strength'); // Get one attribute (cloned)
+$gameApi->attributes->set($attribute); // Set an attribute
+$gameApi->attributes->remove('strength');
 ```
 
 ### Statuses API
@@ -209,7 +209,7 @@ namespace Application;
 $statuses = $gameApi->statuses->getAll();
 
 $status = $gameApi->statuses->get('skill', 'Goblin Hunter'); // Get one status (cloned)
-$gameApi->statuses->set($status); // Set an ability
+$gameApi->statuses->set($status); // Set an attribute
 $gameApi->statuses->remove('skill', 'Goblin Hunter');
 ```
 
@@ -249,7 +249,7 @@ $data = [
     'race'        => 'elf', // optional, default 'human'
     'description' => 'A brave adventurer.', // optional, default ''
     'background'  => 'Born in a small village.', // optional, default ''
-    'abilities'   => [,
+    'attributes'   => [,
         'strength'  => 10,
         'endurance' => 12,
         'agility'   => 14,
@@ -328,7 +328,7 @@ parameters:
   game.data.player:   '%game.data.dir%/templates/player.json'
 
   # Rules files to load when create new story. Should be stored in database after.
-  game.data.rules.abilities: '%game.data.dir%/rules/rules_abilities.json'
+  game.data.rules.attributes: '%game.data.dir%/rules/rules_attributes.json'
   game.data.rules.statuses:  '%game.data.dir%/rules/rules_statuses.json'
   game.data.rules.combat:    '%game.data.dir%/rules/rules_combat.json'
   game.data.rules.player:    '%game.data.dir%/rules/rules_player.json'
@@ -338,21 +338,21 @@ services:
     autowire: true
     bind:
       $typeResolvers:
-        - '@Velkuns\GameTextEngine\Core\Resolver\AbilityResolver'
+        - '@Velkuns\GameTextEngine\Core\Resolver\AttributeResolver'
         - '@Velkuns\GameTextEngine\Core\Resolver\EntityDamagesResolver'
         - '@Velkuns\GameTextEngine\Core\Resolver\EntityInfoResolver'
         - '@Velkuns\GameTextEngine\Core\Resolver\EntityInventoryItemsResolver'
         - '@Velkuns\GameTextEngine\Core\Resolver\StatusResolver'
 
       $valueResolvers:
-        - '@Velkuns\GameTextEngine\Core\Resolver\AbilityResolver'
+        - '@Velkuns\GameTextEngine\Core\Resolver\AttributeResolver'
         - '@Velkuns\GameTextEngine\Core\Resolver\EntityDamagesResolver'
         - '@Velkuns\GameTextEngine\Core\Resolver\EntityInfoResolver'
         - '@Velkuns\GameTextEngine\Core\Resolver\EquippedWeaponItemResolver'
         - '@Velkuns\GameTextEngine\Core\Resolver\RollResolver'
 
       $validators:
-        - '@Velkuns\GameTextEngine\Core\Validator\AbilityConditionValidator'
+        - '@Velkuns\GameTextEngine\Core\Validator\AttributeConditionValidator'
         - '@Velkuns\GameTextEngine\Core\Validator\EntityInfoConditionValidator'
         - '@Velkuns\GameTextEngine\Core\Validator\EntityInventoryItemsConditionValidator'
         - '@Velkuns\GameTextEngine\Core\Validator\StatusConditionValidator'
@@ -419,7 +419,7 @@ readonly class StoryPlay
             $bookInteractive->getStory(),          // json string
             $bookInteractive->getItems(),          // json string
             $bookInteractive->getBestiary(),       // json string
-            $bookInteractive->getRulesAbilities(), // json string
+            $bookInteractive->getRulesAttributes(), // json string
             $bookInteractive->getRulesStatuses(),  // json string
             $bookInteractive->getRulesCombat(),    // json string
             $bookInteractive->getRulesPlayer(),    // json string
@@ -441,7 +441,7 @@ readonly class StoryPlay
             $bookInteractive->getStory(),          // json string
             $bookInteractive->getItems(),          // json string
             $bookInteractive->getBestiary(),       // json string
-            $bookInteractive->getRulesAbilities(), // json string
+            $bookInteractive->getRulesAttributes(), // json string
             $bookInteractive->getRulesStatuses(),  // json string
             $bookInteractive->getRulesCombat(),    // json string
             $bookInteractive->getRulesPlayer(),    // json string
@@ -533,7 +533,7 @@ classDiagram
         string book_interactive_story
         string book_interactive_items
         string book_interactive_bestiary
-        string book_interactive_rules_abilities
+        string book_interactive_rules_attributes
         string book_interactive_rules_statuses
         string book_interactive_rules_combat
         string book_interactive_rules_player

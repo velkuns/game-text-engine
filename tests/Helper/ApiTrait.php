@@ -13,7 +13,7 @@ namespace Velkuns\GameTextEngine\Tests\Helper;
 
 use Random\Engine\Mt19937;
 use Random\Randomizer;
-use Velkuns\GameTextEngine\Api\AbilitiesApi;
+use Velkuns\GameTextEngine\Api\AttributesApi;
 use Velkuns\GameTextEngine\Api\BestiaryApi;
 use Velkuns\GameTextEngine\Api\CombatApi;
 use Velkuns\GameTextEngine\Api\ItemsApi;
@@ -24,10 +24,10 @@ use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Core\Processor\TimeProcessor;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
-use Velkuns\GameTextEngine\Rpg\Modifier\AbilityModifierProcessor;
+use Velkuns\GameTextEngine\Rpg\Modifier\AttributeModifierProcessor;
 use Velkuns\GameTextEngine\Rpg\Modifier\DamagesModifierProcessor;
 use Velkuns\GameTextEngine\Rpg\Modifier\ModifierHandler;
-use Velkuns\GameTextEngine\Rules\Abilities\AbilitiesRules;
+use Velkuns\GameTextEngine\Rules\Attributes\AttributesRules;
 use Velkuns\GameTextEngine\Rules\Combat\CombatRules;
 use Velkuns\GameTextEngine\Rules\Player\PlayerRules;
 use Velkuns\GameTextEngine\Rules\Statuses\StatusesRules;
@@ -36,7 +36,7 @@ use Velkuns\GameTextEngine\Rules\Statuses\StatusesRules;
  * @phpstan-import-type BestiaryFileData from BestiaryApi
  * @phpstan-import-type ItemData from ItemInterface
  * @phpstan-import-type EntityData from EntityInterface
- * @phpstan-import-type AbilitiesRulesData from AbilitiesRules
+ * @phpstan-import-type AttributesRulesData from AttributesRules
  * @phpstan-import-type StatusesRulesData from StatusesRules
  * @phpstan-import-type CombatRulesData from CombatRules
  * @phpstan-import-type PlayerRulesData from PlayerRules
@@ -48,7 +48,7 @@ trait ApiTrait
 
     private static ?BestiaryApi $bestiary = null;
     private static ?ItemsApi $items = null;
-    private static ?AbilitiesApi $abilitiesApi = null;
+    private static ?AttributesApi $attributesApi = null;
     private static ?StatusesApi $statusesApi = null;
     private static ?PlayerApi $playerApi = null;
     private static ?CombatApi $combatApi = null;
@@ -101,17 +101,17 @@ trait ApiTrait
         return self::$combatApi;
     }
 
-    private static function getAbilitiesApi(): AbilitiesApi
+    private static function getAttributesApi(): AttributesApi
     {
-        if (self::$abilitiesApi === null) {
-            self::$abilitiesApi = new AbilitiesApi(self::getAbilityFactory());
+        if (self::$attributesApi === null) {
+            self::$attributesApi = new AttributesApi(self::getAttributeFactory());
 
-            /** @var AbilitiesRulesData $data */
-            $data = (new JsonLoader())->fromFile(__DIR__ . '/../../data/rules/rules_abilities.json');
-            self::$abilitiesApi->load($data);
+            /** @var AttributesRulesData $data */
+            $data = (new JsonLoader())->fromFile(__DIR__ . '/../../data/rules/rules_attributes.json');
+            self::$attributesApi->load($data);
         }
 
-        return self::$abilitiesApi;
+        return self::$attributesApi;
     }
 
     private static function getStatusesApi(): StatusesApi
@@ -133,9 +133,9 @@ trait ApiTrait
             self::$playerApi = new PlayerApi(
                 self::getEntityFactory(),
                 self::getItemsApi(),
-                self::getAbilitiesApi(),
+                self::getAttributesApi(),
                 self::getStatusesApi(),
-                new ModifierHandler(self::getTypeResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]),
+                new ModifierHandler(self::getTypeResolverHandler(), [new AttributeModifierProcessor(), new DamagesModifierProcessor()]),
                 new Evaluator(self::getValueResolverHandler()),
             );
 

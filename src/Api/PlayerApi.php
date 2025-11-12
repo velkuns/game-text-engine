@@ -32,7 +32,7 @@ use Velkuns\GameTextEngine\Rules\Player\PlayerRulesStarting;
  *    gender?: string,
  *    description?: string,
  *    background?: string,
- *    abilities: array<string, int>,
+ *    attributes: array<string, int>,
  *    statuses?: array<string, list<string>>,
  *    inventory?: list<string>,
  * }
@@ -45,7 +45,7 @@ class PlayerApi
     public function __construct(
         private readonly EntityFactory $entityFactory,
         private readonly ItemsApi $items,
-        private readonly AbilitiesApi $abilities,
+        private readonly AttributesApi $attributes,
         private readonly StatusesApi $statuses,
         private readonly ModifierHandler $modifierHandler,
         private readonly Evaluator $evaluator,
@@ -90,26 +90,26 @@ class PlayerApi
     }
 
     /**
-     * @param array<string, int> $abilities
+     * @param array<string, int> $attributes
      * @param array<string, list<string>> $statuses
      */
-    public function levelUp(array $abilities, array $statuses = []): self
+    public function levelUp(array $attributes, array $statuses = []): self
     {
         //~ Check player info
         $this->rules->leveling->assertMaxLevelNotReached($this->player->getInfo()->level);
         $this->rules->leveling->assertHasEnoughXp($this->evaluator, $this->player);
 
-        //~ Check abilities
-        $this->abilities->rules->leveling->assertHasCorrectAttribution($abilities);
+        //~ Check attributes
+        $this->attributes->rules->leveling->assertHasCorrectAttribution($attributes);
 
         //~ Check statuses
         $this->statuses->rules->leveling->assertCanAttributeOnNextLevel($this->player->getInfo()->level, $statuses);
         $this->statuses->rules->leveling->assertHasCorrectAttribution($statuses);
         $this->statuses->rules->assertAllStatusesExist($statuses);
 
-        //~ All is ok, then update abilities
-        foreach ($abilities as $name => $value) {
-            $this->player->getAbilities()->get($name)?->increase($value);
+        //~ All is ok, then update attributes
+        foreach ($attributes as $name => $value) {
+            $this->player->getAttributes()->get($name)?->increase($value);
         }
 
         //~ Add statuses
@@ -181,8 +181,8 @@ class PlayerApi
             'notes'       => '',
         ];
 
-        //~ Build abilities
-        $abilities = $this->abilities->fromNewPlayer($data['abilities']);
+        //~ Build attributes
+        $attributes = $this->attributes->fromNewPlayer($data['attributes']);
 
         //~ Initialize empty statuses
         $statuses = $this->statuses->fromNewPlayer($data['statuses'] ?? []);
@@ -199,7 +199,7 @@ class PlayerApi
             'type'      => 'player',
             'info'      => $info,
             'damages'   => ['physical' => ['type' => 'physical', 'value' => 0]],
-            'abilities' => $abilities,
+            'attributes' => $attributes,
             'statuses'  => $statuses,
             'inventory' => $inventory,
         ];
