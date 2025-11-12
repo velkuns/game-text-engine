@@ -1,4 +1,4 @@
-# Data - Abilities
+# Data - Attributes
 
 ## Status
 
@@ -6,27 +6,27 @@
 
 ## Context
 
-We have two types of abilities: base & compound.
+We have two types of attributes: base & compound.
 
-Base abilities are simple, with a value that can be changed (increased or decreased) during the game.
+Base attributes are simple, with a value that can be changed (increased or decreased) during the game.
 - type: base
-- initial: the initial value of the ability (immutable)
-- value: the current value of the ability
-- max: the maximum value of the ability (generally >= initial)
-- constraints: (immutable, limits min & max of the ability values)
-  - min: min value for the ability (in absolute, generally 0 or 1)
-  - max: max value for the ability (in absolute) 
-- rule (optional): a mathematical expression that defines how to calculate the initial value from other abilities
+- initial: the initial value of the attribute (immutable)
+- value: the current value of the attribute
+- max: the maximum value of the attribute (generally >= initial)
+- constraints: (immutable, limits min & max of the attribute values)
+  - min: min value for the attribute (in absolute, generally 0 or 1)
+  - max: max value for the attribute (in absolute) 
+- rule (optional): a mathematical expression that defines how to calculate the initial value from other attributes
 
-Compound abilities are calculated from other abilities, and cannot be changed directly.
+Compound attributes are calculated from other attributes, and cannot be changed directly.
 - type: compound
-- rule: a mathematical expression that defines how to calculate the ability from other abilities
+- rule: a mathematical expression that defines how to calculate the attribute from other attributes
 
 ## Decision
 
-### Base ability
+### Base attribute
 So, the format will be:
-Base ability format:
+Base attribute format:
 ```json
 {
     "type": "base",
@@ -42,7 +42,7 @@ Base ability format:
 }
 ```
 
-Example (for a vitality ability):
+Example (for a vitality attribute):
 ```json
 {
     "type": "base",
@@ -58,8 +58,8 @@ Example (for a vitality ability):
 }
 ```
 
-### Compound ability
-Compound ability format:
+### Compound attribute
+Compound attribute format:
 ```json
 {
     "type": "compound",
@@ -76,10 +76,10 @@ Example:
 }
 ```
 
-### Global Abilities format
+### Global Attributes format
 ```json
 {
-    "base": "list<BaseAbility>",
-    "compound": "list<CompoundAbility>"
+    "base": "list<BaseAttribute>",
+    "compound": "list<CompoundAttribute>"
 }
 ```

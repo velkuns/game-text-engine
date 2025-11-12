@@ -44,26 +44,26 @@ class EntityFactoryTest extends TestCase
         self::assertSame('Born in a small village', $info->background);
         self::assertSame('No special notes', $info->notes);
 
-        $ability = $hero->getAbilities()->get('strength');
-        self::assertNotNull($ability);
-        self::assertSame(10, $ability->getValue());
-        self::assertSame(10, $ability->getMax());
-        self::assertSame(10, $ability->getInitial());
-        self::assertNull($ability->getRule());
-        self::assertSame('strength', $ability->getName());
+        $attribute = $hero->getAttributes()->get('strength');
+        self::assertNotNull($attribute);
+        self::assertSame(10, $attribute->getValue());
+        self::assertSame(10, $attribute->getMax());
+        self::assertSame(10, $attribute->getInitial());
+        self::assertNull($attribute->getRule());
+        self::assertSame('strength', $attribute->getName());
 
-        $statuses = $hero->getStatuses();
-        self::assertCount(3, $statuses->statuses['skill']);
-        self::assertCount(1, $statuses->statuses['state']);
-        self::assertCount(0, $statuses->statuses['blessing']);
-        self::assertCount(0, $statuses->statuses['curse']);
-        self::assertCount(1, $statuses->statuses['title']);
+        $traits = $hero->getTraits();
+        self::assertCount(3, $traits->traits['skill']);
+        self::assertCount(1, $traits->traits['state']);
+        self::assertCount(0, $traits->traits['blessing']);
+        self::assertCount(0, $traits->traits['curse']);
+        self::assertCount(1, $traits->traits['title']);
 
-        self::assertFalse($hero->hasStatus('skill', 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus('state', 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus('blessing', 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus('curse', 'non-existing-skill'));
-        self::assertFalse($hero->hasStatus('title', 'non-existing-skill'));
+        self::assertFalse($hero->hasTrait('skill', 'non-existing-skill'));
+        self::assertFalse($hero->hasTrait('state', 'non-existing-skill'));
+        self::assertFalse($hero->hasTrait('blessing', 'non-existing-skill'));
+        self::assertFalse($hero->hasTrait('curse', 'non-existing-skill'));
+        self::assertFalse($hero->hasTrait('title', 'non-existing-skill'));
 
 
         $item = $hero->getInventory()->get('The Sword');

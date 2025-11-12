@@ -14,12 +14,12 @@ So we need to define number of conditions required from a list to be considered 
 - list: list of conditions
 
 Condition types:
-- self.ability: check an ability value
-- self.statuses.skill: check if a skill is present or not
-- self.statuses.state: check if a state is present or not
-- self.statuses.blessing: check if a blessing is present or not
-- self.statuses.curse: check if a curse is present or not
-- self.statuses.title: check if a title is present or not
+- self.attribute: check an attribute value
+- self.traits.skill: check if a skill is present or not
+- self.traits.state: check if a state is present or not
+- self.traits.blessing: check if a blessing is present or not
+- self.traits.curse: check if a curse is present or not
+- self.traits.title: check if a title is present or not
 - self.inventory.item: check if an item is present or not (in inventory or equipped)
 - enemy.info: check for enemy information value (like race or size)
 
@@ -64,7 +64,7 @@ List of supported operators are:
 #### Size of the entity (player or enemy)
 ```json
 {
-    "type": "self.ability.strength",
+    "type": "self.attribute.strength",
     "condition": "value>5",
     "is": true
 }
@@ -72,7 +72,7 @@ List of supported operators are:
 #### Skill presence
 ```json
 {
-    "type": "self.statuses.skills",
+    "type": "self.traits.skills",
     "condition": "name=lockpicking",
     "is": true
 }
@@ -101,7 +101,7 @@ List of supported operators are:
 
 
 ### Examples
-Ability condition example:
+Attribute condition example:
  - At least 1 of the following conditions must be met:
    - strength > 6
    - endurance >= 5
@@ -112,12 +112,12 @@ Ability condition example:
         "numberRequired": 1,
         "conditions": [
             {
-               "type": "self.ability.strength",
+               "type": "self.attribute.strength",
                "condition": "value>6",
                "is": true
             },
             {
-               "type": "self.ability.endurance",
+               "type": "self.attribute.endurance",
                "condition": "value>=5",
                "is": true
             }
@@ -134,17 +134,17 @@ State condition example:
       "numberRequired": 3,
       "conditions": [
          {
-            "type": "self.statuses.skills",
+            "type": "self.traits.skills",
             "condition": "name=lockpicking",
             "is": true
          },
          {
-            "type": "self.statuses.states",
+            "type": "self.traits.states",
             "condition": "name=blindness",
             "is": false
          },
          {
-            "type": "self.ability.agility",
+            "type": "self.attribute.agility",
             "condition": "value>=6",
             "is": true
          }

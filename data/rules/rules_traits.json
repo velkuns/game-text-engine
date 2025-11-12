@@ -1,0 +1,253 @@
+{
+    "description": "This section defines all kind of traits types available for the story, and the number of each when create a new character.",
+    "starting": {
+        "attributions": {
+            "skill": 2,
+            "state": 0,
+            "blessing": 0,
+            "curse": 0,
+            "title": 0
+        }
+    },
+    "leveling": {
+        "everyNumberLevel": 2,
+        "attributions": {
+            "skill": 1,
+            "state": 0,
+            "blessing": 0,
+            "curse": 0,
+            "title": 0
+        }
+    },
+    "traits": {
+        "skill": [
+            {
+                "type": "skill",
+                "name": "Sword (Mastery)",
+                "description": "Mastering sword techniques increases damage dealt with swords by 2.",
+                "modifiers": [
+                    {
+                        "type": "self.damages.physical.value",
+                        "value": 2,
+                        "conditions": {
+                            "numberRequired": 1,
+                            "conditions": [
+                                {
+                                    "type": "self.inventory.item",
+                                    "condition": "subType=sword;equipped=true",
+                                    "is": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "skill",
+                "name": "Dagger (Mastery)",
+                "description": "Mastering dagger techniques increases damage dealt with daggers by 2.",
+                "modifiers": [
+                    {
+                        "type": "self.damages.physical.value",
+                        "value": 2,
+                        "conditions": {
+                            "numberRequired": 1,
+                            "conditions": [
+                                {
+                                    "type": "self.inventory.item",
+                                    "condition": "subType=dagger;equipped=true",
+                                    "is": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "skill",
+                "name": "Archery (Mastery)",
+                "description": "Mastering archery techniques increases damage dealt with bows by 2.",
+                "modifiers": [
+                    {
+                        "type": "self.damages.physical.value",
+                        "value": 2,
+                        "conditions": {
+                            "numberRequired": 1,
+                            "conditions": [
+                                {
+                                    "type": "self.inventory.item",
+                                    "condition": "subType=bow;equipped=true",
+                                    "is": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "skill",
+                "name": "Dodge",
+                "description": "Mastering dodge techniques increases defense by 2 during combat.",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.defense.value",
+                        "value": 2
+                    }
+                ]
+            },
+            {
+                "type": "skill",
+                "name": "Lockpicking",
+                "description": "Mastering lockpicking allow player to unlock locked elements.",
+                "modifiers": []
+            },
+            {
+                "type": "skill",
+                "name": "Goblin Hunter",
+                "description": "Specialized skill in hunting goblins increases damage dealt to goblins by 2.",
+                "modifiers": [
+                    {
+                        "type": "self.damages.physical.value",
+                        "value": 2,
+                        "conditions": {
+                            "numberRequired": 1,
+                            "conditions": [
+                                {
+                                    "type": "enemy.info",
+                                    "condition": "race=goblin",
+                                    "is": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "skill",
+                "name": "Wolf Hunter",
+                "description": "Specialized skill in hunting wolfs increases damage dealt to wolfs by 2.",
+                "modifiers": [
+                    {
+                        "type": "self.damages.physical.value",
+                        "value": 2,
+                        "conditions": {
+                            "numberRequired": 1,
+                            "conditions": [
+                                {
+                                    "type": "enemy.info",
+                                    "condition": "race=goblin",
+                                    "is": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "skill",
+                "name": "Vermin Hunter",
+                "description": "Specialized skill in hunting small creatures increases damage dealt to small creatures by 2.",
+                "modifiers": [
+                    {
+                        "type": "self.damages.physical.value",
+                        "value": 2,
+                        "conditions": {
+                            "numberRequired": 1,
+                            "conditions": [
+                                {
+                                    "type": "enemy.info",
+                                    "condition": "size=tiny",
+                                    "is": true
+                                },
+                                {
+                                    "type": "enemy.info",
+                                    "condition": "size=small",
+                                    "is": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ],
+        "state": [
+            {
+                "type": "state",
+                "name": "poisoned",
+                "description": "The character is poisoned, losing 1 vitality point at the start of each turn.",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.vitality.value",
+                        "value": -1
+                    }
+                ],
+                "durationTurns": 5,
+                "remainingTurns": 5
+            },
+            {
+                "type": "state",
+                "name": "stunned",
+                "description": "The character is stunned and cannot perform any actions for 1 turn.",
+                "modifiers": [],
+                "durationTurns": 1,
+                "remainingTurns": 1
+            },
+            {
+                "type": "state",
+                "name": "blinded",
+                "description": "The character is blinded, reducing agility by 10, but increase intuition by 5.",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.agility.value",
+                        "value": -10
+                    },
+                    {
+                        "type": "self.attribute.intuition.value",
+                        "value": 5
+                    }
+                ],
+                "durationTurns": 2,
+                "remainingTurns": 2
+            },
+            {
+                "type": "state",
+                "name": "rested",
+                "description": "The character is well rested, gaining 2 agility and 2 intuition points for 3 turn.",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.agility.value",
+                        "value": 2
+                    },
+                    {
+                        "type": "self.attribute.intuition.value",
+                        "value": 2
+                    }
+                ],
+                "durationTurns": 3,
+                "remainingTurns": 3
+            }
+        ],
+        "blessing": [],
+        "curse": [],
+        "title": [
+            {
+                "type": "title",
+                "name": "Goblin Slayer",
+                "description": "Earned the title 'Goblins Slayer' for defeating 5 goblins.",
+                "modifiers": []
+            },
+            {
+                "type": "title",
+                "name": "Demon Slayer",
+                "description": "Earned the title 'Demon Slayer' for defeating 5 demons.",
+                "modifiers": []
+            },
+            {
+                "type": "title",
+                "name": "Village Hero",
+                "description": "Earned the title when protect the village.",
+                "modifiers": []
+            }
+        ]
+    }
+}

@@ -7,7 +7,7 @@ namespace Rpg\Modifier;
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedModifierProcessorPropertyException;
 use Velkuns\GameTextEngine\Exception\Rpg\ModifierException;
-use Velkuns\GameTextEngine\Rpg\Modifier\AbilityModifierProcessor;
+use Velkuns\GameTextEngine\Rpg\Modifier\AttributeModifierProcessor;
 use Velkuns\GameTextEngine\Rpg\Modifier\DamagesModifierProcessor;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 use Velkuns\GameTextEngine\Rpg\Modifier\ModifierHandler;
@@ -21,25 +21,25 @@ class ModifierHandlerTest extends TestCase
     use EntityTrait;
     use ResolverTrait;
 
-    public function testApplyOnAbility(): void
+    public function testApplyOnAttribute(): void
     {
         $player   = self::getPlayer();
-        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
-        $modifier = new Modifier('self.ability.strength.value', 5);
+        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AttributeModifierProcessor(), new DamagesModifierProcessor()]);
+        $modifier = new Modifier('self.attribute.strength.value', 5);
 
         //~ Check initial value
-        self::assertSame(10, $player->getAbilities()->get('strength')?->getValue());
+        self::assertSame(10, $player->getAttributes()->get('strength')?->getValue());
 
         $handler->handle($modifier, $player);
 
-        self::assertSame(15, $player->getAbilities()->get('strength')?->getValue());
+        self::assertSame(15, $player->getAttributes()->get('strength')?->getValue());
     }
 
-    public function testApplyOnAbilityButPropertyDoesNotExists(): void
+    public function testApplyOnAttributeButPropertyDoesNotExists(): void
     {
         $player   = self::getPlayer();
-        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
-        $modifier = new Modifier('self.ability.strength.values', 5);
+        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AttributeModifierProcessor(), new DamagesModifierProcessor()]);
+        $modifier = new Modifier('self.attribute.strength.values', 5);
 
         self::expectException(UnsupportedModifierProcessorPropertyException::class);
         $handler->handle($modifier, $player);
@@ -48,7 +48,7 @@ class ModifierHandlerTest extends TestCase
     public function testApplyOnDamages(): void
     {
         $player   = self::getPlayer();
-        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
+        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AttributeModifierProcessor(), new DamagesModifierProcessor()]);
         $modifier = new Modifier('self.damages.physical.value', 2);
 
         //~ Check initial value
@@ -62,7 +62,7 @@ class ModifierHandlerTest extends TestCase
     public function testApplyOnDamagesButPropertyDoesNotExists(): void
     {
         $player   = self::getPlayer();
-        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
+        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AttributeModifierProcessor(), new DamagesModifierProcessor()]);
         $modifier = new Modifier('self.damages.physical.values', 5);
 
         self::expectException(UnsupportedModifierProcessorPropertyException::class);
@@ -72,8 +72,8 @@ class ModifierHandlerTest extends TestCase
     public function testApplyOnEnemyButEnemyIsNull(): void
     {
         $player   = self::getPlayer();
-        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AbilityModifierProcessor(), new DamagesModifierProcessor()]);
-        $modifier = new Modifier('enemy.ability.strength.values', -5);
+        $handler  = new ModifierHandler(self::getTypeResolverHandler(), [new AttributeModifierProcessor(), new DamagesModifierProcessor()]);
+        $modifier = new Modifier('enemy.attribute.strength.values', -5);
 
         self::expectException(ModifierException::class);
         self::expectExceptionCode(1200);

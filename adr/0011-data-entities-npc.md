@@ -30,8 +30,8 @@ Format:
         "background": "string",
         "notes": "string"
     },
-    "abilities": "Abilities",
-    "statuses": "Statuses",
+    "attributes": "Attributes",
+    "traits": "Traits",
     "inventory": "Inventory"
 }
 ```
@@ -50,15 +50,15 @@ Example:
         "background": "",
         "notes": ""
     },
-    "abilities": {
-        "base": "list<BaseAbility>",
-        "compound": "list<CompoundAbility>"
+    "attributes": {
+        "base": "list<BaseAttribute>",
+        "compound": "list<CompoundAttribute>"
     },
-    "statuses": {
-        "skills": "array<string, Status>",
-        "states": "array<string, Status>",
-        "blessings": "array<string, Status>",
-        "curses": "array<string, Status>"
+    "traits": {
+        "skills": "array<string, TraitInterface>",
+        "states": "array<string, TraitInterface>",
+        "blessings": "array<string, TraitInterface>",
+        "curses": "array<string, TraitInterface>"
     },
     "inventory": "list<Item>"
 }

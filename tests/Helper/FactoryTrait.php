@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
 use Velkuns\GameTextEngine\Core\Condition\ConditionParser;
-use Velkuns\GameTextEngine\Core\Factory\AbilityFactory;
+use Velkuns\GameTextEngine\Core\Factory\AttributeFactory;
 use Velkuns\GameTextEngine\Core\Factory\ConditionsFactory;
 use Velkuns\GameTextEngine\Core\Factory\DamageFactory;
 use Velkuns\GameTextEngine\Core\Factory\ElementFactory;
@@ -20,7 +20,7 @@ use Velkuns\GameTextEngine\Core\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Core\Factory\ItemFactory;
 use Velkuns\GameTextEngine\Core\Factory\LootFactory;
 use Velkuns\GameTextEngine\Core\Factory\ModifierFactory;
-use Velkuns\GameTextEngine\Core\Factory\StatusFactory;
+use Velkuns\GameTextEngine\Core\Factory\TraitFactory;
 use Velkuns\GameTextEngine\Graph\Factory\GraphFactory;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 
@@ -38,8 +38,8 @@ trait FactoryTrait
     {
         if (self::$entityFactory === null) {
             self::$entityFactory = new EntityFactory(
-                self::getAbilityFactory(),
-                self::getStatusFactory(),
+                self::getAttributeFactory(),
+                self::getTraitFactory(),
                 self::getItemFactory(),
                 self::getDamageFactory(),
                 self::getLootFactory(),
@@ -53,17 +53,17 @@ trait FactoryTrait
     {
         return new ElementFactory(
             self::getEntityFactory(),
-            self::getAbilityFactory(),
-            self::getStatusFactory(),
+            self::getAttributeFactory(),
+            self::getTraitFactory(),
             self::getItemFactory(),
             self::getConditionFactory(),
             self::getModifierFactory(),
         );
     }
 
-    private static function getAbilityFactory(): AbilityFactory
+    private static function getAttributeFactory(): AttributeFactory
     {
-        return new AbilityFactory();
+        return new AttributeFactory();
     }
 
     private static function getLootFactory(): LootFactory
@@ -90,9 +90,9 @@ trait FactoryTrait
         return new ModifierFactory(self::getConditionFactory());
     }
 
-    private static function getStatusFactory(): StatusFactory
+    private static function getTraitFactory(): TraitFactory
     {
-        return new StatusFactory(self::getModifierFactory());
+        return new TraitFactory(self::getModifierFactory());
     }
 
     private static function getDamageFactory(): DamageFactory

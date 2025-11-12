@@ -14,7 +14,7 @@ Need to define & store some player basic information, like:
 - age (in years)
 - notes
 - inventory (list of items with quantity & notes)
-- abilities (list of abilities, base & compound)
+- attributes (list of attributes, base & compound)
 
 
 ## Decision
@@ -33,8 +33,8 @@ Format:
         "background": "string",
         "notes": "string"
     },
-    "abilities": "Abilities",
-    "statuses": "Statuses",
+    "attributes": "Attributes",
+    "traits": "Traits",
     "inventory": "Inventory"
 }
 ```
@@ -52,16 +52,16 @@ Example:
         "background": "...",
         "notes": "..."
     },
-    "abilities": {
-        "base": "list<BaseAbility>",
-        "compound": "list<CompoundAbility>"
+    "attributes": {
+        "base": "list<BaseAttribute>",
+        "compound": "list<CompoundAttribute>"
     },
-    "statuses": {
-        "skills": "list<Status>",
-        "states": "list<Status>",
-        "blessings": "list<Status>",
-        "curses": "list<Status>",
-        "titles": "list<Status>"
+    "traits": {
+        "skills": "list<StatusInterface>",
+        "states": "list<TraitInterface>",
+        "blessings": "list<TraitInterface>",
+        "curses": "list<TraitInterface>",
+        "titles": "list<TraitInterface>"
     },
     "inventory": "list<Item>"
 }

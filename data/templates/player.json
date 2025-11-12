@@ -18,7 +18,7 @@
             "value": 0
         }
     },
-    "abilities": {
+    "attributes": {
         "bases": {
             "strength": {
                 "type": "base",
@@ -94,7 +94,7 @@
             }
         }
     },
-    "statuses": {
+    "traits": {
         "skill": [],
         "state": [],
         "blessing": [],

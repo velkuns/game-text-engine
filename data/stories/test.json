@@ -97,7 +97,7 @@
                     "numberRequired": 1,
                     "conditions": [
                         {
-                            "type": "self.ability.vitality",
+                            "type": "self.attribute.vitality",
                             "condition": "value>0",
                             "is": true
                         }
@@ -115,7 +115,7 @@
                     "numberRequired": 1,
                     "conditions": [
                         {
-                            "type": "self.ability.vitality",
+                            "type": "self.attribute.vitality",
                             "condition": "value<=0",
                             "is": true
                         }

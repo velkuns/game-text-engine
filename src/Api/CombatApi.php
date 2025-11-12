@@ -80,7 +80,7 @@ class CombatApi
             }
         }
 
-        //~ Time Resolver to clean status with duration
+        //~ Time Resolver to clean trait with duration
         $this->timeResolver->combatEnd([$player, ...$enemies]);
 
         //~ If player still alive, loots enemies
@@ -190,10 +190,10 @@ class CombatApi
 
     private function inflictDamagesTo(EntityInterface $defender, int $damages): void
     {
-        $vitality = $defender->getAbilities()->get('vitality');
+        $vitality = $defender->getAttributes()->get('vitality');
 
         if ($vitality === null) {
-            throw new \UnexpectedValueException('Entity has no vitality ability'); // @codeCoverageIgnore
+            throw new \UnexpectedValueException('Entity has no vitality attribute'); // @codeCoverageIgnore
         }
 
         $vitality->decrease($damages);

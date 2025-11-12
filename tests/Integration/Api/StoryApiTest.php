@@ -56,7 +56,7 @@ class StoryApiTest extends TestCase
         $goblin = self::getGoblin();
 
         //~ Player is dead
-        $player->getAbilities()->get('vitality')?->decrease(100);
+        $player->getAttributes()->get('vitality')?->decrease(100);
 
         //~ Trying to go to 998 (player dead)
         $node = $story->goto('4', '998', $player, $goblin);
@@ -81,7 +81,7 @@ class StoryApiTest extends TestCase
         self::assertCount(1, $edges);
 
         //~ Combat simulation, Player wins
-        $goblin->getAbilities()->get('vitality')?->decrease(100);
+        $goblin->getAttributes()->get('vitality')?->decrease(100);
 
         $edges = $story->getPossibleChoices('4', $player, $goblin);
         self::assertCount(1, $edges);
@@ -91,7 +91,7 @@ class StoryApiTest extends TestCase
         $player = self::getPlayer();
         $goblin = self::getGoblin();
 
-        $player->getAbilities()->get('vitality')?->decrease(100);
+        $player->getAttributes()->get('vitality')?->decrease(100);
 
         $edges = $story->getPossibleChoices('4', $player, $goblin);
         self::assertCount(1, $edges);

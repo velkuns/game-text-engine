@@ -20,12 +20,12 @@ class ValueResolverHandlerTest extends TestCase
     use EntityTrait;
     use ResolverTrait;
 
-    public function testHandleOnAbility(): void
+    public function testHandleOnAttribute(): void
     {
         $resolver = self::getValueResolverHandler();
         $player   = self::getPlayer();
 
-        $value = $resolver->handle('self.ability.strength.value', $player);
+        $value = $resolver->handle('self.attribute.strength.value', $player);
 
         self::assertSame(10, $value);
     }
