@@ -186,7 +186,7 @@ namespace Application;
 
 // [... game api init code here ... ]
 
-//~ Return all attributes: array{bases: array<string, AttributeInterface>, compounds: array<string, AttributeInterface>}
+//~ Return all attributes: array{simples: array<string, AttributeInterface>, compounds: array<string, AttributeInterface>}
 $attributes = $gameApi->attributes->getAll();
 
 $attribute = $gameApi->attributes->get('strength'); // Get one attribute (cloned)

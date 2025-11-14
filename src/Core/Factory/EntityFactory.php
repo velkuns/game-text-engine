@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Core\Factory;
 
-use Velkuns\GameTextEngine\Rpg\Attribute\BaseAttribute;
+use Velkuns\GameTextEngine\Rpg\Attribute\SimpleAttribute;
 use Velkuns\GameTextEngine\Rpg\Attribute\CompoundAttribute;
 use Velkuns\GameTextEngine\Rpg\Damages\Damages;
 use Velkuns\GameTextEngine\Rpg\Entity\Entity;
@@ -26,7 +26,7 @@ use Velkuns\GameTextEngine\Rpg\Item\Item;
 use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 
 /**
- * @phpstan-import-type BaseAttributeData from BaseAttribute
+ * @phpstan-import-type SimpleAttributeData from SimpleAttribute
  * @phpstan-import-type CompoundAttributeData from CompoundAttribute
  * @phpstan-import-type EntityData from EntityInterface
  * @phpstan-import-type EntityInfoData from EntityInfo
@@ -90,10 +90,10 @@ readonly class EntityFactory
      */
     private function fromEntityAttributes(array $data): EntityAttributes
     {
-        $bases     = $this->attributeFactory->fromBases($data['bases']);
-        $compounds = $this->attributeFactory->fromCompounds($data['compounds'], $bases);
+        $simples     = $this->attributeFactory->fromSimples($data['simples']);
+        $compounds = $this->attributeFactory->fromCompounds($data['compounds'], $simples);
 
-        return new EntityAttributes($bases, $compounds);
+        return new EntityAttributes($simples, $compounds);
     }
 
     /**

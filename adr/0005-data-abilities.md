@@ -6,10 +6,10 @@
 
 ## Context
 
-We have two types of attributes: base & compound.
+We have two types of attributes: simple & compound.
 
-Base attributes are simple, with a value that can be changed (increased or decreased) during the game.
-- type: base
+Simple attributes are simple, with a value that can be changed (increased or decreased) during the game.
+- type: simple
 - initial: the initial value of the attribute (immutable)
 - value: the current value of the attribute
 - max: the maximum value of the attribute (generally >= initial)
@@ -24,12 +24,12 @@ Compound attributes are calculated from other attributes, and cannot be changed 
 
 ## Decision
 
-### Base attribute
+### Simple attribute
 So, the format will be:
-Base attribute format:
+Simple attribute format:
 ```json
 {
-    "type": "base",
+    "type": "simple",
     "name": "string",
     "value": "int",
     "max": "int",
@@ -45,7 +45,7 @@ Base attribute format:
 Example (for a vitality attribute):
 ```json
 {
-    "type": "base",
+    "type": "simple",
     "name": "vitality",
     "rule": "strength + endurance",
     "initial": 12,
@@ -79,7 +79,7 @@ Example:
 ### Global Attributes format
 ```json
 {
-    "base": "list<BaseAttribute>",
+    "simple": "list<SimpleAttribute>",
     "compound": "list<CompoundAttribute>"
 }
 ```

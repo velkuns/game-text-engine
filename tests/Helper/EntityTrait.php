@@ -62,9 +62,9 @@ trait EntityTrait
                 ],
             ],
             'attributes' => [
-                'bases'     => [
+                'simples'     => [
                     'strength'  => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'strength',
                         'initial'     => 10,
                         'max'         => 10,
@@ -76,7 +76,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'endurance' => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'endurance',
                         'initial'     => 14,
                         'max'         => 14,
@@ -88,7 +88,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'agility'   => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'agility',
                         'initial'     => 15,
                         'max'         => 15,
@@ -100,7 +100,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'intuition' => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'intuition',
                         'initial'     => 12,
                         'max'         => 12,
@@ -112,7 +112,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'vitality'  => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'vitality',
                         'initial'     => 24,
                         'max'         => 24,
@@ -310,9 +310,9 @@ trait EntityTrait
             ],
             'damages'   => ['physical' => ['type' => 'physical', 'value' => 0]],
             'attributes' => [
-                'bases'     => [
+                'simples'     => [
                     'strength'  => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'strength',
                         'initial'     => 11,
                         'max'         => 11,
@@ -324,7 +324,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'endurance' => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'endurance',
                         'initial'     => 12,
                         'max'         => 12,
@@ -336,7 +336,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'agility'   => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'agility',
                         'initial'     => 13,
                         'max'         => 13,
@@ -348,7 +348,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'intuition' => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'intuition',
                         'initial'     => 14,
                         'max'         => 14,
@@ -360,7 +360,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'vitality'  => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'vitality',
                         'initial'     => 23,
                         'max'         => 23,
@@ -433,9 +433,9 @@ trait EntityTrait
             ],
             'damages'   => ['physical' => ['type' => 'physical', 'value' => 2]],
             'attributes' => [
-                'bases'     => [
+                'simples'     => [
                     'strength'  => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'strength',
                         'initial'     => 8,
                         'max'         => 8,
@@ -447,7 +447,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'endurance' => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'endurance',
                         'initial'     => 8,
                         'max'         => 8,
@@ -459,7 +459,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'agility'   => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'agility',
                         'initial'     => 14,
                         'max'         => 14,
@@ -471,7 +471,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'intuition' => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'intuition',
                         'initial'     => 10,
                         'max'         => 10,
@@ -483,7 +483,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'vitality'  => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'vitality',
                         'initial'     => 0,
                         'max'         => 0,

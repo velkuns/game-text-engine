@@ -104,7 +104,7 @@ class TraitsApi
             $traits[$type] = [];
         }
 
-        //~ Transform attributes into data and separate bases with ou without init rule.
+        //~ Transform attributes into data and separate simples with ou without init rule.
         foreach ($data as $type => $list) {
             if (!isset($traits[$type])) {
                 throw new TraitsApiException("Unknown trait '$type'", 1552);

@@ -42,9 +42,9 @@ class BestiaryApiTest extends TestCase
         $entityData = $entity->jsonSerialize();
         $entityData['name'] = 'Goblin Warrior';
 
-        self::assertArrayHasKey('strength', $entityData['attributes']['bases']);
+        self::assertArrayHasKey('strength', $entityData['attributes']['simples']);
 
-        $entityData['attributes']['bases']['strength']['value'] = 20;
+        $entityData['attributes']['simples']['strength']['value'] = 20;
 
         $goblinWarrior = self::getEntityFactory()->from($entityData);
 

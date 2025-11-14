@@ -13,7 +13,7 @@ namespace Core\Factory;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Exception\Core\ElementJsonParseException;
-use Velkuns\GameTextEngine\Rpg\Attribute\BaseAttribute;
+use Velkuns\GameTextEngine\Rpg\Attribute\SimpleAttribute;
 use Velkuns\GameTextEngine\Rpg\Attribute\ConstraintsAttribute;
 use Velkuns\GameTextEngine\Rpg\Damages\Damages;
 use Velkuns\GameTextEngine\Rpg\Damages\DamagesDetail;
@@ -194,10 +194,10 @@ class ElementFactoryTest extends TestCase
         self::getElementFactory()->prerequisitesFromJson($json);
     }
 
-    public function testAttributeBaseFromJson(): void
+    public function testAttributeSimpleFromJson(): void
     {
         $json    = '{
-            "type": "base",
+            "type": "simple",
             "name": "strength",
             "value": 10,
             "max": 20,
@@ -208,7 +208,7 @@ class ElementFactoryTest extends TestCase
             "initial": 10,
             "rule": null
         }';
-        $attribute = self::getElementFactory()->attributeBaseFromJson($json);
+        $attribute = self::getElementFactory()->attributeSimpleFromJson($json);
 
         self::assertSame('strength', $attribute->getName());
         self::assertSame(10, $attribute->getValue());
@@ -217,13 +217,13 @@ class ElementFactoryTest extends TestCase
         self::assertNull($attribute->getRule());
         self::assertSame(0, $attribute->getConstraints()->min);
         self::assertSame(100, $attribute->getConstraints()->max);
-        self::assertSame('base', $attribute->getType()->value);
+        self::assertSame('simple', $attribute->getType()->value);
     }
 
-    public function testAttributeBaseFromJsonWithInvalidJson(): void
+    public function testAttributeSimpleFromJsonWithInvalidJson(): void
     {
         $json = '{
-            "type": "base",
+            "type": "simple",
             "name": "strength",
             "value": 10,
             "max": 20,
@@ -237,7 +237,7 @@ class ElementFactoryTest extends TestCase
 
         self::expectExceptionCode(2011);
         self::expectException(ElementJsonParseException::class);
-        self::getElementFactory()->attributeBaseFromJson($json);
+        self::getElementFactory()->attributeSimpleFromJson($json);
     }
 
     public function testAttributeCompoundFromJson(): void
@@ -247,12 +247,12 @@ class ElementFactoryTest extends TestCase
             "name": "attack",
             "rule": "strength + agility"
         }';
-        $bases = [
-            'strength' => new BaseAttribute('strength', 10, 20, new ConstraintsAttribute(0, 100), 10),
-            'agility'  => new BaseAttribute('agility', 15, 30, new ConstraintsAttribute(0, 100), 15),
+        $simples = [
+            'strength' => new SimpleAttribute('strength', 10, 20, new ConstraintsAttribute(0, 100), 10),
+            'agility'  => new SimpleAttribute('agility', 15, 30, new ConstraintsAttribute(0, 100), 15),
         ];
 
-        $attribute = self::getElementFactory()->attributeCompoundFromJson($json, $bases);
+        $attribute = self::getElementFactory()->attributeCompoundFromJson($json, $simples);
 
         self::assertSame('attack', $attribute->getName());
         self::assertSame(25, $attribute->getValue());
@@ -271,11 +271,11 @@ class ElementFactoryTest extends TestCase
             "name": "attack",
             "rule": "strength + agility"
         ';
-        $bases = [];
+        $simples = [];
 
         self::expectExceptionCode(2012);
         self::expectException(ElementJsonParseException::class);
-        self::getElementFactory()->attributeCompoundFromJson($json, $bases);
+        self::getElementFactory()->attributeCompoundFromJson($json, $simples);
     }
 
     public function testItemFromJson(): void
@@ -367,9 +367,9 @@ class ElementFactoryTest extends TestCase
                 }
             },
             "attributes": {
-                "bases": {
+                "simples": {
                     "strength": {
-                        "type": "base",
+                        "type": "simple",
                         "name": "strength",
                         "value": 10,
                         "max": 20,
@@ -381,7 +381,7 @@ class ElementFactoryTest extends TestCase
                         "rule": null
                     },
                     "agility": {
-                        "type": "base",
+                        "type": "simple",
                         "name": "agility",
                         "value": 15,
                         "max": 30,
@@ -393,7 +393,7 @@ class ElementFactoryTest extends TestCase
                         "rule": null
                     },
                     "endurance": {
-                        "type": "base",
+                        "type": "simple",
                         "name": "endurance",
                         "value": 12,
                         "max": 25,
@@ -405,7 +405,7 @@ class ElementFactoryTest extends TestCase
                         "rule": null
                     },
                     "intuition": {
-                        "type": "base",
+                        "type": "simple",
                         "name": "intuition",
                         "value": 8,
                         "max": 20,

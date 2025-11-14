@@ -51,7 +51,7 @@ Example:
         "notes": ""
     },
     "attributes": {
-        "base": "list<BaseAttribute>",
+        "simples": "list<SimpleAttribute>",
         "compound": "list<CompoundAttribute>"
     },
     "traits": {

@@ -96,7 +96,7 @@ Statistique principale:
 ```json
 {
     "strength": {
-        "type": "base",
+        "type": "simple",
         "initial": 6,
         "max": 6,
         "value": 6,
@@ -107,7 +107,7 @@ Statistique principale:
         "rule": null
     },
     "endurance": {
-        "type": "base",
+        "type": "simple",
         "initial": 6,
         "max": 6,
         "value": 6,
@@ -118,7 +118,7 @@ Statistique principale:
         "rule": null
     },
     "agility": {
-        "type": "base",
+        "type": "simple",
         "initial": 6,
         "max": 6,
         "value": 6,
@@ -129,7 +129,7 @@ Statistique principale:
         "rule": null
     },
     "intuition": {
-        "type": "base",
+        "type": "simple",
         "initial": 6,
         "max": 6,
         "value": 6,
@@ -140,7 +140,7 @@ Statistique principale:
         "rule": null
     },
     "vitality": {
-        "type": "base",
+        "type": "simple",
         "initial": 0, // 12 after initialization
         "max": 0,     // 12 after initialization
         "value": 0, // 12 after initialization

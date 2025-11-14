@@ -185,10 +185,10 @@ class BestiaryApi
         $damages = $data['damages'] ?? [];
 
         //~ Build attributes
-        $attributes = ['bases' => [], 'compounds' => []];
+        $attributes = ['simples' => [], 'compounds' => []];
         foreach ($data['attributes'] as $name => $value) {
-            $attributes['bases'][$name] = [
-                'type'        => 'base',
+            $attributes['simples'][$name] = [
+                'type'        => 'simple',
                 'name'        => $name,
                 'initial'     => $value,
                 'max'         => $value,
@@ -197,8 +197,8 @@ class BestiaryApi
                 'rule'        => null,
             ];
         }
-        $attributes['bases']['vitality'] = [
-            'type'        => 'base',
+        $attributes['simples']['vitality'] = [
+            'type'        => 'simple',
             'name'        => 'vitality',
             'initial'     => 0,
             'max'         => 0,
