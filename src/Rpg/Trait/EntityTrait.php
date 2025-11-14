@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Rpg\Traits;
+namespace Velkuns\GameTextEngine\Rpg\Trait;
 
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 

@@ -29,9 +29,9 @@
                     {
                         "type": "self.damages.physical.value",
                         "value": 2,
-                        "conditions": {
+                        "prerequisites": {
                             "numberRequired": 1,
-                            "conditions": [
+                            "requirements": [
                                 {
                                     "type": "self.inventory.item",
                                     "condition": "subType=sword;equipped=true",
@@ -50,9 +50,9 @@
                     {
                         "type": "self.damages.physical.value",
                         "value": 2,
-                        "conditions": {
+                        "prerequisites": {
                             "numberRequired": 1,
-                            "conditions": [
+                            "requirements": [
                                 {
                                     "type": "self.inventory.item",
                                     "condition": "subType=dagger;equipped=true",
@@ -71,9 +71,9 @@
                     {
                         "type": "self.damages.physical.value",
                         "value": 2,
-                        "conditions": {
+                        "prerequisites": {
                             "numberRequired": 1,
-                            "conditions": [
+                            "requirements": [
                                 {
                                     "type": "self.inventory.item",
                                     "condition": "subType=bow;equipped=true",
@@ -109,9 +109,9 @@
                     {
                         "type": "self.damages.physical.value",
                         "value": 2,
-                        "conditions": {
+                        "prerequisites": {
                             "numberRequired": 1,
-                            "conditions": [
+                            "requirements": [
                                 {
                                     "type": "enemy.info",
                                     "condition": "race=goblin",
@@ -130,9 +130,9 @@
                     {
                         "type": "self.damages.physical.value",
                         "value": 2,
-                        "conditions": {
+                        "prerequisites": {
                             "numberRequired": 1,
-                            "conditions": [
+                            "requirements": [
                                 {
                                     "type": "enemy.info",
                                     "condition": "race=goblin",
@@ -151,9 +151,9 @@
                     {
                         "type": "self.damages.physical.value",
                         "value": 2,
-                        "conditions": {
+                        "prerequisites": {
                             "numberRequired": 1,
-                            "conditions": [
+                            "requirements": [
                                 {
                                     "type": "enemy.info",
                                     "condition": "size=tiny",

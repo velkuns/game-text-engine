@@ -36,10 +36,10 @@ class EntityTest extends TestCase
         $player  = self::getPlayer();
         $gobelin = self::getGoblin();
 
-        $conditions = self::getConditionFactory()->from(
+        $conditions = self::getPrerequisitesFactory()->from(
             [
                 'numberRequired' => 1,
-                'conditions'     => [
+                'requirements'   => [
                     [
                         'type'      => 'enemy.info',
                         'condition' => 'race=goblin',

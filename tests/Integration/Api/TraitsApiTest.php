@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Api\TraitsApi;
 use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Exception\Api\TraitsApiException;
-use Velkuns\GameTextEngine\Rpg\Traits\EntityTrait;
+use Velkuns\GameTextEngine\Rpg\Trait\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
 /**

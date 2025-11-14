@@ -16,7 +16,7 @@ use Velkuns\GameTextEngine\Core\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Exception\Api\PlayerApiException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rpg\Modifier\ModifierHandler;
-use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
+use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 use Velkuns\GameTextEngine\Rules\Player\PlayerRules;
 use Velkuns\GameTextEngine\Rules\Player\PlayerRulesInventory;
 use Velkuns\GameTextEngine\Rules\Player\PlayerRulesLeveling;

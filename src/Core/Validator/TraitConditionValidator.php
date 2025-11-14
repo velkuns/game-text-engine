@@ -11,12 +11,12 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Core\Validator;
 
-use Velkuns\GameTextEngine\Core\Condition\ConditionOperatorType;
-use Velkuns\GameTextEngine\Core\Condition\ConditionParser;
+use Velkuns\GameTextEngine\Core\Prerequisite\ConditionOperatorType;
+use Velkuns\GameTextEngine\Core\Prerequisite\ConditionParser;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedConditionOperatorTypeException;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedConditionPropertyException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityTraits;
-use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
+use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 
 /**
  * @phpstan-import-type ConditionPartData from ConditionParser

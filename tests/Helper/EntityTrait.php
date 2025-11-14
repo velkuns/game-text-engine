@@ -147,9 +147,9 @@ trait EntityTrait
                             [
                                 'type'  => 'self.attribute.agility.value',
                                 'value' => 1,
-                                'conditions'     => [
+                                'prerequisites'     => [
                                     'numberRequired' => 1,
-                                    'conditions'     => [
+                                    'requirements'     => [
                                         [
                                             'type'      => 'self.inventory.item',
                                             'condition' => 'subType=sword;equipped=true;flags&4',
@@ -161,9 +161,9 @@ trait EntityTrait
                             [
                                 'type'  => 'self.attribute.attack.value',
                                 'value' => 2,
-                                'conditions'     => [
+                                'prerequisites'     => [
                                     'numberRequired' => 1,
-                                    'conditions'     => [
+                                    'requirements'     => [
                                         [
                                             'type'      => 'self.inventory.item',
                                             'condition' => 'subType=sword;equipped=true;flags&4',
@@ -182,9 +182,9 @@ trait EntityTrait
                             [
                                 'type'  => 'self.attribute.agility.value',
                                 'value' => 1,
-                                'conditions'     => [
+                                'prerequisites'     => [
                                     'numberRequired' => 1,
-                                    'conditions'     => [
+                                    'requirements'     => [
                                         [
                                             'type'      => 'enemy.info',
                                             'condition' => 'race=dragon',
@@ -196,9 +196,9 @@ trait EntityTrait
                             [
                                 'type'  => 'self.attribute.attack.value',
                                 'value' => 2,
-                                'conditions'     => [
+                                'prerequisites'     => [
                                     'numberRequired' => 1,
-                                    'conditions'     => [
+                                    'requirements'     => [
                                         [
                                             'type'      => 'enemy.info',
                                             'condition' => 'race=dragon',
@@ -217,9 +217,9 @@ trait EntityTrait
                             [
                                 'type'  => 'self.damages.physical.value',
                                 'value' => 1,
-                                'conditions'     => [
+                                'prerequisites'     => [
                                     'numberRequired' => 1,
-                                    'conditions'     => [
+                                    'requirements'     => [
                                         [
                                             'type'      => 'enemy.info',
                                             'condition' => 'race=goblin',

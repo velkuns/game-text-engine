@@ -11,22 +11,22 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Core\Factory;
 
-use Velkuns\GameTextEngine\Core\Condition\Conditions;
+use Velkuns\GameTextEngine\Core\Prerequisite\Prerequisites;
 use Velkuns\GameTextEngine\Exception\Core\ElementJsonParseException;
 use Velkuns\GameTextEngine\Rpg\Attribute\BaseAttribute;
 use Velkuns\GameTextEngine\Rpg\Attribute\CompoundAttribute;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
-use Velkuns\GameTextEngine\Rpg\Traits\EntityTrait;
-use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
+use Velkuns\GameTextEngine\Rpg\Trait\EntityTrait;
+use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 
 /**
  * @phpstan-import-type BaseAttributeData from BaseAttribute
  * @phpstan-import-type CompoundAttributeData from CompoundAttribute
  * @phpstan-import-type EntityData from EntityInterface
  * @phpstan-import-type TraitData from TraitInterface
- * @phpstan-import-type ConditionsData from Conditions
+ * @phpstan-import-type PrerequisitesData from Prerequisites
  * @phpstan-import-type ModifierData from Modifier
  * @phpstan-import-type ItemData from ItemInterface
  */
@@ -37,7 +37,7 @@ readonly class ElementFactory
         private AttributeFactory $attributeFactory,
         private TraitFactory $traitFactory,
         private ItemFactory $itemFactory,
-        private ConditionsFactory $conditionsFactory,
+        private PrerequisitesFactory $prerequisitesFactory,
         private ModifierFactory $modifierFactory,
     ) {}
 
@@ -120,21 +120,21 @@ readonly class ElementFactory
     /**
      * @throws ElementJsonParseException
      */
-    public function conditionsFromJson(string $json): Conditions
+    public function prerequisitesFromJson(string $json): Prerequisites
     {
         try {
-            /** @var ConditionsData $data */
+            /** @var PrerequisitesData $data */
             $data = \json_decode($json, true, flags: \JSON_THROW_ON_ERROR);
         } catch (\JsonException $exception) {
-            throw new ElementJsonParseException('Cannot parse json data from condition data', 2015, $exception);
+            throw new ElementJsonParseException('Cannot parse json data from prerequisites data', 2015, $exception);
         }
 
-        $conditions = $this->conditionsFactory->from($data);
-        if ($conditions === null) {
-            throw new ElementJsonParseException('Condition data cannot be null', 2016);
+        $prerequisites = $this->prerequisitesFactory->from($data);
+        if ($prerequisites === null) {
+            throw new ElementJsonParseException('Prerequisites data cannot be null', 2016);
         }
 
-        return $conditions;
+        return $prerequisites;
     }
 
     /**

@@ -9,11 +9,11 @@
 
 declare(strict_types=1);
 
-namespace Core\Condition;
+namespace Core\Prequisite;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Velkuns\GameTextEngine\Core\Condition\Conditions;
+use Velkuns\GameTextEngine\Core\Prerequisite\Prerequisites;
 use Velkuns\GameTextEngine\Exception\Core\ResolverException;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedConditionTypeException;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedTypeElementResolverException;
@@ -22,19 +22,19 @@ use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
-class ConditionsTest extends TestCase
+class PrerequisitesTest extends TestCase
 {
     use EntityTrait;
     use FactoryTrait;
 
     #[DataProvider('evaluateDataProvider')]
     public function testEvaluate(
-        ?Conditions $conditions,
+        ?Prerequisites $prerequisites,
         EntityInterface $player,
         ?EntityInterface $enemy,
         bool $evaluation,
     ): void {
-        self::assertSame($evaluation, $conditions?->evaluate($player, $enemy));
+        self::assertSame($evaluation, $prerequisites?->evaluate($player, $enemy));
     }
 
     /**
@@ -42,17 +42,17 @@ class ConditionsTest extends TestCase
      */
     #[DataProvider('evaluateExceptionDataProvider')]
     public function testEvaluateThatThrowException(
-        ?Conditions $conditions,
+        ?Prerequisites $prerequisites,
         EntityInterface $player,
         EntityInterface $enemy,
         string $exceptionClass,
     ): void {
         self::expectException($exceptionClass);
-        $conditions?->evaluate($player, $enemy);
+        $prerequisites?->evaluate($player, $enemy);
     }
 
     /**
-     * @return array<string, array{0: Conditions|null, 1: EntityInterface, 2: EntityInterface|null, 3: bool}>
+     * @return array<string, array{0: Prerequisites|null, 1: EntityInterface, 2: EntityInterface|null, 3: bool}>
      */
     public static function evaluateDataProvider(): array
     {
@@ -60,9 +60,9 @@ class ConditionsTest extends TestCase
 
         return [
             'evaluate required 1 condition with list of 1 conditions' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.attribute.strength',
                             'condition' => 'value >=  10 ',
@@ -75,9 +75,9 @@ class ConditionsTest extends TestCase
                 true,
             ],
             'evaluate required conditions based on entity info level' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.info',
                             'condition' => 'level>=0',
@@ -90,9 +90,9 @@ class ConditionsTest extends TestCase
                 true,
             ],
             'evaluate required conditions based on entity info size' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.info',
                             'condition' => 'size!=huge',
@@ -105,9 +105,9 @@ class ConditionsTest extends TestCase
                 true,
             ],
             'evaluate required conditions based on entity trait but not found' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.trait.skill',
                             'condition' => 'name=unknown',
@@ -120,9 +120,9 @@ class ConditionsTest extends TestCase
                 false,
             ],
             'evaluate required 1 condition with list of 1 conditions but evaluation failed' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.trait.skill',
                             'condition' => 'name=Sword (Mastery)',
@@ -135,11 +135,11 @@ class ConditionsTest extends TestCase
                 false,
             ],
             'evaluate required 1 condition with list of 2 conditions' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
-                            'type'     => 'self.attribute.strength',
+                            'type'      => 'self.attribute.strength',
                             'condition' => 'value>10',
                             'is'        => true,
                         ],
@@ -155,9 +155,9 @@ class ConditionsTest extends TestCase
                 true,
             ],
             'evaluate required 2 condition with list of 2 conditions' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 2,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.attribute.strength',
                             'condition' => 'value<=10',
@@ -175,9 +175,9 @@ class ConditionsTest extends TestCase
                 true,
             ],
             'evaluate required 1 condition with list of 1 conditions on specific item' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.inventory.item',
                             'condition' => 'name=The Sword;subType=sword;equipped=true;flags&4',
@@ -190,9 +190,9 @@ class ConditionsTest extends TestCase
                 true,
             ],
             'evaluate required 1 condition with list of 1 conditions on specific item but evaluation failed' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.inventory.item',
                             'condition' => 'name=The Sword;subType=sword;equipped=false;flags&4',
@@ -205,9 +205,9 @@ class ConditionsTest extends TestCase
                 false,
             ],
             'evaluate required conditions based on enemy info but no enemy entity given ' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'enemy.info',
                             'condition' => 'race=goblin',
@@ -223,7 +223,7 @@ class ConditionsTest extends TestCase
     }
 
     /**
-     * @return array<string, array{0: Conditions|null, 1: EntityInterface, 2: EntityInterface, 3: class-string<\Throwable>}>
+     * @return array<string, array{0: Prerequisites|null, 1: EntityInterface, 2: EntityInterface, 3: class-string<\Throwable>}>
      */
     public static function evaluateExceptionDataProvider(): array
     {
@@ -231,9 +231,9 @@ class ConditionsTest extends TestCase
 
         return [
             'evaluate with not supported type property' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions'     => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.unknown.property',
                             'condition' => 'value >=  10 ',
@@ -246,9 +246,9 @@ class ConditionsTest extends TestCase
                 UnsupportedTypeElementResolverException::class,
             ],
             'evaluate required conditions based on trait but trait type does not exist' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.trait.unknown',
                             'condition' => 'name=test',
@@ -261,9 +261,9 @@ class ConditionsTest extends TestCase
                 TraitException::class,
             ],
             'evaluate required conditions based on element that is not supported' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.damages.physical', // currently haven't damages condition validator
                             'condition' => 'value>2',
@@ -276,9 +276,9 @@ class ConditionsTest extends TestCase
                 UnsupportedConditionTypeException::class,
             ],
             'evaluate required conditions based on attribute but property not supported' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.damages.physical', // currently haven't damages condition validator
                             'condition' => 'value>2',
@@ -291,9 +291,9 @@ class ConditionsTest extends TestCase
                 UnsupportedConditionTypeException::class,
             ],
             'evaluate required conditions based on attribute but attribute not found' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.attribute.unknown',
                             'condition' => 'value>2',
@@ -306,9 +306,9 @@ class ConditionsTest extends TestCase
                 ResolverException::class,
             ],
             'evaluate required conditions based on damages type but type not found' => [
-                self::getConditionFactory()->from([
+                self::getPrerequisitesFactory()->from([
                     'numberRequired' => 1,
-                    'conditions' => [
+                    'requirements'   => [
                         [
                             'type'      => 'self.damages.unknown',
                             'condition' => 'value>2',

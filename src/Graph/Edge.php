@@ -11,12 +11,12 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Graph;
 
-use Velkuns\GameTextEngine\Core\Condition\Conditions;
+use Velkuns\GameTextEngine\Core\Prerequisite\Prerequisites;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 
 /**
- * @phpstan-import-type ConditionsData from Conditions
- * @phpstan-type EdgeData array{source: string, target: string, label: string, metadata: array{text: string, conditions?: ConditionsData|null}}
+ * @phpstan-import-type PrerequisitesData from Prerequisites
+ * @phpstan-type EdgeData array{source: string, target: string, label: string, metadata: array{text: string, prerequisites?: PrerequisitesData|null}}
  */
 readonly class Edge implements \JsonSerializable
 {
@@ -24,12 +24,12 @@ readonly class Edge implements \JsonSerializable
         public string $source,
         public string $target,
         public string $content,
-        public ?Conditions $conditions = null,
+        public ?Prerequisites $prerequisites = null,
     ) {}
 
     public function available(EntityInterface $player, ?EntityInterface $enemy = null): bool
     {
-        return $this->conditions?->evaluate($player, $enemy) ?? true;
+        return $this->prerequisites?->evaluate($player, $enemy) ?? true;
     }
 
     /**
@@ -46,8 +46,8 @@ readonly class Edge implements \JsonSerializable
             ],
         ];
 
-        if ($this->conditions !== null) {
-            $data['metadata']['conditions'] = $this->conditions->jsonSerialize();
+        if ($this->prerequisites !== null) {
+            $data['metadata']['prerequisites'] = $this->prerequisites->jsonSerialize();
         }
 
         return $data;

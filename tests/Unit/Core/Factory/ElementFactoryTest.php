@@ -33,9 +33,9 @@ class ElementFactoryTest extends TestCase
                 {
                     "type": "self.attribute.agility.value",
                     "value": 5,
-                    "conditions": {
+                    "prerequisites": {
                         "numberRequired": 1,
-                        "conditions": [
+                        "requirements": [
                             {
                                 "type": "self.inventory.item",
                                 "condition": "subType=sword",
@@ -47,9 +47,9 @@ class ElementFactoryTest extends TestCase
                 {
                     "type": "self.attribute.attack.value",
                     "value": 10,
-                    "conditions": {
+                    "prerequisites": {
                         "numberRequired": 1,
-                        "conditions": [
+                        "requirements": [
                             {
                                 "type": "self.inventory.item",
                                 "condition": "subType=sword",
@@ -70,9 +70,9 @@ class ElementFactoryTest extends TestCase
         self::assertCount(2, $modifiers);
         self::assertSame(0, $trait->getDurationTurns());
         self::assertSame(0, $trait->getRemainingTurns());
-        self::assertNotNull($modifiers[0]->conditions);
-        self::assertSame(1, $modifiers[0]->conditions->getNumberRequired());
-        self::assertCount(1, $modifiers[0]->conditions->getConditions());
+        self::assertNotNull($modifiers[0]->prerequisites);
+        self::assertSame(1, $modifiers[0]->prerequisites->getNumberRequired());
+        self::assertCount(1, $modifiers[0]->prerequisites->getRequirements());
     }
 
     public function testTraitFromJsonWithInvalidJson(): void
@@ -86,9 +86,9 @@ class ElementFactoryTest extends TestCase
                 {
                     "type": "self.attribute.agility.value",
                     "value": 5,
-                    "conditions": {
+                    "prerequisites": {
                         "numberRequired": 1,
-                        "conditions": [
+                        "requirements": [
                             {
                                 "type": "self.inventory.item",
                                 "condition": "subType=sword",
@@ -100,9 +100,9 @@ class ElementFactoryTest extends TestCase
                 {
                     "type": "self.attribute.attack.value",
                     "value": 10,
-                    "conditions": {
+                    "prerequisites": {
                         "numberRequired": 1,
-                        "conditions": [
+                        "requirements": [
                             {
                                 "type": "self.inventory.item",
                                 "condition": "subType=sword",
@@ -148,7 +148,7 @@ class ElementFactoryTest extends TestCase
     {
         $json = '{
             "numberRequired": 1,
-            "conditions": [
+            "requirements": [
                 {
                         "type": "self.inventory.item",
                         "condition": "subType=sword",
@@ -157,11 +157,11 @@ class ElementFactoryTest extends TestCase
             ]
         }';
 
-        $conditions = self::getElementFactory()->conditionsFromJson($json);
+        $conditions = self::getElementFactory()->prerequisitesFromJson($json);
         self::assertSame(1, $conditions->getNumberRequired());
-        self::assertCount(1, $conditions->getConditions());
+        self::assertCount(1, $conditions->getRequirements());
 
-        $condition = $conditions->getConditions()[0];
+        $condition = $conditions->getRequirements()[0];
         self::assertSame('self.inventory.item', $condition->getType());
         self::assertSame('subType=sword', $condition->getCondition());
         self::assertTrue($condition->is());
@@ -171,7 +171,7 @@ class ElementFactoryTest extends TestCase
     {
         $json = '{
             "numberRequired": 1,
-            "conditions": [
+            "requirements": [
                 {
                         "type": "self.inventory.item",
                         "condition": "subType=sword",
@@ -182,7 +182,7 @@ class ElementFactoryTest extends TestCase
 
         self::expectExceptionCode(2015);
         self::expectException(ElementJsonParseException::class);
-        self::getElementFactory()->conditionsFromJson($json);
+        self::getElementFactory()->prerequisitesFromJson($json);
     }
 
     public function testConditionsFromJsonWithNullJson(): void
@@ -191,7 +191,7 @@ class ElementFactoryTest extends TestCase
 
         self::expectExceptionCode(2016);
         self::expectException(ElementJsonParseException::class);
-        self::getElementFactory()->conditionsFromJson($json);
+        self::getElementFactory()->prerequisitesFromJson($json);
     }
 
     public function testAttributeBaseFromJson(): void
@@ -446,9 +446,9 @@ class ElementFactoryTest extends TestCase
                                 "value": 10
                             }
                         ],
-                        "conditions": {
+                        "prerequisites": {
                             "numberRequired": 1,
-                            "conditions": [
+                            "requirements": [
                                 {
                                     "type": "self.inventory.item",
                                     "condition": "subType=sword;equipped=true;flags&3",

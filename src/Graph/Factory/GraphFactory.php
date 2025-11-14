@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Graph\Factory;
 
-use Velkuns\GameTextEngine\Core\Factory\ConditionsFactory;
+use Velkuns\GameTextEngine\Core\Factory\PrerequisitesFactory;
 use Velkuns\GameTextEngine\Graph\Edge;
 use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Graph\Node;
@@ -24,7 +24,7 @@ use Velkuns\GameTextEngine\Graph\Node;
 readonly class GraphFactory
 {
     public function __construct(
-        private ConditionsFactory $conditionsFactory,
+        private PrerequisitesFactory $prerequisitesFactory,
     ) {}
 
     /**
@@ -66,7 +66,7 @@ readonly class GraphFactory
             $data['source'],
             $data['target'],
             $data['metadata']['text'],
-            $this->conditionsFactory->from($data['metadata']['conditions'] ?? null),
+            $this->prerequisitesFactory->from($data['metadata']['prerequisites'] ?? null),
         );
     }
 }

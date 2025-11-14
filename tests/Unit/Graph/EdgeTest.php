@@ -28,7 +28,7 @@ class EdgeTest extends TestCase
 
         $data = [
             'numberRequired' => 1,
-            'conditions'     => [
+            'requirements'   => [
                 [
                     'type'      => 'self.attribute.vitality',
                     'condition' => 'value<=0',
@@ -36,7 +36,7 @@ class EdgeTest extends TestCase
                 ],
             ],
         ];
-        $conditions = self::getConditionFactory()->from($data);
+        $conditions = self::getPrerequisitesFactory()->from($data);
 
         $edge = new Edge('1', '2', 'You died!', $conditions);
 

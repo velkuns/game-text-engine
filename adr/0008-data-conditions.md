@@ -1,4 +1,4 @@
-# Data - Conditions
+# Data - Prerequisites
 
 ## Status
 
@@ -7,8 +7,8 @@
 ## Context
 
 In some case, state or action require some conditions to be applied.
-And we can have multiple conditions to be applied.
-So we need to define number of conditions required from a list to be considered as met, and the list of those conditions.
+And we can have multiple prerequisites to be applied.
+So we need to define number of prerequisites required from a list to be considered as met, and the list of those conditions.
 
 - number: number of conditions required to be met
 - list: list of conditions
@@ -30,7 +30,7 @@ Condition format:
 ```json
 {
     "number": "int",
-    "conditions": [
+    "prerequisites": [
         {
             "from": "string",
             "condition": "string",
@@ -102,13 +102,13 @@ List of supported operators are:
 
 ### Examples
 Attribute condition example:
- - At least 1 of the following conditions must be met:
+ - At least 1 of the following prerequisites must be met:
    - strength > 6
    - endurance >= 5
 
 ```json
 {
-    "conditions": {
+    "prerequisites": {
         "numberRequired": 1,
         "conditions": [
             {
@@ -130,7 +130,7 @@ State condition example:
 
 ```json
 {
-   "conditions": {
+   "prerequisites": {
       "numberRequired": 3,
       "conditions": [
          {

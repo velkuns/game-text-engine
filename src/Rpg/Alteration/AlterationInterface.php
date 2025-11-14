@@ -9,22 +9,22 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Rpg\Traits;
+namespace Velkuns\GameTextEngine\Rpg\Alteration;
 
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
 /**
  * @phpstan-import-type ModifierData from Modifier
- * @phpstan-type TraitData array{
+ * @phpstan-import-type AlterationDurationData from AlterationDuration
+ * @phpstan-type AlterationData array{
  *    type: string,
  *    name: string,
  *    description: string,
  *    modifiers: list<ModifierData>,
- *    durationTurns?: int,
- *    remainingTurns?: int,
+ *    duration: AlterationDurationData,
  * }
  */
-interface TraitInterface extends \JsonSerializable
+interface AlterationInterface extends \JsonSerializable
 {
     public function getType(): string;
 
@@ -39,16 +39,12 @@ interface TraitInterface extends \JsonSerializable
 
     public function isActive(): bool;
 
-    public function getDurationTurns(): int;
-
-    public function getRemainingTurns(): int;
-
-    public function decreaseRemainingTurns(): self;
+    public function getDuration(): AlterationDuration;
 
     public function clone(): self;
 
     /**
-     * @return TraitData
+     * @return AlterationData
      */
     public function jsonSerialize(): array;
 }

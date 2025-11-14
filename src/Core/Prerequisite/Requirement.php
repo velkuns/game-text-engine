@@ -9,16 +9,16 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Core\Condition;
+namespace Velkuns\GameTextEngine\Core\Prerequisite;
 
 use Velkuns\GameTextEngine\Core\Resolver\TypeResolverHandler;
 use Velkuns\GameTextEngine\Core\Validator\ValidatorHandler;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 
 /**
- * @phpstan-import-type ConditionData from ConditionInterface
+ * @phpstan-import-type RequirementData from RequirementInterface
  */
-readonly class Condition implements ConditionInterface
+readonly class Requirement implements RequirementInterface
 {
     public function __construct(
         public ConditionParser $parser,
@@ -56,7 +56,7 @@ readonly class Condition implements ConditionInterface
     }
 
     /**
-     * @return ConditionData
+     * @return RequirementData
      */
     public function jsonSerialize(): array
     {

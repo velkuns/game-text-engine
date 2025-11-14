@@ -13,7 +13,7 @@ namespace Velkuns\GameTextEngine\Rpg\Entity;
 
 use Velkuns\GameTextEngine\Exception\Rpg\TraitException;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
-use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
+use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 
 /**
  * @phpstan-import-type TraitData from TraitInterface
@@ -106,8 +106,8 @@ class EntityTraits implements \JsonSerializable
             }
 
             foreach ($traitModifiers as $modifier) {
-                if ($modifier->conditions !== null && !$modifier->conditions->evaluate($player, $enemy)) {
-                    continue; // modifier conditions is not met, skip it
+                if ($modifier->prerequisites !== null && !$modifier->prerequisites->evaluate($player, $enemy)) {
+                    continue; // modifier prerequisites is not met, skip it
                 }
 
                 $modifiers[] = $modifier;

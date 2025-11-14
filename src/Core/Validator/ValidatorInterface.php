@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Core\Validator;
 
-use Velkuns\GameTextEngine\Core\Condition\ConditionParser;
+use Velkuns\GameTextEngine\Core\Prerequisite\ConditionParser;
 
 /**
  * @phpstan-import-type ConditionPartData from ConditionParser

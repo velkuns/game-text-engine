@@ -23,7 +23,7 @@ use Velkuns\GameTextEngine\Rpg\Entity\EntityInventory;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityLoot;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityTraits;
 use Velkuns\GameTextEngine\Rpg\Item\Item;
-use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
+use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 
 /**
  * @phpstan-import-type BaseAttributeData from BaseAttribute

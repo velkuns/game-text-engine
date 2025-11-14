@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
-use Velkuns\GameTextEngine\Core\Condition\ConditionParser;
+use Velkuns\GameTextEngine\Core\Prerequisite\ConditionParser;
 use Velkuns\GameTextEngine\Core\Factory\AttributeFactory;
-use Velkuns\GameTextEngine\Core\Factory\ConditionsFactory;
+use Velkuns\GameTextEngine\Core\Factory\PrerequisitesFactory;
 use Velkuns\GameTextEngine\Core\Factory\DamageFactory;
 use Velkuns\GameTextEngine\Core\Factory\ElementFactory;
 use Velkuns\GameTextEngine\Core\Factory\EntityFactory;
@@ -56,7 +56,7 @@ trait FactoryTrait
             self::getAttributeFactory(),
             self::getTraitFactory(),
             self::getItemFactory(),
-            self::getConditionFactory(),
+            self::getPrerequisitesFactory(),
             self::getModifierFactory(),
         );
     }
@@ -71,9 +71,9 @@ trait FactoryTrait
         return new LootFactory();
     }
 
-    private static function getConditionFactory(): ConditionsFactory
+    private static function getPrerequisitesFactory(): PrerequisitesFactory
     {
-        return new ConditionsFactory(
+        return new PrerequisitesFactory(
             new ConditionParser(),
             self::getTypeResolverHandler(),
             self::getValidatorHandler(),
@@ -87,7 +87,7 @@ trait FactoryTrait
 
     private static function getModifierFactory(): ModifierFactory
     {
-        return new ModifierFactory(self::getConditionFactory());
+        return new ModifierFactory(self::getPrerequisitesFactory());
     }
 
     private static function getTraitFactory(): TraitFactory
@@ -102,6 +102,6 @@ trait FactoryTrait
 
     private static function getGraphFactory(): GraphFactory
     {
-        return new GraphFactory(self::getConditionFactory());
+        return new GraphFactory(self::getPrerequisitesFactory());
     }
 }

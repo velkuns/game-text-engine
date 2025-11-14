@@ -93,9 +93,9 @@
             "label": "action",
             "metadata": {
                 "text": "Vous avez vaincu!",
-                "conditions": {
+                "prerequisites": {
                     "numberRequired": 1,
-                    "conditions": [
+                    "requirements": [
                         {
                             "type": "self.attribute.vitality",
                             "condition": "value>0",
@@ -111,9 +111,9 @@
             "label": "action",
             "metadata": {
                 "text": "Vous \u00eates mort...",
-                "conditions": {
+                "prerequisites": {
                     "numberRequired": 1,
-                    "conditions": [
+                    "requirements": [
                         {
                             "type": "self.attribute.vitality",
                             "condition": "value<=0",

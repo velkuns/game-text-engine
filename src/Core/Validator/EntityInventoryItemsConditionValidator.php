@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Core\Validator;
 
-use Velkuns\GameTextEngine\Core\Condition\ConditionOperatorType;
-use Velkuns\GameTextEngine\Core\Condition\ConditionParser;
+use Velkuns\GameTextEngine\Core\Prerequisite\ConditionOperatorType;
+use Velkuns\GameTextEngine\Core\Prerequisite\ConditionParser;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedConditionPropertyException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInventory;
 use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;

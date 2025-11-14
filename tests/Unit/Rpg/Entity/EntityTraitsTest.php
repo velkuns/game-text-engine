@@ -14,7 +14,7 @@ namespace Rpg\Entity;
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Exception\Rpg\TraitException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityTraits;
-use Velkuns\GameTextEngine\Rpg\Traits\EntityTrait;
+use Velkuns\GameTextEngine\Rpg\Trait\EntityTrait;
 
 class EntityTraitsTest extends TestCase
 {

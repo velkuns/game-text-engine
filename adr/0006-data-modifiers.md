@@ -18,7 +18,7 @@ Modifier format:
 {
     "type": "string",
     "value": "int",
-    "conditions?": {
+    "prerequisites?": {
         "numberRequired": "int",
         "conditions": [
             {
@@ -37,7 +37,7 @@ Example:
 {
     "type": "self.attribute.strength.value",
     "value": 2,
-    "conditions": {
+    "prerequisites": {
         "numberRequired": 1,
         "conditions": [
             {

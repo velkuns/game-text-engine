@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Core\Factory;
 
-use Velkuns\GameTextEngine\Rpg\Traits\EntityTrait;
-use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
+use Velkuns\GameTextEngine\Rpg\Trait\EntityTrait;
+use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 
 /**
  * @phpstan-import-type TraitData from TraitInterface

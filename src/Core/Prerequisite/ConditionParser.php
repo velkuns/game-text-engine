@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Core\Condition;
+namespace Velkuns\GameTextEngine\Core\Prerequisite;
 
 /**
  * @phpstan-type ConditionPartData array{property: string, operator: ConditionOperatorType, value: string|int|float|bool|null}

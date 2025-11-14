@@ -15,7 +15,7 @@ use Velkuns\GameTextEngine\Core\Factory\TraitFactory;
 use Velkuns\GameTextEngine\Exception\Api\AttributesApiException;
 use Velkuns\GameTextEngine\Exception\Api\TraitsApiException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityTraits;
-use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
+use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 use Velkuns\GameTextEngine\Rules\Traits\TraitsRules;
 use Velkuns\GameTextEngine\Rules\Traits\TraitsRulesLeveling;
 use Velkuns\GameTextEngine\Rules\Traits\TraitsRulesStarting;

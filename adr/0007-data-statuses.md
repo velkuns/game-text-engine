@@ -112,7 +112,7 @@ Skill trait example:
         {
             "combat" : "self.damages.physical.value",
             "value": 2,
-            "conditions": {
+            "prerequisites": {
                 "numberRequired": 1,
                 "conditions": [
                     {
