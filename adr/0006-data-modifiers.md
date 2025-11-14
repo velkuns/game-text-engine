@@ -20,7 +20,7 @@ Modifier format:
     "value": "int",
     "prerequisites?": {
         "numberRequired": "int",
-        "conditions": [
+        "requirements": [
             {
                 "type": "string",
                 "condition": "string",
@@ -39,7 +39,7 @@ Example:
     "value": 2,
     "prerequisites": {
         "numberRequired": 1,
-        "conditions": [
+        "requirements": [
             {
                 "type": "self.inventory.item",
                 "condition": "subType=sword;equipped=true",

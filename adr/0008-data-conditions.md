@@ -6,26 +6,26 @@
 
 ## Context
 
-In some case, state or action require some conditions to be applied.
+In some case, state or action require some prerequisites to be applied.
 And we can have multiple prerequisites to be applied.
-So we need to define number of prerequisites required from a list to be considered as met, and the list of those conditions.
+So we need to define number of prerequisites required from a list to be considered as met, and the list of those requirements.
 
-- number: number of conditions required to be met
-- list: list of conditions
+- numberRequired: number of requirement required to be met
+- requirements: list of requirement
 
 Condition types:
 - self.attribute: check an attribute value
-- self.traits.skill: check if a skill is present or not
-- self.traits.state: check if a state is present or not
-- self.traits.blessing: check if a blessing is present or not
-- self.traits.curse: check if a curse is present or not
-- self.traits.title: check if a title is present or not
+- self.trait.skill: check if a skill is present or not
+- self.trait.state: check if a state is present or not
+- self.trait.blessing: check if a blessing is present or not
+- self.trait.curse: check if a curse is present or not
+- self.trait.title: check if a title is present or not
 - self.inventory.item: check if an item is present or not (in inventory or equipped)
 - enemy.info: check for enemy information value (like race or size)
 
 ## Decision
 
-Condition format:
+Prerequisites format:
 
 ```json
 {
@@ -72,7 +72,7 @@ List of supported operators are:
 #### Skill presence
 ```json
 {
-    "type": "self.traits.skills",
+    "type": "self.trait.skills",
     "condition": "name=lockpicking",
     "is": true
 }
@@ -110,7 +110,7 @@ Attribute condition example:
 {
     "prerequisites": {
         "numberRequired": 1,
-        "conditions": [
+        "requirements": [
             {
                "type": "self.attribute.strength",
                "condition": "value>6",
@@ -132,14 +132,14 @@ State condition example:
 {
    "prerequisites": {
       "numberRequired": 3,
-      "conditions": [
+      "requirements": [
          {
-            "type": "self.traits.skills",
+            "type": "self.trait.skills",
             "condition": "name=lockpicking",
             "is": true
          },
          {
-            "type": "self.traits.states",
+            "type": "self.trait.state",
             "condition": "name=blindness",
             "is": false
          },
@@ -160,7 +160,7 @@ Weapon condition example:
 {
     "conditions": {
         "numberRequired": 1,
-        "conditions": [
+        "requirements": [
             {
                 "type": "self.inventory.item",
                 "condition": "subType=axe",
@@ -178,7 +178,7 @@ Weapon condition example:
 {
     "conditions": {
         "numberRequired": "1",
-        "conditions": [
+        "requirements": [
             {
                 "type": "self.inventory.item",
                 "condition": "flags&4;equipped=true",
