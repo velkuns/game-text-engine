@@ -128,7 +128,7 @@ class CombatApi
             $this->inflictDamagesTo($defender, $damages);
         }
 
-        $log = new CombatLog(
+        return new CombatLog(
             $attacker,
             $defender,
             $attacker->getInventory()->getEquippedWeapon() ?? null,
@@ -140,8 +140,6 @@ class CombatApi
                 'damages'   => $this->evaluator->render($this->rules->hit->damages->rule, $attacker, $defender, $attackerModifiers, $defenderModifiers),
             ],
         );
-
-        return $log;
     }
 
     public function loot(EntityInterface $player, EntityInterface $enemy): LootLog

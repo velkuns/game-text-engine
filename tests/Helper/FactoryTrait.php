@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
+use Velkuns\GameTextEngine\Core\Factory\AlterationFactory;
 use Velkuns\GameTextEngine\Core\Prerequisite\ConditionParser;
 use Velkuns\GameTextEngine\Core\Factory\AttributeFactory;
 use Velkuns\GameTextEngine\Core\Factory\PrerequisitesFactory;
@@ -40,6 +41,7 @@ trait FactoryTrait
             self::$entityFactory = new EntityFactory(
                 self::getAttributeFactory(),
                 self::getTraitFactory(),
+                self::getAlterationFactory(),
                 self::getItemFactory(),
                 self::getDamageFactory(),
                 self::getLootFactory(),
@@ -55,6 +57,7 @@ trait FactoryTrait
             self::getEntityFactory(),
             self::getAttributeFactory(),
             self::getTraitFactory(),
+            self::getAlterationFactory(),
             self::getItemFactory(),
             self::getPrerequisitesFactory(),
             self::getModifierFactory(),
@@ -93,6 +96,11 @@ trait FactoryTrait
     private static function getTraitFactory(): TraitFactory
     {
         return new TraitFactory(self::getModifierFactory());
+    }
+
+    private static function getAlterationFactory(): AlterationFactory
+    {
+        return new AlterationFactory(self::getModifierFactory());
     }
 
     private static function getDamageFactory(): DamageFactory

@@ -89,7 +89,7 @@ readonly class Alteration implements AlterationInterface
                 fn(Modifier $modifier): Modifier => $modifier->clone(),
                 $this->modifiers,
             ),
-            $this->duration,
+            $this->duration->clone(),
         );
     }
 }

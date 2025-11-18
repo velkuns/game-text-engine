@@ -11,28 +11,32 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Core\Factory;
 
-use Velkuns\GameTextEngine\Rpg\Trait\EntityTrait;
-use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
+use Velkuns\GameTextEngine\Rpg\Alteration\Alteration;
+use Velkuns\GameTextEngine\Rpg\Alteration\AlterationDuration;
+use Velkuns\GameTextEngine\Rpg\Alteration\AlterationInterface;
 
 /**
- * @phpstan-import-type TraitData from TraitInterface
+ * @phpstan-import-type AlterationData from AlterationInterface
  */
-readonly class TraitFactory
+readonly class AlterationFactory
 {
     public function __construct(
         private ModifierFactory $modifierFactory,
     ) {}
 
     /**
-     * @param TraitData $data
+     * @phpstan-param AlterationData $data
      */
-    public function from(array $data): TraitInterface
+    public function from(array $data): AlterationInterface
     {
         $type           = $data['type'];
         $name           = $data['name'];
         $description    = $data['description'];
         $modifiers      = \array_map(fn($modifier) => $this->modifierFactory->from($modifier), $data['modifiers']);
 
-        return new EntityTrait($type, $name, $description, $modifiers);
+        $max       = $data['duration']['max'];
+        $remaining = $data['duration']['remaining'] ?? $max;
+
+        return new Alteration($type, $name, $description, $modifiers, new AlterationDuration($max, $remaining));
     }
 }

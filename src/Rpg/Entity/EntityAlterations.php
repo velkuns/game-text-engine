@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Rpg\Entity;
 
-use Velkuns\GameTextEngine\Exception\Rpg\TraitException;
+use Velkuns\GameTextEngine\Exception\Rpg\AlterationException;
 use Velkuns\GameTextEngine\Rpg\Alteration\AlterationInterface;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
@@ -36,7 +36,7 @@ class EntityAlterations implements \JsonSerializable
     public function set(AlterationInterface $alteration): self
     {
         if (!isset($this->alterations[$alteration->getType()])) {
-            throw new TraitException("Unknown alteration type '{$alteration->getType()}'", 1540);
+            throw new AlterationException("Unknown alteration type '{$alteration->getType()}'", 1540);
         }
 
         $this->alterations[$alteration->getType()][$alteration->getName()] = $alteration;
@@ -72,7 +72,7 @@ class EntityAlterations implements \JsonSerializable
     public function getAllFromType(string $type): array
     {
         if (!isset($this->alterations[$type])) {
-            throw new TraitException("Unknown trait type '$type'", 1501);
+            throw new AlterationException("Unknown trait type '$type'", 1501);
         }
 
         return $this->alterations[$type];

@@ -13,6 +13,7 @@ namespace Velkuns\GameTextEngine\Tests\Helper;
 
 use Random\Engine\Mt19937;
 use Random\Randomizer;
+use Velkuns\GameTextEngine\Core\Resolver\AlterationResolver;
 use Velkuns\GameTextEngine\Core\Resolver\AttributeResolver;
 use Velkuns\GameTextEngine\Core\Resolver\EntityDamagesResolver;
 use Velkuns\GameTextEngine\Core\Resolver\EntityInfoResolver;
@@ -37,6 +38,7 @@ trait ResolverTrait
             new EntityInfoResolver(),
             new EntityInventoryItemsResolver(),
             new TraitResolver(),
+            new AlterationResolver(),
         ];
 
         return new TypeResolverHandler($resolvers);

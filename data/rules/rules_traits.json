@@ -1,25 +1,120 @@
 {
-    "description": "This section defines all kind of traits types available for the story, and the number of each when create a new character.",
+    "description": "This section defines all kind of traits types available for the story, and the number of each when create a new character.\nTraits are persistant element that define the player.",
     "starting": {
-        "attributions": {
-            "skill": 2,
-            "state": 0,
-            "blessing": 0,
-            "curse": 0,
-            "title": 0
-        }
+        "race": [],
+        "class": [],
+        "skill": {
+            "number": 2
+        },
+        "title": []
     },
     "leveling": {
-        "everyNumberLevel": 2,
-        "attributions": {
-            "skill": 1,
-            "state": 0,
-            "blessing": 0,
-            "curse": 0,
-            "title": 0
-        }
+        "race": [],
+        "class": [],
+        "skill": {
+            "number": 1,
+            "everyNumberLevel": 2
+        },
+        "title": []
     },
     "traits": {
+        "class": [
+            {
+                "type": "class",
+                "name": "Warrior",
+                "description": "Warrior Class. Give bonus in strength and melee attack",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.strength.value",
+                        "value": 2
+                    },
+                    {
+                        "type": "self.damages.physical.value",
+                        "value": 2,
+                        "prerequisites": {
+                            "numberRequired": 1,
+                            "requirements": [
+                                {
+                                    "type": "self.inventory.item",
+                                    "condition": "flag&32",
+                                    "is": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "class",
+                "name": "Mage",
+                "description": "Mage Class. Give bonus in intuition and magical attack",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.intuition.value",
+                        "value": 2
+                    },
+                    {
+                        "type": "self.damages.magical.value",
+                        "value": 2,
+                        "prerequisites": {
+                            "numberRequired": 1,
+                            "requirements": [
+                                {
+                                    "type": "self.inventory.item",
+                                    "condition": "flag&128",
+                                    "is": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "class",
+                "name": "Ranger",
+                "description": "Ranger Class. Give bonus in intuition and range attack",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.intuition.value",
+                        "value": 2
+                    },
+                    {
+                        "type": "self.damages.physical.value",
+                        "value": 2,
+                        "prerequisites": {
+                            "numberRequired": 1,
+                            "requirements": [
+                                {
+                                    "type": "self.inventory.item",
+                                    "condition": "flag&64",
+                                    "is": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ],
+        "race": [
+            {
+                "type": "race",
+                "name": "Human",
+                "description": "Average",
+                "modifiers": []
+            },
+            {
+                "type": "race",
+                "name": "Dwarf",
+                "description": "Small & grumblers",
+                "modifiers": []
+            },
+            {
+                "type": "race",
+                "name": "Elf",
+                "description": "Tall & 'sophisticated'",
+                "modifiers": []
+            }
+        ],
         "skill": [
             {
                 "type": "skill",
@@ -170,65 +265,6 @@
                 ]
             }
         ],
-        "state": [
-            {
-                "type": "state",
-                "name": "poisoned",
-                "description": "The character is poisoned, losing 1 vitality point at the start of each turn.",
-                "modifiers": [
-                    {
-                        "type": "self.attribute.vitality.value",
-                        "value": -1
-                    }
-                ],
-                "durationTurns": 5,
-                "remainingTurns": 5
-            },
-            {
-                "type": "state",
-                "name": "stunned",
-                "description": "The character is stunned and cannot perform any actions for 1 turn.",
-                "modifiers": [],
-                "durationTurns": 1,
-                "remainingTurns": 1
-            },
-            {
-                "type": "state",
-                "name": "blinded",
-                "description": "The character is blinded, reducing agility by 10, but increase intuition by 5.",
-                "modifiers": [
-                    {
-                        "type": "self.attribute.agility.value",
-                        "value": -10
-                    },
-                    {
-                        "type": "self.attribute.intuition.value",
-                        "value": 5
-                    }
-                ],
-                "durationTurns": 2,
-                "remainingTurns": 2
-            },
-            {
-                "type": "state",
-                "name": "rested",
-                "description": "The character is well rested, gaining 2 agility and 2 intuition points for 3 turn.",
-                "modifiers": [
-                    {
-                        "type": "self.attribute.agility.value",
-                        "value": 2
-                    },
-                    {
-                        "type": "self.attribute.intuition.value",
-                        "value": 2
-                    }
-                ],
-                "durationTurns": 3,
-                "remainingTurns": 3
-            }
-        ],
-        "blessing": [],
-        "curse": [],
         "title": [
             {
                 "type": "title",

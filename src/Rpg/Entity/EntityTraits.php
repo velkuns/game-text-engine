@@ -47,28 +47,6 @@ class EntityTraits implements \JsonSerializable
     /**
      * @return array<string, TraitInterface>
      */
-    public function getAll(): array
-    {
-        return \array_merge(...\array_values($this->traits));
-    }
-
-    /**
-     * Remove traits that have duration
-     */
-    public function clean(): void
-    {
-        foreach ($this->traits as $type => $traits) {
-            foreach ($traits as $name => $trait) {
-                if ($trait->getDurationTurns() > 0) {
-                    unset($this->traits[$type][$name]);
-                }
-            }
-        }
-    }
-
-    /**
-     * @return array<string, TraitInterface>
-     */
     public function getAllFromType(string $type): array
     {
         if (!isset($this->traits[$type])) {
@@ -101,7 +79,7 @@ class EntityTraits implements \JsonSerializable
 
         foreach ($traits as $trait) {
             $traitModifiers = $trait->getModifiers();
-            if ($traitModifiers === [] || !$trait->isActive()) {
+            if ($traitModifiers === []) {
                 continue;
             }
 

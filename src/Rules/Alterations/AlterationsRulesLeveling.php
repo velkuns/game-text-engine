@@ -9,17 +9,17 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Rules\Traits;
+namespace Velkuns\GameTextEngine\Rules\Alterations;
 
-use Velkuns\GameTextEngine\Exception\Rules\TraitsRulesException;
+use Velkuns\GameTextEngine\Exception\Rules\AlterationsRulesException;
 
 /**
- * @phpstan-type TraitsRulesLevelingData array<string, array{
+ * @phpstan-type AlterationsRulesLevelingData array<string, array{
  *    everyNumberLevel?: int,
  *    number?: int,
  * }>
  */
-class TraitsRulesLeveling implements \JsonSerializable
+class AlterationsRulesLeveling implements \JsonSerializable
 {
     /**
      * @param array<string, array<string, int>> $attributions
@@ -39,26 +39,26 @@ class TraitsRulesLeveling implements \JsonSerializable
     }
 
     /**
-     * @param array<string, list<string>> $traits
+     * @param array<string, list<string>> $alterations
      */
-    public function assertHasCorrectAttribution(int $currentLevel, array $traits): void
+    public function assertHasCorrectAttribution(int $currentLevel, array $alterations): void
     {
         foreach (\array_keys($this->attributions) as $type) {
-            $number       = $this->getNumber($type);
-            $diff         = $number - \count($traits[$type] ?? []);
-            $hasNewTraits = ($traits[$type] ?? []) !== [];
-            $canAttribute = $this->canAttributeOnNextLevel($currentLevel, $type);
+            $number            = $this->getNumber($type);
+            $diff              = $number - \count($alterations[$type] ?? []);
+            $hasNewAlterations = ($alterations[$type] ?? []) !== [];
+            $canAttribute      = $this->canAttributeOnNextLevel($currentLevel, $type);
 
-            if (!$canAttribute && $hasNewTraits) {
-                throw new TraitsRulesException("New traits only allowed every {$this->getEveryNumberLevel($type)} level(s).", 2200);
+            if (!$canAttribute && $hasNewAlterations) {
+                throw new AlterationsRulesException("New alterations only allowed every {$this->getEveryNumberLevel($type)} level(s).", 2400);
             }
 
             if ($canAttribute && $diff < 0) {
-                throw new TraitsRulesException("Only $number '$type' allowed, " . \abs($diff) . " given.", 2201);
+                throw new AlterationsRulesException("Only $number '$type' allowed, " . \abs($diff) . " given.", 2401);
             }
 
             if ($canAttribute && $diff > 0) {
-                throw new TraitsRulesException("Remaining $diff trait(s) of '$type' to attribute.", 2202);
+                throw new AlterationsRulesException("Remaining $diff alteration(s) of '$type' to attribute.", 2402);
             }
         }
     }
@@ -72,7 +72,7 @@ class TraitsRulesLeveling implements \JsonSerializable
     }
 
     /**
-     * @phpstan-return TraitsRulesLevelingData
+     * @phpstan-return AlterationsRulesLevelingData
      */
     public function jsonSerialize(): array
     {

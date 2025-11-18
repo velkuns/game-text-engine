@@ -138,6 +138,8 @@ trait EntityTrait
                 ],
             ],
             'traits'  => [
+                'race'     => [],
+                'class'    => [],
                 'skill'    => [
                     'Sword (Mastery)' => [
                         'type'           => 'skill',
@@ -231,6 +233,16 @@ trait EntityTrait
                         ],
                     ],
                 ],
+                'title'    => [
+                    'Dragon Slayer' => [
+                        'type'           => 'title',
+                        'name'           => 'Dragon Slayer',
+                        'description'    => 'You have slain a dragon',
+                        'modifiers'      => [],
+                    ],
+                ],
+            ],
+            'alterations' => [
                 'state'    => [
                     'Rested' => [
                         'type'           => 'state',
@@ -242,20 +254,14 @@ trait EntityTrait
                                 'value' => 2,
                             ],
                         ],
-                        'durationTurns'  => 3,
-                        'remainingTurns' => 1,
+                        'duration' => [
+                            'max'       => 3,
+                            'remaining' => 1,
+                        ],
                     ],
                 ],
                 'blessing' => [],
                 'curse'    => [],
-                'title'    => [
-                    'Dragon Slayer' => [
-                        'type'           => 'title',
-                        'name'           => 'Dragon Slayer',
-                        'description'    => 'You have slain a dragon',
-                        'modifiers'      => [],
-                    ],
-                ],
             ],
             'inventory' => [
                 'coins' => 100,
@@ -386,11 +392,15 @@ trait EntityTrait
                 ],
             ],
             'traits'  => [
+                'race'     => [],
+                'class'    => [],
                 'skill'    => [],
+                'title'    => [],
+            ],
+            'alterations' => [
                 'state'    => [],
                 'blessing' => [],
                 'curse'    => [],
-                'title'    => [],
             ],
             'inventory' => [
                 'coins' => 10,
@@ -509,11 +519,15 @@ trait EntityTrait
                 ],
             ],
             'traits'  => [
+                'race'     => [],
+                'class'    => [],
                 'skill'    => [],
+                'title'    => [],
+            ],
+            'alterations' => [
                 'state'    => [],
                 'blessing' => [],
                 'curse'    => [],
-                'title'    => [],
             ],
             'inventory' => [
                 'coins' => 2,

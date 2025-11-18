@@ -13,12 +13,12 @@ namespace Velkuns\GameTextEngine\Core\Factory;
 
 use Velkuns\GameTextEngine\Core\Prerequisite\Prerequisites;
 use Velkuns\GameTextEngine\Exception\Core\ElementJsonParseException;
+use Velkuns\GameTextEngine\Rpg\Alteration\AlterationInterface;
 use Velkuns\GameTextEngine\Rpg\Attribute\SimpleAttribute;
 use Velkuns\GameTextEngine\Rpg\Attribute\CompoundAttribute;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
-use Velkuns\GameTextEngine\Rpg\Trait\EntityTrait;
 use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 
 /**
@@ -26,6 +26,7 @@ use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
  * @phpstan-import-type CompoundAttributeData from CompoundAttribute
  * @phpstan-import-type EntityData from EntityInterface
  * @phpstan-import-type TraitData from TraitInterface
+ * @phpstan-import-type AlterationData from AlterationInterface
  * @phpstan-import-type PrerequisitesData from Prerequisites
  * @phpstan-import-type ModifierData from Modifier
  * @phpstan-import-type ItemData from ItemInterface
@@ -36,6 +37,7 @@ readonly class ElementFactory
         private EntityFactory $entityFactory,
         private AttributeFactory $attributeFactory,
         private TraitFactory $traitFactory,
+        private AlterationFactory $alterationFactory,
         private ItemFactory $itemFactory,
         private PrerequisitesFactory $prerequisitesFactory,
         private ModifierFactory $modifierFactory,
@@ -90,7 +92,7 @@ readonly class ElementFactory
     /**
      * @throws ElementJsonParseException
      */
-    public function traitFromJson(string $json): EntityTrait
+    public function traitFromJson(string $json): TraitInterface
     {
         try {
             /** @var TraitData $data */
@@ -100,6 +102,21 @@ readonly class ElementFactory
         }
 
         return $this->traitFactory->from($data);
+    }
+
+    /**
+     * @throws ElementJsonParseException
+     */
+    public function alterationFromJson(string $json): AlterationInterface
+    {
+        try {
+            /** @var AlterationData $data */
+            $data = \json_decode($json, true, flags: \JSON_THROW_ON_ERROR);
+        } catch (\JsonException $exception) {
+            throw new ElementJsonParseException('Cannot parse json data from trait data', 2018, $exception);
+        }
+
+        return $this->alterationFactory->from($data);
     }
 
     /**

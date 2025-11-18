@@ -13,6 +13,7 @@ namespace Velkuns\GameTextEngine\Tests\Helper;
 
 use Random\Engine\Mt19937;
 use Random\Randomizer;
+use Velkuns\GameTextEngine\Api\AlterationsApi;
 use Velkuns\GameTextEngine\Api\AttributesApi;
 use Velkuns\GameTextEngine\Api\BestiaryApi;
 use Velkuns\GameTextEngine\Api\CombatApi;
@@ -27,6 +28,7 @@ use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
 use Velkuns\GameTextEngine\Rpg\Modifier\AttributeModifierProcessor;
 use Velkuns\GameTextEngine\Rpg\Modifier\DamagesModifierProcessor;
 use Velkuns\GameTextEngine\Rpg\Modifier\ModifierHandler;
+use Velkuns\GameTextEngine\Rules\Alterations\AlterationsRules;
 use Velkuns\GameTextEngine\Rules\Attributes\AttributesRules;
 use Velkuns\GameTextEngine\Rules\Combat\CombatRules;
 use Velkuns\GameTextEngine\Rules\Player\PlayerRules;
@@ -38,6 +40,7 @@ use Velkuns\GameTextEngine\Rules\Traits\TraitsRules;
  * @phpstan-import-type EntityData from EntityInterface
  * @phpstan-import-type AttributesRulesData from AttributesRules
  * @phpstan-import-type TraitsRulesData from TraitsRules
+ * @phpstan-import-type AlterationsRulesData from AlterationsRules
  * @phpstan-import-type CombatRulesData from CombatRules
  * @phpstan-import-type PlayerRulesData from PlayerRules
  */
@@ -50,6 +53,7 @@ trait ApiTrait
     private static ?ItemsApi $items = null;
     private static ?AttributesApi $attributesApi = null;
     private static ?TraitsApi $traitsApi = null;
+    private static ?AlterationsApi $alterationsApi = null;
     private static ?PlayerApi $playerApi = null;
     private static ?CombatApi $combatApi = null;
 
@@ -127,6 +131,19 @@ trait ApiTrait
         return self::$traitsApi;
     }
 
+    private static function getAlterationsApi(): AlterationsApi
+    {
+        if (self::$alterationsApi === null) {
+            self::$alterationsApi = new AlterationsApi(self::getAlterationFactory());
+
+            /** @var AlterationsRulesData $data */
+            $data = (new JsonLoader())->fromFile(__DIR__ . '/../../data/rules/rules_alterations.json');
+            self::$alterationsApi->load($data);
+        }
+
+        return self::$alterationsApi;
+    }
+
     private static function getPlayerApi(): PlayerApi
     {
         if (self::$playerApi === null) {
@@ -135,6 +152,7 @@ trait ApiTrait
                 self::getItemsApi(),
                 self::getAttributesApi(),
                 self::getTraitsApi(),
+                self::getAlterationsApi(),
                 new ModifierHandler(self::getTypeResolverHandler(), [new AttributeModifierProcessor(), new DamagesModifierProcessor()]),
                 new Evaluator(self::getValueResolverHandler()),
             );

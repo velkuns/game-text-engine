@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Rules\Traits;
+namespace Velkuns\GameTextEngine\Rules\Alterations;
 
 /**
- * @phpstan-type TraitsRulesStartingData array<string, array{
+ * @phpstan-type AlterationsRulesStartingData array<string, array{
  *    number?: int
  * }>
  */
-class TraitsRulesStarting implements \JsonSerializable
+class AlterationsRulesStarting implements \JsonSerializable
 {
     /**
      * @param array<string, array<string, int>> $attributions
@@ -39,7 +39,7 @@ class TraitsRulesStarting implements \JsonSerializable
     }
 
     /**
-     * @phpstan-return TraitsRulesStartingData
+     * @phpstan-return AlterationsRulesStartingData
      */
     public function jsonSerialize(): array
     {

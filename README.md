@@ -61,21 +61,23 @@ $gameApi = new GameApi(
 );
 
 //~ Load json data (can be from files or strings if came from database)
-$storyData          = $game->loader->fromFile($dataDir . '/stories/test.json');
-$itemsData          = $game->loader->fromFile($dataDir . '/items.json');
-$bestiaryData       = $game->loader->fromFile($dataDir . '/bestiary.json');
-$attributesRulesData = $game->loader->fromFile($dataDir . '/rules/rules_attributes.json');
-$traitsRulesData  = $game->loader->fromFile($dataDir . '/rules/rules_traits.json');
-$combatsRulesData   = $game->loader->fromFile($dataDir . '/rules/rules_combat.json');
-$playerRulesData    = $game->loader->fromFile($dataDir . '/rules/rules_player.json');
-$playerData         = $game->loader->fromFile($dataDir . '/templates/player.json');
+$storyData            = $game->loader->fromFile($dataDir . '/stories/test.json');
+$itemsData            = $game->loader->fromFile($dataDir . '/items.json');
+$bestiaryData         = $game->loader->fromFile($dataDir . '/bestiary.json');
+$attributesRulesData  = $game->loader->fromFile($dataDir . '/rules/rules_attributes.json');
+$traitsRulesData      = $game->loader->fromFile($dataDir . '/rules/rules_traits.json');
+$alterationsRulesData = $game->loader->fromFile($dataDir . '/rules/rules_alterations.json');
+$combatsRulesData     = $game->loader->fromFile($dataDir . '/rules/rules_combat.json');
+$playerRulesData      = $game->loader->fromFile($dataDir . '/rules/rules_player.json');
+$playerData           = $game->loader->fromFile($dataDir . '/templates/player.json');
 
 //~ Load data into the game api
 $gameApi->load(
     $storyData, 
     $itemsData, 
     $bestiaryData, 
-    $traitsRulesData, 
+    $traitsRulesData,
+    $alterationsRulesData,
     $combatsRulesData, 
     $playerRulesData, 
     $playerData
@@ -87,6 +89,7 @@ $gameApi->bestiaryApi->[...];
 $gameApi->itemsApi->[...];
 $gameApi->attributesApi->[...];
 $gameApi->traitsApi->[...];
+$gameApi->alterationssApi->[...];
 $gameApi->playerApi->[...];
 
 //~ Dumping apis into json data
@@ -98,6 +101,7 @@ $gameApi->playerApi->[...];
  *     bestiary: string,
  *     attributesRules: string,
  *     traitsRules: string,
+ *     alterationsRules: string,
  *     combatRules: string,
  *     playerRules: string,
  *     playerData: string,
@@ -209,8 +213,27 @@ namespace Application;
 $traits = $gameApi->traits->getAll();
 
 $trait = $gameApi->traits->get('skill', 'Goblin Hunter'); // Get one trait (cloned)
-$gameApi->traits->set($trait); // Set an attribute
+$gameApi->traits->set($trait); // Set a trait
 $gameApi->traits->remove('skill', 'Goblin Hunter');
+```
+
+### Alterations API
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Application;
+
+// [... game api init code here ... ]
+
+//~ Return all alterations: array<string, array<string, TraitInterface>>
+$alterations = $gameApi->alterations->getAll();
+
+$alteration = $gameApi->alterations->get('state', 'poisoned'); // Get one alteration (cloned)
+$gameApi->alterations->set($alteration); // Set an alteration
+$gameApi->alterations->remove('state', 'poisoned');
 ```
 
 ### Story API
@@ -328,10 +351,11 @@ parameters:
   game.data.player:   '%game.data.dir%/templates/player.json'
 
   # Rules files to load when create new story. Should be stored in database after.
-  game.data.rules.attributes: '%game.data.dir%/rules/rules_attributes.json'
-  game.data.rules.traits:  '%game.data.dir%/rules/rules_traits.json'
-  game.data.rules.combat:    '%game.data.dir%/rules/rules_combat.json'
-  game.data.rules.player:    '%game.data.dir%/rules/rules_player.json'
+  game.data.rules.attributes:  '%game.data.dir%/rules/rules_attributes.json'
+  game.data.rules.traits:      '%game.data.dir%/rules/rules_traits.json'
+  game.data.rules.alterations: '%game.data.dir%/rules/rules_alterations.json'
+  game.data.rules.combat:      '%game.data.dir%/rules/rules_combat.json'
+  game.data.rules.player:      '%game.data.dir%/rules/rules_player.json'
 
 services:
   _defaults:
@@ -343,6 +367,7 @@ services:
         - '@Velkuns\GameTextEngine\Core\Resolver\EntityInfoResolver'
         - '@Velkuns\GameTextEngine\Core\Resolver\EntityInventoryItemsResolver'
         - '@Velkuns\GameTextEngine\Core\Resolver\TraitResolver'
+        - '@Velkuns\GameTextEngine\Core\Resolver\AlterationResolver'
 
       $valueResolvers:
         - '@Velkuns\GameTextEngine\Core\Resolver\AttributeResolver'
@@ -356,6 +381,7 @@ services:
         - '@Velkuns\GameTextEngine\Core\Validator\EntityInfoConditionValidator'
         - '@Velkuns\GameTextEngine\Core\Validator\EntityInventoryItemsConditionValidator'
         - '@Velkuns\GameTextEngine\Core\Validator\TraitConditionValidator'
+        - '@Velkuns\GameTextEngine\Core\Validator\AlterationConditionValidator'
 
 
   #~ Game text engine source
@@ -368,7 +394,7 @@ services:
 
 ```
 
-### Example of brige service between app & Game Text Engine
+### Example of bridge service between app & Game Text Engine
 
 ```php
 <?php

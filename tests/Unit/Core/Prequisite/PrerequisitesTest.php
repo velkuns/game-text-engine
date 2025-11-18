@@ -17,6 +17,7 @@ use Velkuns\GameTextEngine\Core\Prerequisite\Prerequisites;
 use Velkuns\GameTextEngine\Exception\Core\ResolverException;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedConditionTypeException;
 use Velkuns\GameTextEngine\Exception\Core\UnsupportedTypeElementResolverException;
+use Velkuns\GameTextEngine\Exception\Rpg\AlterationException;
 use Velkuns\GameTextEngine\Exception\Rpg\TraitException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
@@ -110,6 +111,36 @@ class PrerequisitesTest extends TestCase
                     'requirements'   => [
                         [
                             'type'      => 'self.trait.skill',
+                            'condition' => 'name=unknown',
+                            'is'        => true,
+                        ],
+                    ],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
+                false,
+            ],
+            'evaluate required conditions based on valid entity alteration' => [
+                self::getPrerequisitesFactory()->from([
+                    'numberRequired' => 1,
+                    'requirements'   => [
+                        [
+                            'type'      => 'self.alteration.state',
+                            'condition' => 'name=Rested',
+                            'is'        => true,
+                        ],
+                    ],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
+                true,
+            ],
+            'evaluate required conditions based on entity alteration but not found' => [
+                self::getPrerequisitesFactory()->from([
+                    'numberRequired' => 1,
+                    'requirements'   => [
+                        [
+                            'type'      => 'self.alteration.state',
                             'condition' => 'name=unknown',
                             'is'        => true,
                         ],
@@ -259,6 +290,21 @@ class PrerequisitesTest extends TestCase
                 self::getPlayer(),
                 self::getGoblin(),
                 TraitException::class,
+            ],
+            'evaluate required conditions based on trait but alteration type does not exist' => [
+                self::getPrerequisitesFactory()->from([
+                    'numberRequired' => 1,
+                    'requirements'   => [
+                        [
+                            'type'      => 'self.alteration.unknown',
+                            'condition' => 'name=test',
+                            'is'        => true,
+                        ],
+                    ],
+                ]),
+                self::getPlayer(),
+                self::getGoblin(),
+                AlterationException::class,
             ],
             'evaluate required conditions based on element that is not supported' => [
                 self::getPrerequisitesFactory()->from([

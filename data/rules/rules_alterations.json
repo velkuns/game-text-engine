@@ -1,0 +1,157 @@
+{
+    "description": "This section defines all kind of alterations types available for the story, and the number of each when create a new character or leveling character.\nAlteration have duration.",
+    "starting": {
+        "state": {
+            "number": 1
+        },
+        "blessing": [],
+        "curse": []
+    },
+    "leveling": {
+        "state": {
+            "number": 1,
+            "everyNumberLevel": 2
+        },
+        "blessing": [],
+        "curse": []
+    },
+    "alterations": {
+        "state": [
+            {
+                "type": "state",
+                "name": "poisoned",
+                "description": "The character is poisoned, losing 1 vitality point at the start of each turn.",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.vitality.value",
+                        "value": -1
+                    }
+                ],
+                "duration": {
+                    "max": 5
+                }
+            },
+            {
+                "type": "state",
+                "name": "stunned",
+                "description": "The character is stunned and cannot perform any actions for 1 turn.",
+                "modifiers": [],
+                "duration": {
+                    "max": 1
+                }
+            },
+            {
+                "type": "state",
+                "name": "blinded",
+                "description": "The character is blinded, reducing agility by 10, but increase intuition by 5.",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.agility.value",
+                        "value": -10
+                    },
+                    {
+                        "type": "self.attribute.intuition.value",
+                        "value": 5
+                    }
+                ],
+                "duration": {
+                    "max": 2
+                }
+            },
+            {
+                "type": "state",
+                "name": "rested",
+                "description": "The character is well rested, gaining 2 agility and 2 intuition points for 3 turn.",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.agility.value",
+                        "value": 2
+                    },
+                    {
+                        "type": "self.attribute.intuition.value",
+                        "value": 2
+                    }
+                ],
+                "duration": {
+                    "max": 3
+                }
+            }
+        ],
+        "blessing": [
+            {
+                "type": "blessing",
+                "name": "Strongness Against Unicorn",
+                "description": "You have +2 strength against unicorn.",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.strength.value",
+                        "value": 2,
+                        "prerequisites": {
+                            "numberRequired": 1,
+                            "requirements": [
+                                {
+                                    "type": "enemy.info",
+                                    "condition": "race=unicorn",
+                                    "is": true
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "duration": {
+                    "max": 10
+                }
+            },
+            {
+                "type": "blessing",
+                "name": "Strongness Against Goblin",
+                "description": "You have +2 strength against goblin.",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.strength.value",
+                        "value": 2,
+                        "prerequisites": {
+                            "numberRequired": 1,
+                            "requirements": [
+                                {
+                                    "type": "enemy.info",
+                                    "condition": "race=goblin",
+                                    "is": true
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "duration": {
+                    "max": 10
+                }
+            }
+        ],
+        "curse": [
+            {
+                "type": "curse",
+                "name": "Weakness Against Unicorn",
+                "description": "You have -2 strength against unicorn.",
+                "modifiers": [
+                    {
+                        "type": "self.attribute.strength.value",
+                        "value": -2,
+                        "prerequisites": {
+                            "numberRequired": 1,
+                            "requirements": [
+                                {
+                                    "type": "enemy.info",
+                                    "condition": "race=unicorn",
+                                    "is": true
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "duration": {
+                    "max": 10
+                }
+            }
+        ]
+    }
+}

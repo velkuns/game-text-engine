@@ -14,6 +14,7 @@ namespace Velkuns\GameTextEngine\Api;
 use Velkuns\GameTextEngine\Core\Evaluator\Evaluator;
 use Velkuns\GameTextEngine\Core\Factory\EntityFactory;
 use Velkuns\GameTextEngine\Exception\Api\PlayerApiException;
+use Velkuns\GameTextEngine\Rpg\Alteration\AlterationInterface;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rpg\Modifier\ModifierHandler;
 use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
@@ -34,6 +35,7 @@ use Velkuns\GameTextEngine\Rules\Player\PlayerRulesStarting;
  *    background?: string,
  *    attributes: array<string, int>,
  *    traits?: array<string, list<string>>,
+ *    alterations?: array<string, list<string>>,
  *    inventory?: list<string>,
  * }
  */
@@ -47,6 +49,7 @@ class PlayerApi
         private readonly ItemsApi $items,
         private readonly AttributesApi $attributes,
         private readonly TraitsApi $traits,
+        private readonly AlterationsApi $alterations,
         private readonly ModifierHandler $modifierHandler,
         private readonly Evaluator $evaluator,
     ) {}
@@ -92,8 +95,9 @@ class PlayerApi
     /**
      * @param array<string, int> $attributes
      * @param array<string, list<string>> $traits
+     * @param array<string, list<string>> $alterations
      */
-    public function levelUp(array $attributes, array $traits = []): self
+    public function levelUp(array $attributes, array $traits = [], array $alterations = []): self
     {
         //~ Check player info
         $this->rules->leveling->assertMaxLevelNotReached($this->player->getInfo()->level);
@@ -103,9 +107,12 @@ class PlayerApi
         $this->attributes->rules->leveling->assertHasCorrectAttribution($attributes);
 
         //~ Check traits
-        $this->traits->rules->leveling->assertCanAttributeOnNextLevel($this->player->getInfo()->level, $traits);
-        $this->traits->rules->leveling->assertHasCorrectAttribution($traits);
+        $this->traits->rules->leveling->assertHasCorrectAttribution($this->player->getInfo()->level, $traits);
         $this->traits->rules->assertAllTraitsExist($traits);
+
+        //~ Check alterations
+        $this->alterations->rules->leveling->assertHasCorrectAttribution($this->player->getInfo()->level, $alterations);
+        $this->alterations->rules->assertAllAlterationsExist($alterations);
 
         //~ All is ok, then update attributes
         foreach ($attributes as $name => $value) {
@@ -118,6 +125,15 @@ class PlayerApi
                 /** @var TraitInterface $trait */
                 $trait = $this->traits->get($type, $name);
                 $this->player->getTraits()->set($trait);
+            }
+        }
+
+        //~ Add alterations
+        foreach ($alterations as $type => $list) {
+            foreach ($list as $name) {
+                /** @var AlterationInterface $alteration */
+                $alteration = $this->alterations->get($type, $name);
+                $this->player->getAlterations()->set($alteration);
             }
         }
 
@@ -184,8 +200,11 @@ class PlayerApi
         //~ Build attributes
         $attributes = $this->attributes->fromNewPlayer($data['attributes']);
 
-        //~ Initialize empty traits
+        //~ Initialize traits
         $traits = $this->traits->fromNewPlayer($data['traits'] ?? []);
+
+        //~ Initialize alterations
+        $alterations = ['state' => [], 'blessing' => [], 'curse' => []];
 
         //~ Build inventory
         $inventory = ['coins' => 10, 'items' => []];
@@ -195,13 +214,14 @@ class PlayerApi
 
         //~ Return full data for factory
         return [
-            'name'      => $data['name'],
-            'type'      => 'player',
-            'info'      => $info,
-            'damages'   => ['physical' => ['type' => 'physical', 'value' => 0]],
-            'attributes' => $attributes,
-            'traits'  => $traits,
-            'inventory' => $inventory,
+            'name'        => $data['name'],
+            'type'        => 'player',
+            'info'        => $info,
+            'damages'     => ['physical' => ['type' => 'physical', 'value' => 0]],
+            'attributes'  => $attributes,
+            'traits'      => $traits,
+            'alterations' => $alterations,
+            'inventory'   => $inventory,
         ];
     }
 }

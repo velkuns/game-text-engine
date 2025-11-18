@@ -95,11 +95,15 @@
         }
     },
     "traits": {
+        "class": [],
+        "race": [],
         "skill": [],
+        "title": []
+    },
+    "alterations": {
         "state": [],
         "blessing": [],
-        "curse": [],
-        "title": []
+        "curse": []
     },
     "inventory": {
         "coins": 10,

@@ -11,10 +11,12 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Core\Factory;
 
+use Velkuns\GameTextEngine\Rpg\Alteration\AlterationInterface;
 use Velkuns\GameTextEngine\Rpg\Attribute\SimpleAttribute;
 use Velkuns\GameTextEngine\Rpg\Attribute\CompoundAttribute;
 use Velkuns\GameTextEngine\Rpg\Damages\Damages;
 use Velkuns\GameTextEngine\Rpg\Entity\Entity;
+use Velkuns\GameTextEngine\Rpg\Entity\EntityAlterations;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityAttributes;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityEquipment;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInfo;
@@ -33,6 +35,8 @@ use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
  * @phpstan-import-type AttributesData from EntityAttributes
  * @phpstan-import-type TraitsData from EntityTraits
  * @phpstan-import-type TraitData from TraitInterface
+ * @phpstan-import-type EntityAlterationsData from EntityAlterations
+ * @phpstan-import-type AlterationData from AlterationInterface
  * @phpstan-import-type DamagesData from Damages
  * @phpstan-import-type InventoryData from EntityInventory
  * @phpstan-import-type ItemData from Item
@@ -44,6 +48,7 @@ readonly class EntityFactory
     public function __construct(
         private AttributeFactory $attributeFactory,
         private TraitFactory $traitFactory,
+        private AlterationFactory $alterationFactory,
         private ItemFactory $itemFactory,
         private DamageFactory $damageFactory,
         private LootFactory $lootFactory,
@@ -54,17 +59,29 @@ readonly class EntityFactory
      */
     public function from(array $data): EntityInterface
     {
-        $name      = $data['name'];
-        $type      = $data['type'];
-        $info      = $this->fromEntityInfo($data['info']);
-        $damages   = $this->fromEntityDamages($data['damages'] ?? []);
-        $attributes = $this->fromEntityAttributes($data['attributes']);
-        $traits  = $this->fromEntityTraits($data['traits']);
-        $inventory = $this->fromEntityInventory($data['inventory']);
-        $loot      = $this->fromEntityLoot($data['loot'] ?? null);
-        $equipment = $this->fromEntityEquipment($data['equipment'] ?? null);
+        $name        = $data['name'];
+        $type        = $data['type'];
+        $info        = $this->fromEntityInfo($data['info']);
+        $damages     = $this->fromEntityDamages($data['damages'] ?? []);
+        $attributes  = $this->fromEntityAttributes($data['attributes']);
+        $traits      = $this->fromEntityTraits($data['traits']);
+        $alterations = $this->fromEntityAlterations($data['alterations']);
+        $inventory   = $this->fromEntityInventory($data['inventory']);
+        $loot        = $this->fromEntityLoot($data['loot'] ?? null);
+        $equipment   = $this->fromEntityEquipment($data['equipment'] ?? null);
 
-        return new Entity($name, $type, $info, $damages, $attributes, $traits, $inventory, $loot, $equipment);
+        return new Entity(
+            $name,
+            $type,
+            $info,
+            $damages,
+            $attributes,
+            $traits,
+            $alterations,
+            $inventory,
+            $loot,
+            $equipment,
+        );
     }
 
     /**
@@ -115,6 +132,22 @@ readonly class EntityFactory
         }
 
         return new EntityTraits($traits);
+    }
+
+    /**
+     * @phpstan-param EntityAlterationsData $data
+     */
+    private function fromEntityAlterations(array $data): EntityAlterations
+    {
+        $alterations = [];
+        foreach ($data as $type => $list) {
+            $alterations[$type] = \array_map(
+                fn(array $alterationData) => $this->alterationFactory->from($alterationData),
+                $list,
+            );
+        }
+
+        return new EntityAlterations($alterations);
     }
 
     /**

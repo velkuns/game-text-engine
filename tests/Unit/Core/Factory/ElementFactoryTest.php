@@ -68,8 +68,6 @@ class ElementFactoryTest extends TestCase
         self::assertSame('swordsmanship', $trait->getName());
         self::assertSame('Skill in using swords.', $trait->getDescription());
         self::assertCount(2, $modifiers);
-        self::assertSame(0, $trait->getDurationTurns());
-        self::assertSame(0, $trait->getRemainingTurns());
         self::assertNotNull($modifiers[0]->prerequisites);
         self::assertSame(1, $modifiers[0]->prerequisites->getNumberRequired());
         self::assertCount(1, $modifiers[0]->prerequisites->getRequirements());
@@ -117,6 +115,58 @@ class ElementFactoryTest extends TestCase
         self::expectExceptionCode(2013);
         self::expectException(ElementJsonParseException::class);
         self::getElementFactory()->traitFromJson($json);
+    }
+
+    public function testAlterationFromJson(): void
+    {
+        $json = '{
+            "type": "state",
+            "name": "Poisoned",
+            "description": "You are poisoned for 3 turn.",
+            "modifiers": [
+                {
+                    "type": "self.attribute.agility.vitality",
+                    "value": -2
+                }
+            ],
+            "duration": {
+                "max": 3,
+                "remaining": 3
+            }
+        }';
+
+        $alteration = self::getElementFactory()->alterationFromJson($json);
+        $modifiers  = $alteration->getModifiers();
+
+        self::assertSame('state', $alteration->getType());
+        self::assertSame('Poisoned', $alteration->getName());
+        self::assertSame('You are poisoned for 3 turn.', $alteration->getDescription());
+        self::assertCount(1, $modifiers);
+        self::assertSame(3, $alteration->getDuration()->getMax());
+        self::assertSame(3, $alteration->getDuration()->getRemaining());
+        self::assertNull($modifiers[0]->prerequisites);
+    }
+
+    public function testAlterationFromJsonWithInvalidJson(): void
+    {
+
+        $json = '{
+            "type": "state",
+            "name": "Poisoned",
+            "description": "You are poisoned for 3 turn.",
+            "modifiers": [
+                {
+                    "type": "self.attribute.agility.vitality",
+                    "value": -2
+                }
+            ],
+            "durationTurns": 3
+            "remainingTurns": 3
+        }';
+
+        self::expectExceptionCode(2018);
+        self::expectException(ElementJsonParseException::class);
+        self::getElementFactory()->alterationFromJson($json);
     }
 
     public function testModifierFromJson(): void
@@ -431,6 +481,8 @@ class ElementFactoryTest extends TestCase
                 }
             },
             "traits": {
+                "race": [],
+                "class": [],
                 "skill": {
                     "swordsmanship": {
                         "type": "skill",
@@ -460,10 +512,12 @@ class ElementFactoryTest extends TestCase
                         "remainingTurns": 0
                     }
                 },
+                "title": []
+            },
+            "alterations": {
                 "state": [],
                 "blessing": [],
-                "curse": [],
-                "title": []
+                "curse": []
             },
             "inventory": {
                 "coins": 100,
@@ -512,17 +566,24 @@ class ElementFactoryTest extends TestCase
         self::assertSame('strength', $attribute->getName());
 
         $traits = $hero->getTraits();
+        self::assertCount(0, $traits->traits['race']);
+        self::assertCount(0, $traits->traits['class']);
         self::assertCount(1, $traits->traits['skill']);
-        self::assertCount(0, $traits->traits['state']);
-        self::assertCount(0, $traits->traits['blessing']);
-        self::assertCount(0, $traits->traits['curse']);
         self::assertCount(0, $traits->traits['title']);
 
+        $alterations = $hero->getAlterations();
+        self::assertCount(0, $alterations->alterations['state']);
+        self::assertCount(0, $alterations->alterations['blessing']);
+        self::assertCount(0, $alterations->alterations['curse']);
+
+        self::assertFalse($hero->hasTrait('race', 'non-existing-race'));
+        self::assertFalse($hero->hasTrait('class', 'non-existing-class'));
         self::assertFalse($hero->hasTrait('skill', 'non-existing-skill'));
-        self::assertFalse($hero->hasTrait('state', 'non-existing-skill'));
-        self::assertFalse($hero->hasTrait('blessing', 'non-existing-skill'));
-        self::assertFalse($hero->hasTrait('curse', 'non-existing-skill'));
-        self::assertFalse($hero->hasTrait('title', 'non-existing-skill'));
+        self::assertFalse($hero->hasTrait('title', 'non-existing-title'));
+
+        self::assertFalse($hero->hasAlteration('state', 'non-existing-state'));
+        self::assertFalse($hero->hasAlteration('blessing', 'non-existing-blessing'));
+        self::assertFalse($hero->hasAlteration('curse', 'non-existing-curse'));
 
 
         $item = $hero->getInventory()->get('The Sword');

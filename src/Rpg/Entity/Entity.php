@@ -26,6 +26,7 @@ readonly class Entity implements EntityInterface
         public Damages $damages,
         public EntityAttributes $attributes,
         public EntityTraits $traits,
+        public EntityAlterations $alterations,
         public EntityInventory $inventory,
         public ?EntityLoot $loot,
         public ?EntityEquipment $equipment,
@@ -61,6 +62,11 @@ readonly class Entity implements EntityInterface
         return $this->traits;
     }
 
+    public function getAlterations(): EntityAlterations
+    {
+        return $this->alterations;
+    }
+
     public function getInventory(): EntityInventory
     {
         return $this->inventory;
@@ -81,6 +87,11 @@ readonly class Entity implements EntityInterface
         return $this->getTraits()->getByType($type, $name) !== null;
     }
 
+    public function hasAlteration(string $type, string $name): bool
+    {
+        return $this->getAlterations()->getByType($type, $name) !== null;
+    }
+
     public function isAlive(): bool
     {
         return ($this->attributes->get('vitality')?->getValue() ?? 0) > 0;
@@ -91,7 +102,10 @@ readonly class Entity implements EntityInterface
      */
     public function getModifiers(EntityInterface $enemy): array
     {
-        return $this->traits->getAllModifiers($this, $enemy);
+        return array_merge(
+            $this->traits->getAllModifiers($this, $enemy),
+            $this->alterations->getAllModifiers($this, $enemy),
+        );
     }
 
     /**
@@ -100,13 +114,14 @@ readonly class Entity implements EntityInterface
     public function jsonSerialize(): array
     {
         $data = [
-            'name'       => $this->getName(),
-            'type'       => $this->getType(),
-            'info'       => $this->getInfo()->jsonSerialize(),
-            'damages'    => $this->getDamages()->jsonSerialize(),
-            'attributes' => $this->getAttributes()->jsonSerialize(),
-            'traits'   => $this->getTraits()->jsonSerialize(),
-            'inventory'  => $this->getInventory()->jsonSerialize(),
+            'name'        => $this->getName(),
+            'type'        => $this->getType(),
+            'info'        => $this->getInfo()->jsonSerialize(),
+            'damages'     => $this->getDamages()->jsonSerialize(),
+            'attributes'  => $this->getAttributes()->jsonSerialize(),
+            'traits'      => $this->getTraits()->jsonSerialize(),
+            'alterations' => $this->getAlterations()->jsonSerialize(),
+            'inventory'   => $this->getInventory()->jsonSerialize(),
         ];
 
         if ($this->getLoot() !== null) {
@@ -129,6 +144,7 @@ readonly class Entity implements EntityInterface
             damages: $this->getDamages()->clone(),
             attributes: $this->getAttributes()->clone(),
             traits: $this->getTraits()->clone(),
+            alterations: $this->getAlterations()->clone(),
             inventory: $this->getInventory()->clone(),
             loot: $this->getLoot()?->clone(),
             equipment: $this->getEquipment()?->clone(),

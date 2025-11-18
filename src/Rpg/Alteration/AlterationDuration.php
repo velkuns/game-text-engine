@@ -14,7 +14,7 @@ namespace Velkuns\GameTextEngine\Rpg\Alteration;
 /**
  * @phpstan-type AlterationDurationData array{
  *  max: int,
- *  remaining: int,
+ *  remaining?: int,
  * }
  */
 class AlterationDuration
@@ -46,10 +46,13 @@ class AlterationDuration
      */
     public function jsonSerialize(): array
     {
-        return [
-            'max'       => $this->max,
-            'remaining' => $this->remaining,
-        ];
+        $data = ['max' => $this->max];
+
+        if ($this->max > $this->remaining) {
+            $data['remaining'] = $this->remaining;
+        }
+
+        return $data;
     }
 
     public function clone(): self

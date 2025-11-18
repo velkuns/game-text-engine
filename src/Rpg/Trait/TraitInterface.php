@@ -20,8 +20,6 @@ use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
  *    name: string,
  *    description: string,
  *    modifiers: list<ModifierData>,
- *    durationTurns?: int,
- *    remainingTurns?: int,
  * }
  */
 interface TraitInterface extends \JsonSerializable
@@ -36,14 +34,6 @@ interface TraitInterface extends \JsonSerializable
      * @return Modifier[]
      */
     public function getModifiers(): array;
-
-    public function isActive(): bool;
-
-    public function getDurationTurns(): int;
-
-    public function getRemainingTurns(): int;
-
-    public function decreaseRemainingTurns(): self;
 
     public function clone(): self;
 

@@ -39,8 +39,8 @@ class TraitsApi
     public function load(array $data): void
     {
         $description = $data['description'];
-        $starting    = new TraitsRulesStarting(...$data['starting']);
-        $leveling    = new TraitsRulesLeveling(...$data['leveling']);
+        $starting    = new TraitsRulesStarting($data['starting']);
+        $leveling    = new TraitsRulesLeveling($data['leveling']);
 
         $traits = [];
         foreach ($data['traits'] as $type => $list) {
@@ -100,7 +100,7 @@ class TraitsApi
         $traits = [];
 
         //~ Pre-build $traits
-        foreach ($this->rules->starting->attributions as $type => $value) {
+        foreach ($this->rules->starting->getAllTypes() as $type) {
             $traits[$type] = [];
         }
 
@@ -119,7 +119,7 @@ class TraitsApi
                 $traits[$type][$name] = $trait->jsonSerialize();
             }
 
-            $remainingTrait = $this->rules->starting->attributions[$type] - \count($traits[$type]);
+            $remainingTrait = $this->rules->starting->getNumber($type) - \count($traits[$type]);
             if ($remainingTrait < 0) {
                 throw new TraitsApiException("Too much trait for type '$type'", 1554);
             }
