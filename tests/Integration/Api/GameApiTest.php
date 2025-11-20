@@ -38,6 +38,7 @@ class GameApiTest extends TestCase
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_attributes.json',
             $dataDir . '/rules/rules_traits.json',
+            $dataDir . '/rules/rules_alterations.json',
             $dataDir . '/rules/rules_combat.json',
             $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
@@ -50,6 +51,7 @@ class GameApiTest extends TestCase
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/bestiary.json')), $dump['bestiary']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_attributes.json')), $dump['attributesRules']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_traits.json')), $dump['traitsRules']);
+        self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_alterations.json')), $dump['alterationsRules']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_combat.json')), $dump['combatRules']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/rules/rules_player.json')), $dump['playerRules']);
         self::assertSame(\trim((string) \file_get_contents($dataDir . '/templates/player.json')), $dump['playerData']);
@@ -59,14 +61,15 @@ class GameApiTest extends TestCase
     {
         $dataDir = (string) realpath(__DIR__ . '/../../../data');
 
-        $storyJson          = (string) \file_get_contents($dataDir . '/stories/test.json');
-        $itemsJson          = (string) \file_get_contents($dataDir . '/items.json');
-        $bestiaryJson       = (string) \file_get_contents($dataDir . '/bestiary.json');
-        $attributesRulesJson = (string) \file_get_contents($dataDir . '/rules/rules_attributes.json');
-        $traitsRulesJson  = (string) \file_get_contents($dataDir . '/rules/rules_traits.json');
-        $combatRulesJson    = (string) \file_get_contents($dataDir . '/rules/rules_combat.json');
-        $playerRulesJson    = (string) \file_get_contents($dataDir . '/rules/rules_player.json');
-        $playerDataJson     = (string) \file_get_contents($dataDir . '/templates/player.json');
+        $storyJson            = (string) \file_get_contents($dataDir . '/stories/test.json');
+        $itemsJson            = (string) \file_get_contents($dataDir . '/items.json');
+        $bestiaryJson         = (string) \file_get_contents($dataDir . '/bestiary.json');
+        $attributesRulesJson  = (string) \file_get_contents($dataDir . '/rules/rules_attributes.json');
+        $traitsRulesJson      = (string) \file_get_contents($dataDir . '/rules/rules_traits.json');
+        $alterationsRulesJson = (string) \file_get_contents($dataDir . '/rules/rules_alterations.json');
+        $combatRulesJson      = (string) \file_get_contents($dataDir . '/rules/rules_combat.json');
+        $playerRulesJson      = (string) \file_get_contents($dataDir . '/rules/rules_player.json');
+        $playerDataJson       = (string) \file_get_contents($dataDir . '/templates/player.json');
 
         $gameApi = $this->getGameApi();
         $gameApi->loadFromJsons(
@@ -75,6 +78,7 @@ class GameApiTest extends TestCase
             $bestiaryJson,
             $attributesRulesJson,
             $traitsRulesJson,
+            $alterationsRulesJson,
             $combatRulesJson,
             $playerRulesJson,
             $playerDataJson,
@@ -87,6 +91,7 @@ class GameApiTest extends TestCase
         self::assertSame(\trim($bestiaryJson), $dump['bestiary']);
         self::assertSame(\trim($attributesRulesJson), $dump['attributesRules']);
         self::assertSame(\trim($traitsRulesJson), $dump['traitsRules']);
+        self::assertSame(\trim($alterationsRulesJson), $dump['alterationsRules']);
         self::assertSame(\trim($combatRulesJson), $dump['combatRules']);
         self::assertSame(\trim($playerRulesJson), $dump['playerRules']);
         self::assertSame(\trim($playerDataJson), $dump['playerData']);
@@ -103,6 +108,7 @@ class GameApiTest extends TestCase
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_attributes.json',
             $dataDir . '/rules/rules_traits.json',
+            $dataDir . '/rules/rules_alterations.json',
             $dataDir . '/rules/rules_combat.json',
             $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
@@ -131,6 +137,7 @@ class GameApiTest extends TestCase
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_attributes.json',
             $dataDir . '/rules/rules_traits.json',
+            $dataDir . '/rules/rules_alterations.json',
             $dataDir . '/rules/rules_combat.json',
             $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
@@ -159,6 +166,7 @@ class GameApiTest extends TestCase
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_attributes.json',
             $dataDir . '/rules/rules_traits.json',
+            $dataDir . '/rules/rules_alterations.json',
             $dataDir . '/rules/rules_combat.json',
             $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
@@ -190,6 +198,7 @@ class GameApiTest extends TestCase
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_attributes.json',
             $dataDir . '/rules/rules_traits.json',
+            $dataDir . '/rules/rules_alterations.json',
             $dataDir . '/rules/rules_combat.json',
             $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
@@ -218,6 +227,7 @@ class GameApiTest extends TestCase
             $dataDir . '/bestiary.json',
             $dataDir . '/rules/rules_attributes.json',
             $dataDir . '/rules/rules_traits.json',
+            $dataDir . '/rules/rules_alterations.json',
             $dataDir . '/rules/rules_combat.json',
             $dataDir . '/rules/rules_player.json',
             $dataDir . '/templates/player.json',
@@ -238,6 +248,7 @@ class GameApiTest extends TestCase
             self::getBestiaryApi(),
             self::getAttributesApi(),
             self::getTraitsApi(),
+            self::getAlterationsApi(),
             self::getPlayerApi(),
             self::getCombatApi(),
         );

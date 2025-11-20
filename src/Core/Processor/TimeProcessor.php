@@ -27,12 +27,12 @@ readonly class TimeProcessor
 
     public function turnEnd(EntityInterface $entity): void
     {
-        foreach ($entity->getTraits()->getAll() as $trait) {
-            if ($trait->getRemainingTurns() === 0) {
+        foreach ($entity->getAlterations()->getAll() as $alteration) {
+            if (!$alteration->isActive() || $alteration->getDuration()->getRemaining() === 0) {
                 continue;
             }
 
-            $trait->decreaseRemainingTurns();
+            $alteration->getDuration()->decrease();
         }
     }
 
@@ -42,7 +42,7 @@ readonly class TimeProcessor
     public function combatEnd(array $entities): void
     {
         foreach ($entities as $entity) {
-            $entity->getTraits()->clean();
+            $entity->getAlterations()->clean();
         }
     }
 }

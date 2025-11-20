@@ -14,7 +14,7 @@ namespace Core\Factory;
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
-class ConditionsFactoryTest extends TestCase
+class PrerequisitesFactoryTest extends TestCase
 {
     use FactoryTrait;
 
@@ -22,7 +22,7 @@ class ConditionsFactoryTest extends TestCase
     {
         $data = [
             'numberRequired' => 1,
-            'conditions' => [
+            'requirements'   => [
                 [
                     'type'      => 'self.attribute.strength',
                     'condition' => 'value>=10',
@@ -41,22 +41,22 @@ class ConditionsFactoryTest extends TestCase
             ],
         ];
 
-        $conditions = self::getConditionFactory()->from($data);
+        $conditions = self::getPrerequisitesFactory()->from($data);
 
         self::assertNotNull($conditions);
         self::assertSame(1, $conditions->getNumberRequired());
 
-        $condition0 = $conditions->getConditions()[0];
+        $condition0 = $conditions->getRequirements()[0];
         self::assertSame('self.attribute.strength', $condition0->getType());
         self::assertSame('value>=10', $condition0->getCondition());
         self::assertTrue($condition0->is());
 
-        $condition1 = $conditions->getConditions()[1];
+        $condition1 = $conditions->getRequirements()[1];
         self::assertSame('self.trait.skill', $condition1->getType());
         self::assertSame('name=Sword (Mastery)', $condition1->getCondition());
         self::assertFalse($condition1->is());
 
-        $condition2 = $conditions->getConditions()[2];
+        $condition2 = $conditions->getRequirements()[2];
         self::assertSame('self.inventory.item', $condition2->getType());
         self::assertSame('subType=sword;equipped=true;flags&3', $condition2->getCondition());
         self::assertTrue($condition2->is());
@@ -68,7 +68,7 @@ class ConditionsFactoryTest extends TestCase
     {
         $data = null;
 
-        $conditions = self::getConditionFactory()->from($data);
+        $conditions = self::getPrerequisitesFactory()->from($data);
 
         self::assertNull($conditions);
     }

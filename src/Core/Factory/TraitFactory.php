@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Core\Factory;
 
-use Velkuns\GameTextEngine\Rpg\Traits\EntityTrait;
-use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
+use Velkuns\GameTextEngine\Rpg\Trait\EntityTrait;
+use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 
 /**
  * @phpstan-import-type TraitData from TraitInterface
@@ -26,15 +26,13 @@ readonly class TraitFactory
     /**
      * @param TraitData $data
      */
-    public function from(array $data): EntityTrait
+    public function from(array $data): TraitInterface
     {
         $type           = $data['type'];
         $name           = $data['name'];
         $description    = $data['description'];
         $modifiers      = \array_map(fn($modifier) => $this->modifierFactory->from($modifier), $data['modifiers']);
-        $durationTurns  = $data['durationTurns'] ?? 0;
-        $remainingTurns = $data['remainingTurns'] ?? 0;
 
-        return new EntityTrait($type, $name, $description, $modifiers, $durationTurns, $remainingTurns);
+        return new EntityTrait($type, $name, $description, $modifiers);
     }
 }

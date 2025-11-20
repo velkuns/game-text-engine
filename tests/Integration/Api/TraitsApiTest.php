@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Api\TraitsApi;
 use Velkuns\GameTextEngine\Core\Loader\JsonLoader;
 use Velkuns\GameTextEngine\Exception\Api\TraitsApiException;
-use Velkuns\GameTextEngine\Rpg\Traits\EntityTrait;
+use Velkuns\GameTextEngine\Rpg\Trait\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
 /**
@@ -28,13 +28,13 @@ class TraitsApiTest extends TestCase
     public function testLoad(): void
     {
         $api = $this->getApi();
-        $expectedStartingAttributions = ['skill' => 2, 'state' => 0, 'blessing' => 0, 'curse' => 0, 'title' => 0];
-        $expectedLevelingAttributions = ['skill' => 1, 'state' => 0, 'blessing' => 0, 'curse' => 0, 'title' => 0];
+        $expectedStartingAttributions = ['race' => [], 'class' => [], 'skill' => ['number' => 2], 'title' => []];
+        $expectedLevelingAttributions = ['race' => [], 'class' => [], 'skill' => ['number' => 1, 'everyNumberLevel' => 2], 'title' => []];
 
-        self::assertSame("This section defines all kind of traits types available for the story, and the number of each when create a new character.", $api->rules->description);
+        self::assertSame("This section defines all kind of traits types available for the story, and the number of each when create a new character.\nTraits are persistant element that define the player.", $api->rules->description);
         self::assertSame($expectedStartingAttributions, $api->rules->starting->attributions);
         self::assertSame($expectedLevelingAttributions, $api->rules->leveling->attributions);
-        self::assertSame(2, $api->rules->leveling->everyNumberLevel);
+        self::assertSame(2, $api->rules->leveling->getEveryNumberLevel('skill'));
     }
 
     public function testDump(): void
@@ -50,10 +50,9 @@ class TraitsApiTest extends TestCase
         $api = $this->getApi();
 
         $traits = $api->getAll();
+        self::assertCount(3, $traits['class']);
+        self::assertCount(3, $traits['race']);
         self::assertCount(8, $traits['skill']);
-        self::assertCount(4, $traits['state']);
-        self::assertCount(0, $traits['blessing']);
-        self::assertCount(0, $traits['curse']);
         self::assertCount(3, $traits['title']);
     }
 
@@ -102,10 +101,9 @@ class TraitsApiTest extends TestCase
 
         $data = $api->fromNewPlayer($traits);
 
+        self::assertCount(0, $data['class']);
+        self::assertCount(0, $data['race']);
         self::assertCount(2, $data['skill']);
-        self::assertCount(0, $data['state']);
-        self::assertCount(0, $data['blessing']);
-        self::assertCount(0, $data['curse']);
         self::assertCount(0, $data['title']);
         self::assertSame('Goblin Hunter', $data['skill']['Goblin Hunter']['name']);
         self::assertSame('Wolf Hunter', $data['skill']['Wolf Hunter']['name']);

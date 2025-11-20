@@ -12,31 +12,31 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Rpg\Entity;
 
 use Velkuns\GameTextEngine\Rpg\Attribute\AttributeInterface;
-use Velkuns\GameTextEngine\Rpg\Attribute\BaseAttribute;
+use Velkuns\GameTextEngine\Rpg\Attribute\SimpleAttribute;
 use Velkuns\GameTextEngine\Rpg\Attribute\CompoundAttribute;
 
 /**
- * @phpstan-import-type BaseAttributeData from BaseAttribute
+ * @phpstan-import-type SimpleAttributeData from SimpleAttribute
  * @phpstan-import-type CompoundAttributeData from CompoundAttribute
  * @phpstan-type AttributesData array{
- *     bases: array<string, BaseAttributeData>,
+ *     simples: array<string, SimpleAttributeData>,
  *     compounds: array<string, CompoundAttributeData>,
  * }
  */
 readonly class EntityAttributes implements \JsonSerializable
 {
     /**
-     * @param array<string, BaseAttribute> $bases
+     * @param array<string, SimpleAttribute> $simples
      * @param array<string, CompoundAttribute> $compounds
      */
     public function __construct(
-        public array $bases,
+        public array $simples,
         public array $compounds = [],
     ) {}
 
     public function get(string $name): ?AttributeInterface
     {
-        return $this->bases[$name] ?? $this->compounds[$name] ?? null;
+        return $this->simples[$name] ?? $this->compounds[$name] ?? null;
     }
 
     /**
@@ -45,18 +45,18 @@ readonly class EntityAttributes implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'bases'     => \array_map(fn(AttributeInterface $attribute) => $attribute->jsonSerialize(), $this->bases),
+            'simples'     => \array_map(fn(AttributeInterface $attribute) => $attribute->jsonSerialize(), $this->simples),
             'compounds' => \array_map(fn(AttributeInterface $attribute) => $attribute->jsonSerialize(), $this->compounds),
         ];
     }
 
     public function clone(): self
     {
-        $bases     = \array_map(fn(AttributeInterface $attribute) => $attribute->clone(), $this->bases);
-        $compounds = \array_map(fn(AttributeInterface $attribute) => $attribute->clone($bases), $this->compounds);
+        $simples     = \array_map(fn(AttributeInterface $attribute) => $attribute->clone(), $this->simples);
+        $compounds = \array_map(fn(AttributeInterface $attribute) => $attribute->clone($simples), $this->compounds);
 
         return new self(
-            $bases,
+            $simples,
             $compounds,
         );
     }

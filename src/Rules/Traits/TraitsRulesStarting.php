@@ -12,26 +12,37 @@ declare(strict_types=1);
 namespace Velkuns\GameTextEngine\Rules\Traits;
 
 /**
- * @phpstan-type TraitsRulesStartingData array{
- *    attributions: array<string, int>,
- * }
+ * @phpstan-type TraitsRulesStartingData array<string, array{
+ *    number?: int
+ * }>
  */
 class TraitsRulesStarting implements \JsonSerializable
 {
     /**
-     * @param array<string, int> $attributions
+     * @param array<string, array<string, int>> $attributions
      */
     public function __construct(
         public array $attributions,
     ) {}
+
+    public function getNumber(string $type): int
+    {
+        return $this->attributions[$type]['number'] ?? 0;
+    }
+
+    /**
+     * @phpstan-return list<string>
+     */
+    public function getAllTypes(): array
+    {
+        return \array_keys($this->attributions);
+    }
 
     /**
      * @phpstan-return TraitsRulesStartingData
      */
     public function jsonSerialize(): array
     {
-        return [
-            'attributions' => $this->attributions,
-        ];
+        return $this->attributions;
     }
 }

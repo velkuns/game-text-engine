@@ -11,11 +11,11 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Rules\Attributes;
 
-use Velkuns\GameTextEngine\Rpg\Attribute\BaseAttribute;
+use Velkuns\GameTextEngine\Rpg\Attribute\SimpleAttribute;
 use Velkuns\GameTextEngine\Rpg\Attribute\CompoundAttribute;
 
 /**
- * @phpstan-import-type BaseAttributeData from BaseAttribute
+ * @phpstan-import-type SimpleAttributeData from SimpleAttribute
  * @phpstan-import-type CompoundAttributeData from CompoundAttribute
  * @phpstan-import-type AttributesRulesStartingData from AttributesRulesStarting
  * @phpstan-import-type AttributesRulesLevelingData from AttributesRulesLeveling
@@ -23,21 +23,21 @@ use Velkuns\GameTextEngine\Rpg\Attribute\CompoundAttribute;
  *    description: string,
  *    starting: AttributesRulesStartingData,
  *    leveling: AttributesRulesLevelingData,
- *    bases: array<string, BaseAttributeData>,
+ *    simples: array<string, SimpleAttributeData>,
  *    compounds: array<string, CompoundAttributeData>,
  * }
  */
 class AttributesRules implements \JsonSerializable
 {
     /**
-     * @param array<string, BaseAttribute> $baseAttributes
+     * @param array<string, SimpleAttribute> $simpleAttributes
      * @param array<string, CompoundAttribute> $compoundAttributes
      */
     public function __construct(
         public string $description,
         public AttributesRulesStarting $starting,
         public AttributesRulesLeveling $leveling,
-        public array $baseAttributes = [],
+        public array $simpleAttributes = [],
         public array $compoundAttributes = [],
     ) {}
 
@@ -47,8 +47,8 @@ class AttributesRules implements \JsonSerializable
     public function jsonSerialize(): array
     {
         //~ Before dump, we need to reset initial/max/value for attribute with init rule.
-        $baseAttributes = $this->baseAttributes;
-        foreach ($baseAttributes as $attribute) {
+        $simpleAttributes = $this->simpleAttributes;
+        foreach ($simpleAttributes as $attribute) {
             if ($attribute->getRule() === null) {
                 continue;
             }
@@ -62,7 +62,7 @@ class AttributesRules implements \JsonSerializable
             'description' => $this->description,
             'starting'    => $this->starting->jsonSerialize(),
             'leveling'    => $this->leveling->jsonSerialize(),
-            'bases'       => \array_map(fn(BaseAttribute $attribute) => $attribute->jsonSerialize(), $baseAttributes),
+            'simples'       => \array_map(fn(SimpleAttribute $attribute) => $attribute->jsonSerialize(), $simpleAttributes),
             'compounds'   => \array_map(fn(CompoundAttribute $attribute) => $attribute->jsonSerialize(), $this->compoundAttributes),
         ];
     }

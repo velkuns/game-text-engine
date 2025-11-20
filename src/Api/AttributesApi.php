@@ -15,7 +15,7 @@ use Velkuns\GameTextEngine\Core\Factory\AttributeFactory;
 use Velkuns\GameTextEngine\Exception\Api\AttributesApiException;
 use Velkuns\GameTextEngine\Rpg\Attribute\AttributeInterface;
 use Velkuns\GameTextEngine\Rpg\Attribute\AttributeType;
-use Velkuns\GameTextEngine\Rpg\Attribute\BaseAttribute;
+use Velkuns\GameTextEngine\Rpg\Attribute\SimpleAttribute;
 use Velkuns\GameTextEngine\Rpg\Attribute\CompoundAttribute;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityAttributes;
 use Velkuns\GameTextEngine\Rules\Attributes\AttributesRules;
@@ -23,7 +23,7 @@ use Velkuns\GameTextEngine\Rules\Attributes\AttributesRulesLeveling;
 use Velkuns\GameTextEngine\Rules\Attributes\AttributesRulesStarting;
 
 /**
- * @phpstan-import-type BaseAttributeData from BaseAttribute
+ * @phpstan-import-type SimpleAttributeData from SimpleAttribute
  * @phpstan-import-type CompoundAttributeData from CompoundAttribute
  * @phpstan-import-type AttributesData from EntityAttributes
  * @phpstan-import-type AttributesRulesData from AttributesRules
@@ -46,32 +46,32 @@ class AttributesApi
         $starting          = new AttributesRulesStarting(...$data['starting']);
         $leveling          = new AttributesRulesLeveling(...$data['leveling']);
 
-        $basesAttributes    = $this->attributeFactory->fromBases($data['bases']);
-        $compoundAttributes = $this->attributeFactory->fromCompounds($data['compounds'], $basesAttributes);
+        $simplesAttributes    = $this->attributeFactory->fromSimples($data['simples']);
+        $compoundAttributes = $this->attributeFactory->fromCompounds($data['compounds'], $simplesAttributes);
 
         $this->rules = new AttributesRules(
             $description,
             $starting,
             $leveling,
-            $basesAttributes,
+            $simplesAttributes,
             $compoundAttributes,
         );
     }
 
     /**
-     * @return array{bases: array<string, BaseAttribute>, compounds: array<string, CompoundAttribute>}
+     * @return array{simples: array<string, SimpleAttribute>, compounds: array<string, CompoundAttribute>}
      */
     public function getAll(): array
     {
-        return (['bases' => $this->rules->baseAttributes, 'compounds' => $this->rules->compoundAttributes]);
+        return (['simples' => $this->rules->simpleAttributes, 'compounds' => $this->rules->compoundAttributes]);
     }
 
     public function get(string $name, bool $asClone = true): ?AttributeInterface
     {
-        $attribute = $this->rules->baseAttributes[$name] ?? $this->rules->compoundAttributes[$name] ?? null;
+        $attribute = $this->rules->simpleAttributes[$name] ?? $this->rules->compoundAttributes[$name] ?? null;
 
         if ($attribute !== null && $asClone) {
-            return $attribute->getType() === AttributeType::Base ? $attribute->clone() : $attribute->clone($this->rules->baseAttributes);
+            return $attribute->getType() === AttributeType::Simple ? $attribute->clone() : $attribute->clone($this->rules->simpleAttributes);
         }
 
         return $attribute;
@@ -79,8 +79,8 @@ class AttributesApi
 
     public function set(AttributeInterface $attribute): self
     {
-        if ($attribute instanceof BaseAttribute) {
-            $this->rules->baseAttributes[$attribute->getName()] = $attribute;
+        if ($attribute instanceof SimpleAttribute) {
+            $this->rules->simpleAttributes[$attribute->getName()] = $attribute;
         } elseif ($attribute instanceof CompoundAttribute) {
             $this->rules->compoundAttributes[$attribute->getName()] = $attribute;
         }
@@ -90,8 +90,8 @@ class AttributesApi
 
     public function remove(string $name): self
     {
-        if (isset($this->rules->baseAttributes[$name])) {
-            unset($this->rules->baseAttributes[$name]);
+        if (isset($this->rules->simpleAttributes[$name])) {
+            unset($this->rules->simpleAttributes[$name]);
         } elseif (isset($this->rules->compoundAttributes[$name])) {
             unset($this->rules->compoundAttributes[$name]);
         } else {
@@ -107,27 +107,27 @@ class AttributesApi
      */
     public function fromNewPlayer(array $data): array
     {
-        $attributes = ['bases' => [], 'compounds' => []];
+        $attributes = ['simples' => [], 'compounds' => []];
 
-        /** @var array<string, BaseAttributeData> $basesWithInitRule */
-        $basesWithInitRule = [];
-        /** @var array<string, BaseAttributeData> $basesWithInitRule */
-        $bases = [];
+        /** @var array<string, SimpleAttributeData> $simplesWithInitRule */
+        $simplesWithInitRule = [];
+        /** @var array<string, SimpleAttributeData> $simplesWithInitRule */
+        $simples = [];
 
-        //~ Transform attributes into data and separate bases with ou without init rule.
-        foreach ($this->rules->baseAttributes as $name => $attribute) {
+        //~ Transform attributes into data and separate simples with ou without init rule.
+        foreach ($this->rules->simpleAttributes as $name => $attribute) {
             if ($attribute->getRule() !== null) {
                 //~ Reset values before store attribute with init rule
-                $basesWithInitRule[$name] = ['initial' => 0, 'max' => 0, 'value' => 0] + $attribute->jsonSerialize();
+                $simplesWithInitRule[$name] = ['initial' => 0, 'max' => 0, 'value' => 0] + $attribute->jsonSerialize();
             } else {
-                $bases[$name] = $attribute->jsonSerialize();
+                $simples[$name] = $attribute->jsonSerialize();
             }
         }
 
         //~ Then, iterate on new player data attributes
         $totalAttributedPoints = 0;
         foreach ($data as $name => $value) {
-            $attribute = $bases[$name] ?? null;
+            $attribute = $simples[$name] ?? null;
             if ($attribute === null) {
                 throw new AttributesApiException("The attribute '$name' does not exist.", 1451);
             }
@@ -137,7 +137,7 @@ class AttributesApi
             }
 
             if ($value < $attribute['value']) {
-                throw new AttributesApiException("You cannot have less point that base define for an attribute.", 1453);
+                throw new AttributesApiException("You cannot have less point that simple define for an attribute.", 1453);
             }
 
             $totalAttributedPoints += $value - $attribute['value'];
@@ -148,7 +148,7 @@ class AttributesApi
             $attribute['value']   = $value;
 
             //~ Then create
-            $attributes['bases'][$name] = $attribute;
+            $attributes['simples'][$name] = $attribute;
         }
 
         $remainingPoints = $this->rules->starting->attributionPoints - $totalAttributedPoints;
@@ -160,9 +160,9 @@ class AttributesApi
             throw new AttributesApiException("You have still have some point(s) to attribute (remaining: $remainingPoints).", 1455);
         }
 
-        //~ Then add base attributes with init rule
-        foreach ($basesWithInitRule as $name => $attribute) {
-            $attributes['bases'][$name] = $attribute;
+        //~ Then add simple attributes with init rule
+        foreach ($simplesWithInitRule as $name => $attribute) {
+            $attributes['simples'][$name] = $attribute;
         }
 
         //~ Then add compound attributes

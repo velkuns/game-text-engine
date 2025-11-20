@@ -112,9 +112,9 @@ Skill trait example:
         {
             "combat" : "self.damages.physical.value",
             "value": 2,
-            "conditions": {
+            "prerequisites": {
                 "numberRequired": 1,
-                "conditions": [
+                "requirements": [
                     {
                         "type": "self.inventory.item",
                         "condition": "subType=sword;equipped=true",

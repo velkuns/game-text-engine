@@ -13,6 +13,6 @@ namespace Velkuns\GameTextEngine\Rpg\Attribute;
 
 enum AttributeType: string
 {
-    case Base = 'base';
+    case Simple = 'simple';
     case Compound = 'compound';
 }

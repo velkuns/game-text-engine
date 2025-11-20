@@ -19,4 +19,7 @@ class ItemFlag
     public const int WEAPON = 4;
     public const int SHIELD = 8;
     public const int GEAR = 16;
+    public const int ATTACK_MELEE = 32;
+    public const int ATTACK_RANGE = 64;
+    public const int ATTACK_MAGICAL = 128;
 }

@@ -19,9 +19,9 @@
         }
     },
     "attributes": {
-        "bases": {
+        "simples": {
             "strength": {
-                "type": "base",
+                "type": "simple",
                 "name": "strength",
                 "initial": 10,
                 "max": 10,
@@ -33,7 +33,7 @@
                 "rule": null
             },
             "endurance": {
-                "type": "base",
+                "type": "simple",
                 "name": "endurance",
                 "initial": 10,
                 "max": 10,
@@ -45,7 +45,7 @@
                 "rule": null
             },
             "agility": {
-                "type": "base",
+                "type": "simple",
                 "name": "agility",
                 "initial": 10,
                 "max": 10,
@@ -57,7 +57,7 @@
                 "rule": null
             },
             "intuition": {
-                "type": "base",
+                "type": "simple",
                 "name": "intuition",
                 "initial": 10,
                 "max": 10,
@@ -69,7 +69,7 @@
                 "rule": null
             },
             "vitality": {
-                "type": "base",
+                "type": "simple",
                 "name": "vitality",
                 "initial": 20,
                 "max": 20,
@@ -95,11 +95,15 @@
         }
     },
     "traits": {
+        "class": [],
+        "race": [],
         "skill": [],
+        "title": []
+    },
+    "alterations": {
         "state": [],
         "blessing": [],
-        "curse": [],
-        "title": []
+        "curse": []
     },
     "inventory": {
         "coins": 10,

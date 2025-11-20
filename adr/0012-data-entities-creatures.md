@@ -31,8 +31,8 @@ Format:
         "notes": ""
     },
     "attributes": {
-        "base": "list<BaseAttribute>",
-        "compound": "list<CompoundAttribute>"
+        "simples": "list<SimpleAttribute>",
+        "compounds": "list<CompoundAttribute>"
     },
     "traits": {
     "skills": "list<TraitInterface>",
@@ -60,8 +60,8 @@ Example:
         "notes": ""
     },
     "attributes": {
-        "base": "list<BaseAttribute>",
-        "compound": "list<CompoundAttribute>"
+        "simples": "list<SimpleAttribute>",
+        "compounds": "list<CompoundAttribute>"
     },
     "traits": {
         "skills": "list<TraitInterface>",

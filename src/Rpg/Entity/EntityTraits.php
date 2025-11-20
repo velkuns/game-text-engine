@@ -13,7 +13,7 @@ namespace Velkuns\GameTextEngine\Rpg\Entity;
 
 use Velkuns\GameTextEngine\Exception\Rpg\TraitException;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
-use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
+use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 
 /**
  * @phpstan-import-type TraitData from TraitInterface
@@ -42,28 +42,6 @@ class EntityTraits implements \JsonSerializable
         $this->traits[$trait->getType()][$trait->getName()] = $trait;
 
         return $this;
-    }
-
-    /**
-     * @return array<string, TraitInterface>
-     */
-    public function getAll(): array
-    {
-        return \array_merge(...\array_values($this->traits));
-    }
-
-    /**
-     * Remove traits that have duration
-     */
-    public function clean(): void
-    {
-        foreach ($this->traits as $type => $traits) {
-            foreach ($traits as $name => $trait) {
-                if ($trait->getDurationTurns() > 0) {
-                    unset($this->traits[$type][$name]);
-                }
-            }
-        }
     }
 
     /**
@@ -101,13 +79,13 @@ class EntityTraits implements \JsonSerializable
 
         foreach ($traits as $trait) {
             $traitModifiers = $trait->getModifiers();
-            if ($traitModifiers === [] || !$trait->isActive()) {
+            if ($traitModifiers === []) {
                 continue;
             }
 
             foreach ($traitModifiers as $modifier) {
-                if ($modifier->conditions !== null && !$modifier->conditions->evaluate($player, $enemy)) {
-                    continue; // modifier conditions is not met, skip it
+                if ($modifier->prerequisites !== null && !$modifier->prerequisites->evaluate($player, $enemy)) {
+                    continue; // modifier prerequisites is not met, skip it
                 }
 
                 $modifiers[] = $modifier;

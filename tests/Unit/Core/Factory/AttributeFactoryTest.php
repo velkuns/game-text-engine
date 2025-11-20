@@ -14,10 +14,10 @@ namespace Core\Factory;
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Core\Factory\AttributeFactory;
 use Velkuns\GameTextEngine\Rpg\Attribute\AttributeType;
-use Velkuns\GameTextEngine\Rpg\Attribute\BaseAttribute;
+use Velkuns\GameTextEngine\Rpg\Attribute\SimpleAttribute;
 
 /**
- * @phpstan-import-type BaseAttributeData from BaseAttribute
+ * @phpstan-import-type SimpleAttributeData from SimpleAttribute
  */
 class AttributeFactoryTest extends TestCase
 {
@@ -28,24 +28,24 @@ class AttributeFactoryTest extends TestCase
         $this->factory = new AttributeFactory();
     }
 
-    public function testFromBases(): void
+    public function testFromSimples(): void
     {
         $data = [
             // With initialization
-            'vitality'  => self::getAttributeBaseData('vitality'),
+            'vitality'  => self::getAttributeSimpleData('vitality'),
             // Without initialization
-            'strength'  => self::getAttributeBaseData('strength'),
-            'endurance' => self::getAttributeBaseData('endurance'),
-            'agility'   => self::getAttributeBaseData('agility'),
+            'strength'  => self::getAttributeSimpleData('strength'),
+            'endurance' => self::getAttributeSimpleData('endurance'),
+            'agility'   => self::getAttributeSimpleData('agility'),
         ];
 
-        $bases = $this->factory->fromBases($data);
+        $simples = $this->factory->fromSimples($data);
 
-        self::assertCount(4, $bases);
+        self::assertCount(4, $simples);
 
-        $strength = $bases['strength'];
+        $strength = $simples['strength'];
         self::assertSame('strength', $strength->getName());
-        self::assertSame(AttributeType::Base, $strength->getType());
+        self::assertSame(AttributeType::Simple, $strength->getType());
         self::assertSame(10, $strength->getValue());
         self::assertSame(20, $strength->getMax());
         self::assertSame(10, $strength->getInitial());
@@ -54,9 +54,9 @@ class AttributeFactoryTest extends TestCase
         self::assertSame($data['strength'], $strength->jsonSerialize());
         self::assertNull($strength->getRule());
 
-        $agility = $bases['agility'];
+        $agility = $simples['agility'];
         self::assertSame('agility', $agility->getName());
-        self::assertSame(AttributeType::Base, $agility->getType());
+        self::assertSame(AttributeType::Simple, $agility->getType());
         self::assertSame(15, $agility->getValue());
         self::assertSame(30, $agility->getMax());
         self::assertSame(15, $agility->getInitial());
@@ -65,9 +65,9 @@ class AttributeFactoryTest extends TestCase
         self::assertSame($data['agility'], $agility->jsonSerialize());
         self::assertNull($agility->getRule());
 
-        $vitality = $bases['vitality'];
+        $vitality = $simples['vitality'];
         self::assertSame('vitality', $vitality->getName());
-        self::assertSame(AttributeType::Base, $vitality->getType());
+        self::assertSame(AttributeType::Simple, $vitality->getType());
         self::assertSame(22, $vitality->getValue());
         self::assertSame(22, $vitality->getMax());
         self::assertSame(22, $vitality->getInitial());
@@ -76,7 +76,7 @@ class AttributeFactoryTest extends TestCase
         self::assertSame('endurance + strength', $vitality->getRule());
 
         $expectedVitalityData = [
-            'type'        => 'base',
+            'type'        => 'simple',
             'name'        => 'vitality',
             'value'     => 22,
             'max'         => 22,
@@ -90,14 +90,14 @@ class AttributeFactoryTest extends TestCase
         self::assertEquals($expectedVitalityData, $vitality->jsonSerialize());
     }
 
-    public function testFromBaseAttribute(): void
+    public function testFromSimpleAttribute(): void
     {
-        $data = self::getAttributeBaseData('strength');
+        $data = self::getAttributeSimpleData('strength');
 
-        $strength = $this->factory->fromBaseAttribute($data);
+        $strength = $this->factory->fromSimpleAttribute($data);
 
         self::assertSame('strength', $strength->getName());
-        self::assertSame(AttributeType::Base, $strength->getType());
+        self::assertSame(AttributeType::Simple, $strength->getType());
         self::assertSame(10, $strength->getValue());
         self::assertSame(20, $strength->getMax());
         self::assertSame(10, $strength->getInitial());
@@ -109,11 +109,11 @@ class AttributeFactoryTest extends TestCase
 
     public function testFromCompounds(): void
     {
-        $bases = [
-            'strength'  => $this->factory->fromBaseAttribute(self::getAttributeBaseData('strength')),
-            'agility'   => $this->factory->fromBaseAttribute(self::getAttributeBaseData('agility')),
-            'endurance' => $this->factory->fromBaseAttribute(self::getAttributeBaseData('endurance')),
-            'intuition' => $this->factory->fromBaseAttribute(self::getAttributeBaseData('intuition')),
+        $simples = [
+            'strength'  => $this->factory->fromSimpleAttribute(self::getAttributeSimpleData('strength')),
+            'agility'   => $this->factory->fromSimpleAttribute(self::getAttributeSimpleData('agility')),
+            'endurance' => $this->factory->fromSimpleAttribute(self::getAttributeSimpleData('endurance')),
+            'intuition' => $this->factory->fromSimpleAttribute(self::getAttributeSimpleData('intuition')),
         ];
 
         $data = [
@@ -129,7 +129,7 @@ class AttributeFactoryTest extends TestCase
             ],
         ];
 
-        $compounds = $this->factory->fromCompounds($data, $bases);
+        $compounds = $this->factory->fromCompounds($data, $simples);
         self::assertCount(2, $compounds);
 
         $attack = $compounds['attack'];
@@ -157,9 +157,9 @@ class AttributeFactoryTest extends TestCase
 
     public function testFromCompoundAttribute(): void
     {
-        $bases = [
-            'strength'  => $this->factory->fromBaseAttribute(self::getAttributeBaseData('strength')),
-            'agility'   => $this->factory->fromBaseAttribute(self::getAttributeBaseData('agility')),
+        $simples = [
+            'strength'  => $this->factory->fromSimpleAttribute(self::getAttributeSimpleData('strength')),
+            'agility'   => $this->factory->fromSimpleAttribute(self::getAttributeSimpleData('agility')),
         ];
 
         $data = [
@@ -168,7 +168,7 @@ class AttributeFactoryTest extends TestCase
             'rule' => 'strength + agility',
         ];
 
-        $attack = $this->factory->fromCompoundAttribute($data, $bases);
+        $attack = $this->factory->fromCompoundAttribute($data, $simples);
         self::assertSame('attack', $attack->getName());
         self::assertSame(AttributeType::Compound, $attack->getType());
         self::assertSame('strength + agility', $attack->getRule());
@@ -181,13 +181,13 @@ class AttributeFactoryTest extends TestCase
     }
 
     /**
-     * @return BaseAttributeData
+     * @return SimpleAttributeData
      */
-    private static function getAttributeBaseData(string $name): array
+    private static function getAttributeSimpleData(string $name): array
     {
-        $bases = [
+        $simples = [
             'vitality' => [
-                'type'    => 'base',
+                'type'    => 'simple',
                 'name'    => 'vitality',
                 'initial' => 0,
                 'max'     => 0,
@@ -199,7 +199,7 @@ class AttributeFactoryTest extends TestCase
                 'rule'    => 'endurance + strength',
             ],
             'strength' => [
-                'type'    => 'base',
+                'type'    => 'simple',
                 'name'    => 'strength',
                 'initial' => 10,
                 'max'     => 20,
@@ -211,7 +211,7 @@ class AttributeFactoryTest extends TestCase
                 'rule'    => null,
             ],
             'agility' => [
-                'type'    => 'base',
+                'type'    => 'simple',
                 'name'    => 'agility',
                 'initial' => 15,
                 'max'     => 30,
@@ -223,7 +223,7 @@ class AttributeFactoryTest extends TestCase
                 'rule'    => null,
             ],
             'endurance' => [
-                'type'    => 'base',
+                'type'    => 'simple',
                 'name'    => 'endurance',
                 'initial' => 12,
                 'max'     => 25,
@@ -235,7 +235,7 @@ class AttributeFactoryTest extends TestCase
                 'rule'    => null,
             ],
             'intuition' => [
-                'type'    => 'base',
+                'type'    => 'simple',
                 'name'    => 'intuition',
                 'initial' => 8,
                 'max'     => 20,
@@ -248,6 +248,6 @@ class AttributeFactoryTest extends TestCase
             ],
         ];
 
-        return $bases[$name];
+        return $simples[$name];
     }
 }

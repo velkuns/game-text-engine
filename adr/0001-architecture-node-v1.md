@@ -1,7 +1,7 @@
 # Architecture - Node - v1 - Mains nodes - Simple version
 
 ## Status
-`draft`
+`accepted`
 
 ## Context
 
@@ -41,21 +41,22 @@ Tables diagram: nodes (v1)
 ---
 classDiagram
     
-    class node_text {
-        int node_text_id
-        string node_text_content
+    class Node {
+        string id
+        string content
+        bool isEnd
+        ?array triggers
     }
     
-    class node_choice {
-        int node_choice_id
-        int node_text_id_from
-        int node_text_id_to
-        string node_choice_condition
-        string node_choice_content
+    class Edge {
+        string source
+        string target
+        string content
+        ?Prequisite prerequisites
     }
 ```
 
-For normal playbook game, the relationship between nodes will use node_text_id_from and node_action_id_to.
+For normal playbook game, the relationship between nodes will use `source` and `target`.
 
 ## Consequences
 Pros:

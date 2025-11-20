@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Rename Ability(ies) to Attribute(s)
 - Rename Status(es) to Trait(s)
+- Rename Conditions to Prerequisites
+- Also rename list of conditions to Requirements
+- Add some classes for Alterations (split from Traits)
+- Rename refs to base(s) attribute to simple(s) attribute
 
 ----
 

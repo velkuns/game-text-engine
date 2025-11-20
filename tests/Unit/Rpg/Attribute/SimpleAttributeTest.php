@@ -14,15 +14,15 @@ namespace Rpg\Attribute;
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Exception\Rpg\AttributeException;
 use Velkuns\GameTextEngine\Rpg\Attribute\AttributeType;
-use Velkuns\GameTextEngine\Rpg\Attribute\BaseAttribute;
+use Velkuns\GameTextEngine\Rpg\Attribute\SimpleAttribute;
 use Velkuns\GameTextEngine\Rpg\Attribute\ConstraintsAttribute;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
-class BaseAttributeTest extends TestCase
+class SimpleAttributeTest extends TestCase
 {
     public function testGetter(): void
     {
-        $attribute = new BaseAttribute(
+        $attribute = new SimpleAttribute(
             name: 'vitality',
             value: 5,
             max: 10,
@@ -30,7 +30,7 @@ class BaseAttributeTest extends TestCase
             initial: 10,
         );
 
-        self::assertSame(AttributeType::Base, $attribute->getType());
+        self::assertSame(AttributeType::Simple, $attribute->getType());
         self::assertSame('vitality', $attribute->getName());
         self::assertSame(5, $attribute->getValue());
         self::assertSame(10, $attribute->getMax());
@@ -40,10 +40,10 @@ class BaseAttributeTest extends TestCase
         self::assertSame(20, $attribute->getConstraints()->max);
     }
 
-    public function testInvalidBaseAttributeWithInitialization(): void
+    public function testInvalidSimpleAttributeWithInitialization(): void
     {
         self::expectException(AttributeException::class);
-        new BaseAttribute(
+        new SimpleAttribute(
             name: 'vitality',
             value: 0,
             max: 0,
@@ -56,7 +56,7 @@ class BaseAttributeTest extends TestCase
 
     public function testMutattributeIncrease(): void
     {
-        $attribute = new BaseAttribute(
+        $attribute = new SimpleAttribute(
             name: 'vitality',
             value: 5,
             max: 10,
@@ -76,7 +76,7 @@ class BaseAttributeTest extends TestCase
 
     public function testMutattributeIncreaseOverConstraint(): void
     {
-        $attribute = new BaseAttribute(
+        $attribute = new SimpleAttribute(
             name: 'vitality',
             value: 5,
             max: 10,
@@ -97,7 +97,7 @@ class BaseAttributeTest extends TestCase
 
     public function testMutattributeDecrease(): void
     {
-        $attribute = new BaseAttribute(
+        $attribute = new SimpleAttribute(
             name: 'vitality',
             value: 5,
             max: 10,
@@ -117,7 +117,7 @@ class BaseAttributeTest extends TestCase
 
     public function testMutattributeDecreaseOverConstraint(): void
     {
-        $attribute = new BaseAttribute(
+        $attribute = new SimpleAttribute(
             name: 'vitality',
             value: 5,
             max: 10,
@@ -138,7 +138,7 @@ class BaseAttributeTest extends TestCase
 
     public function testCurrentValueWithModifiers(): void
     {
-        $attribute = new BaseAttribute(
+        $attribute = new SimpleAttribute(
             name: 'vitality',
             value: 5,
             max: 10,

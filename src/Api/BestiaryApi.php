@@ -185,10 +185,10 @@ class BestiaryApi
         $damages = $data['damages'] ?? [];
 
         //~ Build attributes
-        $attributes = ['bases' => [], 'compounds' => []];
+        $attributes = ['simples' => [], 'compounds' => []];
         foreach ($data['attributes'] as $name => $value) {
-            $attributes['bases'][$name] = [
-                'type'        => 'base',
+            $attributes['simples'][$name] = [
+                'type'        => 'simple',
                 'name'        => $name,
                 'initial'     => $value,
                 'max'         => $value,
@@ -197,8 +197,8 @@ class BestiaryApi
                 'rule'        => null,
             ];
         }
-        $attributes['bases']['vitality'] = [
-            'type'        => 'base',
+        $attributes['simples']['vitality'] = [
+            'type'        => 'simple',
             'name'        => 'vitality',
             'initial'     => 0,
             'max'         => 0,
@@ -210,7 +210,8 @@ class BestiaryApi
         $attributes['compounds']['defense'] = ['type' => 'compound', 'name' => 'defense','rule' => 'endurance + intuition'];
 
         //~ Initialize empty traits
-        $traits  = ['skills' => [], 'states' => [], 'blessings' => [], 'curses' => [], 'titles' => []];
+        $traits      = ['race' => [], 'class' => [], 'skills' => [], 'titles' => []];
+        $alterations = ['states' => [], 'blessings' => [], 'curses' => []];
 
         $loot      = $data['loot'] ?? null;
         $equipment = $data['equipment'] ?? null;
@@ -231,13 +232,14 @@ class BestiaryApi
 
         //~ Return full data for factory
         $entityData = [
-            'name'      => $data['name'],
-            'type'      => $data['type'],
-            'info'      => $info,
-            'damages'   => $damages,
-            'attributes' => $attributes,
-            'traits'  => $traits,
-            'inventory' => $inventory,
+            'name'        => $data['name'],
+            'type'        => $data['type'],
+            'info'        => $info,
+            'damages'     => $damages,
+            'attributes'  => $attributes,
+            'traits'      => $traits,
+            'alterations' => $alterations,
+            'inventory'   => $inventory,
         ];
 
         if ($loot !== null) {

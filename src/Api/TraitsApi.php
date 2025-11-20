@@ -15,7 +15,7 @@ use Velkuns\GameTextEngine\Core\Factory\TraitFactory;
 use Velkuns\GameTextEngine\Exception\Api\AttributesApiException;
 use Velkuns\GameTextEngine\Exception\Api\TraitsApiException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityTraits;
-use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
+use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 use Velkuns\GameTextEngine\Rules\Traits\TraitsRules;
 use Velkuns\GameTextEngine\Rules\Traits\TraitsRulesLeveling;
 use Velkuns\GameTextEngine\Rules\Traits\TraitsRulesStarting;
@@ -39,8 +39,8 @@ class TraitsApi
     public function load(array $data): void
     {
         $description = $data['description'];
-        $starting    = new TraitsRulesStarting(...$data['starting']);
-        $leveling    = new TraitsRulesLeveling(...$data['leveling']);
+        $starting    = new TraitsRulesStarting($data['starting']);
+        $leveling    = new TraitsRulesLeveling($data['leveling']);
 
         $traits = [];
         foreach ($data['traits'] as $type => $list) {
@@ -100,11 +100,11 @@ class TraitsApi
         $traits = [];
 
         //~ Pre-build $traits
-        foreach ($this->rules->starting->attributions as $type => $value) {
+        foreach ($this->rules->starting->getAllTypes() as $type) {
             $traits[$type] = [];
         }
 
-        //~ Transform attributes into data and separate bases with ou without init rule.
+        //~ Transform attributes into data and separate simples with ou without init rule.
         foreach ($data as $type => $list) {
             if (!isset($traits[$type])) {
                 throw new TraitsApiException("Unknown trait '$type'", 1552);
@@ -119,7 +119,7 @@ class TraitsApi
                 $traits[$type][$name] = $trait->jsonSerialize();
             }
 
-            $remainingTrait = $this->rules->starting->attributions[$type] - \count($traits[$type]);
+            $remainingTrait = $this->rules->starting->getNumber($type) - \count($traits[$type]);
             if ($remainingTrait < 0) {
                 throw new TraitsApiException("Too much trait for type '$type'", 1554);
             }

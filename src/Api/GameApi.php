@@ -21,6 +21,7 @@ use Velkuns\GameTextEngine\Graph\Graph;
 use Velkuns\GameTextEngine\Graph\Node;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityInterface;
 use Velkuns\GameTextEngine\Rpg\Item\ItemInterface;
+use Velkuns\GameTextEngine\Rules\Alterations\AlterationsRules;
 use Velkuns\GameTextEngine\Rules\Attributes\AttributesRules;
 use Velkuns\GameTextEngine\Rules\Combat\CombatRules;
 use Velkuns\GameTextEngine\Rules\Player\PlayerRules;
@@ -33,6 +34,7 @@ use Velkuns\GameTextEngine\Rules\Traits\TraitsRules;
  * @phpstan-import-type EntityData from EntityInterface
  * @phpstan-import-type AttributesRulesData from AttributesRules
  * @phpstan-import-type TraitsRulesData from TraitsRules
+ * @phpstan-import-type AlterationsRulesData from AlterationsRules
  * @phpstan-import-type CombatRulesData from CombatRules
  * @phpstan-import-type PlayerRulesData from PlayerRules
  * @phpstan-import-type TurnLogData from CombatApi
@@ -47,6 +49,7 @@ readonly class GameApi
         public BestiaryApi $bestiary,
         public AttributesApi $attributes,
         public TraitsApi $traits,
+        public AlterationsApi $alterations,
         public PlayerApi $player,
         public CombatApi $combat,
     ) {}
@@ -57,6 +60,7 @@ readonly class GameApi
      * @phpstan-param BestiaryFileData $bestiaryData
      * @phpstan-param AttributesRulesData $attributesRulesData
      * @phpstan-param TraitsRulesData $traitsRulesData
+     * @phpstan-param AlterationsRulesData $alterationsRulesData
      * @phpstan-param CombatRulesData $combatRulesData
      * @phpstan-param PlayerRulesData $playerRulesData
      * @phpstan-param EntityData|null $playerData
@@ -67,6 +71,7 @@ readonly class GameApi
         array $bestiaryData,
         array $attributesRulesData,
         array $traitsRulesData,
+        array $alterationsRulesData,
         array $combatRulesData,
         array $playerRulesData,
         ?array $playerData = null,
@@ -76,6 +81,7 @@ readonly class GameApi
         $this->bestiary->load($bestiaryData);
         $this->attributes->load($attributesRulesData);
         $this->traits->load($traitsRulesData);
+        $this->alterations->load($alterationsRulesData);
         $this->combat->load($combatRulesData);
         $this->player->load($playerRulesData, $playerData);
 
@@ -88,6 +94,7 @@ readonly class GameApi
         string $bestiaryFile,
         string $attributesRulesFile,
         string $traitsRulesFile,
+        string $alterationsRulesFile,
         string $combatRulesFile,
         string $playerRulesFile,
         ?string $playerFile = null,
@@ -108,6 +115,9 @@ readonly class GameApi
         /** @var TraitsRulesData $traitsRulesData */
         $traitsRulesData = $this->loader->fromFile($traitsRulesFile);
 
+        /** @var AlterationsRulesData $alterationsRulesData */
+        $alterationsRulesData = $this->loader->fromFile($alterationsRulesFile);
+
         /** @var CombatRulesData $combatRulesData */
         $combatRulesData = $this->loader->fromFile($combatRulesFile);
 
@@ -123,6 +133,7 @@ readonly class GameApi
             $bestiaryData,
             $attributesRulesData,
             $traitsRulesData,
+            $alterationsRulesData,
             $combatRulesData,
             $playerRulesData,
             $playerData,
@@ -137,6 +148,7 @@ readonly class GameApi
         string $bestiaryJson,
         string $attributesRulesJson,
         string $traitsRulesJson,
+        string $alterationsRulesJson,
         string $combatRulesJson,
         string $playerRulesJson,
         ?string $playerJson = null,
@@ -157,6 +169,9 @@ readonly class GameApi
         /** @var TraitsRulesData $traitsRulesData */
         $traitsRulesData = $this->loader->fromString($traitsRulesJson);
 
+        /** @var AlterationsRulesData $alterationsRulesData */
+        $alterationsRulesData = $this->loader->fromString($alterationsRulesJson);
+
         /** @var CombatRulesData $combatRulesData */
         $combatRulesData = $this->loader->fromString($combatRulesJson);
 
@@ -172,6 +187,7 @@ readonly class GameApi
             $bestiaryData,
             $attributesRulesData,
             $traitsRulesData,
+            $alterationsRulesData,
             $combatRulesData,
             $playerRulesData,
             $playerData,
@@ -216,6 +232,7 @@ readonly class GameApi
      *     bestiary: string,
      *     attributesRules: string,
      *     traitsRules: string,
+     *     alterationsRules: string,
      *     combatRules: string,
      *     playerRules: string,
      *     playerData: string,
@@ -225,14 +242,15 @@ readonly class GameApi
     {
         try {
             return [
-                'story'          => $this->story->dump($prettyPrint),
-                'items'          => $this->items->dump($prettyPrint),
-                'bestiary'       => $this->bestiary->dump($prettyPrint),
-                'attributesRules' => $this->attributes->dump($prettyPrint),
-                'traitsRules'  => $this->traits->dump($prettyPrint),
-                'combatRules'    => $this->combat->dump($prettyPrint),
-                'playerRules'    => $this->player->dump($prettyPrint),
-                'playerData'     => $this->player->dumpPlayer($prettyPrint),
+                'story'            => $this->story->dump($prettyPrint),
+                'items'            => $this->items->dump($prettyPrint),
+                'bestiary'         => $this->bestiary->dump($prettyPrint),
+                'attributesRules'  => $this->attributes->dump($prettyPrint),
+                'traitsRules'      => $this->traits->dump($prettyPrint),
+                'alterationsRules' => $this->alterations->dump($prettyPrint),
+                'combatRules'      => $this->combat->dump($prettyPrint),
+                'playerRules'      => $this->player->dump($prettyPrint),
+                'playerData'       => $this->player->dumpPlayer($prettyPrint),
             ];
             // @codeCoverageIgnoreStart
         } catch (\Throwable $exception) {

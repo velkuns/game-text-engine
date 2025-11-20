@@ -38,7 +38,7 @@
     "phpstan/phpstan-deprecation-rules": "^2.0.3",
     "phpstan/phpstan-phpunit": "^2.0.8",
     "phpunit/phpcov": "^11.0.2",
-    "phpunit/phpunit": "^12.4.2",
+    "phpunit/phpunit": "^12.4.3",
     "shipmonk/composer-dependency-analyser": "^1.8.3"
   }
 }

@@ -22,11 +22,11 @@ use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
  */
 readonly class CompoundAttribute implements AttributeInterface
 {
-    /** @var array<string, BaseAttribute> $attributes */
+    /** @var array<string, SimpleAttribute> $attributes */
     private array $attributes;
 
     /**
-     * @param array<string, BaseAttribute> $attributes
+     * @param array<string, SimpleAttribute> $attributes
      */
     public function __construct(
         public string $name,
@@ -35,7 +35,7 @@ readonly class CompoundAttribute implements AttributeInterface
     ) {
         $this->attributes = \array_filter(
             $attributes,
-            fn(BaseAttribute $attribute) => \str_contains($this->rule, $attribute->name),
+            fn(SimpleAttribute $attribute) => \str_contains($this->rule, $attribute->name),
         );
     }
 
@@ -54,23 +54,23 @@ readonly class CompoundAttribute implements AttributeInterface
      */
     public function getValue(): int
     {
-        return \array_sum(\array_map(fn(BaseAttribute $attribute) => $attribute->getValue(), $this->attributes));
+        return \array_sum(\array_map(fn(SimpleAttribute $attribute) => $attribute->getValue(), $this->attributes));
     }
 
     public function getMax(): int
     {
-        return \array_sum(\array_map(fn(BaseAttribute $attribute) => $attribute->getMax(), $this->attributes));
+        return \array_sum(\array_map(fn(SimpleAttribute $attribute) => $attribute->getMax(), $this->attributes));
     }
 
     public function getInitial(): int
     {
-        return \array_sum(\array_map(fn(BaseAttribute $attribute) => $attribute->getInitial(), $this->attributes));
+        return \array_sum(\array_map(fn(SimpleAttribute $attribute) => $attribute->getInitial(), $this->attributes));
     }
 
     public function getConstraints(): ConstraintsAttribute
     {
-        $min = \array_sum(\array_map(fn(BaseAttribute $attribute) => $attribute->getConstraints()->min, $this->attributes));
-        $max = \array_sum(\array_map(fn(BaseAttribute $attribute) => $attribute->getConstraints()->max, $this->attributes));
+        $min = \array_sum(\array_map(fn(SimpleAttribute $attribute) => $attribute->getConstraints()->min, $this->attributes));
+        $max = \array_sum(\array_map(fn(SimpleAttribute $attribute) => $attribute->getConstraints()->max, $this->attributes));
 
         return new ConstraintsAttribute($min, $max);
     }
@@ -144,7 +144,7 @@ readonly class CompoundAttribute implements AttributeInterface
     }
 
     /**
-     * @param array<string, BaseAttribute> $attributes
+     * @param array<string, SimpleAttribute> $attributes
      */
     public function clone(array $attributes = []): self
     {

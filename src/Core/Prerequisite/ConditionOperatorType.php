@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Velkuns\GameTextEngine\Core\Condition;
+namespace Velkuns\GameTextEngine\Core\Prerequisite;
 
 enum ConditionOperatorType: string
 {

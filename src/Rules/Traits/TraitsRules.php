@@ -13,7 +13,7 @@ namespace Velkuns\GameTextEngine\Rules\Traits;
 
 use Velkuns\GameTextEngine\Exception\Rules\TraitsRulesException;
 use Velkuns\GameTextEngine\Rpg\Entity\EntityTraits;
-use Velkuns\GameTextEngine\Rpg\Traits\TraitInterface;
+use Velkuns\GameTextEngine\Rpg\Trait\TraitInterface;
 
 /**
  * @phpstan-import-type TraitsData from EntityTraits

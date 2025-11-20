@@ -62,9 +62,9 @@ trait EntityTrait
                 ],
             ],
             'attributes' => [
-                'bases'     => [
+                'simples'     => [
                     'strength'  => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'strength',
                         'initial'     => 10,
                         'max'         => 10,
@@ -76,7 +76,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'endurance' => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'endurance',
                         'initial'     => 14,
                         'max'         => 14,
@@ -88,7 +88,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'agility'   => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'agility',
                         'initial'     => 15,
                         'max'         => 15,
@@ -100,7 +100,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'intuition' => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'intuition',
                         'initial'     => 12,
                         'max'         => 12,
@@ -112,7 +112,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'vitality'  => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'vitality',
                         'initial'     => 24,
                         'max'         => 24,
@@ -138,6 +138,8 @@ trait EntityTrait
                 ],
             ],
             'traits'  => [
+                'race'     => [],
+                'class'    => [],
                 'skill'    => [
                     'Sword (Mastery)' => [
                         'type'           => 'skill',
@@ -147,9 +149,9 @@ trait EntityTrait
                             [
                                 'type'  => 'self.attribute.agility.value',
                                 'value' => 1,
-                                'conditions'     => [
+                                'prerequisites'     => [
                                     'numberRequired' => 1,
-                                    'conditions'     => [
+                                    'requirements'     => [
                                         [
                                             'type'      => 'self.inventory.item',
                                             'condition' => 'subType=sword;equipped=true;flags&4',
@@ -161,9 +163,9 @@ trait EntityTrait
                             [
                                 'type'  => 'self.attribute.attack.value',
                                 'value' => 2,
-                                'conditions'     => [
+                                'prerequisites'     => [
                                     'numberRequired' => 1,
-                                    'conditions'     => [
+                                    'requirements'     => [
                                         [
                                             'type'      => 'self.inventory.item',
                                             'condition' => 'subType=sword;equipped=true;flags&4',
@@ -182,9 +184,9 @@ trait EntityTrait
                             [
                                 'type'  => 'self.attribute.agility.value',
                                 'value' => 1,
-                                'conditions'     => [
+                                'prerequisites'     => [
                                     'numberRequired' => 1,
-                                    'conditions'     => [
+                                    'requirements'     => [
                                         [
                                             'type'      => 'enemy.info',
                                             'condition' => 'race=dragon',
@@ -196,9 +198,9 @@ trait EntityTrait
                             [
                                 'type'  => 'self.attribute.attack.value',
                                 'value' => 2,
-                                'conditions'     => [
+                                'prerequisites'     => [
                                     'numberRequired' => 1,
-                                    'conditions'     => [
+                                    'requirements'     => [
                                         [
                                             'type'      => 'enemy.info',
                                             'condition' => 'race=dragon',
@@ -217,9 +219,9 @@ trait EntityTrait
                             [
                                 'type'  => 'self.damages.physical.value',
                                 'value' => 1,
-                                'conditions'     => [
+                                'prerequisites'     => [
                                     'numberRequired' => 1,
-                                    'conditions'     => [
+                                    'requirements'     => [
                                         [
                                             'type'      => 'enemy.info',
                                             'condition' => 'race=goblin',
@@ -231,6 +233,16 @@ trait EntityTrait
                         ],
                     ],
                 ],
+                'title'    => [
+                    'Dragon Slayer' => [
+                        'type'           => 'title',
+                        'name'           => 'Dragon Slayer',
+                        'description'    => 'You have slain a dragon',
+                        'modifiers'      => [],
+                    ],
+                ],
+            ],
+            'alterations' => [
                 'state'    => [
                     'Rested' => [
                         'type'           => 'state',
@@ -242,20 +254,14 @@ trait EntityTrait
                                 'value' => 2,
                             ],
                         ],
-                        'durationTurns'  => 3,
-                        'remainingTurns' => 1,
+                        'duration' => [
+                            'max'       => 3,
+                            'remaining' => 1,
+                        ],
                     ],
                 ],
                 'blessing' => [],
                 'curse'    => [],
-                'title'    => [
-                    'Dragon Slayer' => [
-                        'type'           => 'title',
-                        'name'           => 'Dragon Slayer',
-                        'description'    => 'You have slain a dragon',
-                        'modifiers'      => [],
-                    ],
-                ],
             ],
             'inventory' => [
                 'coins' => 100,
@@ -310,9 +316,9 @@ trait EntityTrait
             ],
             'damages'   => ['physical' => ['type' => 'physical', 'value' => 0]],
             'attributes' => [
-                'bases'     => [
+                'simples'     => [
                     'strength'  => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'strength',
                         'initial'     => 11,
                         'max'         => 11,
@@ -324,7 +330,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'endurance' => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'endurance',
                         'initial'     => 12,
                         'max'         => 12,
@@ -336,7 +342,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'agility'   => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'agility',
                         'initial'     => 13,
                         'max'         => 13,
@@ -348,7 +354,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'intuition' => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'intuition',
                         'initial'     => 14,
                         'max'         => 14,
@@ -360,7 +366,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'vitality'  => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'vitality',
                         'initial'     => 23,
                         'max'         => 23,
@@ -386,11 +392,15 @@ trait EntityTrait
                 ],
             ],
             'traits'  => [
+                'race'     => [],
+                'class'    => [],
                 'skill'    => [],
+                'title'    => [],
+            ],
+            'alterations' => [
                 'state'    => [],
                 'blessing' => [],
                 'curse'    => [],
-                'title'    => [],
             ],
             'inventory' => [
                 'coins' => 10,
@@ -433,9 +443,9 @@ trait EntityTrait
             ],
             'damages'   => ['physical' => ['type' => 'physical', 'value' => 2]],
             'attributes' => [
-                'bases'     => [
+                'simples'     => [
                     'strength'  => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'strength',
                         'initial'     => 8,
                         'max'         => 8,
@@ -447,7 +457,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'endurance' => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'endurance',
                         'initial'     => 8,
                         'max'         => 8,
@@ -459,7 +469,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'agility'   => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'agility',
                         'initial'     => 14,
                         'max'         => 14,
@@ -471,7 +481,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'intuition' => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'intuition',
                         'initial'     => 10,
                         'max'         => 10,
@@ -483,7 +493,7 @@ trait EntityTrait
                         'rule'        => null,
                     ],
                     'vitality'  => [
-                        'type'        => 'base',
+                        'type'        => 'simple',
                         'name'        => 'vitality',
                         'initial'     => 0,
                         'max'         => 0,
@@ -509,11 +519,15 @@ trait EntityTrait
                 ],
             ],
             'traits'  => [
+                'race'     => [],
+                'class'    => [],
                 'skill'    => [],
+                'title'    => [],
+            ],
+            'alterations' => [
                 'state'    => [],
                 'blessing' => [],
                 'curse'    => [],
-                'title'    => [],
             ],
             'inventory' => [
                 'coins' => 2,

@@ -18,9 +18,9 @@ Modifier format:
 {
     "type": "string",
     "value": "int",
-    "conditions?": {
+    "prerequisites?": {
         "numberRequired": "int",
-        "conditions": [
+        "requirements": [
             {
                 "type": "string",
                 "condition": "string",
@@ -37,9 +37,9 @@ Example:
 {
     "type": "self.attribute.strength.value",
     "value": 2,
-    "conditions": {
+    "prerequisites": {
         "numberRequired": 1,
-        "conditions": [
+        "requirements": [
             {
                 "type": "self.inventory.item",
                 "condition": "subType=sword;equipped=true",

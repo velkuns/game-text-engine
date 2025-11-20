@@ -12,12 +12,16 @@ declare(strict_types=1);
 namespace Rpg\Entity;
 
 use PHPUnit\Framework\TestCase;
+use Velkuns\GameTextEngine\Rpg\Alteration\Alteration;
+use Velkuns\GameTextEngine\Rpg\Alteration\AlterationDuration;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
+use Velkuns\GameTextEngine\Tests\Helper\ApiTrait;
 use Velkuns\GameTextEngine\Tests\Helper\EntityTrait;
 use Velkuns\GameTextEngine\Tests\Helper\FactoryTrait;
 
 class EntityTest extends TestCase
 {
+    use ApiTrait;
     use EntityTrait;
     use FactoryTrait;
 
@@ -36,10 +40,10 @@ class EntityTest extends TestCase
         $player  = self::getPlayer();
         $gobelin = self::getGoblin();
 
-        $conditions = self::getConditionFactory()->from(
+        $conditions = self::getPrerequisitesFactory()->from(
             [
                 'numberRequired' => 1,
-                'conditions'     => [
+                'requirements'   => [
                     [
                         'type'      => 'enemy.info',
                         'condition' => 'race=goblin',
@@ -51,6 +55,11 @@ class EntityTest extends TestCase
 
         //~ Be sure the sword is unequipped before getting the modifiers
         $player->getInventory()->get('The Sword')?->unequip();
+
+        //~ Add useless alteration
+        $alteration = self::getAlterationsApi()->get('curse', 'Weakness Against Unicorn');
+        self::assertNotNull($alteration);
+        $player->getAlterations()->set($alteration);
 
         $expected  = [
             new Modifier('self.damages.physical.value', 1, $conditions),

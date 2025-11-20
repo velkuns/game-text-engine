@@ -11,14 +11,14 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Rpg\Modifier;
 
-use Velkuns\GameTextEngine\Core\Condition\Conditions;
+use Velkuns\GameTextEngine\Core\Prerequisite\Prerequisites;
 
 /**
- * @phpstan-import-type ConditionsData from Conditions
+ * @phpstan-import-type PrerequisitesData from Prerequisites
  * @phpstan-type ModifierData array{
  *     type: string,
  *     value: int,
- *     conditions?: ConditionsData,
+ *     prerequisites?: PrerequisitesData,
  * }
  */
 readonly class Modifier implements \JsonSerializable
@@ -26,7 +26,7 @@ readonly class Modifier implements \JsonSerializable
     public function __construct(
         public string $type,
         public int $value,
-        public ?Conditions $conditions = null,
+        public ?Prerequisites $prerequisites = null,
     ) {}
 
     /**
@@ -39,8 +39,8 @@ readonly class Modifier implements \JsonSerializable
             'value' => $this->value,
         ];
 
-        if ($this->conditions !== null) {
-            $data['conditions'] = $this->conditions->jsonSerialize();
+        if ($this->prerequisites !== null) {
+            $data['prerequisites'] = $this->prerequisites->jsonSerialize();
         }
 
         return $data;
@@ -49,9 +49,9 @@ readonly class Modifier implements \JsonSerializable
     public function clone(): self
     {
         return new self(
-            type: $this->type,
-            value: $this->value,
-            conditions: $this->conditions?->clone(),
+            $this->type,
+            $this->value,
+            $this->prerequisites?->clone(),
         );
     }
 }

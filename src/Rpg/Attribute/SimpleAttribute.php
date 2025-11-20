@@ -16,8 +16,8 @@ use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 
 /**
  * @phpstan-import-type ConstraintsAttributeData from ConstraintsAttribute
- * @phpstan-type BaseAttributeData array{
- *     type: 'base',
+ * @phpstan-type SimpleAttributeData array{
+ *     type: 'simple',
  *     name: string,
  *     initial: int,
  *     value: int,
@@ -26,10 +26,10 @@ use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
  *     rule: string|null,
  * }
  */
-class BaseAttribute implements AttributeInterface
+class SimpleAttribute implements AttributeInterface
 {
     /**
-     * @param array<string, BaseAttribute> $attributes
+     * @param array<string, SimpleAttribute> $attributes
      */
     public function __construct(
         public readonly string $name,
@@ -45,7 +45,7 @@ class BaseAttribute implements AttributeInterface
             if ($rule === null || $this->attributes === []) {
                 throw new AttributeException('Attribute rule nor related attributes cannot be empty for init.');
             }
-            $result = \array_sum(\array_map(fn(BaseAttribute $attribute) => $attribute->getInitial(), $this->attributes));
+            $result = \array_sum(\array_map(fn(SimpleAttribute $attribute) => $attribute->getInitial(), $this->attributes));
             $this->initial = $result;
             $this->value   = $result;
             $this->max     = $result;
@@ -54,7 +54,7 @@ class BaseAttribute implements AttributeInterface
 
     public function getType(): AttributeType
     {
-        return AttributeType::Base;
+        return AttributeType::Simple;
     }
 
     public function getName(): string
@@ -135,12 +135,12 @@ class BaseAttribute implements AttributeInterface
     }
 
     /**
-     * @return BaseAttributeData
+     * @return SimpleAttributeData
      */
     public function jsonSerialize(): array
     {
         return [
-            'type'        => AttributeType::Base->value,
+            'type'        => AttributeType::Simple->value,
             'name'        => $this->name,
             'initial'     => $this->initial,
             'max'         => $this->max,

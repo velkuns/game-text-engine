@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Velkuns\GameTextEngine\Tests\Helper;
 
+use Velkuns\GameTextEngine\Core\Validator\AlterationConditionValidator;
 use Velkuns\GameTextEngine\Core\Validator\AttributeConditionValidator;
 use Velkuns\GameTextEngine\Core\Validator\EntityInfoConditionValidator;
 use Velkuns\GameTextEngine\Core\Validator\EntityInventoryItemsConditionValidator;
@@ -26,6 +27,7 @@ trait ValidatorTrait
             new EntityInfoConditionValidator(),
             new EntityInventoryItemsConditionValidator(),
             new TraitConditionValidator(),
+            new AlterationConditionValidator(),
         ];
 
         return new ValidatorHandler($validators);

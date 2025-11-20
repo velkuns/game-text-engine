@@ -13,7 +13,7 @@ namespace Rpg\Attribute;
 
 use PHPUnit\Framework\TestCase;
 use Velkuns\GameTextEngine\Rpg\Attribute\AttributeType;
-use Velkuns\GameTextEngine\Rpg\Attribute\BaseAttribute;
+use Velkuns\GameTextEngine\Rpg\Attribute\SimpleAttribute;
 use Velkuns\GameTextEngine\Rpg\Attribute\CompoundAttribute;
 use Velkuns\GameTextEngine\Rpg\Attribute\ConstraintsAttribute;
 use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
@@ -25,7 +25,7 @@ class CompoundAttributeTest extends TestCase
         $attribute = new CompoundAttribute(
             name: 'attack',
             rule: 'strength + agility',
-            attributes: $this->getBaseAttributes(),
+            attributes: $this->getSimpleAttributes(),
         );
 
         self::assertSame(AttributeType::Compound, $attribute->getType());
@@ -43,7 +43,7 @@ class CompoundAttributeTest extends TestCase
         $attribute = new CompoundAttribute(
             name: 'attack',
             rule: 'strength + agility',
-            attributes: $this->getBaseAttributes(),
+            attributes: $this->getSimpleAttributes(),
         );
 
         self::assertSame(5, $attribute->getValue());
@@ -59,19 +59,19 @@ class CompoundAttributeTest extends TestCase
     }
 
     /**
-     * @return array<string, BaseAttribute>
+     * @return array<string, SimpleAttribute>
      */
-    private function getBaseAttributes(): array
+    private function getSimpleAttributes(): array
     {
         return [
-            'strength' => new BaseAttribute(
+            'strength' => new SimpleAttribute(
                 name: 'strength',
                 value: 3,
                 max: 6,
                 constraints: new ConstraintsAttribute(min: 0, max: 10),
                 initial: 5,
             ),
-            'agility'  => new BaseAttribute(
+            'agility'  => new SimpleAttribute(
                 name: 'agility',
                 value: 2,
                 max: 5,

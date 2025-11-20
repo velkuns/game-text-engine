@@ -19,7 +19,7 @@ use Velkuns\GameTextEngine\Rpg\Modifier\Modifier;
 readonly class ModifierFactory
 {
     public function __construct(
-        private ConditionsFactory $conditionsFactory,
+        private PrerequisitesFactory $prerequisitesFactory,
     ) {}
 
     /**
@@ -27,10 +27,10 @@ readonly class ModifierFactory
      */
     public function from(array $data): Modifier
     {
-        $type       = $data['type'];
-        $value      = $data['value'];
-        $conditions = $this->conditionsFactory->from($data['conditions'] ?? null);
+        $type          = $data['type'];
+        $value         = $data['value'];
+        $prerequisites = $this->prerequisitesFactory->from($data['prerequisites'] ?? null);
 
-        return new Modifier($type, $value, $conditions);
+        return new Modifier($type, $value, $prerequisites);
     }
 }
